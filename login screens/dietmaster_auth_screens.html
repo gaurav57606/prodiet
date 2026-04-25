@@ -1,0 +1,840 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#000;
+  --card:rgba(255,255,255,.04);
+  --card-bd:rgba(255,255,255,.08);
+  --card-shine:rgba(255,255,255,.12);
+  --hero-bg:linear-gradient(150deg,#1A0030 0%,#0D0020 55%,#000 100%);
+  --nav-on:#C080FF;
+  --fab-bg:linear-gradient(145deg,#A050FF,#6020D0);
+  --fab-shadow:rgba(130,60,255,.5);
+  --pill-bg:rgba(160,120,255,.06);
+  --pill-c:rgba(160,120,255,.5);
+  --pill-bd:rgba(160,120,255,.2);
+  --pill-on-bg:rgba(140,80,220,.2);
+  --pill-on-c:#C090FF;
+  --pill-on-bd:rgba(160,120,255,.4);
+  --t1:#fff;
+  --t2:rgba(255,255,255,.5);
+  --t3:rgba(255,255,255,.25);
+  --inp-bg:rgba(255,255,255,.05);
+  --inp-bd:rgba(255,255,255,.1);
+  --inp-focus:rgba(192,128,255,.4);
+  --al-a-bg:linear-gradient(135deg,rgba(255,170,50,.1),rgba(255,130,30,.06));
+  --al-a-bd:rgba(255,170,50,.18);
+  --al-a-c:#FFD070;
+  --al-v-bg:linear-gradient(135deg,rgba(170,120,255,.1),rgba(130,80,255,.06));
+  --al-v-bd:rgba(170,120,255,.18);
+  --al-v-c:#D4A8FF;
+  --al-m-bg:linear-gradient(135deg,rgba(40,200,170,.09),rgba(20,180,150,.05));
+  --al-m-bd:rgba(40,200,170,.16);
+  --al-m-c:#60EDD0;
+  --err-bg:rgba(255,60,80,.1);
+  --err-bd:rgba(255,60,80,.2);
+  --err-c:#FF8090;
+  --soc-bg:rgba(255,255,255,.04);
+  --soc-bd:rgba(255,255,255,.1);
+  --soc-c:rgba(255,255,255,.65);
+}
+body.light{
+  --bg:#F2ECF9;
+  --card:rgba(255,255,255,.6);
+  --card-bd:rgba(160,100,220,.12);
+  --card-shine:rgba(255,255,255,.9);
+  --hero-bg:linear-gradient(150deg,#E8D5FF 0%,#F5DEFF 40%,#FFE8F0 80%,#FFF0E4 100%);
+  --nav-on:#8030D0;
+  --fab-bg:linear-gradient(145deg,#A050FF,#7020C0);
+  --fab-shadow:rgba(140,60,220,.35);
+  --pill-bg:rgba(140,80,220,.06);
+  --pill-c:rgba(100,60,160,.5);
+  --pill-bd:rgba(140,80,220,.15);
+  --pill-on-bg:rgba(140,80,220,.15);
+  --pill-on-c:#8040C0;
+  --pill-on-bd:rgba(140,80,220,.3);
+  --t1:#2A0A50;
+  --t2:rgba(80,40,120,.6);
+  --t3:rgba(80,40,120,.35);
+  --inp-bg:rgba(255,255,255,.8);
+  --inp-bd:rgba(160,100,220,.2);
+  --inp-focus:rgba(128,48,208,.35);
+  --al-a-bg:linear-gradient(135deg,rgba(255,190,80,.2),rgba(255,160,40,.12));
+  --al-a-bd:rgba(255,180,60,.25);
+  --al-a-c:#904800;
+  --al-v-bg:linear-gradient(135deg,rgba(180,130,255,.18),rgba(150,100,255,.1));
+  --al-v-bd:rgba(170,120,255,.22);
+  --al-v-c:#6020A0;
+  --al-m-bg:linear-gradient(135deg,rgba(40,200,170,.14),rgba(20,180,150,.08));
+  --al-m-bd:rgba(40,200,170,.2);
+  --al-m-c:#106050;
+  --err-bg:rgba(200,40,60,.08);
+  --err-bd:rgba(200,40,60,.2);
+  --err-c:#A02030;
+  --soc-bg:rgba(255,255,255,.7);
+  --soc-bd:rgba(160,100,220,.18);
+  --soc-c:rgba(60,20,100,.65);
+}
+body.mv{
+  --bg:#1C1A2E;
+  --card:rgba(167,139,255,.06);
+  --card-bd:rgba(167,139,255,.13);
+  --card-shine:rgba(167,139,255,.2);
+  --hero-bg:linear-gradient(150deg,#2A1548 0%,#1C1230 55%,#1C1A2E 100%);
+  --nav-on:#C4A0FF;
+  --fab-bg:linear-gradient(145deg,#A060FF,#7030E0);
+  --fab-shadow:rgba(140,80,255,.45);
+  --pill-bg:rgba(167,139,255,.08);
+  --pill-c:rgba(167,139,255,.6);
+  --pill-bd:rgba(167,139,255,.2);
+  --pill-on-bg:rgba(167,139,255,.2);
+  --pill-on-c:#C4A0FF;
+  --pill-on-bd:rgba(167,139,255,.4);
+  --t1:#EDE6FF;
+  --t2:rgba(200,185,255,.55);
+  --t3:rgba(160,140,220,.35);
+  --inp-bg:rgba(167,139,255,.07);
+  --inp-bd:rgba(167,139,255,.18);
+  --inp-focus:rgba(192,128,255,.35);
+  --al-a-bg:linear-gradient(135deg,rgba(255,170,50,.1),rgba(255,130,30,.06));
+  --al-a-bd:rgba(255,170,50,.18);
+  --al-a-c:#FFD070;
+  --al-v-bg:linear-gradient(135deg,rgba(180,140,255,.12),rgba(140,100,255,.07));
+  --al-v-bd:rgba(180,140,255,.2);
+  --al-v-c:#C4A0FF;
+  --al-m-bg:linear-gradient(135deg,rgba(40,200,170,.09),rgba(20,180,150,.05));
+  --al-m-bd:rgba(40,200,170,.16);
+  --al-m-c:#60EDD0;
+  --err-bg:rgba(255,60,80,.1);
+  --err-bd:rgba(255,60,80,.2);
+  --err-c:#FF8090;
+  --soc-bg:rgba(167,139,255,.07);
+  --soc-bd:rgba(167,139,255,.18);
+  --soc-c:rgba(200,180,255,.7);
+}
+
+body{font-family:'Outfit',sans-serif;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;padding:20px 12px 60px;}
+
+/* theme bar */
+.tbar{display:flex;gap:8px;margin-bottom:20px;align-items:center;}
+.tbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-right:4px;}
+.tbtn{padding:6px 16px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid rgba(160,100,255,.25);background:rgba(160,100,255,.07);color:rgba(160,100,255,.6);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;}
+.tbtn.on{background:linear-gradient(135deg,#A060FF,#7030E0);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(140,60,255,.4);}
+
+/* screen switcher */
+.switcher{display:flex;gap:6px;margin-bottom:18px;}
+.sw{padding:6px 18px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.4);}
+.sw.on{background:rgba(192,128,255,.2);color:#C080FF;border-color:rgba(192,128,255,.35);}
+
+/* phone */
+.phone{
+  width:340px;
+  background:var(--bg);
+  border-radius:44px;overflow:hidden;
+  border:1.5px solid rgba(255,255,255,.1);
+  box-shadow:0 40px 100px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.08);
+  transition:background .3s;
+}
+.sb{display:flex;justify-content:space-between;padding:13px 22px 5px;font-size:11px;font-weight:600;color:var(--t3);}
+.scr{overflow-y:auto;overflow-x:hidden;scrollbar-width:none;max-height:700px;}
+.scr::-webkit-scrollbar{display:none;}
+
+/* ── HERO BRAND AREA ── */
+.auth-hero{
+  background:var(--hero-bg);
+  padding:40px 28px 32px;
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.auth-hero::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(160,80,255,.3) 0%,transparent 70%);}
+.auth-hero::after{content:'';position:absolute;bottom:-40px;left:-20px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,120,180,.15) 0%,transparent 70%);}
+.logo-ring{
+  width:72px;height:72px;border-radius:22px;
+  background:linear-gradient(145deg,rgba(192,128,255,.2),rgba(160,80,255,.1));
+  border:1px solid rgba(192,128,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+  position:relative;z-index:1;
+}
+.logo-ring svg{width:36px;height:36px;}
+.brand-name{font-size:26px;font-weight:800;color:var(--t1);letter-spacing:-.5px;position:relative;z-index:1;}
+.brand-name em{color:var(--nav-on);font-style:normal;}
+.brand-tag{font-size:12px;font-weight:500;color:var(--t3);margin-top:4px;position:relative;z-index:1;}
+
+/* ── FORM CARD ── */
+.form-card{
+  margin:0;
+  background:var(--card);
+  border-top:1px solid var(--card-bd);
+  position:relative;
+  padding:24px 22px 32px;
+}
+.form-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--card-shine),transparent);
+}
+
+/* tab toggle */
+.form-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:14px;padding:3px;margin-bottom:22px;border:1px solid var(--card-bd);}
+.ft{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:700;border-radius:11px;cursor:pointer;color:var(--t3);transition:all .2s;font-family:'Outfit',sans-serif;}
+.ft.on{background:var(--nav-on);color:#fff;box-shadow:0 4px 12px var(--fab-shadow);}
+
+/* input group */
+.inp-group{margin-bottom:14px;}
+.inp-label{font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.4px;margin-bottom:6px;}
+.inp-wrap{position:relative;display:flex;align-items:center;}
+.inp-wrap svg{position:absolute;left:14px;width:16px;height:16px;stroke:var(--t3);fill:none;stroke-width:1.7;flex-shrink:0;}
+.inp-wrap .eye{left:auto;right:14px;cursor:pointer;}
+.inp{
+  width:100%;background:var(--inp-bg);
+  border:1px solid var(--inp-bd);
+  border-radius:12px;
+  padding:12px 14px 12px 42px;
+  font-size:13px;font-weight:500;color:var(--t1);
+  font-family:'Outfit',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.inp::placeholder{color:var(--t3);}
+.inp:focus{border-color:var(--inp-focus);}
+.inp.has-eye{padding-right:42px;}
+.inp.error{border-color:var(--err-bd);}
+
+/* row of 2 inputs */
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+
+/* strength bar */
+.pw-strength{margin-top:6px;display:flex;gap:3px;align-items:center;}
+.ps-bar{flex:1;height:3px;border-radius:3px;background:var(--card-bd);transition:background .3s;}
+.ps-bar.weak{background:#FF6080;}
+.ps-bar.fair{background:#FFB040;}
+.ps-bar.good{background:#60EDD0;}
+.ps-label{font-size:9px;font-weight:700;color:var(--t3);margin-left:6px;min-width:28px;}
+
+/* checkboxes */
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.cb-box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--inp-bd);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:var(--inp-bg);}
+.cb-box.on{background:var(--nav-on);border-color:var(--nav-on);}
+.cb-box.on svg{opacity:1;}
+.cb-box svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;opacity:0;}
+.cb-text{font-size:11px;font-weight:500;color:var(--t3);line-height:1.5;}
+.cb-link{color:var(--nav-on);cursor:pointer;}
+
+/* primary button */
+.btn-primary{
+  width:100%;padding:14px;border-radius:14px;
+  background:linear-gradient(135deg,var(--nav-on),var(--fab-bg) 60%);
+  color:#fff;font-size:14px;font-weight:700;
+  border:none;cursor:pointer;font-family:'Outfit',sans-serif;
+  letter-spacing:.3px;
+  box-shadow:0 6px 20px var(--fab-shadow);
+  margin-bottom:16px;
+  transition:opacity .15s;
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+}
+.btn-primary:hover{opacity:.9;}
+
+/* divider */
+.or-div{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.or-line{flex:1;height:1px;background:var(--card-bd);}
+.or-t{font-size:11px;font-weight:600;color:var(--t3);}
+
+/* social buttons */
+.soc-row{display:flex;gap:10px;margin-bottom:20px;}
+.soc-btn{
+  flex:1;padding:11px;border-radius:12px;
+  background:var(--soc-bg);border:1px solid var(--soc-bd);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:12px;font-weight:700;color:var(--soc-c);
+  cursor:pointer;font-family:'Outfit',sans-serif;
+  transition:all .15s;position:relative;overflow:hidden;
+}
+.soc-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);}
+.soc-btn:hover{background:var(--inp-bg);}
+.soc-btn svg{width:16px;height:16px;flex-shrink:0;}
+
+/* switch link */
+.sw-link{text-align:center;font-size:12px;font-weight:500;color:var(--t3);}
+.sw-link span{color:var(--nav-on);font-weight:700;cursor:pointer;}
+
+/* error strip */
+.err-strip{
+  background:var(--err-bg);border:1px solid var(--err-bd);
+  border-radius:12px;padding:11px 14px;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.err-strip::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--err-bd),transparent);}
+.err-strip svg{width:16px;height:16px;stroke:var(--err-c);fill:none;stroke-width:1.8;flex-shrink:0;}
+.err-text{font-size:12px;font-weight:600;color:var(--err-c);}
+
+/* success strip */
+.ok-strip{
+  background:var(--al-m-bg);border:1px solid var(--al-m-bd);
+  border-radius:12px;padding:11px 14px;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.ok-strip svg{width:16px;height:16px;stroke:var(--al-m-c);fill:none;stroke-width:1.8;flex-shrink:0;}
+.ok-text{font-size:12px;font-weight:600;color:var(--al-m-c);}
+
+/* forgot password screen */
+.fp-icon{
+  width:64px;height:64px;border-radius:20px;
+  background:var(--al-v-bg);border:1px solid var(--al-v-bd);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+}
+.fp-icon svg{width:28px;height:28px;stroke:var(--al-v-c);fill:none;stroke-width:1.7;}
+.back-btn{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--nav-on);
+  cursor:pointer;margin-bottom:20px;
+  background:none;border:none;font-family:'Outfit',sans-serif;
+  padding:0;
+}
+.back-btn svg{width:14px;height:14px;stroke:var(--nav-on);fill:none;stroke-width:2;}
+
+/* otp screen */
+.otp-row{display:flex;gap:10px;justify-content:center;margin-bottom:20px;}
+.otp-inp{
+  width:52px;height:56px;border-radius:14px;
+  background:var(--inp-bg);border:1px solid var(--inp-bd);
+  text-align:center;font-size:22px;font-weight:800;color:var(--t1);
+  font-family:'Outfit',sans-serif;outline:none;
+  transition:border-color .2s;
+}
+.otp-inp:focus{border-color:var(--inp-focus);}
+.otp-inp.filled{border-color:var(--nav-on);background:rgba(192,128,255,.08);}
+.resend-row{text-align:center;font-size:12px;color:var(--t3);margin-bottom:20px;}
+.resend-row span{color:var(--nav-on);font-weight:700;cursor:pointer;}
+
+/* step dots for signup */
+.step-dots{display:flex;gap:6px;justify-content:center;margin-bottom:20px;}
+.sd{width:6px;height:6px;border-radius:50%;background:var(--card-bd);transition:all .2s;}
+.sd.on{background:var(--nav-on);width:20px;border-radius:3px;}
+.sd.done{background:var(--al-m-c);}
+
+/* diet goal pills */
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.goal-card{
+  background:var(--card);border:1px solid var(--card-bd);
+  border-radius:14px;padding:14px 12px;text-align:center;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.goal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--card-shine),transparent);}
+.goal-card.on{border-color:var(--nav-on);background:rgba(192,128,255,.08);}
+.goal-ic{font-size:24px;margin-bottom:6px;}
+.goal-nm{font-size:12px;font-weight:700;color:var(--t1);}
+.goal-sub{font-size:10px;font-weight:500;color:var(--t3);margin-top:2px;}
+.goal-check{
+  position:absolute;top:8px;right:8px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--nav-on);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s;
+}
+.goal-card.on .goal-check{opacity:1;}
+.goal-check svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;}
+</style>
+
+<div style="background:#0a0a0a;padding:20px 12px 60px;display:flex;flex-direction:column;align-items:center;">
+
+<!-- THEME BAR -->
+<div class="tbar">
+  <span class="tbl">Theme</span>
+  <button class="tbtn on" onclick="setTheme('','dark',this)">Dark</button>
+  <button class="tbtn" onclick="setTheme('light','light',this)">Light</button>
+  <button class="tbtn" onclick="setTheme('mv','midnight',this)">Midnight</button>
+</div>
+
+<!-- SCREEN TABS -->
+<div class="switcher">
+  <div class="sw on" onclick="showScr(0,this)">Login</div>
+  <div class="sw" onclick="showScr(1,this)">Sign up · Step 1</div>
+  <div class="sw" onclick="showScr(2,this)">Sign up · Step 2</div>
+  <div class="sw" onclick="showScr(3,this)">Forgot password</div>
+  <div class="sw" onclick="showScr(4,this)">OTP verify</div>
+</div>
+
+<!-- ══ SCREEN 0 — LOGIN ══ -->
+<div class="phone" id="s0">
+  <div class="sb"><span>9:41</span><span style="letter-spacing:2px;opacity:.4;">···</span></div>
+  <div class="scr">
+    <div class="auth-hero">
+      <div class="logo-ring">
+        <svg viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="18" stroke="#C080FF" stroke-width="2" stroke-dasharray="4 3" opacity=".4"/>
+          <path d="M24 14c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10" stroke="#C080FF" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="4" fill="#C080FF"/>
+          <path d="M24 10v4M24 34v4M10 24H14M34 24h4" stroke="#C080FF" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="brand-name">Diet<em>Master</em> Pro</div>
+      <div class="brand-tag">Your intelligent nutrition companion</div>
+    </div>
+    <div class="form-card">
+      <div class="form-tabs">
+        <div class="ft on">Sign in</div>
+        <div class="ft" onclick="showScr(1,null)">Create account</div>
+      </div>
+      <div class="err-strip" id="login-err" style="display:none;">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="err-text">Incorrect email or password</div>
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">EMAIL ADDRESS</div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input class="inp" type="email" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="inp-group">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div class="inp-label" style="margin-bottom:0;">PASSWORD</div>
+          <div style="font-size:11px;font-weight:700;color:var(--nav-on);cursor:pointer;" onclick="showScr(3,null)">Forgot?</div>
+        </div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="inp has-eye" type="password" placeholder="Enter your password" id="login-pw">
+          <svg class="eye" viewBox="0 0 24 24" onclick="togglePw('login-pw',this)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+      </div>
+      <div class="check-row">
+        <div class="cb-box on" onclick="this.classList.toggle('on')"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="cb-text">Keep me signed in</div>
+      </div>
+      <button class="btn-primary" onclick="showLoginErr()">Sign In</button>
+      <div class="or-div"><div class="or-line"></div><div class="or-t">or continue with</div><div class="or-line"></div></div>
+      <div class="soc-row">
+        <div class="soc-btn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google
+        </div>
+        <div class="soc-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Apple
+        </div>
+      </div>
+      <div class="sw-link">Don't have an account? <span onclick="showScr(1,null)">Create one</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 1 — SIGN UP STEP 1 ══ -->
+<div class="phone" id="s1" style="display:none;">
+  <div class="sb"><span>9:41</span><span style="letter-spacing:2px;opacity:.4;">···</span></div>
+  <div class="scr">
+    <div class="auth-hero" style="padding:28px 28px 24px;">
+      <div class="logo-ring" style="width:56px;height:56px;border-radius:16px;margin-bottom:10px;">
+        <svg viewBox="0 0 48 48" fill="none" width="28" height="28">
+          <circle cx="24" cy="24" r="18" stroke="#C080FF" stroke-width="2" stroke-dasharray="4 3" opacity=".4"/>
+          <path d="M24 14c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10" stroke="#C080FF" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="4" fill="#C080FF"/>
+        </svg>
+      </div>
+      <div class="brand-name" style="font-size:22px;">Create your account</div>
+      <div class="brand-tag">Step 1 of 2 — Personal details</div>
+    </div>
+    <div class="form-card">
+      <div class="step-dots">
+        <div class="sd on"></div>
+        <div class="sd"></div>
+      </div>
+      <div class="form-tabs" style="margin-bottom:20px;">
+        <div class="ft" onclick="showScr(0,null)">Sign in</div>
+        <div class="ft on">Create account</div>
+      </div>
+      <div class="inp-row">
+        <div class="inp-group" style="margin-bottom:0;">
+          <div class="inp-label">FIRST NAME</div>
+          <div class="inp-wrap">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input class="inp" type="text" placeholder="Rohan">
+          </div>
+        </div>
+        <div class="inp-group" style="margin-bottom:0;">
+          <div class="inp-label">LAST NAME</div>
+          <div class="inp-wrap">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input class="inp" type="text" placeholder="Sharma">
+          </div>
+        </div>
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">EMAIL ADDRESS</div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input class="inp" type="email" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">PHONE (OPTIONAL)</div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.63a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <input class="inp" type="tel" placeholder="+91 98765 43210">
+        </div>
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">PASSWORD</div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="inp has-eye" type="password" placeholder="Min. 8 characters" id="su-pw" oninput="checkStrength(this)">
+          <svg class="eye" viewBox="0 0 24 24" onclick="togglePw('su-pw',this)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="pw-strength">
+          <div class="ps-bar" id="psb1"></div>
+          <div class="ps-bar" id="psb2"></div>
+          <div class="ps-bar" id="psb3"></div>
+          <div class="ps-label" id="pslbl" style="color:var(--t3);">—</div>
+        </div>
+      </div>
+      <div class="inp-group" style="margin-bottom:18px;">
+        <div class="inp-label">CONFIRM PASSWORD</div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="inp has-eye" type="password" placeholder="Re-enter password" id="su-pw2">
+          <svg class="eye" viewBox="0 0 24 24" onclick="togglePw('su-pw2',this)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+      </div>
+      <div class="check-row">
+        <div class="cb-box" onclick="this.classList.toggle('on')"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="cb-text">I agree to the <span class="cb-link">Terms of Service</span> and <span class="cb-link">Privacy Policy</span></div>
+      </div>
+      <button class="btn-primary" onclick="showScr(2,null)">Continue →</button>
+      <div class="or-div"><div class="or-line"></div><div class="or-t">or sign up with</div><div class="or-line"></div></div>
+      <div class="soc-row">
+        <div class="soc-btn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google
+        </div>
+        <div class="soc-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Apple
+        </div>
+      </div>
+      <div class="sw-link">Already have an account? <span onclick="showScr(0,null)">Sign in</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2 — SIGN UP STEP 2: GOALS ══ -->
+<div class="phone" id="s2" style="display:none;">
+  <div class="sb"><span>9:41</span><span style="letter-spacing:2px;opacity:.4;">···</span></div>
+  <div class="scr">
+    <div class="auth-hero" style="padding:28px 28px 24px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Almost there</div>
+      <div class="brand-name" style="font-size:22px;">Your health <em>goals</em></div>
+      <div class="brand-tag">Step 2 of 2 — Personalise your plan</div>
+    </div>
+    <div class="form-card">
+      <div class="step-dots">
+        <div class="sd done"></div>
+        <div class="sd on"></div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px;">What's your primary goal?</div>
+      <div style="font-size:11px;font-weight:500;color:var(--t3);margin-bottom:14px;">This helps us personalise your meal plan</div>
+      <div class="goal-grid">
+        <div class="goal-card on" onclick="selGoal(this)">
+          <div class="goal-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div class="goal-ic">⚖️</div>
+          <div class="goal-nm">Lose weight</div>
+          <div class="goal-sub">Calorie deficit</div>
+        </div>
+        <div class="goal-card" onclick="selGoal(this)">
+          <div class="goal-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div class="goal-ic">💪</div>
+          <div class="goal-nm">Build muscle</div>
+          <div class="goal-sub">High protein</div>
+        </div>
+        <div class="goal-card" onclick="selGoal(this)">
+          <div class="goal-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div class="goal-ic">🥗</div>
+          <div class="goal-nm">Eat healthier</div>
+          <div class="goal-sub">Balanced macros</div>
+        </div>
+        <div class="goal-card" onclick="selGoal(this)">
+          <div class="goal-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div class="goal-ic">⚡</div>
+          <div class="goal-nm">More energy</div>
+          <div class="goal-sub">Optimised meals</div>
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px;">Activity level</div>
+      <div style="font-size:11px;font-weight:500;color:var(--t3);margin-bottom:12px;">Helps calculate your daily needs</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div class="goal-card" style="display:flex;align-items:center;text-align:left;padding:11px 14px;gap:12px;" onclick="selActivity(this)">
+          <div class="goal-check" style="position:static;opacity:1;width:20px;height:20px;border-radius:50%;background:var(--card-bd);flex-shrink:0;margin:0;" id="ac0"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div><div class="goal-nm" style="font-size:12px;">Sedentary</div><div class="goal-sub">Desk job, little exercise</div></div>
+        </div>
+        <div class="goal-card on" style="display:flex;align-items:center;text-align:left;padding:11px 14px;gap:12px;" onclick="selActivity(this)">
+          <div class="goal-check" style="position:static;opacity:1;width:20px;height:20px;border-radius:50%;flex-shrink:0;margin:0;" id="ac1"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div><div class="goal-nm" style="font-size:12px;">Lightly active</div><div class="goal-sub">1–3 days exercise / week</div></div>
+        </div>
+        <div class="goal-card" style="display:flex;align-items:center;text-align:left;padding:11px 14px;gap:12px;" onclick="selActivity(this)">
+          <div class="goal-check" style="position:static;opacity:1;width:20px;height:20px;border-radius:50%;background:var(--card-bd);flex-shrink:0;margin:0;" id="ac2"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <div><div class="goal-nm" style="font-size:12px;">Very active</div><div class="goal-sub">Hard exercise 6–7 days</div></div>
+        </div>
+      </div>
+      <div class="inp-row" style="margin-bottom:18px;">
+        <div class="inp-group" style="margin-bottom:0;">
+          <div class="inp-label">AGE</div>
+          <div class="inp-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><input class="inp" type="number" placeholder="25"></div>
+        </div>
+        <div class="inp-group" style="margin-bottom:0;">
+          <div class="inp-label">WEIGHT (KG)</div>
+          <div class="inp-wrap"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3c0 1.66 1.34 3 3 3s3-1.34 3-3a3 3 0 0 0-3-3z"/><path d="M4 22v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg><input class="inp" type="number" placeholder="70"></div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="showScr(4,null)">Create My Account ✓</button>
+      <div style="text-align:center;margin-top:-10px;"><button class="back-btn" style="display:inline-flex;" onclick="showScr(1,null)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back to details</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3 — FORGOT PASSWORD ══ -->
+<div class="phone" id="s3" style="display:none;">
+  <div class="sb"><span>9:41</span><span style="letter-spacing:2px;opacity:.4;">···</span></div>
+  <div class="scr">
+    <div class="auth-hero" style="padding:32px 28px 28px;text-align:center;">
+      <div class="fp-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div class="brand-name" style="font-size:22px;"><em>Reset</em> password</div>
+      <div class="brand-tag" style="max-width:220px;margin:6px auto 0;">Enter your email and we'll send a reset link</div>
+    </div>
+    <div class="form-card">
+      <button class="back-btn" onclick="showScr(0,null)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back to sign in</button>
+      <div class="inp-group">
+        <div class="inp-label">EMAIL ADDRESS</div>
+        <div class="inp-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input class="inp" type="email" placeholder="you@example.com" id="fp-email">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="showFpSuccess()">Send Reset Link</button>
+      <div class="ok-strip" id="fp-ok" style="display:none;">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="ok-text">Reset link sent — check your inbox</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--card-bd);border-radius:14px;padding:14px 16px;margin-top:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:6px;">DIDN'T RECEIVE IT?</div>
+        <div style="font-size:11px;font-weight:500;color:var(--t3);line-height:1.6;">Check spam folder · Wait 2 minutes · <span style="color:var(--nav-on);cursor:pointer;font-weight:700;">Resend email</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4 — OTP VERIFICATION ══ -->
+<div class="phone" id="s4" style="display:none;">
+  <div class="sb"><span>9:41</span><span style="letter-spacing:2px;opacity:.4;">···</span></div>
+  <div class="scr">
+    <div class="auth-hero" style="padding:32px 28px 28px;text-align:center;">
+      <div class="fp-icon" style="background:var(--al-m-bg);border-color:var(--al-m-bd);">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.63a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="var(--al-m-c)"/></svg>
+      </div>
+      <div class="brand-name" style="font-size:22px;">Verify your <em style="color:var(--al-m-c);">phone</em></div>
+      <div class="brand-tag">OTP sent to +91 98765 43210</div>
+    </div>
+    <div class="form-card">
+      <button class="back-btn" onclick="showScr(2,null)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
+      <div style="font-size:12px;font-weight:500;color:var(--t3);text-align:center;margin-bottom:16px;">Enter the 6-digit code</div>
+      <div class="otp-row" id="otp-boxes">
+        <input class="otp-inp" maxlength="1" type="text" oninput="otpNext(this,0)" onkeydown="otpBack(event,this,0)">
+        <input class="otp-inp" maxlength="1" type="text" oninput="otpNext(this,1)" onkeydown="otpBack(event,this,1)">
+        <input class="otp-inp" maxlength="1" type="text" oninput="otpNext(this,2)" onkeydown="otpBack(event,this,2)">
+        <input class="otp-inp" maxlength="1" type="text" oninput="otpNext(this,3)" onkeydown="otpBack(event,this,3)">
+        <input class="otp-inp" maxlength="1" type="text" oninput="otpNext(this,4)" onkeydown="otpBack(event,this,4)">
+        <input class="otp-inp" maxlength="1" type="text" oninput="otpNext(this,5)" onkeydown="otpBack(event,this,5)">
+      </div>
+      <div class="resend-row">Code expires in <span id="otp-timer" style="color:var(--al-a-c);">2:47</span> · <span>Resend</span></div>
+      <button class="btn-primary">Verify & Continue</button>
+      <div style="text-align:center;font-size:11px;color:var(--t3);">Wrong number? <span style="color:var(--nav-on);font-weight:700;cursor:pointer;" onclick="showScr(2,null)">Change it</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+let otpSeconds=167;
+
+function setTheme(cls,name,btn){
+  document.querySelectorAll('.phone').forEach(p=>{p.className='phone';if(cls)p.classList.add(cls);});
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  updateThemeVars(name);
+}
+
+function updateThemeVars(theme){
+  const phones=document.querySelectorAll('.phone');
+  phones.forEach(p=>{
+    if(theme==='light'){
+      p.style.setProperty('--bg','#F2ECF9');
+      p.style.setProperty('--card','rgba(255,255,255,.6)');
+      p.style.setProperty('--card-bd','rgba(160,100,220,.12)');
+      p.style.setProperty('--card-shine','rgba(255,255,255,.9)');
+      p.style.setProperty('--hero-bg','linear-gradient(150deg,#E8D5FF 0%,#F5DEFF 40%,#FFE8F0 80%,#FFF0E4 100%)');
+      p.style.setProperty('--nav-on','#8030D0');
+      p.style.setProperty('--fab-bg','linear-gradient(145deg,#A050FF,#7020C0)');
+      p.style.setProperty('--fab-shadow','rgba(140,60,220,.35)');
+      p.style.setProperty('--t1','#2A0A50');
+      p.style.setProperty('--t2','rgba(80,40,120,.6)');
+      p.style.setProperty('--t3','rgba(80,40,120,.35)');
+      p.style.setProperty('--inp-bg','rgba(255,255,255,.8)');
+      p.style.setProperty('--inp-bd','rgba(160,100,220,.2)');
+      p.style.setProperty('--inp-focus','rgba(128,48,208,.35)');
+      p.style.setProperty('--pill-on-bg','rgba(140,80,220,.15)');
+      p.style.setProperty('--pill-on-c','#8040C0');
+      p.style.setProperty('--al-m-bg','linear-gradient(135deg,rgba(40,200,170,.14),rgba(20,180,150,.08))');
+      p.style.setProperty('--al-m-bd','rgba(40,200,170,.2)');
+      p.style.setProperty('--al-m-c','#106050');
+      p.style.setProperty('--al-v-bg','linear-gradient(135deg,rgba(180,130,255,.18),rgba(150,100,255,.1))');
+      p.style.setProperty('--al-v-bd','rgba(170,120,255,.22)');
+      p.style.setProperty('--al-v-c','#6020A0');
+      p.style.setProperty('--err-bg','rgba(200,40,60,.08)');
+      p.style.setProperty('--err-bd','rgba(200,40,60,.2)');
+      p.style.setProperty('--err-c','#A02030');
+      p.style.setProperty('--soc-bg','rgba(255,255,255,.7)');
+      p.style.setProperty('--soc-bd','rgba(160,100,220,.18)');
+      p.style.setProperty('--soc-c','rgba(60,20,100,.65)');
+    } else if(theme==='midnight'){
+      p.style.setProperty('--bg','#1C1A2E');
+      p.style.setProperty('--card','rgba(167,139,255,.06)');
+      p.style.setProperty('--card-bd','rgba(167,139,255,.13)');
+      p.style.setProperty('--card-shine','rgba(167,139,255,.2)');
+      p.style.setProperty('--hero-bg','linear-gradient(150deg,#2A1548 0%,#1C1230 55%,#1C1A2E 100%)');
+      p.style.setProperty('--nav-on','#C4A0FF');
+      p.style.setProperty('--fab-bg','linear-gradient(145deg,#A060FF,#7030E0)');
+      p.style.setProperty('--fab-shadow','rgba(140,80,255,.45)');
+      p.style.setProperty('--t1','#EDE6FF');
+      p.style.setProperty('--t2','rgba(200,185,255,.55)');
+      p.style.setProperty('--t3','rgba(160,140,220,.35)');
+      p.style.setProperty('--inp-bg','rgba(167,139,255,.07)');
+      p.style.setProperty('--inp-bd','rgba(167,139,255,.18)');
+      p.style.setProperty('--inp-focus','rgba(192,128,255,.35)');
+      p.style.setProperty('--pill-on-bg','rgba(167,139,255,.2)');
+      p.style.setProperty('--pill-on-c','#C4A0FF');
+      p.style.setProperty('--al-m-bg','linear-gradient(135deg,rgba(40,200,170,.09),rgba(20,180,150,.05))');
+      p.style.setProperty('--al-m-bd','rgba(40,200,170,.16)');
+      p.style.setProperty('--al-m-c','#60EDD0');
+      p.style.setProperty('--al-v-bg','linear-gradient(135deg,rgba(180,140,255,.12),rgba(140,100,255,.07))');
+      p.style.setProperty('--al-v-bd','rgba(180,140,255,.2)');
+      p.style.setProperty('--al-v-c','#C4A0FF');
+      p.style.setProperty('--err-bg','rgba(255,60,80,.1)');
+      p.style.setProperty('--err-bd','rgba(255,60,80,.2)');
+      p.style.setProperty('--err-c','#FF8090');
+      p.style.setProperty('--soc-bg','rgba(167,139,255,.07)');
+      p.style.setProperty('--soc-bd','rgba(167,139,255,.18)');
+      p.style.setProperty('--soc-c','rgba(200,180,255,.7)');
+    } else {
+      p.style.setProperty('--bg','#000');
+      p.style.setProperty('--card','rgba(255,255,255,.04)');
+      p.style.setProperty('--card-bd','rgba(255,255,255,.08)');
+      p.style.setProperty('--card-shine','rgba(255,255,255,.12)');
+      p.style.setProperty('--hero-bg','linear-gradient(150deg,#1A0030 0%,#0D0020 55%,#000 100%)');
+      p.style.setProperty('--nav-on','#C080FF');
+      p.style.setProperty('--fab-bg','linear-gradient(145deg,#A050FF,#6020D0)');
+      p.style.setProperty('--fab-shadow','rgba(130,60,255,.5)');
+      p.style.setProperty('--t1','#fff');
+      p.style.setProperty('--t2','rgba(255,255,255,.5)');
+      p.style.setProperty('--t3','rgba(255,255,255,.25)');
+      p.style.setProperty('--inp-bg','rgba(255,255,255,.05)');
+      p.style.setProperty('--inp-bd','rgba(255,255,255,.1)');
+      p.style.setProperty('--inp-focus','rgba(192,128,255,.4)');
+      p.style.setProperty('--pill-on-bg','rgba(140,80,220,.2)');
+      p.style.setProperty('--pill-on-c','#C090FF');
+      p.style.setProperty('--al-m-bg','linear-gradient(135deg,rgba(40,200,170,.09),rgba(20,180,150,.05))');
+      p.style.setProperty('--al-m-bd','rgba(40,200,170,.16)');
+      p.style.setProperty('--al-m-c','#60EDD0');
+      p.style.setProperty('--al-v-bg','linear-gradient(135deg,rgba(170,120,255,.1),rgba(130,80,255,.06))');
+      p.style.setProperty('--al-v-bd','rgba(170,120,255,.18)');
+      p.style.setProperty('--al-v-c','#D4A8FF');
+      p.style.setProperty('--err-bg','rgba(255,60,80,.1)');
+      p.style.setProperty('--err-bd','rgba(255,60,80,.2)');
+      p.style.setProperty('--err-c','#FF8090');
+      p.style.setProperty('--soc-bg','rgba(255,255,255,.04)');
+      p.style.setProperty('--soc-bd','rgba(255,255,255,.1)');
+      p.style.setProperty('--soc-c','rgba(255,255,255,.65)');
+    }
+  });
+}
+
+function showScr(n,btn){
+  for(let i=0;i<5;i++) document.getElementById('s'+i).style.display='none';
+  document.getElementById('s'+n).style.display='block';
+  document.querySelectorAll('.sw').forEach((s,i)=>{s.classList.toggle('on',i===n);});
+  document.getElementById('s'+n).scrollTo(0,0);
+}
+
+function togglePw(id,icon){
+  const inp=document.getElementById(id);
+  inp.type=inp.type==='password'?'text':'password';
+  icon.style.opacity=inp.type==='text'?'.4':'1';
+}
+
+function showLoginErr(){
+  const e=document.getElementById('login-err');
+  e.style.display='flex';
+  setTimeout(()=>e.style.display='none',2500);
+}
+
+function checkStrength(inp){
+  const v=inp.value;
+  const bars=[document.getElementById('psb1'),document.getElementById('psb2'),document.getElementById('psb3')];
+  const lbl=document.getElementById('pslbl');
+  bars.forEach(b=>{b.className='ps-bar';});
+  if(v.length===0){lbl.textContent='—';lbl.style.color='var(--t3)';return;}
+  const strong=v.length>=8 && /[A-Z]/.test(v) && /[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v);
+  const fair=v.length>=8 && (/[A-Z]/.test(v)||/[0-9]/.test(v));
+  if(strong){bars[0].classList.add('good');bars[1].classList.add('good');bars[2].classList.add('good');lbl.textContent='Strong';lbl.style.color='#60EDD0';}
+  else if(fair){bars[0].classList.add('fair');bars[1].classList.add('fair');lbl.textContent='Fair';lbl.style.color='#FFB040';}
+  else{bars[0].classList.add('weak');lbl.textContent='Weak';lbl.style.color='#FF8090';}
+}
+
+function showFpSuccess(){
+  document.getElementById('fp-ok').style.display='flex';
+}
+
+function selGoal(el){
+  el.closest('.goal-grid')?.querySelectorAll('.goal-card').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function selActivity(el){
+  el.closest('.form-card')?.querySelectorAll('.goal-card[onclick="selActivity(this)"]').forEach(c=>{
+    c.classList.remove('on');
+    const ch=c.querySelector('.goal-check');
+    if(ch){ch.style.background='var(--card-bd)';}
+  });
+  el.classList.add('on');
+}
+
+function otpNext(inp,idx){
+  inp.classList.toggle('filled',inp.value.length>0);
+  if(inp.value.length===1){
+    const boxes=document.getElementById('otp-boxes').querySelectorAll('.otp-inp');
+    if(idx<5) boxes[idx+1].focus();
+  }
+}
+
+function otpBack(e,inp,idx){
+  if(e.key==='Backspace'&&inp.value===''){
+    const boxes=document.getElementById('otp-boxes').querySelectorAll('.otp-inp');
+    if(idx>0){boxes[idx-1].focus();boxes[idx-1].value='';boxes[idx-1].classList.remove('filled');}
+  }
+}
+
+setInterval(()=>{
+  otpSeconds=Math.max(0,otpSeconds-1);
+  const m=Math.floor(otpSeconds/60), s=otpSeconds%60;
+  const el=document.getElementById('otp-timer');
+  if(el) el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+},1000);
+</script>
