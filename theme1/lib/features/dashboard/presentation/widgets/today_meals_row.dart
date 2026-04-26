@@ -62,7 +62,7 @@ class TodayMealsRow extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Colors.white.withOpacity(0.07)),
+                top: BorderSide(color: Colors.white.withOpacity(0.12)),
               ),
             ),
             child: Row(
@@ -114,7 +114,7 @@ class TodayMealsRow extends StatelessWidget {
     return Container(
       width: 1,
       height: 30,
-      color: Colors.white.withOpacity(0.07),
+      color: Colors.white.withOpacity(0.12),
     );
   }
 }

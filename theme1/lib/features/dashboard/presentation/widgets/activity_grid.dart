@@ -14,8 +14,13 @@ class ActivityGrid extends StatelessWidget {
             context,
             '4,820',
             'STEPS',
-            const Color(0xFF3A1080),
-            const Color(0xFFD090FF),
+            null,
+            Colors.white,
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF3A1060), Color(0xFF5020A0)],
+            ),
           ),
           const SizedBox(width: AppSpacing.sm),
           _buildActivityTile(
@@ -44,9 +49,10 @@ class ActivityGrid extends StatelessWidget {
     BuildContext context,
     String value,
     String label,
-    Color bgColor,
+    Color? bgColor,
     Color textColor, {
     BoxBorder? border,
+    Gradient? gradient,
   }) {
     final theme = Theme.of(context);
     
@@ -55,6 +61,7 @@ class ActivityGrid extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         decoration: BoxDecoration(
           color: bgColor,
+          gradient: gradient,
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           border: border,
         ),

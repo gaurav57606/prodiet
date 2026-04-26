@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/color_schemes.dart';
 import '../mock/dashboard_mock.dart';
 
 class MacroGrid extends StatelessWidget {
@@ -52,7 +53,7 @@ class MacroGrid extends StatelessWidget {
             children: [
               _buildIcon(context, data.label),
               Text(
-                '${data.percentage.toInt() * 100}%',
+                '${(data.percentage * 100).toInt()}%',
                 style: theme.textTheme.labelSmall?.copyWith(color: Colors.white.withOpacity(0.5)),
               ),
             ],
@@ -83,7 +84,7 @@ class MacroGrid extends StatelessWidget {
 
   Widget _buildFatTile(BuildContext context) {
     final theme = Theme.of(context);
-    const fatColor = Color(0xFF40D8C0);
+    final fatColor = AppColorSchemes.accentTeal;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -140,10 +141,10 @@ class MacroGrid extends StatelessWidget {
       width: 30,
       height: 30,
       decoration: BoxDecoration(
-        color: isFat ? const Color(0xFF40D8C0).withOpacity(0.1) : Colors.white.withOpacity(0.1),
+        color: isFat ? AppColorSchemes.accentTeal.withOpacity(0.1) : Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(9),
       ),
-      child: Icon(icon, size: 16, color: isFat ? const Color(0xFF40D8C0) : Colors.white),
+      child: Icon(icon, size: 16, color: isFat ? AppColorSchemes.accentTeal : Colors.white),
     );
   }
 }

@@ -49,7 +49,7 @@ class DietPlanScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.description_outlined, color: Color(0xFFB06EFF), size: 18),
+                      const Icon(Icons.table_chart_outlined, color: Color(0xFFB06EFF), size: 18),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Column(

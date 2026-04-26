@@ -25,23 +25,23 @@ class AlertStrip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: color.withOpacity(0.15),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.25)),
+          border: Border.all(color: color.withOpacity(0.35)),
         ),
         child: Row(
           children: [
             Container(
-              width: 28,
-              height: 28,
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 isWarning ? Icons.bolt : Icons.warning_amber_rounded,
                 color: color,
-                size: 14,
+                size: 16,
               ),
             ),
             const SizedBox(width: 8),

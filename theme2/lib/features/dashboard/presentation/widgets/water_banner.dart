@@ -34,7 +34,7 @@ class WaterBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Next water in",
+                    "Almost time — prepare",
                     style: theme.textTheme.labelLarge?.copyWith(color: skyColor),
                   ),
                   Text(
@@ -48,7 +48,8 @@ class WaterBanner extends StatelessWidget {
               "18m",
               style: theme.textTheme.displayMedium?.copyWith(
                 color: skyColor,
-                fontSize: 22,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],

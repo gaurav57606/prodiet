@@ -87,7 +87,7 @@ class HydrationCard extends StatelessWidget {
                   height: 6,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface.withOpacity(0.08),
+                    color: theme.colorScheme.onSurface.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: FractionallySizedBox(
@@ -137,7 +137,7 @@ class HydrationCard extends StatelessWidget {
         Text(
           label,
           style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.25),
+            color: theme.colorScheme.onSurface.withOpacity(0.45),
           ),
         ),
         Text(

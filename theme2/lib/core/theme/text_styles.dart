@@ -70,7 +70,7 @@ class AppTextStyles {
         fontSize: 9,
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurfaceVariant,
-        letterSpacing: 0.8,
+        letterSpacing: 0.4,
       ),
     );
   }

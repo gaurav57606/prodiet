@@ -40,8 +40,8 @@ class CalorieSummaryCard extends StatelessWidget {
             top: -50,
             right: -30,
             child: Container(
-              width: 180,
-              height: 180,
+              width: 220,
+              height: 220,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
@@ -100,6 +100,7 @@ class CalorieSummaryCard extends StatelessWidget {
                         style: theme.textTheme.displayLarge?.copyWith(
                           fontSize: 48,
                           height: 1,
+                          letterSpacing: -0.5,
                         ),
                       ),
                       Text(
@@ -135,7 +136,7 @@ class CalorieSummaryCard extends StatelessWidget {
                           'day streak',
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: const Color(0xFFFFD070).withOpacity(0.5),
-                            fontSize: 8,
+                            fontSize: 9,
                           ),
                         ),
                       ],

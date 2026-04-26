@@ -10,6 +10,8 @@ class DmButton extends StatelessWidget {
   final IconData? icon;
   final bool isLoading;
   final bool isFullWidth;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const DmButton({
     super.key,
@@ -19,6 +21,8 @@ class DmButton extends StatelessWidget {
     this.icon,
     this.isLoading = false,
     this.isFullWidth = true,
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
@@ -53,6 +57,9 @@ class DmButton extends StatelessWidget {
         foregroundColor = colorScheme.onErrorContainer;
         break;
     }
+
+    if (this.backgroundColor != null) backgroundColor = this.backgroundColor!;
+    if (this.textColor != null) foregroundColor = this.textColor!;
 
     final buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: backgroundColor,

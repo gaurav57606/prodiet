@@ -16,7 +16,7 @@ class AlertsList extends StatelessWidget {
             'Snack skipped · Dinner adjusted',
             '+15g protein added tonight',
             const Color(0xFFFFB040),
-            const Color(0xFFFFD070).withOpacity(0.1),
+            const Color(0xFFFFD070).withOpacity(0.13),
           ),
           const SizedBox(height: AppSpacing.sm),
           _buildAlertTile(
@@ -24,7 +24,7 @@ class AlertsList extends StatelessWidget {
             'Quinoa Bowl ready to cook',
             'All ingredients in stock · 25 min',
             const Color(0xFFC090FF),
-            const Color(0xFFA178FF).withOpacity(0.1),
+            const Color(0xFFA178FF).withOpacity(0.13),
           ),
           const SizedBox(height: AppSpacing.sm),
           _buildAlertTile(
@@ -32,7 +32,7 @@ class AlertsList extends StatelessWidget {
             '3 of 4 macros above 60%',
             'Great progress on targets today',
             const Color(0xFF40D8B8),
-            const Color(0xFF28C8AA).withOpacity(0.1),
+            const Color(0xFF28C8AA).withOpacity(0.13),
           ),
         ],
       ),
@@ -51,7 +51,7 @@ class AlertsList extends StatelessWidget {
     return DmCard(
       padding: const EdgeInsets.all(12),
       color: bgColor,
-      borderSide: BorderSide(color: accentColor.withOpacity(0.18)),
+      borderSide: BorderSide(color: accentColor.withOpacity(0.22)),
       child: Row(
         children: [
           Container(

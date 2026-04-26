@@ -41,6 +41,7 @@ class InventoryScreen extends StatelessWidget {
                   DmChip(
                     label: "Scan Bill", 
                     isSelected: true,
+                    color: const Color(0xFFB8FF00),
                     onTap: () => context.pushNamed('ocr'),
                   ),
                 ],

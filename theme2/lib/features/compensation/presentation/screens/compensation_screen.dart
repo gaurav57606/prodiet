@@ -19,7 +19,7 @@ class CompensationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Meal Adjustment",
-          style: theme.textTheme.displayMedium?.copyWith(fontSize: 24),
+          style: theme.textTheme.displayMedium?.copyWith(fontSize: 28),
         ),
         centerTitle: false,
         leading: IconButton(
@@ -47,7 +47,7 @@ class CompensationScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: coral.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
-                  border: Border.all(color: coral.withOpacity(0.3)),
+                  border: Border.all(color: coral.withOpacity(0.5)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,28 +83,22 @@ class CompensationScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     const Row(
                       children: [
-                        Expanded(
-                          child: DmMacroChip(
-                            value: "-180",
-                            label: "kcal",
-                            type: MacroType.calories,
-                          ),
+                        DmMacroChip(
+                          value: "-180",
+                          label: "kcal",
+                          type: MacroType.calories,
                         ),
                         SizedBox(width: 8),
-                        Expanded(
-                          child: DmMacroChip(
-                            value: "-6g",
-                            label: "Protein",
-                            type: MacroType.protein,
-                          ),
+                        DmMacroChip(
+                          value: "-6g",
+                          label: "Protein",
+                          type: MacroType.protein,
                         ),
                         SizedBox(width: 8),
-                        Expanded(
-                          child: DmMacroChip(
-                            value: "-12g",
-                            label: "Carbs",
-                            type: MacroType.carbs,
-                          ),
+                        DmMacroChip(
+                          value: "-12g",
+                          label: "Carbs",
+                          type: MacroType.carbs,
                         ),
                       ],
                     ),
@@ -124,6 +118,7 @@ class CompensationScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primary.withOpacity(0.12),
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLarge)),
+                        border: Border(left: BorderSide(color: theme.colorScheme.primary, width: 3)),
                       ),
                       child: Row(
                         children: [
@@ -174,7 +169,7 @@ class CompensationScreen extends StatelessWidget {
                     Text("Break from diet plan?", style: theme.textTheme.labelLarge?.copyWith(color: amber, fontWeight: FontWeight.w700)),
                     Text("Recalculate entire plan for remaining days to meet weekly goals", style: theme.textTheme.bodySmall),
                     const SizedBox(height: 6),
-                    Text("Recalculate plan ›", style: theme.textTheme.labelLarge?.copyWith(color: amber)),
+                    Text("Recalculate plan ›", style: theme.textTheme.labelLarge?.copyWith(color: amber, decoration: TextDecoration.underline)),
                   ],
                 ),
               ),
@@ -205,7 +200,7 @@ class CompensationScreen extends StatelessWidget {
           ),
           Text(
             delta,
-            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 14, color: theme.colorScheme.primary),
+            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 14, color: const Color(0xFFB8FF00)),
           ),
         ],
       ),

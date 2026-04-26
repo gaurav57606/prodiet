@@ -24,7 +24,7 @@ class AppTheme {
 
       cardTheme: CardThemeData(
         color: scheme.brightness == Brightness.dark 
-            ? scheme.surfaceContainerHighest.withOpacity(0.6) 
+            ? scheme.surfaceContainerHighest 
             : Colors.white.withOpacity(0.7),
         elevation: 0,
         shape: RoundedRectangleBorder(

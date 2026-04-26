@@ -11,17 +11,17 @@ class ActivityRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
       child: Row(
         children: [
-          _buildActivityItem(context, "4,820", "Steps", Theme.of(context).colorScheme.primary),
+          _buildActivityItem(context, 0, "4,820", "Steps", Theme.of(context).colorScheme.primary),
           const SizedBox(width: 6),
-          _buildActivityItem(context, "312", "kcal Burned", const Color(0xFFFF5C3A)),
+          _buildActivityItem(context, 1, "312", "kcal Burned", const Color(0xFFFF5C3A)),
           const SizedBox(width: 6),
-          _buildActivityItem(context, "48m", "Active", const Color(0xFF38BFFF)),
+          _buildActivityItem(context, 2, "48m", "Active", const Color(0xFF38BFFF)),
         ],
       ),
     );
   }
 
-  Widget _buildActivityItem(BuildContext context, String value, String label, Color color) {
+  Widget _buildActivityItem(BuildContext context, int index, String value, String label, Color color) {
     final theme = Theme.of(context);
     return Expanded(
       child: DmCard(
@@ -31,7 +31,10 @@ class ActivityRow extends StatelessWidget {
           children: [
             Text(
               value,
-              style: theme.textTheme.headlineMedium?.copyWith(fontSize: 20, color: color),
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontSize: index == 0 ? 22 : 20,
+                color: color,
+              ),
             ),
             const SizedBox(height: 2),
             Text(

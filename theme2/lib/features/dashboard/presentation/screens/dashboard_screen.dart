@@ -42,12 +42,12 @@ class DashboardScreen extends StatelessWidget {
                             color: AppColors.textSecondary,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         Text(
                           "EAT",
                           style: GoogleFonts.barlowCondensed(
                             fontSize: 48,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,
                             color: Colors.white,
                             height: 1.0,
                           ),
@@ -56,7 +56,7 @@ class DashboardScreen extends StatelessWidget {
                           "RIGHT.",
                           style: GoogleFonts.barlowCondensed(
                             fontSize: 48,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w900,
                             color: AppColors.lime,
                             height: 1.0,
                           ),
@@ -82,6 +82,7 @@ class DashboardScreen extends StatelessWidget {
                             fontSize: 48,
                             fontWeight: FontWeight.bold,
                             color: AppColors.lime,
+                            letterSpacing: -1.5,
                             height: 1.0,
                           ),
                         ),

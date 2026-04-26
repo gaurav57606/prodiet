@@ -29,21 +29,21 @@ class InventoryGrid extends StatelessWidget {
   Widget _buildStatCard(BuildContext context, String value, String label, Color color) {
     final theme = Theme.of(context);
     return DmCard(
-      padding: const EdgeInsets.all(11),
+      borderSide: BorderSide(color: color.withOpacity(0.3), width: 1.5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             value,
             style: theme.textTheme.displayMedium?.copyWith(
-              fontSize: 26,
+              fontSize: 36,
               color: color,
             ),
           ),
           Text(
             label.toUpperCase(),
             style: theme.textTheme.labelSmall?.copyWith(
-              fontSize: 9,
+              fontSize: 10,
               fontWeight: FontWeight.w600,
             ),
           ),

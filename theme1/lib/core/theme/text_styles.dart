@@ -4,7 +4,7 @@ class AppTextStyles {
   static const String fontFamily = 'Outfit';
 
   static TextTheme getTextTheme(ColorScheme scheme) {
-    return const TextTheme(
+    return TextTheme(
       displayLarge: TextStyle(
         fontFamily: fontFamily,
         fontSize: 50,

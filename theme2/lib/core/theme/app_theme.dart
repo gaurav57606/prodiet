@@ -31,7 +31,7 @@ class AppTheme {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: textTheme.displayMedium,
+        titleTextStyle: textTheme.headlineLarge,
       ),
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

@@ -56,8 +56,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark 
-                ? AppColorSchemes.heroGradientDark 
-                : AppColorSchemes.heroGradientLight,
+                ? AppColorSchemes.heroGradient 
+                : AppColorSchemes.heroGradientLightMode,
           ),
         ),
         child: FadeTransition(

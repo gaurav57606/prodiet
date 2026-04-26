@@ -41,7 +41,7 @@ class MacroRingChart extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: 1,
                       strokeWidth: 4,
-                      color: theme.colorScheme.outline,
+                      color: const Color(0xFF4E4E44).withOpacity(0.35),
                     ),
                   ),
                   Center(
@@ -59,7 +59,7 @@ class MacroRingChart extends StatelessWidget {
             Text(
               value,
               style: theme.textTheme.headlineMedium?.copyWith(
-                fontSize: 14,
+                fontSize: 16,
                 color: color,
               ),
             ),

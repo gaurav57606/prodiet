@@ -116,7 +116,7 @@ class MealPlannerScreen extends StatelessWidget {
       width: isActive ? 20 : 6,
       height: 6,
       decoration: BoxDecoration(
-        color: isActive ? theme.colorScheme.primary : theme.colorScheme.outline.withOpacity(0.3),
+        color: isActive ? theme.colorScheme.primary : const Color(0xFF3A3A35),
         borderRadius: BorderRadius.circular(10),
       ),
     );

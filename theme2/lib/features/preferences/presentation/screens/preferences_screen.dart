@@ -3,6 +3,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_card.dart';
 import '../../../../shared/widgets/dm_chip.dart';
 import '../../../../shared/widgets/dm_button.dart';
+import '../../../../core/theme/text_styles.dart';
 
 class PreferencesScreen extends StatelessWidget {
   const PreferencesScreen({super.key});
@@ -40,7 +41,7 @@ class PreferencesScreen extends StatelessWidget {
             ]),
             
             _buildSection(context, "Diet Type", [
-              const DmChip(label: "Non-Vegetarian", isSelected: true),
+              const DmChip(label: "Non-Vegetarian", isSelected: true, color: Color(0xFFB8FF00)),
               const DmChip(label: "Vegetarian", isSelected: false),
               const DmChip(label: "Vegan", isSelected: false),
               const DmChip(label: "Keto", isSelected: false),
@@ -80,14 +81,19 @@ class PreferencesScreen extends StatelessWidget {
 
             _buildSection(context, "Meal Frequency", [
               const DmChip(label: "3 meals", isSelected: false),
-              const DmChip(label: "5 meals", isSelected: true),
+              const DmChip(label: "5 meals", isSelected: true, color: Color(0xFFB8FF00)),
               const DmChip(label: "6 meals", isSelected: false),
               const DmChip(label: "Intermittent", isSelected: false),
             ]),
 
             Padding(
               padding: const EdgeInsets.all(18),
-              child: DmButton(label: "Save Preferences", onPressed: () {}),
+              child: DmButton(
+                label: "Save Preferences", 
+                onPressed: () {},
+                backgroundColor: const Color(0xFFB8FF00),
+                textColor: Colors.black,
+              ),
             ),
             const SizedBox(height: 20),
           ],
@@ -103,7 +109,7 @@ class PreferencesScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title.toUpperCase(), style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+          Text(title.toUpperCase(), style: AppTextStyles.sectionLabel(theme.colorScheme)),
           const SizedBox(height: 8),
           Wrap(spacing: 6, runSpacing: 6, children: chips),
         ],
@@ -162,7 +168,7 @@ class PreferencesScreen extends StatelessWidget {
           height: 10,
           margin: const EdgeInsets.only(left: 4),
           decoration: BoxDecoration(
-            color: index < level ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+            color: index < level ? theme.colorScheme.primary : const Color(0xFF3A3A35),
             borderRadius: BorderRadius.circular(2),
           ),
         );
