@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/utils/extensions.dart';
-import '../../../shared/widgets/dm_button.dart';
-import '../widgets/auth_hero.dart';
+import 'package:dietmate/core/theme/app_spacing.dart';
+import 'package:dietmate/core/utils/extensions.dart';
+import 'package:dietmate/shared/widgets/dm_button.dart';
+import 'package:dietmate/features/auth/presentation/widgets/auth_hero.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -161,3 +161,4 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
+

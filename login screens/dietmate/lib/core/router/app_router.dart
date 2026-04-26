@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/auth/presentation/screens/splash_screen.dart';
-import '../../features/auth/presentation/screens/onboarding_screen.dart';
-import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/signup_screen.dart';
-import '../../features/auth/presentation/screens/forgot_password_screen.dart';
-import '../../features/auth/presentation/screens/otp_screen.dart';
-import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
-import '../../features/diet_plan/presentation/screens/diet_plan_screen.dart';
-import '../../features/meal_planner/presentation/screens/meal_planner_screen.dart';
-import '../../features/inventory/presentation/screens/inventory_screen.dart';
-import '../../features/progress/presentation/screens/progress_screen.dart';
-import '../../features/nutrition/presentation/screens/nutrition_screen.dart';
-import '../../features/shopping_list/presentation/screens/shopping_list_screen.dart';
-import '../../features/ocr_scanner/presentation/screens/ocr_screen.dart';
+import 'package:dietmate/features/auth/presentation/screens/splash_screen.dart';
+import 'package:dietmate/features/auth/presentation/screens/onboarding_screen.dart';
+import 'package:dietmate/features/auth/presentation/screens/login_screen.dart';
+import 'package:dietmate/features/auth/presentation/screens/signup_screen.dart';
+import 'package:dietmate/features/auth/presentation/screens/forgot_password_screen.dart';
+import 'package:dietmate/features/auth/presentation/screens/otp_screen.dart';
+import 'package:dietmate/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:dietmate/features/diet_plan/presentation/screens/diet_plan_screen.dart';
+import 'package:dietmate/features/meal_planner/presentation/screens/meal_planner_screen.dart';
+import 'package:dietmate/features/inventory/presentation/screens/inventory_screen.dart';
+import 'package:dietmate/features/progress/presentation/screens/progress_screen.dart';
+import 'package:dietmate/features/nutrition/presentation/screens/nutrition_screen.dart';
+import 'package:dietmate/features/shopping_list/presentation/screens/shopping_list_screen.dart';
+import 'package:dietmate/features/ocr_scanner/presentation/screens/ocr_screen.dart';
+import 'package:dietmate/shared/widgets/main_shell.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -74,8 +75,7 @@ final appRouter = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
-        // Return a scaffold with bottom nav here later
-        return child; 
+        return MainShell(child: child); 
       },
       routes: [
         GoRoute(
@@ -122,3 +122,4 @@ final appRouter = GoRouter(
     ),
   ],
 );
+

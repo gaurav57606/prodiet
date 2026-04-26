@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
-import '../../../../shared/widgets/dm_button.dart';
+import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
+import 'package:dietmate_pro/shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/shared/widgets/dm_button.dart';
+import 'package:dietmate_pro/shared/widgets/dm_macro_chip.dart';
 
 class CompensationScreen extends StatelessWidget {
   const CompensationScreen({super.key});
@@ -9,6 +11,7 @@ class CompensationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final coral = const Color(0xFFFF5C3A);
     final amber = const Color(0xFFFFB800);
     
@@ -51,7 +54,7 @@ class CompensationScreen extends StatelessWidget {
                   children: [
                     Text(
                       "MISSED MEAL",
-                      style: theme.textTheme.labelSmall?.copyWith(color: coral, fontWeight: FontWeight.w700),
+                      style: AppTextStyles.sectionLabel(colorScheme).copyWith(color: coral),
                     ),
                     Text(
                       "Morning Snack",
@@ -73,15 +76,36 @@ class CompensationScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("IMPACT ANALYSIS", style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 6),
-                    Row(
+                    Text(
+                      "IMPACT ANALYSIS", 
+                      style: AppTextStyles.sectionLabel(colorScheme),
+                    ),
+                    const SizedBox(height: 10),
+                    const Row(
                       children: [
-                        _buildImpact(context, "-180", "kcal missed", coral),
-                        const SizedBox(width: 8),
-                        _buildImpact(context, "-6g", "protein missed", coral),
-                        const SizedBox(width: 8),
-                        _buildImpact(context, "-12g", "carbs missed", amber),
+                        Expanded(
+                          child: DmMacroChip(
+                            value: "-180",
+                            label: "kcal",
+                            type: MacroType.calories,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: DmMacroChip(
+                            value: "-6g",
+                            label: "Protein",
+                            type: MacroType.protein,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: DmMacroChip(
+                            value: "-12g",
+                            label: "Carbs",
+                            type: MacroType.carbs,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -107,8 +131,8 @@ class CompensationScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Auto-Adjustment Plan",
-                                style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),
+                                "AUTO-ADJUSTMENT PLAN",
+                                style: AppTextStyles.sectionLabel(colorScheme).copyWith(color: theme.colorScheme.primary),
                               ),
                               Text("Distributed across remaining meals", style: theme.textTheme.bodySmall),
                             ],
@@ -155,25 +179,6 @@ class CompensationScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImpact(BuildContext context, String value, String label, Color color) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            Text(value, style: theme.textTheme.displayMedium?.copyWith(fontSize: 22, color: color)),
-            Text(label, style: theme.textTheme.bodySmall, textAlign: TextAlign.center),
           ],
         ),
       ),

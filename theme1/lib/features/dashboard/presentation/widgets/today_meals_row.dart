@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_card.dart';
 import '../../../../shared/widgets/dm_chip.dart';
+import '../../../../shared/widgets/dm_macro_chip.dart';
 
 class TodayMealsRow extends StatelessWidget {
   const TodayMealsRow({super.key});
@@ -66,10 +67,41 @@ class TodayMealsRow extends StatelessWidget {
             ),
             child: Row(
               children: [
-                _buildMealStat(context, '38g', 'Prot', const Color(0xFFFF90B0)),
-                _buildMealStat(context, '45g', 'Carb', const Color(0xFFFFD080)),
-                _buildMealStat(context, '12g', 'Fat', const Color(0xFF80B8FF)),
-                _buildMealStat(context, '4g', 'Fibre', const Color(0xFF60DCC0), isLast: true),
+                const Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(value: '38g', label: 'Prot', type: MacroType.protein),
+                    ),
+                  ),
+                ),
+                _buildDivider(),
+                const Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(value: '45g', label: 'Carb', type: MacroType.carbs),
+                    ),
+                  ),
+                ),
+                _buildDivider(),
+                const Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(value: '12g', label: 'Fat', type: MacroType.fat),
+                    ),
+                  ),
+                ),
+                _buildDivider(),
+                const Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(value: '4g', label: 'Fibre', type: MacroType.fibre),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -78,30 +110,11 @@ class TodayMealsRow extends StatelessWidget {
     );
   }
 
-  Widget _buildMealStat(BuildContext context, String value, String label, Color color, {bool isLast = false}) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          border: isLast ? null : Border(right: BorderSide(color: Colors.white.withOpacity(0.07))),
-        ),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: theme.textTheme.titleMedium?.copyWith(color: color, fontSize: 15),
-            ),
-            Text(
-              label,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.25),
-                fontSize: 8,
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget _buildDivider() {
+    return Container(
+      width: 1,
+      height: 30,
+      color: Colors.white.withOpacity(0.07),
     );
   }
 }

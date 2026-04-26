@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
-import '../../../../shared/widgets/dm_button.dart';
+import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
+import 'package:dietmate_pro/shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/shared/widgets/dm_button.dart';
+import 'package:dietmate_pro/shared/widgets/dm_macro_chip.dart';
 
 class MealCard extends StatelessWidget {
   const MealCard({super.key});
@@ -9,6 +11,7 @@ class MealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final skyColor = const Color(0xFF38BFFF);
     
     return Padding(
@@ -23,10 +26,7 @@ class MealCard extends StatelessWidget {
               children: [
                 Text(
                   "LUNCH",
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.0,
-                  ),
+                  style: AppTextStyles.sectionLabel(colorScheme),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
@@ -66,15 +66,39 @@ class MealCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Row(
+            const Row(
               children: [
-                _buildMacro(context, "38g", "Protein", const Color(0xFFFF5C3A)),
-                const SizedBox(width: 5),
-                _buildMacro(context, "45g", "Carbs", const Color(0xFFFFB800)),
-                const SizedBox(width: 5),
-                _buildMacro(context, "12g", "Fat", const Color(0xFFB06EFF)),
-                const SizedBox(width: 5),
-                _buildMacro(context, "4g", "Fibre", const Color(0xFF3DCC7E)),
+                Expanded(
+                  child: DmMacroChip(
+                    value: "38g",
+                    label: "Protein",
+                    type: MacroType.protein,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: DmMacroChip(
+                    value: "45g",
+                    label: "Carbs",
+                    type: MacroType.carbs,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: DmMacroChip(
+                    value: "12g",
+                    label: "Fat",
+                    type: MacroType.fat,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: DmMacroChip(
+                    value: "4g",
+                    label: "Fibre",
+                    type: MacroType.fibre,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -104,31 +128,6 @@ class MealCard extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMacro(BuildContext context, String value, String label, Color color) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: theme.textTheme.headlineMedium?.copyWith(fontSize: 14, color: color),
-            ),
-            Text(
-              label,
-              style: theme.textTheme.labelSmall?.copyWith(fontSize: 8),
             ),
           ],
         ),

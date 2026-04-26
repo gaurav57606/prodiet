@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
 import 'package:dietmate_pro/features/inventory/presentation/widgets/inventory_grid.dart';
 import 'package:dietmate_pro/features/inventory/presentation/widgets/reorder_banner.dart';
 import 'package:dietmate_pro/shared/widgets/dm_card.dart';
@@ -12,6 +13,7 @@ class InventoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +51,10 @@ class InventoryScreen extends StatelessWidget {
             
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-              child: Text("In Stock (12 items)", style: theme.textTheme.titleMedium),
+              child: Text(
+                "ALL ITEMS", 
+                style: AppTextStyles.sectionLabel(colorScheme),
+              ),
             ),
             
             const InventoryGrid(),

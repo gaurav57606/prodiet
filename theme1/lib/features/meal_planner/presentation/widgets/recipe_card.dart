@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_button.dart';
+import '../../../../shared/widgets/dm_macro_chip.dart';
 import '../mock/meal_planner_mock.dart';
 
 class RecipeCard extends StatelessWidget {
@@ -62,10 +63,10 @@ class RecipeCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildMacro(theme, recipe.protein, 'Prot'),
-                      _buildMacro(theme, recipe.carbs, 'Carb'),
-                      _buildMacro(theme, recipe.fat, 'Fat'),
-                      _buildMacro(theme, recipe.match, 'Match', isAccent: true),
+                      DmMacroChip(value: recipe.protein, label: 'Prot', type: MacroType.protein, large: true),
+                      DmMacroChip(value: recipe.carbs, label: 'Carb', type: MacroType.carbs, large: true),
+                      DmMacroChip(value: recipe.fat, label: 'Fat', type: MacroType.fat, large: true),
+                      DmMacroChip(value: recipe.match, label: 'Match', type: MacroType.calories, large: true), // Match as accent violet
                     ],
                   ),
                   const SizedBox(height: AppSpacing.md),
@@ -89,26 +90,6 @@ class RecipeCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMacro(ThemeData theme, String value, String label, {bool isAccent = false}) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontSize: 16,
-            color: isAccent ? theme.colorScheme.primary : null,
-          ),
-        ),
-        Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.3),
-            fontSize: 8,
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildTag(ThemeData theme, String label) {
     return Container(

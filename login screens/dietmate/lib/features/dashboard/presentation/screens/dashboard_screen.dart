@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/utils/extensions.dart';
-import '../../../shared/widgets/dm_avatar.dart';
-import '../widgets/calorie_summary_card.dart';
-import '../widgets/macro_ring_chart.dart';
-import '../widgets/today_meals_row.dart';
-import '../widgets/quick_action_grid.dart';
+import 'package:dietmate/core/theme/app_spacing.dart';
+import 'package:dietmate/core/utils/extensions.dart';
+import 'package:dietmate/shared/widgets/dm_avatar.dart';
+import 'package:dietmate/features/dashboard/presentation/widgets/calorie_summary_card.dart';
+import 'package:dietmate/features/dashboard/presentation/widgets/macro_ring_chart.dart';
+import 'package:dietmate/features/dashboard/presentation/widgets/today_meals_row.dart';
+import 'package:dietmate/features/dashboard/presentation/widgets/quick_action_grid.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -68,3 +68,4 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 }
+

@@ -26,7 +26,7 @@ class AppTheme {
         iconTheme: IconThemeData(color: scheme.onBackground),
       ),
       
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: scheme.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -87,3 +87,4 @@ class AppTheme {
     );
   }
 }
+

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/router/app_router.dart';
-import '../../../core/utils/extensions.dart';
+import 'package:dietmate/core/router/app_router.dart';
+import 'package:dietmate/core/utils/extensions.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -56,3 +56,4 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+

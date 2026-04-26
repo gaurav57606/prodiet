@@ -10,97 +10,99 @@ class DmAppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final location = GoRouterState.of(context).uri.toString();
-
-    // Mapping locations to indices
-    int calculateSelectedIndex() {
-      if (location.startsWith(AppRoutes.dashboard)) return 0;
-      if (location.startsWith(AppRoutes.dietPlan) || location.startsWith(AppRoutes.mealPlanner)) return 1;
-      if (location.startsWith(AppRoutes.inventory)) return 2;
-      if (location.startsWith(AppRoutes.progress) || location.startsWith(AppRoutes.nutrition)) return 3;
-      return 0;
-    }
-
-    void onItemSelected(int index) {
-      switch (index) {
-        case 0:
-          context.go(AppRoutes.dashboard);
-          break;
-        case 1:
-          context.go(AppRoutes.dietPlan);
-          break;
-        case 2:
-          context.go(AppRoutes.inventory);
-          break;
-        case 3:
-          context.go(AppRoutes.progress);
-          break;
-      }
-    }
 
     return Scaffold(
       body: child,
       extendBody: true,
-      bottomNavigationBar: Container(
-        height: 70,
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-          border: Border.all(color: Colors.white.withOpacity(0.08)),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(context, 0, Icons.grid_view_rounded, calculateSelectedIndex() == 0, onItemSelected),
-              _buildNavItem(context, 1, Icons.restaurant_rounded, calculateSelectedIndex() == 1, onItemSelected),
-              _buildNavItem(context, 2, Icons.inventory_2_rounded, calculateSelectedIndex() == 2, onItemSelected),
-              _buildNavItem(context, 3, Icons.insights_rounded, calculateSelectedIndex() == 3, onItemSelected),
-            ],
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
+        elevation: 8,
+        onPressed: () => context.push(AppRoutes.ocr),
+        child: const Icon(Icons.mic_rounded, size: 26),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.ocr),
-        backgroundColor: theme.colorScheme.primary,
-        shape: const CircleBorder(),
-        elevation: 4,
-        child: const Icon(Icons.camera_alt_rounded, color: Colors.white),
+      bottomNavigationBar: BottomAppBar(
+        color: scheme.surface,
+        elevation: 0,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 6,
+        padding: EdgeInsets.zero,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _NavItem(
+              icon: Icons.home_rounded,
+              label: 'Home',
+              route: AppRoutes.dashboard,
+              isSelected: location.startsWith(AppRoutes.dashboard),
+            ),
+            _NavItem(
+              icon: Icons.restaurant_menu_rounded,
+              label: 'Meals',
+              route: AppRoutes.mealPlanner,
+              isSelected: location.startsWith(AppRoutes.mealPlanner),
+            ),
+            const SizedBox(width: 56), // notch space
+            _NavItem(
+              icon: Icons.kitchen_rounded,
+              label: 'Stock',
+              route: AppRoutes.inventory,
+              isSelected: location.startsWith(AppRoutes.inventory),
+            ),
+            _NavItem(
+              icon: Icons.calendar_today_rounded,
+              label: 'Plan',
+              route: AppRoutes.dietPlan,
+              isSelected: location.startsWith(AppRoutes.dietPlan),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildNavItem(BuildContext context, int index, IconData icon, bool isSelected, Function(int) onTap) {
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String route;
+  final bool isSelected;
+
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.route,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
     return InkWell(
-      onTap: () => onTap(index),
+      onTap: () => context.go(route),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             icon,
-            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.2),
+            size: isSelected ? 24 : 22,
+            color: isSelected ? scheme.primary : scheme.onSurface.withOpacity(0.25),
           ),
-          if (isSelected)
-            Container(
-              margin: const EdgeInsets.only(top: 4),
-              width: 4,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary,
-                shape: BoxShape.circle,
-              ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontSize: 10,
+              color: isSelected ? scheme.primary : scheme.onSurface.withOpacity(0.25),
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
             ),
+          ),
         ],
       ),
     );

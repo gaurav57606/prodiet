@@ -57,12 +57,12 @@ class AppTextStyles {
       ),
       bodyMedium: TextStyle(
         fontFamily: fontFamily,
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
       bodySmall: TextStyle(
         fontFamily: fontFamily,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: FontWeight.w500,
       ),
       labelLarge: TextStyle(
@@ -74,10 +74,23 @@ class AppTextStyles {
       ),
       labelSmall: TextStyle(
         fontFamily: fontFamily,
-        fontSize: 8,
+        fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.5,
       ),
+    ).apply(
+      bodyColor: scheme.onSurface,
+      displayColor: scheme.onSurface,
     );
   }
+}
+
+class AppTextStyleExtensions {
+  static TextStyle sectionLabel(ColorScheme scheme) => TextStyle(
+    fontFamily: AppTextStyles.fontFamily,
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.4,
+    color: scheme.onSurface.withOpacity(0.45),
+  );
 }

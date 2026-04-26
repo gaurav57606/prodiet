@@ -55,3 +55,4 @@ class AppColorSchemes {
     onSurfaceVariant: Color(0x80FFFFFF), // rgba(255,255,255,.5)
   );
 }
+

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_spacing.dart';
-import '../../core/utils/extensions.dart';
+import 'package:dietmate/core/theme/app_spacing.dart';
+import 'package:dietmate/core/utils/extensions.dart';
 
 enum DmButtonVariant { primary, secondary, outline, ghost, danger }
 
@@ -113,3 +113,4 @@ class DmButton extends StatelessWidget {
     );
   }
 }
+

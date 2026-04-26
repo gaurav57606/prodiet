@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dietmate_pro/core/theme/app_spacing.dart';
 import 'package:dietmate_pro/features/meal_planner/presentation/widgets/meal_card.dart';
 import 'package:dietmate_pro/features/meal_planner/presentation/widgets/variety_toggle.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
 import 'package:dietmate_pro/shared/widgets/dm_card.dart';
 
 class MealPlannerScreen extends StatelessWidget {
@@ -28,8 +29,8 @@ class MealPlannerScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Today's Targets", style: theme.textTheme.titleMedium),
-                  const Icon(Icons.calendar_today_outlined, size: 18),
+                  Text("TODAY'S TARGETS", style: AppTextStyles.sectionLabel(theme.colorScheme)),
+                  const Icon(Icons.calendar_today_outlined, size: 14),
                 ],
               ),
             ),

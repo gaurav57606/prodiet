@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../core/utils/extensions.dart';
+import 'package:dietmate/core/utils/extensions.dart';
 
 class DmLoader extends StatelessWidget {
   final bool isShimmer;
@@ -45,3 +45,4 @@ class DmLoader extends StatelessWidget {
     );
   }
 }
+

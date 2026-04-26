@@ -13,48 +13,59 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
     return Scaffold(
       body: child,
-      extendBody: true, // Allows content to be visible behind the nav bar
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(0.85),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: theme.colorScheme.outline.withOpacity(0.1)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
+      extendBody: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton.large(
+        onPressed: () => context.goNamed('voice'),
+        backgroundColor: theme.colorScheme.primary,
+        foregroundColor: Colors.black,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.mic, size: 36),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        color: theme.colorScheme.surface.withOpacity(0.9),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildNavItem(context, 0, Icons.home_outlined, Icons.home, "Home", selectedIndex == 0),
+            _buildNavItem(context, 1, Icons.restaurant_menu_outlined, Icons.restaurant_menu, "Meals", selectedIndex == 1),
+            const SizedBox(width: 80), // Space for FAB
+            _buildNavItem(context, 2, Icons.inventory_2_outlined, Icons.inventory_2, "Stock", selectedIndex == 2),
+            _buildNavItem(context, 3, Icons.assignment_outlined, Icons.assignment, "Plan", selectedIndex == 3),
           ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: NavigationBar(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (index) => _onItemTapped(index, context),
-            backgroundColor: Colors.transparent,
-            indicatorColor: theme.colorScheme.primary.withOpacity(0.15),
-            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-            height: 65,
-            destinations: [
-              _buildDestination(Icons.home_outlined, Icons.home, "Home", selectedIndex == 0, theme),
-              _buildDestination(Icons.restaurant_menu_outlined, Icons.restaurant_menu, "Meals", selectedIndex == 1, theme),
-              _buildDestination(Icons.mic_none_outlined, Icons.mic, "Voice", selectedIndex == 2, theme),
-              _buildDestination(Icons.inventory_2_outlined, Icons.inventory_2, "Stock", selectedIndex == 3, theme),
-              _buildDestination(Icons.assignment_outlined, Icons.assignment, "Plan", selectedIndex == 4, theme),
-            ],
-          ),
         ),
       ),
     );
   }
 
-  Widget _buildDestination(IconData icon, IconData activeIcon, String label, bool isSelected, ThemeData theme) {
-    return NavigationDestination(
-      icon: Icon(icon, color: theme.colorScheme.onSurfaceVariant),
-      selectedIcon: Icon(activeIcon, color: theme.colorScheme.primary),
-      label: label,
+  Widget _buildNavItem(BuildContext context, int index, IconData icon, IconData activeIcon, String label, bool isSelected) {
+    final theme = Theme.of(context);
+    final color = isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant.withOpacity(0.7);
+    
+    return Expanded(
+      child: InkWell(
+        onTap: () => _onItemTapped(index, context),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(isSelected ? activeIcon : icon, color: color, size: 26),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -62,9 +73,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
     final String location = GoRouterState.of(context).uri.path;
     if (location.startsWith(AppRoutes.dashboard)) return 0;
     if (location.startsWith(AppRoutes.meals)) return 1;
-    if (location.startsWith(AppRoutes.voice)) return 2;
-    if (location.startsWith(AppRoutes.inventory)) return 3;
-    if (location.startsWith(AppRoutes.dietPlan)) return 4;
+    if (location.startsWith(AppRoutes.inventory)) return 2;
+    if (location.startsWith(AppRoutes.dietPlan)) return 3;
     return 0;
   }
 
@@ -72,9 +82,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
     switch (index) {
       case 0: context.goNamed('dashboard'); break;
       case 1: context.goNamed('meals'); break;
-      case 2: context.goNamed('voice'); break;
-      case 3: context.goNamed('inventory'); break;
-      case 4: context.goNamed('dietPlan'); break;
+      case 2: context.goNamed('inventory'); break;
+      case 3: context.goNamed('dietPlan'); break;
     }
   }
 }

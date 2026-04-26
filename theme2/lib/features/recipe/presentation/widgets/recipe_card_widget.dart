@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
-import '../../../../shared/widgets/dm_button.dart';
+import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
+import 'package:dietmate_pro/shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/shared/widgets/dm_button.dart';
+import 'package:dietmate_pro/shared/widgets/dm_macro_chip.dart';
 
 class RecipeCardWidget extends StatelessWidget {
   final String title;
@@ -20,7 +22,8 @@ class RecipeCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
+    final colorScheme = theme.colorScheme;
+    final primary = colorScheme.primary;
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
@@ -29,7 +32,7 @@ class RecipeCardWidget extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 90,
+              height: 100,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -51,11 +54,15 @@ class RecipeCardWidget extends StatelessWidget {
                       children: [
                         Text(
                           type,
-                          style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                          style: AppTextStyles.sectionLabel(colorScheme).copyWith(color: Colors.white70),
                         ),
                         Text(
                           title,
-                          style: theme.textTheme.headlineMedium?.copyWith(fontSize: 22, height: 1.1),
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontSize: 22, 
+                            height: 1.1,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
@@ -82,12 +89,39 @@ class RecipeCardWidget extends StatelessWidget {
               padding: const EdgeInsets.all(14),
               child: Column(
                 children: [
-                  Row(
+                  const Row(
                     children: [
-                      _buildMacro(context, "420", "kcal", primary),
-                      _buildMacro(context, "32g", "Protein", const Color(0xFFFF5C3A)),
-                      _buildMacro(context, "48g", "Carbs", const Color(0xFFFFB800)),
-                      _buildMacro(context, "10g", "Fat", const Color(0xFFB06EFF)),
+                      Expanded(
+                        child: DmMacroChip(
+                          value: "420",
+                          label: "kcal",
+                          type: MacroType.calories,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: DmMacroChip(
+                          value: "32g",
+                          label: "Protein",
+                          type: MacroType.protein,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: DmMacroChip(
+                          value: "48g",
+                          label: "Carbs",
+                          type: MacroType.carbs,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: DmMacroChip(
+                          value: "10g",
+                          label: "Fat",
+                          type: MacroType.fat,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -111,24 +145,6 @@ class RecipeCardWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildMacro(BuildContext context, String value, String label, Color color) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 16, color: color),
-          ),
-          Text(
-            label,
-            style: theme.textTheme.labelSmall,
-          ),
-        ],
       ),
     );
   }

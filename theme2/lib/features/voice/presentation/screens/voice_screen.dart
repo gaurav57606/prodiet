@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
 import '../../../../shared/widgets/dm_card.dart';
 import '../../../../shared/widgets/dm_button.dart';
 import '../../../../shared/widgets/dm_text_field.dart';
@@ -100,7 +101,7 @@ class VoiceScreen extends StatelessWidget {
                     Expanded(child: Divider(color: theme.colorScheme.outline)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text("OR TYPE INSTEAD", style: theme.textTheme.labelSmall?.copyWith(fontSize: 9, fontWeight: FontWeight.w600)),
+                      child: Text("OR TYPE INSTEAD", style: AppTextStyles.sectionLabel(theme.colorScheme)),
                     ),
                     Expanded(child: Divider(color: theme.colorScheme.outline)),
                   ],
@@ -131,7 +132,7 @@ class VoiceScreen extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                child: Text("Recently Added", style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
+                child: Text("RECENTLY ADDED", style: AppTextStyles.sectionLabel(theme.colorScheme)),
               ),
 
               Padding(

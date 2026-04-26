@@ -9,11 +9,13 @@ class AppTheme {
   static ThemeData getAmoledTheme() => _buildTheme(amoledScheme);
 
   static ThemeData _buildTheme(ColorScheme colorScheme) {
+    final textTheme = AppTextStyles.getTextTheme(colorScheme);
+    
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
-      textTheme: AppTextStyles.getTextTheme(colorScheme),
+      textTheme: textTheme,
       
       cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerHighest,
@@ -29,7 +31,7 @@ class AppTheme {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: AppTextStyles.getTextTheme(colorScheme).displayMedium,
+        titleTextStyle: textTheme.displayMedium,
       ),
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -37,8 +39,8 @@ class AppTheme {
         selectedItemColor: colorScheme.primary,
         unselectedItemColor: colorScheme.onSurfaceVariant,
         type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: AppTextStyles.getTextTheme(colorScheme).labelSmall,
-        unselectedLabelStyle: AppTextStyles.getTextTheme(colorScheme).labelSmall,
+        selectedLabelStyle: textTheme.labelSmall,
+        unselectedLabelStyle: textTheme.labelSmall,
       ),
 
       inputDecorationTheme: InputDecorationTheme(
@@ -56,7 +58,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
           borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
         ),
-        hintStyle: AppTextStyles.getTextTheme(colorScheme).bodyMedium?.copyWith(
+        hintStyle: textTheme.bodyMedium?.copyWith(
           color: colorScheme.onSurfaceVariant,
         ),
       ),
@@ -70,7 +72,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusSmall),
           ),
-          textStyle: AppTextStyles.getTextTheme(colorScheme).titleMedium,
+          textStyle: textTheme.titleMedium,
         ),
       ),
     );

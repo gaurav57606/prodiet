@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/router/app_router.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/utils/extensions.dart';
-import '../../../shared/widgets/dm_button.dart';
+import 'package:dietmate/core/router/app_router.dart';
+import 'package:dietmate/core/theme/app_spacing.dart';
+import 'package:dietmate/core/utils/extensions.dart';
+import 'package:dietmate/shared/widgets/dm_button.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -51,3 +51,4 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 }
+

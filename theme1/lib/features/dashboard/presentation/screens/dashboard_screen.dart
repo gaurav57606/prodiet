@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/text_styles.dart';
 import '../widgets/calorie_summary_card.dart';
 import '../widgets/hydration_card.dart';
 import '../widgets/macro_grid.dart';
@@ -12,68 +15,71 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          const SliverToBoxAdapter(child: CalorieSummaryCard()),
-          
-          SliverPadding(
-            padding: const EdgeInsets.only(top: AppSpacing.md),
-            sliver: SliverToBoxAdapter(child: const HydrationCard()),
-          ),
-          
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-            sliver: SliverToBoxAdapter(
-              child: _SectionHeader(
-                title: 'Macros Today',
-                onAction: () {},
+      body: SafeArea(
+        top: true,
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(child: CalorieSummaryCard()),
+            
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: AppSpacing.md),
+                child: HydrationCard(),
               ),
             ),
-          ),
-          
-          const SliverToBoxAdapter(child: MacroGrid()),
-          
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-            sliver: SliverToBoxAdapter(
-              child: _SectionHeader(
-                title: 'Next Meal',
-                onAction: () {},
+            
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                child: _SectionHeader(
+                  title: 'Macros Today',
+                  onAction: () {},
+                ),
               ),
             ),
-          ),
-          
-          const SliverToBoxAdapter(child: TodayMealsRow()),
-          
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-            sliver: SliverToBoxAdapter(
-              child: _SectionHeader(
-                title: 'Activity · Fitband',
-                onAction: () {},
+            
+            const SliverToBoxAdapter(child: MacroGrid()),
+            
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                child: _SectionHeader(
+                  title: 'Next Meal',
+                  onAction: () {},
+                ),
               ),
             ),
-          ),
-          
-          const SliverToBoxAdapter(child: ActivityGrid()),
-          
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-            sliver: SliverToBoxAdapter(
-              child: _SectionHeader(
-                title: 'Alerts',
+            
+            const SliverToBoxAdapter(child: TodayMealsRow()),
+            
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                child: _SectionHeader(
+                  title: 'Activity · Fitband',
+                  onAction: () => context.pushNamed(AppRoutes.activitySyncName),
+                ),
               ),
             ),
-          ),
-          
-          const SliverToBoxAdapter(child: AlertsList()),
-          
-          const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
-        ],
+            
+            const SliverToBoxAdapter(child: ActivityGrid()),
+            
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                child: _SectionHeader(
+                  title: 'Alerts',
+                ),
+              ),
+            ),
+            
+            const SliverToBoxAdapter(child: AlertsList()),
+            
+            const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
+          ],
+        ),
       ),
     );
   }
@@ -88,16 +94,14 @@ class _SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title.toUpperCase(),
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.25),
-            letterSpacing: 1.2,
-            fontWeight: FontWeight.w700,
-          ),
+          style: AppTextStyleExtensions.sectionLabel(scheme),
         ),
         if (onAction != null)
           GestureDetector(

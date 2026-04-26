@@ -5,32 +5,32 @@ import 'app_spacing.dart';
 
 class AppTheme {
   static ThemeData buildTheme(ColorScheme scheme) {
+    final tt = AppTextStyles.getTextTheme(scheme);
+    
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      textTheme: AppTextStyles.getTextTheme(scheme),
+      textTheme: tt,
       scaffoldBackgroundColor: scheme.surface,
       
       appBarTheme: AppBarTheme(
         backgroundColor: scheme.surface,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: AppTextStyles.getTextTheme(scheme).headlineSmall?.copyWith(
+        titleTextStyle: tt.headlineSmall?.copyWith(
           color: scheme.onSurface,
         ),
       ),
 
       cardTheme: CardThemeData(
         color: scheme.brightness == Brightness.dark 
-            ? Colors.white.withOpacity(0.04) 
-            : Colors.white.withOpacity(0.6),
+            ? scheme.surfaceContainerHighest.withOpacity(0.6) 
+            : Colors.white.withOpacity(0.7),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
           side: BorderSide(
-            color: scheme.brightness == Brightness.dark
-                ? Colors.white.withOpacity(0.08)
-                : const Color(0xFFA064DC).withOpacity(0.12),
+            color: scheme.primary.withOpacity(0.12),
             width: 1.0,
           ),
         ),
@@ -38,6 +38,21 @@ class AppTheme {
           horizontal: AppSpacing.md,
           vertical: AppSpacing.sm,
         ),
+      ),
+
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return scheme.onPrimary;
+          }
+          return scheme.onSurface.withOpacity(0.4);
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return scheme.primary;
+          }
+          return scheme.onSurface.withOpacity(0.15);
+        }),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -49,7 +64,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
           ),
-          textStyle: AppTextStyles.getTextTheme(scheme).titleSmall,
+          textStyle: tt.titleSmall,
         ),
       ),
 
@@ -60,8 +75,16 @@ class AppTheme {
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: AppTextStyles.getTextTheme(scheme).labelSmall,
-        unselectedLabelStyle: AppTextStyles.getTextTheme(scheme).labelSmall,
+        selectedLabelStyle: tt.labelSmall,
+        unselectedLabelStyle: tt.labelSmall,
+        selectedIconTheme: IconThemeData(
+          color: scheme.primary,
+          size: 24,
+        ),
+        unselectedIconTheme: IconThemeData(
+          color: scheme.onSurface.withOpacity(0.25),
+          size: 22,
+        ),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
@@ -76,16 +99,14 @@ class AppTheme {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
           borderSide: BorderSide(
-            color: scheme.brightness == Brightness.dark
-                ? Colors.white.withOpacity(0.1)
-                : const Color(0xFFA064DC).withOpacity(0.15),
+            color: scheme.primary.withOpacity(0.15),
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
           borderSide: BorderSide(color: scheme.primary, width: 1.5),
         ),
-        hintStyle: AppTextStyles.getTextTheme(scheme).bodyMedium?.copyWith(
+        hintStyle: tt.bodyMedium?.copyWith(
           color: scheme.onSurface.withOpacity(0.35),
         ),
       ),

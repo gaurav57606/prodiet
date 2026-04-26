@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/utils/extensions.dart';
-import '../../../shared/widgets/dm_card.dart';
-import '../mock/dashboard_mock.dart';
+import 'package:dietmate/core/theme/app_spacing.dart';
+import 'package:dietmate/core/utils/extensions.dart';
+import 'package:dietmate/shared/widgets/dm_card.dart';
+import 'package:dietmate/features/dashboard/presentation/mock/dashboard_mock.dart';
 
 class MacroRingChart extends StatelessWidget {
   const MacroRingChart({super.key});
@@ -46,3 +46,4 @@ class MacroRingChart extends StatelessWidget {
     );
   }
 }
+

@@ -9,17 +9,17 @@ class CalorieSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final scheme = theme.colorScheme;
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark 
-              ? AppColorSchemes.heroGradientDark 
-              : AppColorSchemes.heroGradientLight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: scheme.brightness == Brightness.light
+            ? AppColorSchemes.heroGradientLightMode
+            : AppColorSchemes.heroGradient,
         ),
         border: Border(
           bottom: BorderSide(

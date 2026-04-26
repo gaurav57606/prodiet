@@ -74,4 +74,13 @@ class AppTextStyles {
       ),
     );
   }
+
+  static TextStyle sectionLabel(ColorScheme colorScheme) {
+    return GoogleFonts.dmSans(
+      fontSize: 10,
+      fontWeight: FontWeight.w600,
+      color: colorScheme.onSurfaceVariant,
+      letterSpacing: 1.5,
+    );
+  }
 }

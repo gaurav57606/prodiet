@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
+import 'package:dietmate_pro/shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/shared/widgets/dm_macro_chip.dart';
 
 class NextMealCard extends StatelessWidget {
   const NextMealCard({super.key});
@@ -8,7 +10,8 @@ class NextMealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
+    final colorScheme = theme.colorScheme;
+    final primary = colorScheme.primary;
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
@@ -24,10 +27,7 @@ class NextMealCard extends StatelessWidget {
                 children: [
                   Text(
                     "LUNCH · 12:30 PM",
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                    ),
+                    style: AppTextStyles.sectionLabel(colorScheme),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
@@ -57,48 +57,52 @@ class NextMealCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
               child: Text(
                 "480 kcal · High protein",
                 style: theme.textTheme.bodySmall,
               ),
             ),
             Container(
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: theme.colorScheme.outline)),
+                border: Border(top: BorderSide(color: colorScheme.outline.withOpacity(0.5))),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  _buildStat(context, "38g", "Protein", const Color(0xFFFF5C3A)),
-                  _buildStat(context, "45g", "Carbs", const Color(0xFFFFB800)),
-                  _buildStat(context, "12g", "Fat", const Color(0xFFB06EFF)),
-                  _buildStat(context, "4g", "Fibre", const Color(0xFF3DCC7E), isLast: true),
+                  Expanded(
+                    child: DmMacroChip(
+                      value: "38g",
+                      label: "Protein",
+                      type: MacroType.protein,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: DmMacroChip(
+                      value: "45g",
+                      label: "Carbs",
+                      type: MacroType.carbs,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: DmMacroChip(
+                      value: "12g",
+                      label: "Fat",
+                      type: MacroType.fat,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: DmMacroChip(
+                      value: "4g",
+                      label: "Fibre",
+                      type: MacroType.fibre,
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStat(BuildContext context, String value, String label, Color color, {bool isLast = false}) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 7),
-        decoration: BoxDecoration(
-          border: isLast ? null : Border(right: BorderSide(color: theme.colorScheme.outline)),
-        ),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: theme.textTheme.headlineMedium?.copyWith(fontSize: 15, color: color),
-            ),
-            Text(
-              label.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, fontWeight: FontWeight.w600),
             ),
           ],
         ),

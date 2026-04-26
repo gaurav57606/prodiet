@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/utils/extensions.dart';
+import 'package:dietmate/core/utils/extensions.dart';
 
 class DmBadge extends StatelessWidget {
   final String label;
@@ -31,3 +31,4 @@ class DmBadge extends StatelessWidget {
     );
   }
 }
+

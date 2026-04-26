@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_card.dart';
+import '../../../../shared/widgets/dm_macro_chip.dart';
 
 class NutritionScreen extends StatelessWidget {
   const NutritionScreen({super.key});
@@ -43,16 +44,15 @@ class NutritionScreen extends StatelessWidget {
   }
 
   Widget _buildMacroSection(BuildContext context) {
-    final theme = Theme.of(context);
     return DmCard(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildMacroDetail(theme, 'Protein', '142g', '95%', Colors.pinkAccent),
-              _buildMacroDetail(theme, 'Carbs', '180g', '82%', Colors.orangeAccent),
-              _buildMacroDetail(theme, 'Fats', '54g', '105%', Colors.lightBlueAccent),
+              DmMacroChip(value: '142g', label: 'Protein', type: MacroType.protein),
+              DmMacroChip(value: '180g', label: 'Carbs', type: MacroType.carbs),
+              DmMacroChip(value: '54g', label: 'Fats', type: MacroType.fat),
             ],
           ),
         ],
@@ -60,15 +60,6 @@ class NutritionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMacroDetail(ThemeData theme, String label, String value, String percent, Color color) {
-    return Column(
-      children: [
-        Text(percent, style: theme.textTheme.titleMedium?.copyWith(color: color)),
-        Text(value, style: theme.textTheme.labelSmall),
-        Text(label, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3))),
-      ],
-    );
-  }
 
   Widget _buildMicronutrientList(BuildContext context) {
     return DmCard(

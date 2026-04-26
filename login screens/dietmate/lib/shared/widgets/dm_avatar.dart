@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../core/utils/extensions.dart';
+import 'package:dietmate/core/utils/extensions.dart';
 
 class DmAvatar extends StatelessWidget {
   final String? imageUrl;
@@ -49,3 +49,4 @@ class DmAvatar extends StatelessWidget {
     );
   }
 }
+

@@ -14,6 +14,7 @@ import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/nutrition/presentation/screens/nutrition_screen.dart';
 import '../../features/shopping_list/presentation/screens/shopping_list_screen.dart';
 import '../../features/ocr_scanner/presentation/screens/ocr_scanner_screen.dart';
+import '../../features/progress/presentation/screens/activity_sync_screen.dart';
 
 // Shared Widgets
 import '../../shared/widgets/dm_app_shell.dart';
@@ -31,6 +32,7 @@ class AppRoutes {
   static const String nutrition = '/nutrition';
   static const String shopping = '/shopping';
   static const String ocr = '/ocr';
+  static const String activitySync = '/activity-sync';
 
   // Names
   static const String splashName = 'splash';
@@ -45,6 +47,7 @@ class AppRoutes {
   static const String nutritionName = 'nutrition';
   static const String shoppingName = 'shopping';
   static const String ocrName = 'ocr';
+  static const String activitySyncName = 'activitySync';
 }
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -125,6 +128,11 @@ final appRouter = GoRouter(
       path: AppRoutes.ocr,
       name: AppRoutes.ocrName,
       builder: (context, state) => const OcrScannerScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.activitySync,
+      name: AppRoutes.activitySyncName,
+      builder: (context, state) => const ActivitySyncScreen(),
     ),
   ],
 );

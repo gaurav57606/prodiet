@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
+import 'package:dietmate_pro/core/theme/text_styles.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/macro_ring_chart.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/water_banner.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/next_meal_card.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/activity_row.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/alert_strip.dart';
-import 'package:dietmate_pro/shared/widgets/dm_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -14,155 +16,201 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 200,
-            floating: false,
-            pinned: true,
-            backgroundColor: theme.colorScheme.surface,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      theme.colorScheme.primary.withOpacity(0.1),
-                      theme.colorScheme.surface,
-                    ],
-                  ),
-                ),
-                child: Column(
+      backgroundColor: AppColors.bgDefault,
+      body: SafeArea(
+        top: true,
+        child: CustomScrollView(
+          slivers: [
+            // Static Header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Eat Right,", style: theme.textTheme.displayMedium),
-                    Text("Stay Fit", style: theme.textTheme.displayMedium?.copyWith(color: theme.colorScheme.primary)),
-                    const SizedBox(height: 10),
-                    Row(
+                    // Left Column
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildCalorieStat(context, "1,240", "kcal left", true),
-                        const SizedBox(width: 20),
-                        _buildCalorieStat(context, "840", "eaten", false),
-                        const SizedBox(width: 20),
-                        _buildCalorieStat(context, "320", "burned", false),
+                        Text(
+                          "Good morning, Rohan",
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "EAT",
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            height: 1.0,
+                          ),
+                        ),
+                        Text(
+                          "RIGHT.",
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lime,
+                            height: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Right Column
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "CALORIES LEFT",
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: AppColors.textSecondary,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "620",
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lime,
+                            height: 1.0,
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          
-          SliverPadding(
-            padding: const EdgeInsets.only(top: AppSpacing.md),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                GestureDetector(
-                  onTap: () => context.pushNamed('water'),
-                  child: const WaterBanner(),
-                ),
-                
-                Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Macros Today", style: theme.textTheme.titleLarge),
-                      GestureDetector(
-                        onTap: () => context.goNamed('dietPlan'),
-                        child: Text(
-                          "Full view",
-                          style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary),
+            
+            // Water Banner
+            SliverToBoxAdapter(
+              child: GestureDetector(
+                onTap: () => context.goNamed('water'),
+                child: const WaterBanner(),
+              ),
+            ),
+            
+            // Macros Today Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "MACROS TODAY",
+                      style: AppTextStyles.sectionLabel(colorScheme),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.goNamed('dietPlan'),
+                      child: Text(
+                        "Full view",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                  child: MacroRingChart(),
-                ),
+              ),
+            ),
+            
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                child: MacroRingChart(),
+              ),
+            ),
 
-                Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Next Meal", style: theme.textTheme.titleLarge),
-                      GestureDetector(
-                        onTap: () => context.goNamed('meals'),
-                        child: Text(
-                          "Meal plan ›",
-                          style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary),
+            // Next Meal Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "NEXT MEAL",
+                      style: AppTextStyles.sectionLabel(colorScheme),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.goNamed('meals'),
+                      child: Text(
+                        "Meal plan ›",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                
-                const NextMealCard(),
+              ),
+            ),
+            
+            const SliverToBoxAdapter(
+              child: NextMealCard(),
+            ),
 
-                Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Activity · Fitband", style: theme.textTheme.titleLarge),
-                      GestureDetector(
-                        onTap: () => context.pushNamed('fitband'),
-                        child: Text(
-                          "Details",
-                          style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary),
+            // Activity Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "ACTIVITY · FITBAND",
+                      style: AppTextStyles.sectionLabel(colorScheme),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.goNamed('fitband'),
+                      child: Text(
+                        "Details",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                
-                const ActivityRow(),
+              ),
+            ),
+            
+            const SliverToBoxAdapter(
+              child: ActivityRow(),
+            ),
 
-                GestureDetector(
-                  onTap: () => context.pushNamed('compensation'),
+            // Compensation Alert
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.md),
+                child: GestureDetector(
+                  onTap: () => context.goNamed('compensation'),
                   child: const AlertStrip(
                     message: "Skipped snack → Dinner adjusted",
                     subMessage: "+15g protein auto-added to dinner",
                     isWarning: true,
                   ),
                 ),
-                
-                const SizedBox(height: 100), // Space for FAB/Nav
-              ]),
+              ),
             ),
-          ),
-        ],
+            
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 100),
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _buildCalorieStat(BuildContext context, String value, String label, bool isMain) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: theme.textTheme.displayMedium?.copyWith(
-            fontSize: isMain ? 32 : 20,
-            color: isMain ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withOpacity(0.6),
-          ),
-        ),
-        Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.5),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -32,6 +32,11 @@ class AppColors {
   static const Color bgElevated = Color(0xFF1E1E1A);
   static const Color bgDeep = Color(0xFF272720);
 
+  // Amoled
+  static const Color amoledSurface    = Color(0xFF000000);
+  static const Color amoledElevated   = Color(0xFF0A0A0A);
+  static const Color amoledDeep       = Color(0xFF111110);
+
   // Text
   static const Color textPrimary = Color(0xFFF2F2EC);
   static const Color textSecondary = Color(0xFF9A9A8A);
@@ -41,15 +46,19 @@ class AppColors {
   static const Color border = Color(0xFF252520);
 }
 
-final lightScheme = ColorScheme.fromSeed(
-  seedColor: AppColors.lime,
+final lightScheme = ColorScheme(
   brightness: Brightness.light,
   primary: AppColors.limeDark,
   onPrimary: Colors.black,
   secondary: AppColors.purple,
-  surface: Colors.white,
-  onSurface: Colors.black,
+  onSecondary: Colors.white,
   error: AppColors.coral,
+  onError: Colors.white,
+  surface: Color(0xFFF5F5F0),
+  onSurface: Colors.black,
+  surfaceContainerHighest: Color(0xFFFFFFFF), // Using this as the 'background' equivalent
+  onSurfaceVariant: AppColors.textMuted,
+  outline: Color(0xFFE0E0DA),
 );
 
 final darkScheme = ColorScheme(
@@ -75,9 +84,9 @@ final amoledScheme = ColorScheme(
   onSecondary: Colors.white,
   error: AppColors.coral,
   onError: Colors.white,
-  surface: Colors.black,
+  surface: AppColors.amoledSurface,
   onSurface: AppColors.textPrimary,
-  surfaceContainerHighest: Color(0xFF121212),
+  surfaceContainerHighest: AppColors.amoledElevated,
   onSurfaceVariant: AppColors.textSecondary,
   outline: AppColors.border,
 );

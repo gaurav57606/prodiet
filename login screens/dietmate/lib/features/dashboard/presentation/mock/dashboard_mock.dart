@@ -12,3 +12,4 @@ class DashboardMockData {
   static const double fatsGoal = 70;
   static const double fatsConsumed = 45;
 }
+
