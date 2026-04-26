@@ -27,9 +27,11 @@ class DmCard extends StatelessWidget {
     
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? theme.colorScheme.surface,
+        color: backgroundColor ?? theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(borderRadius ?? AppSpacing.radiusLarge),
-        border: borderSide != null ? Border.fromBorderSide(borderSide!) : null,
+        border: borderSide != null 
+          ? Border.fromBorderSide(borderSide!) 
+          : Border.all(color: theme.colorScheme.outline, width: 1),
         boxShadow: boxShadow,
       ),
       child: Material(

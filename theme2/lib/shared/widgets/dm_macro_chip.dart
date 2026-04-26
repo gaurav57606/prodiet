@@ -43,6 +43,7 @@ class DmMacroChip extends StatelessWidget {
           decoration: BoxDecoration(
             color: color.withOpacity(0.15),
             borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: color.withOpacity(0.35), width: 1),
           ),
           child: Text(
             value,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dietmate_pro/shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class WaterOverdueState extends StatelessWidget {
   const WaterOverdueState({super.key});
@@ -13,13 +14,15 @@ class WaterOverdueState extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       child: DmCard(
         padding: const EdgeInsets.all(20),
-        borderSide: BorderSide(color: coralColor.withOpacity(0.4), width: 1.5),
+        backgroundColor: AppColors.coralLight,
+        borderSide: BorderSide(color: AppColors.coral.withOpacity(0.35), width: 1),
         child: Column(
           children: [
             Text(
-              "Overdue!",
+              "OVERDUE!",
               style: theme.textTheme.displayLarge?.copyWith(
-                fontSize: 64,
+                fontSize: 52,
+                fontWeight: FontWeight.w900,
                 color: coralColor,
                 height: 1.0,
               ),
