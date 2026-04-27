@@ -4,8 +4,15 @@ import '../../../../shared/widgets/dm_card.dart';
 import '../../../../shared/widgets/dm_chip.dart';
 import '../mock/dashboard_mock.dart';
 
-class HydrationCard extends StatelessWidget {
+class HydrationCard extends StatefulWidget {
   const HydrationCard({super.key});
+
+  @override
+  State<HydrationCard> createState() => _HydrationCardState();
+}
+
+class _HydrationCardState extends State<HydrationCard> {
+  int _filterIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +132,46 @@ class HydrationCard extends StatelessWidget {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+            child: Row(
+              children: [
+                _filterPill('On track', 0, const Color(0xFF40D8B8)),
+                const SizedBox(width: 8),
+                _filterPill('Almost', 1, const Color(0xFFFFB040)),
+                const SizedBox(width: 8),
+                _filterPill('Overdue', 2, const Color(0xFFFF6080)),
+              ],
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _filterPill(String label, int index, Color color) {
+    final isActive = _filterIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _filterIndex = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? color.withOpacity(0.2) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isActive ? color.withOpacity(0.5) : Colors.white.withOpacity(0.1),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Outfit',
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: isActive ? color : Colors.white.withOpacity(0.3),
+          ),
+        ),
       ),
     );
   }

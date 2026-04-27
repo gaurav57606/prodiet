@@ -10,6 +10,8 @@ import '../widgets/today_meals_row.dart';
 import '../widgets/activity_grid.dart';
 import '../widgets/alerts_list.dart';
 
+import '../../../../core/widgets/theme_toggle.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -21,14 +23,18 @@ class DashboardScreen extends StatelessWidget {
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
+            SliverAppBar(
+              floating: true,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: const [
+                ThemeToggle(),
+                SizedBox(width: 8),
+              ],
+            ),
             const SliverToBoxAdapter(child: CalorieSummaryCard()),
             
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(top: AppSpacing.md),
-                child: HydrationCard(),
-              ),
-            ),
+            const SliverToBoxAdapter(child: HydrationCard()),
             
             SliverToBoxAdapter(
               child: Padding(

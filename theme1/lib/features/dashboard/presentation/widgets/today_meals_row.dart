@@ -71,7 +71,7 @@ class TodayMealsRow extends StatelessWidget {
                   child: Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '38g', label: 'Prot', type: MacroType.protein),
+                      child: DmMacroChip(value: '38g', label: 'PROT', type: MacroType.protein),
                     ),
                   ),
                 ),
@@ -80,7 +80,7 @@ class TodayMealsRow extends StatelessWidget {
                   child: Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '45g', label: 'Carb', type: MacroType.carbs),
+                      child: DmMacroChip(value: '45g', label: 'CARB', type: MacroType.carbs),
                     ),
                   ),
                 ),
@@ -89,7 +89,7 @@ class TodayMealsRow extends StatelessWidget {
                   child: Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '12g', label: 'Fat', type: MacroType.fat),
+                      child: DmMacroChip(value: '12g', label: 'FAT', type: MacroType.fat),
                     ),
                   ),
                 ),
@@ -98,7 +98,7 @@ class TodayMealsRow extends StatelessWidget {
                   child: Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '4g', label: 'Fibre', type: MacroType.fibre),
+                      child: DmMacroChip(value: '4g', label: 'FIBRE', type: MacroType.fibre),
                     ),
                   ),
                 ),

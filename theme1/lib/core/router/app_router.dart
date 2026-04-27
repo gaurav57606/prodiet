@@ -14,6 +14,9 @@ import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/nutrition/presentation/screens/nutrition_screen.dart';
 import '../../features/shopping_list/presentation/screens/shopping_list_screen.dart';
 import '../../features/ocr_scanner/presentation/screens/ocr_scanner_screen.dart';
+import '../../features/auth/presentation/screens/forgot_password_screen.dart';
+import '../../features/auth/presentation/screens/health_goals_screen.dart';
+import '../../features/auth/presentation/screens/verify_phone_screen.dart';
 import '../../features/progress/presentation/screens/activity_sync_screen.dart';
 
 // Shared Widgets
@@ -33,6 +36,9 @@ class AppRoutes {
   static const String shopping = '/shopping';
   static const String ocr = '/ocr';
   static const String activitySync = '/activity-sync';
+  static const String healthGoals = '/health-goals';
+  static const String verifyPhone = '/verify-phone';
+  static const String forgotPassword = '/forgot-password';
 
   // Names
   static const String splashName = 'splash';
@@ -48,6 +54,9 @@ class AppRoutes {
   static const String shoppingName = 'shopping';
   static const String ocrName = 'ocr';
   static const String activitySyncName = 'activitySync';
+  static const String healthGoalsName = 'healthGoals';
+  static const String verifyPhoneName = 'verifyPhone';
+  static const String forgotPasswordName = 'forgotPassword';
 }
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -78,6 +87,21 @@ final appRouter = GoRouter(
       path: AppRoutes.signup,
       name: AppRoutes.signupName,
       builder: (context, state) => const SignupScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.forgotPassword,
+      name: AppRoutes.forgotPasswordName,
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.healthGoals,
+      name: AppRoutes.healthGoalsName,
+      builder: (context, state) => const HealthGoalsScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.verifyPhone,
+      name: AppRoutes.verifyPhoneName,
+      builder: (context, state) => const VerifyPhoneScreen(),
     ),
 
     // Main App Shell (with Bottom Nav)

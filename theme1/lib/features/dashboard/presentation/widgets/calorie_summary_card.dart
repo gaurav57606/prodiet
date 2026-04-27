@@ -21,11 +21,6 @@ class CalorieSummaryCard extends StatelessWidget {
             ? AppColorSchemes.heroGradientLightMode
             : AppColorSchemes.heroGradient,
         ),
-        border: Border(
-          bottom: BorderSide(
-            color: theme.colorScheme.outline.withOpacity(0.1),
-          ),
-        ),
       ),
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -98,7 +93,8 @@ class CalorieSummaryCard extends StatelessWidget {
                       Text(
                         '${DashboardMockData.caloriesRemaining}',
                         style: theme.textTheme.displayLarge?.copyWith(
-                          fontSize: 48,
+                          fontSize: 56,
+                          fontWeight: FontWeight.w900,
                           height: 1,
                           letterSpacing: -0.5,
                         ),
@@ -133,10 +129,12 @@ class CalorieSummaryCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'day streak',
+                          'DAY STREAK',
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: const Color(0xFFFFD070).withOpacity(0.5),
-                            fontSize: 9,
+                            fontSize: 8,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],

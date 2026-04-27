@@ -2,105 +2,95 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/router/app_router.dart';
 
-class DmAppShell extends StatelessWidget {
+class DmAppShell extends StatefulWidget {
   final Widget child;
 
   const DmAppShell({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final location = GoRouterState.of(context).uri.toString();
+  State<DmAppShell> createState() => _DmAppShellState();
+}
 
+class _DmAppShellState extends State<DmAppShell> {
+  int get _currentIndex {
+    final location = GoRouterState.of(context).uri.toString();
+    if (location.startsWith(AppRoutes.dashboard)) return 0;
+    if (location.startsWith(AppRoutes.mealPlanner)) return 1;
+    if (location.startsWith(AppRoutes.inventory)) return 2;
+    if (location.startsWith(AppRoutes.dietPlan)) return 3;
+    return 0;
+  }
+
+  void _onTap(int index) {
+    switch (index) {
+      case 0:
+        context.go(AppRoutes.dashboard);
+        break;
+      case 1:
+        context.go(AppRoutes.mealPlanner);
+        break;
+      case 2:
+        context.go(AppRoutes.inventory);
+        break;
+      case 3:
+        context.go(AppRoutes.dietPlan);
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: widget.child,
       extendBody: true,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: scheme.primary,
-        foregroundColor: scheme.onPrimary,
-        elevation: 8,
-        onPressed: () => context.push(AppRoutes.ocr),
-        child: const Icon(Icons.mic_rounded, size: 26),
+        onPressed: () {},
+        backgroundColor: const Color(0xFF8B5CF6),
+        elevation: 6,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.mic_rounded, color: Colors.white, size: 28),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: scheme.surface,
-        elevation: 0,
+        color: const Color(0xFF0A0A0F),
         shape: const CircularNotchedRectangle(),
-        notchMargin: 6,
+        notchMargin: 8,
         padding: EdgeInsets.zero,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _NavItem(
-              icon: Icons.home_rounded,
-              label: 'Home',
-              route: AppRoutes.dashboard,
-              isSelected: location.startsWith(AppRoutes.dashboard),
-            ),
-            _NavItem(
-              icon: Icons.restaurant_menu_rounded,
-              label: 'Meals',
-              route: AppRoutes.mealPlanner,
-              isSelected: location.startsWith(AppRoutes.mealPlanner),
-            ),
-            const SizedBox(width: 56), // notch space
-            _NavItem(
-              icon: Icons.kitchen_rounded,
-              label: 'Stock',
-              route: AppRoutes.inventory,
-              isSelected: location.startsWith(AppRoutes.inventory),
-            ),
-            _NavItem(
-              icon: Icons.calendar_today_rounded,
-              label: 'Plan',
-              route: AppRoutes.dietPlan,
-              isSelected: location.startsWith(AppRoutes.dietPlan),
-            ),
+            _navItem(context, Icons.home_rounded, Icons.home_outlined, 'Home', 0),
+            _navItem(context, Icons.restaurant_rounded, Icons.restaurant_outlined, 'Meals', 1),
+            const SizedBox(width: 56), // space for FAB
+            _navItem(context, Icons.inventory_2_rounded, Icons.inventory_2_outlined, 'Stock', 2),
+            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Plan', 3),
           ],
         ),
       ),
     );
   }
-}
 
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String route;
-  final bool isSelected;
-
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.route,
-    required this.isSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-
-    return InkWell(
-      onTap: () => context.go(route),
+  Widget _navItem(BuildContext ctx, IconData filled, IconData outlined, 
+                  String label, int index) {
+    final isActive = _currentIndex == index;
+    const activeColor = Color(0xFF8B5CF6);
+    const inactiveColor = Color(0x40FFFFFF);
+    return GestureDetector(
+      onTap: () => _onTap(index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: isSelected ? 24 : 22,
-            color: isSelected ? scheme.primary : scheme.onSurface.withOpacity(0.25),
-          ),
+          Icon(isActive ? filled : outlined,
+              color: isActive ? activeColor : inactiveColor,
+              size: 24),
           const SizedBox(height: 2),
-          Text(
-            label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              fontSize: 10,
-              color: isSelected ? scheme.primary : scheme.onSurface.withOpacity(0.25),
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+          Text(label,
+            style: TextStyle(
+              fontFamily: 'Outfit',
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: isActive ? activeColor : inactiveColor,
             ),
           ),
         ],

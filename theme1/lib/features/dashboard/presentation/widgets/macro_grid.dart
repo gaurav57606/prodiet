@@ -15,9 +15,9 @@ class MacroGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 9,
-          mainAxisSpacing: 9,
-          childAspectRatio: 1.4,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 0.92,
         ),
         itemCount: 4, // 3 macros + 1 fat tile (custom styled in HTML)
         itemBuilder: (context, index) {
@@ -54,7 +54,10 @@ class MacroGrid extends StatelessWidget {
               _buildIcon(context, data.label),
               Text(
                 '${(data.percentage * 100).toInt()}%',
-                style: theme.textTheme.labelSmall?.copyWith(color: Colors.white.withOpacity(0.5)),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: Colors.white.withOpacity(0.5),
+                  fontSize: 11,
+                ),
               ),
             ],
           ),
@@ -64,18 +67,52 @@ class MacroGrid extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '${data.value.toInt()}',
-                  style: theme.textTheme.headlineMedium?.copyWith(color: Colors.white, fontSize: 24),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.w800,
+                    height: 1,
+                  ),
                 ),
                 TextSpan(
                   text: data.unit,
-                  style: theme.textTheme.labelSmall?.copyWith(color: Colors.white.withOpacity(0.6)),
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white70,
+                  ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 2),
           Text(
             data.label,
-            style: theme.textTheme.labelSmall?.copyWith(color: Colors.white.withOpacity(0.4)),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: Colors.white.withOpacity(0.45),
+              fontSize: 11,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Progress bar
+          Container(
+            height: 3,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: data.percentage.clamp(0.0, 1.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -103,18 +140,52 @@ class MacroGrid extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '28',
-                  style: theme.textTheme.headlineMedium?.copyWith(color: fatColor, fontSize: 24),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: fatColor,
+                    fontSize: 36,
+                    fontWeight: FontWeight.w800,
+                    height: 1,
+                  ),
                 ),
                 TextSpan(
                   text: 'g',
-                  style: theme.textTheme.labelSmall?.copyWith(color: fatColor.withOpacity(0.5)),
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: fatColor.withOpacity(0.7),
+                  ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 2),
           Text(
             'Fat',
-            style: theme.textTheme.labelSmall?.copyWith(color: fatColor.withOpacity(0.4)),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: fatColor.withOpacity(0.45),
+              fontSize: 11,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Progress bar
+          Container(
+            height: 3,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: fatColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: 0.40, // As fixed in instruction
+              child: Container(
+                decoration: BoxDecoration(
+                  color: fatColor.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
           ),
         ],
       ),
