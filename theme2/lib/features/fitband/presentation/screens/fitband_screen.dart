@@ -1,232 +1,252 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class FitbandScreen extends StatelessWidget {
   const FitbandScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
-    
     return Scaffold(
+      backgroundColor: AppColors.bgDefault,
       appBar: AppBar(
-        title: Text(
-          "Activity Sync",
-          style: theme.textTheme.displayMedium?.copyWith(fontSize: 26),
-        ),
-        centerTitle: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(18),
-              child: DmCard(
-                padding: const EdgeInsets.all(14),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(Icons.watch, color: primary, size: 22),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Mi Band 8", style: theme.textTheme.titleLarge?.copyWith(fontSize: 14)),
-                          Text("Last synced: 2 min ago · Battery 78%", style: theme.textTheme.bodySmall),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                      decoration: BoxDecoration(color: primary.withOpacity(0.12), borderRadius: BorderRadius.circular(20)),
-                      child: Text("Connected", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontSize: 10)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildBigStat(context, "4,820", "Steps", primary),
-                  const SizedBox(width: 6),
-                  _buildBigStat(context, "312", "kcal Burned", const Color(0xFFFF5C3A)),
-                  const SizedBox(width: 6),
-                  _buildBigStat(context, "48m", "Active", const Color(0xFF38BFFF)),
+                  Text(
+                    'ACTIVITY',
+                    style: GoogleFonts.barlowCondensed(
+                      fontSize: 56,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.lime,
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      _buildDeviceChip('WATCH CONNECTED', AppColors.lime),
+                      const SizedBox(width: 8),
+                      _buildDeviceChip('78% BATTERY', AppColors.textSecondary),
+                    ],
+                  ),
                 ],
               ),
             ),
-
+            const SizedBox(height: 30),
+            // Heart Rate Section
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: primary.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: primary.withOpacity(0.2)),
+                  color: AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text("Diet adjusted for today's activity", style: theme.textTheme.titleMedium?.copyWith(fontSize: 12, color: primary)),
-                    const SizedBox(height: 6),
-                    _buildAdjustRow(context, "Extra calories allowed", "+312 kcal"),
-                    _buildAdjustRow(context, "Protein target (adjusted)", "162g (+12g)"),
-                    _buildAdjustRow(context, "Hydration target", "3.0L (+500ml)"),
-                    _buildAdjustRow(context, "Post-workout window", "Eat within 45m", isLast: true),
-                  ],
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text("Week Activity vs Intake", style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: DmCard(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Calories burned vs consumed", style: theme.textTheme.labelSmall?.copyWith(fontSize: 10)),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 60,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          _buildChartBar(context, "M", 40, 32),
-                          _buildChartBar(context, "T", 52, 44),
-                          _buildChartBar(context, "W", 35, 48, isCoral: true),
-                          _buildChartBar(context, "T", 58, 40),
-                          _buildChartBar(context, "F", 48, 45),
-                          _buildChartBar(context, "S", 60, 38),
-                          _buildChartBar(context, "S", 0, 38, isToday: true),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLegendItem(context, theme.colorScheme.surfaceContainerHighest, "Calories eaten"),
-                        const SizedBox(width: 12),
-                        _buildLegendItem(context, primary.withOpacity(0.6), "Calories burned"),
+                        Text(
+                          'HEART RATE',
+                          style: TextStyle(
+                            fontSize: 10,
+                            letterSpacing: 1.2,
+                            color: AppColors.textMuted,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '74',
+                              style: GoogleFonts.barlowCondensed(
+                                fontSize: 48,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.purple,
+                                height: 1.0,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'bpm',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
+                    const Spacer(),
+                    // Placeholder for Heart Rate Graph
+                    SizedBox(
+                      width: 120,
+                      height: 50,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(15, (index) {
+                          final h = [20, 30, 25, 40, 35, 45, 30, 20, 25, 35, 40, 30, 25, 20, 15][index];
+                          return Container(
+                            width: 4,
+                            height: h.toDouble(),
+                            decoration: BoxDecoration(
+                              color: AppColors.purple.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBigStat(BuildContext context, String val, String lbl, Color color) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: DmCard(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        child: Column(
-          children: [
-            Text(val, style: theme.textTheme.displayMedium?.copyWith(fontSize: 28, color: color)),
-            Text(lbl.toUpperCase(), style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, fontWeight: FontWeight.w600)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAdjustRow(BuildContext context, String lbl, String val, {bool isLast = false}) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        border: isLast ? null : Border(bottom: BorderSide(color: theme.colorScheme.primary.withOpacity(0.1))),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(lbl, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-          Text(val, style: theme.textTheme.labelLarge?.copyWith(fontSize: 11, color: theme.colorScheme.primary)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildChartBar(BuildContext context, String day, double eatenH, double burnedH, {bool isCoral = false, bool isToday = false}) {
-    final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
-    final color = isCoral ? const Color(0xFFFF5C3A) : primary;
-
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              if (eatenH > 0)
-                Container(
-                  height: eatenH,
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                  decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest, borderRadius: const BorderRadius.vertical(top: Radius.circular(4))),
-                ),
-              Container(
-                height: burnedH,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                decoration: BoxDecoration(color: color.withOpacity(0.4), borderRadius: const BorderRadius.vertical(top: Radius.circular(4))),
+            const SizedBox(height: 20),
+            // Steps & Active Row
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Expanded(child: _buildMetricTile('STEPS', '8,420', 'Goal: 10k', AppColors.lime)),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildMetricTile('ACTIVE', '42 min', 'Goal: 60m', AppColors.coral)),
+                ],
               ),
-              if (isToday)
-                Container(
-                  height: burnedH,
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                  decoration: BoxDecoration(color: primary, borderRadius: const BorderRadius.vertical(top: Radius.circular(4))),
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'ACTIVITY LOG',
+                style: TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w700,
                 ),
-            ],
-          ),
-          const SizedBox(height: 3),
-          Text(day, style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, color: isToday ? primary : null, fontWeight: isToday ? FontWeight.w700 : null)),
-        ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 3,
+              separatorBuilder: (_, __) => Divider(color: AppColors.border, height: 1),
+              itemBuilder: (context, index) {
+                final titles = ['Morning Walk', 'Gym Session', 'Evening Jog'];
+                final times = ['07:30 AM', '11:00 AM', '06:15 PM'];
+                final kcal = ['120 kcal', '310 kcal', '215 kcal'];
+                return ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  title: Text(
+                    titles[index],
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
+                  ),
+                  subtitle: Text(
+                    times[index],
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                  ),
+                  trailing: Text(
+                    kcal[index],
+                    style: GoogleFonts.barlowCondensed(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.lime,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 100),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildLegendItem(BuildContext context, Color color, String lbl) {
-    final theme = Theme.of(context);
-    return Row(
-      children: [
-        Container(width: 8, height: 8, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2))),
-        const SizedBox(width: 4),
-        Text(lbl, style: theme.textTheme.bodySmall?.copyWith(fontSize: 8)),
-      ],
+  Widget _buildDeviceChip(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 9,
+          letterSpacing: 1.2,
+          fontWeight: FontWeight.w800,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMetricTile(String label, String value, String sub, Color accent) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              letterSpacing: 1.2,
+              color: AppColors.textMuted,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            value,
+            style: GoogleFonts.barlowCondensed(
+              fontSize: 32,
+              fontWeight: FontWeight.w900,
+              color: accent,
+              height: 1.0,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            sub,
+            style: TextStyle(
+              fontSize: 11,
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

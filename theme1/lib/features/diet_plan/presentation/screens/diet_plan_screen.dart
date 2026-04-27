@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_card.dart';
-import '../mock/diet_plan_mock.dart';
-import '../widgets/day_selector.dart';
-import '../widgets/meal_timeline_item.dart';
 
 class DietPlanScreen extends StatelessWidget {
   const DietPlanScreen({super.key});
@@ -14,100 +11,195 @@ class DietPlanScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Diet Plan'),
+        title: const Text('My Program'),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.calendar_month_rounded),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.calendar_month_rounded)),
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        children: [
+          _buildHeroCard(theme),
+          const SizedBox(height: AppSpacing.xl),
+          _buildGoalMetrics(theme),
+          const SizedBox(height: AppSpacing.xl),
+          Text(
+            'TODAY\'S SCHEDULE',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurface.withOpacity(0.3),
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _buildTimeline(theme),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroCard(ThemeData theme) {
+    return Container(
+      height: 200,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF3B1FA8), Color(0xFF6B35FF)],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF3B1FA8).withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          const SizedBox(height: AppSpacing.md),
-          const DaySelector(),
-          const SizedBox(height: AppSpacing.md),
-          
+          Positioned(
+            right: -20,
+            bottom: -20,
+            child: Icon(Icons.fitness_center_rounded, size: 180, color: Colors.white.withOpacity(0.1)),
+          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'TODAY\'S TIMELINE',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.25),
-                  ),
-                ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF40D8B8).withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    '4/5 done',
-                    style: TextStyle(
-                      color: Color(0xFF106050),
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    'ACTIVE PLAN',
+                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900),
                   ),
+                ),
+                const Spacer(),
+                const Text(
+                  'Muscle Shredding 2.0',
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Week 4 of 12 · Day 24',
+                  style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14, fontWeight: FontWeight.w700),
                 ),
               ],
             ),
           ),
-          
-          const SizedBox(height: AppSpacing.lg),
-          
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              itemCount: DietPlanMockData.todayMeals.length,
-              itemBuilder: (context, index) {
-                final meal = DietPlanMockData.todayMeals[index];
-                return MealTimelineItem(
-                  data: meal,
-                  isLast: index == DietPlanMockData.todayMeals.length - 1,
-                );
-              },
-            ),
-          ),
-          
-          // Weekly Summary Card at bottom
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: DmCard(
-              color: theme.colorScheme.primary.withOpacity(0.05),
-              child: Row(
-                children: [
-                  Icon(Icons.insights_rounded, color: theme.colorScheme.primary),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Weekly Compliance: 92%',
-                          style: theme.textTheme.titleSmall,
-                        ),
-                        Text(
-                          'You are on track to lose 0.5kg this week.',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 80), // Space for FAB/Nav
         ],
       ),
+    );
+  }
+
+  Widget _buildGoalMetrics(ThemeData theme) {
+    return Row(
+      children: [
+        Expanded(child: _metric(theme, 'WEIGHT', '72.4', 'kg', const Color(0xFF40D8B8))),
+        const SizedBox(width: 12),
+        Expanded(child: _metric(theme, 'BODY FAT', '14.2', '%', const Color(0xFFFF3060))),
+        const SizedBox(width: 12),
+        Expanded(child: _metric(theme, 'WATER', '2.5', 'L', const Color(0xFF3B1FA8))),
+      ],
+    );
+  }
+
+  Widget _metric(ThemeData theme, String label, String value, String unit, Color color) {
+    return DmCard(
+      color: color.withOpacity(0.06),
+      borderSide: BorderSide(color: color.withOpacity(0.15)),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontSize: 8,
+              fontWeight: FontWeight.w900,
+              color: color.withOpacity(0.6),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                value,
+                style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900, color: color),
+              ),
+              const SizedBox(width: 2),
+              Text(
+                unit,
+                style: theme.textTheme.labelSmall?.copyWith(color: color.withOpacity(0.5), fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeline(ThemeData theme) {
+    final schedule = [
+      {'time': '07:00', 'title': 'Pre-Workout Snack', 'done': true},
+      {'time': '08:00', 'title': 'Intense HIIT Session', 'done': true},
+      {'time': '10:00', 'title': 'Post-Workout Protein', 'done': false},
+      {'time': '13:00', 'title': 'Lean Lunch', 'done': false},
+    ];
+
+    return Column(
+      children: schedule.map((item) {
+        final isDone = item['done'] as bool;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 50,
+                child: Text(
+                  item['time'] as String,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(isDone ? 0.2 : 0.5),
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDone ? const Color(0xFF40D8B8) : Colors.white.withOpacity(0.1),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: DmCard(
+                  color: Colors.white.withOpacity(isDone ? 0.01 : 0.03),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Text(
+                    item['title'] as String,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(isDone ? 0.3 : 1.0),
+                      fontWeight: FontWeight.w700,
+                      decoration: isDone ? TextDecoration.lineThrough : null,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:dietmate_pro/core/router/app_router.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class ScaffoldWithNavBar extends StatelessWidget {
   const ScaffoldWithNavBar({required this.child, super.key});
@@ -25,26 +27,33 @@ class ScaffoldWithNavBar extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,
-        color: theme.colorScheme.surface.withOpacity(0.9),
+        color: AppColors.bgDefault,
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildNavItem(context, 0, Icons.home_outlined, Icons.home, "Home", selectedIndex == 0),
-            _buildNavItem(context, 1, Icons.restaurant_menu_outlined, Icons.restaurant_menu, "Meals", selectedIndex == 1),
-            const SizedBox(width: 80), // Space for FAB
-            _buildNavItem(context, 2, Icons.inventory_2_outlined, Icons.inventory_2, "Stock", selectedIndex == 2),
-            _buildNavItem(context, 3, Icons.assignment_outlined, Icons.assignment, "Plan", selectedIndex == 3),
-          ],
+        height: 64,
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppColors.border, width: 1.0),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildNavItem(context, 0, Icons.home_outlined, Icons.home, "Home", selectedIndex == 0),
+              _buildNavItem(context, 1, Icons.restaurant_menu_outlined, Icons.restaurant_menu, "Meals", selectedIndex == 1),
+              const SizedBox(width: 80), // Space for FAB
+              _buildNavItem(context, 2, Icons.inventory_2_outlined, Icons.inventory_2, "Stock", selectedIndex == 2),
+              _buildNavItem(context, 3, Icons.assignment_outlined, Icons.assignment, "Plan", selectedIndex == 3),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildNavItem(BuildContext context, int index, IconData icon, IconData activeIcon, String label, bool isSelected) {
-    final theme = Theme.of(context);
-    final color = isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant.withOpacity(0.7);
+    final color = isSelected ? AppColors.lime : AppColors.textMuted;
     
     return Expanded(
       child: InkWell(
@@ -57,9 +66,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(
+              style: GoogleFonts.barlowCondensed(
                 color: color,
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),

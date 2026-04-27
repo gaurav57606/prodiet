@@ -1,191 +1,258 @@
 import 'package:flutter/material.dart';
-import 'package:dietmate_pro/core/theme/app_spacing.dart';
-import 'package:dietmate_pro/core/theme/text_styles.dart';
-import 'package:dietmate_pro/shared/widgets/dm_card.dart';
-import 'package:dietmate_pro/shared/widgets/dm_button.dart';
-import 'package:dietmate_pro/shared/widgets/dm_macro_chip.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class CompensationScreen extends StatelessWidget {
   const CompensationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final coral = const Color(0xFFFF5C3A);
-    final amber = const Color(0xFFFFB800);
-    
     return Scaffold(
+      backgroundColor: AppColors.bgDefault,
       appBar: AppBar(
-        title: Text(
-          "Meal Adjustment",
-          style: theme.textTheme.displayMedium?.copyWith(fontSize: 28),
-        ),
-        centerTitle: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
-              child: Text(
-                "You missed a meal — here's the fix",
-                style: theme.textTheme.bodySmall,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ADJUST',
+                    style: GoogleFonts.barlowCondensed(
+                      fontSize: 56,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.coral,
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'You missed a meal — here is the fix',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-            
+            const SizedBox(height: 24),
+            // Missed Meal Box
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
-                padding: const EdgeInsets.all(14),
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: coral.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
-                  border: Border.all(color: coral.withOpacity(0.5)),
+                  color: AppColors.coral.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.coral.withOpacity(0.5), width: 1.5),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "MISSED MEAL",
-                      style: AppTextStyles.sectionLabel(colorScheme).copyWith(color: coral),
+                      'MISSED MEAL',
+                      style: TextStyle(
+                        fontSize: 10,
+                        letterSpacing: 1.5,
+                        color: AppColors.coral,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
+                    const SizedBox(height: 8),
                     Text(
-                      "Morning Snack",
-                      style: theme.textTheme.displayMedium?.copyWith(fontSize: 24, color: coral),
+                      'Morning Snack',
+                      style: GoogleFonts.barlowCondensed(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.coral,
+                        height: 1.0,
+                      ),
                     ),
+                    const SizedBox(height: 4),
                     Text(
-                      "10:00 AM · Almonds + Fruit · 180 kcal · 6g protein",
-                      style: theme.textTheme.bodySmall,
+                      '10:00 AM · Almonds + Fruit · 180 kcal',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-
+            const SizedBox(height: 32),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: DmCard(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "IMPACT ANALYSIS", 
-                      style: AppTextStyles.sectionLabel(colorScheme),
-                    ),
-                    const SizedBox(height: 10),
-                    const Row(
-                      children: [
-                        DmMacroChip(
-                          value: "-180",
-                          label: "kcal",
-                          type: MacroType.calories,
-                        ),
-                        SizedBox(width: 8),
-                        DmMacroChip(
-                          value: "-6g",
-                          label: "Protein",
-                          type: MacroType.protein,
-                        ),
-                        SizedBox(width: 8),
-                        DmMacroChip(
-                          value: "-12g",
-                          label: "Carbs",
-                          type: MacroType.carbs,
-                        ),
-                      ],
-                    ),
-                  ],
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'IMPACT ANALYSIS',
+                style: TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-
+            const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.all(18),
-              child: DmCard(
-                padding: EdgeInsets.zero,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  _buildImpactChip('-180 kcal', AppColors.coral),
+                  const SizedBox(width: 8),
+                  _buildImpactChip('-6g Protein', AppColors.coral),
+                  const SizedBox(width: 8),
+                  _buildImpactChip('-12g Carbs', AppColors.coral),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
+                ),
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.12),
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLarge)),
-                        border: Border(left: BorderSide(color: theme.colorScheme.primary, width: 3)),
+                        color: AppColors.lime.withOpacity(0.05),
+                        border: Border(left: BorderSide(color: AppColors.lime, width: 3)),
                       ),
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "AUTO-ADJUSTMENT PLAN",
-                                style: AppTextStyles.sectionLabel(colorScheme).copyWith(color: theme.colorScheme.primary),
-                              ),
-                              Text("Distributed across remaining meals", style: theme.textTheme.bodySmall),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'AUTO-ADJUSTMENT PLAN',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    letterSpacing: 1.2,
+                                    color: AppColors.lime,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                Text(
+                                  'Distributed across remaining meals',
+                                  style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    _buildAdjustItem(context, "Lunch · 12:30 PM", "+15g protein · Quinoa 100g → 120g", "+15g"),
-                    _buildAdjustItem(context, "Dinner · 7:30 PM", "+80 kcal · Extra salmon 30g", "+80"),
-                    _buildAdjustItem(context, "Evening Snack", "+12g carbs · Add banana", "+12g"),
+                    _buildAdjustRow('Lunch · 12:30 PM', '+15g protein · Quinoa 100g → 120g', '+15g'),
+                    _buildAdjustRow('Dinner · 7:30 PM', '+80 kcal · Extra salmon 30g', '+80'),
+                    _buildAdjustRow('Evening Snack', '+12g carbs · Add banana', '+12g', isLast: true),
                   ],
                 ),
               ),
             ),
-
+            const SizedBox(height: 32),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  Expanded(child: DmButton(label: "Accept Adjustment", onPressed: () {})),
-                  const SizedBox(width: 8),
-                  Expanded(child: DmButton(label: "Customise", variant: DmButtonVariant.outline, onPressed: () {})),
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.lime,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'ACCEPT ADJUSTMENT',
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 13),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.border),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'CUSTOMISE',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-
+            const SizedBox(height: 40),
             Padding(
-              padding: const EdgeInsets.all(18),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: amber.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: amber.withOpacity(0.2)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Break from diet plan?", style: theme.textTheme.labelLarge?.copyWith(color: amber, fontWeight: FontWeight.w700)),
-                    Text("Recalculate entire plan for remaining days to meet weekly goals", style: theme.textTheme.bodySmall),
-                    const SizedBox(height: 6),
-                    Text("Recalculate plan ›", style: theme.textTheme.labelLarge?.copyWith(color: amber, decoration: TextDecoration.underline)),
-                  ],
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: Text(
+                  'Recalculate entire plan for remaining days ›',
+                  style: TextStyle(
+                    color: AppColors.amber,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             ),
+            const SizedBox(height: 100),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAdjustItem(BuildContext context, String title, String sub, String delta) {
-    final theme = Theme.of(context);
+  Widget _buildImpactChip(String label, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colorScheme.outline)),
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdjustRow(String title, String sub, String delta, {bool isLast = false}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: isLast ? null : Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
@@ -193,14 +260,25 @@ class CompensationScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: theme.textTheme.titleMedium),
-                Text(sub, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary)),
+                Text(
+                  title,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  sub,
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+                ),
               ],
             ),
           ),
           Text(
             delta,
-            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 14, color: const Color(0xFFB8FF00)),
+            style: GoogleFonts.barlowCondensed(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFFB8FF00),
+            ),
           ),
         ],
       ),

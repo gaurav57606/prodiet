@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dietmate_pro/core/theme/app_spacing.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class ActivityRow extends StatelessWidget {
   const ActivityRow({super.key});
@@ -11,35 +12,56 @@ class ActivityRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
       child: Row(
         children: [
-          _buildActivityItem(context, 0, "4,820", "Steps", Theme.of(context).colorScheme.primary),
+          _buildActivityItem('STEPS', '8,420', Icons.directions_walk, AppColors.lime),
           const SizedBox(width: 6),
-          _buildActivityItem(context, 1, "312", "kcal Burned", const Color(0xFFFF5C3A)),
+          _buildActivityItem('ACTIVE', '42 min', Icons.timer, AppColors.coral),
           const SizedBox(width: 6),
-          _buildActivityItem(context, 2, "48m", "Active", const Color(0xFF38BFFF)),
+          _buildActivityItem('BURNED', '312 kcal', Icons.whatshot, AppColors.amber),
+          const SizedBox(width: 6),
+          _buildActivityItem('HEART', '74 bpm', Icons.favorite, AppColors.purple),
         ],
       ),
     );
   }
 
-  Widget _buildActivityItem(BuildContext context, int index, String value, String label, Color color) {
-    final theme = Theme.of(context);
+  Widget _buildActivityItem(String label, String value, IconData iconData, Color tileColor) {
     return Expanded(
-      child: DmCard(
-        borderRadius: 12,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        child: Column(
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.bgElevated,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Stack(
           children: [
-            Text(
-              value,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontSize: index == 0 ? 22 : 20,
-                color: color,
-              ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Icon(iconData, color: tileColor, size: 14),
             ),
-            const SizedBox(height: 2),
-            Text(
-              label.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, fontWeight: FontWeight.w600),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 8,
+                    letterSpacing: 1.2,
+                    color: AppColors.textMuted,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: GoogleFonts.barlowCondensed(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: tileColor,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

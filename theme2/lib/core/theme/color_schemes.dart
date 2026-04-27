@@ -44,6 +44,10 @@ class AppColors {
 
   // Borders
   static const Color border = Color(0xFF252520);
+
+  // Aliases
+  static const Color bgCard = bgElevated;
+  static const Color divider = border;
 }
 
 final lightScheme = ColorScheme(

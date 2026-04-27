@@ -26,22 +26,22 @@ class CalorieSummaryCard extends StatelessWidget {
         AppSpacing.lg,
         AppSpacing.lg,
         AppSpacing.lg,
-        AppSpacing.xl,
+        AppSpacing.lg,
       ),
       child: Stack(
         children: [
-          // Decorative Glows similar to HTML ::before and ::after
+          // Decorative Glow
           Positioned(
-            top: -50,
-            right: -30,
+            top: -60,
+            right: -40,
             child: Container(
-              width: 220,
-              height: 220,
+              width: 260,
+              height: 260,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    theme.colorScheme.primary.withOpacity(0.15),
+                    theme.colorScheme.primary.withOpacity(0.2),
                     Colors.transparent,
                   ],
                 ),
@@ -53,18 +53,21 @@ class CalorieSummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good morning,',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                DashboardMockData.planLabel,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.primary.withOpacity(0.8),
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 12),
               RichText(
                 text: TextSpan(
                   style: theme.textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 34,
                     color: theme.colorScheme.onSurface,
+                    letterSpacing: -0.5,
                   ),
                   children: [
                     const TextSpan(text: 'Rohan '),
@@ -75,16 +78,18 @@ class CalorieSummaryCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
-                DashboardMockData.dateString,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                DashboardMockData.dateString.toUpperCase(),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: 32),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
@@ -93,30 +98,33 @@ class CalorieSummaryCard extends StatelessWidget {
                       Text(
                         '${DashboardMockData.caloriesRemaining}',
                         style: theme.textTheme.displayLarge?.copyWith(
-                          fontSize: 56,
+                          fontSize: 64,
                           fontWeight: FontWeight.w900,
                           height: 1,
-                          letterSpacing: -0.5,
+                          letterSpacing: -1.5,
                         ),
                       ),
+                      const SizedBox(height: 4),
                       Text(
-                        'kcal remaining today',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        'KCAL REMAINING TODAY',
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.0,
                         ),
                       ),
                     ],
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
+                      horizontal: 14,
+                      vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFD070).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                      color: const Color(0xFFFFD070).withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: const Color(0xFFFFD070).withOpacity(0.2),
+                        color: const Color(0xFFFFD070).withOpacity(0.25),
                       ),
                     ),
                     child: Column(
@@ -125,16 +133,18 @@ class CalorieSummaryCard extends StatelessWidget {
                           '${DashboardMockData.streakDays}',
                           style: theme.textTheme.headlineMedium?.copyWith(
                             color: const Color(0xFFFFD070),
+                            fontWeight: FontWeight.w900,
                             height: 1,
                           ),
                         ),
+                        const SizedBox(height: 2),
                         Text(
                           'DAY STREAK',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: const Color(0xFFFFD070).withOpacity(0.5),
+                            color: const Color(0xFFFFD070).withOpacity(0.6),
                             fontSize: 8,
                             letterSpacing: 1.2,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ],

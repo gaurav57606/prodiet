@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_chip.dart';
+import '../../../../shared/widgets/dm_text_field.dart';
 import '../mock/meal_planner_mock.dart';
 import '../widgets/recipe_card.dart';
 
@@ -13,48 +14,64 @@ class MealPlannerScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Smart Planner'),
+        title: const Text('Recipe Explorer'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.tune_rounded)),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border_rounded),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.tune_rounded),
+          ),
         ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: AppSpacing.md),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-            child: Row(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+            child: DmTextField(
+              hintText: 'Search for keto recipes...',
+              prefixIcon: Icon(Icons.search_rounded, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+            ),
+          ),
+          SizedBox(
+            height: 44,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               children: [
-                DmChip(
-                  label: 'Classic Suggestions',
-                  isSelected: true,
-                  onSelected: (val) {},
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                DmChip(
-                  label: 'Experimental',
-                  isSelected: false,
-                  onSelected: (val) {},
-                ),
+                _categoryChip('All', true),
+                _categoryChip('Keto', false),
+                _categoryChip('High Protein', false),
+                _categoryChip('Vegan', false),
+                _categoryChip('Quick (15m)', false),
               ],
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
             child: Text(
-              'RECOMMENDED FOR DINNER',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.25),
+              'RECOMMENDED FOR YOU',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.3),
+                fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
               ),
             ),
           ),
           const SizedBox(height: AppSpacing.md),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.62,
+              ),
               itemCount: MealPlannerMockData.suggestions.length,
               itemBuilder: (context, index) {
                 final recipe = MealPlannerMockData.suggestions[index];
@@ -66,4 +83,16 @@ class MealPlannerScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _categoryChip(String label, bool isSelected) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: DmChip(
+        label: label,
+        isSelected: isSelected,
+        onSelected: (val) {},
+      ),
+    );
+  }
 }
+

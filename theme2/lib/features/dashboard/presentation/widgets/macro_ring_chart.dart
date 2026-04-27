@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_card.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class MacroRingChart extends StatelessWidget {
   const MacroRingChart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-      child: Row(
-        children: [
-          _buildMacroItem(context, "69%", "Cals", Theme.of(context).colorScheme.primary, 0.69),
-          const SizedBox(width: 6),
-          _buildMacroItem(context, "58%", "Protein", const Color(0xFFFF5C3A), 0.58),
-          const SizedBox(width: 6),
-          _buildMacroItem(context, "80%", "Carbs", const Color(0xFFFFB800), 0.80),
-          const SizedBox(width: 6),
-          _buildMacroItem(context, "40%", "Fat", const Color(0xFFB06EFF), 0.40),
-        ],
-      ),
+    return Row(
+      children: [
+        _buildMacroItem(context, "69%", "1,380 kcal", "Cals", AppColors.lime, 0.69),
+        const SizedBox(width: 6),
+        _buildMacroItem(context, "58%", "87g", "Protein", AppColors.coral, 0.58),
+        const SizedBox(width: 6),
+        _buildMacroItem(context, "80%", "200g", "Carbs", AppColors.amber, 0.80),
+        const SizedBox(width: 6),
+        _buildMacroItem(context, "40%", "28g", "Fat", AppColors.purple, 0.40),
+      ],
     );
   }
 
-  Widget _buildMacroItem(BuildContext context, String value, String label, Color color, double percent) {
-    final theme = Theme.of(context);
-    
+  Widget _buildMacroItem(BuildContext context, String percentStr, String gramStr, String label, Color color, double percent) {
     return Expanded(
-      child: DmCard(
-        borderRadius: 12,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        decoration: BoxDecoration(
+          color: AppColors.bgElevated,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Column(
           children: [
             SizedBox(
@@ -40,14 +37,14 @@ class MacroRingChart extends StatelessWidget {
                   Center(
                     child: CircularProgressIndicator(
                       value: 1,
-                      strokeWidth: 4,
-                      color: const Color(0xFF4E4E44).withOpacity(0.35),
+                      strokeWidth: 5,
+                      color: const Color(0xFF252520),
                     ),
                   ),
                   Center(
                     child: CircularProgressIndicator(
                       value: percent,
-                      strokeWidth: 4,
+                      strokeWidth: 5,
                       color: color,
                       strokeCap: StrokeCap.round,
                     ),
@@ -55,17 +52,31 @@ class MacroRingChart extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Text(
-              value,
-              style: theme.textTheme.headlineMedium?.copyWith(
+              percentStr,
+              style: TextStyle(
                 fontSize: 16,
+                fontWeight: FontWeight.w800,
                 color: color,
               ),
             ),
             Text(
+              gramStr,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            Text(
               label.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 8,
+                letterSpacing: 1.2,
+                color: AppColors.textMuted,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),

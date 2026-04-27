@@ -9,6 +9,7 @@ import 'package:dietmate_pro/features/dashboard/presentation/widgets/water_banne
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/next_meal_card.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/activity_row.dart';
 import 'package:dietmate_pro/features/dashboard/presentation/widgets/alert_strip.dart';
+import 'package:dietmate_pro/features/dashboard/presentation/widgets/calorie_stat.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -46,7 +47,7 @@ class DashboardScreen extends StatelessWidget {
                         Text(
                           "EAT",
                           style: GoogleFonts.barlowCondensed(
-                            fontSize: 48,
+                            fontSize: 56,
                             fontWeight: FontWeight.w900,
                             color: Colors.white,
                             height: 1.0,
@@ -55,7 +56,7 @@ class DashboardScreen extends StatelessWidget {
                         Text(
                           "RIGHT.",
                           style: GoogleFonts.barlowCondensed(
-                            fontSize: 48,
+                            fontSize: 56,
                             fontWeight: FontWeight.w900,
                             color: AppColors.lime,
                             height: 1.0,
@@ -79,11 +80,18 @@ class DashboardScreen extends StatelessWidget {
                         Text(
                           "620",
                           style: GoogleFonts.barlowCondensed(
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 56,
+                            fontWeight: FontWeight.w900,
                             color: AppColors.lime,
                             letterSpacing: -1.5,
                             height: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'of 2,000',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -93,6 +101,16 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
             
+            // Calorie Stat Bar
+            const SliverToBoxAdapter(
+              child: CalorieStat(),
+            ),
+
+            // Divider
+            const SliverToBoxAdapter(
+              child: Divider(color: AppColors.border, height: 1, thickness: 1),
+            ),
+
             // Water Banner
             SliverToBoxAdapter(
               child: GestureDetector(
@@ -128,7 +146,7 @@ class DashboardScreen extends StatelessWidget {
             
             const SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                padding: EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.md, AppSpacing.lg, AppSpacing.md),
                 child: MacroRingChart(),
               ),
             ),
@@ -191,17 +209,13 @@ class DashboardScreen extends StatelessWidget {
               child: ActivityRow(),
             ),
 
-            // Compensation Alert
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.md),
-                child: GestureDetector(
-                  onTap: () => context.goNamed('compensation'),
-                  child: const AlertStrip(
-                    message: "Skipped snack → Dinner adjusted",
-                    subMessage: "+15g protein auto-added to dinner",
-                    isWarning: true,
-                  ),
+              child: GestureDetector(
+                onTap: () => context.goNamed('compensation'),
+                child: const AlertStrip(
+                  message: "Skipped snack → Dinner adjusted",
+                  subMessage: "+15g protein auto-added to dinner",
+                  isWarning: true,
                 ),
               ),
             ),

@@ -1,123 +1,240 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:dietmate_pro/core/theme/app_spacing.dart';
-import 'package:dietmate_pro/features/meal_planner/presentation/widgets/meal_card.dart';
-import 'package:dietmate_pro/features/meal_planner/presentation/widgets/variety_toggle.dart';
-import 'package:dietmate_pro/core/theme/text_styles.dart';
-import 'package:dietmate_pro/shared/widgets/dm_card.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class MealPlannerScreen extends StatelessWidget {
   const MealPlannerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
     return Scaffold(
+      backgroundColor: AppColors.bgDefault,
       appBar: AppBar(
-        title: Text(
-          "Meal Planner",
-          style: theme.textTheme.displayMedium?.copyWith(fontSize: 28),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        centerTitle: false,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("TODAY'S TARGETS", style: AppTextStyles.sectionLabel(theme.colorScheme)),
-                  const Icon(Icons.calendar_today_outlined, size: 14),
-                ],
-              ),
-            ),
-            
-            GestureDetector(
-              onTap: () {}, // Toggle logic
-              child: const VarietyToggle(),
-            ),
-            
-            const MealCard(),
-            
-            // Navigation dots placeholder
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildDot(true, theme),
-                  const SizedBox(width: 5),
-                  _buildDot(false, theme),
-                  const SizedBox(width: 5),
-                  _buildDot(false, theme),
-                ],
-              ),
-            ),
-
-            // Order CTA
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: GestureDetector(
-                onTap: () => context.pushNamed('vendor'),
-                child: DmCard(
-                  backgroundColor: const Color(0xFFB06EFF).withOpacity(0.1),
-                  borderSide: const BorderSide(color: Color(0x33B06EFF)),
-                  borderRadius: 14,
-                  padding: const EdgeInsets.all(13),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.info_outline, color: Color(0xFFB06EFF), size: 15),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Can't cook? Order this meal",
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFFB06EFF),
-                              ),
-                            ),
-                            Text(
-                              "3 matches on Zomato · Best match 94%",
-                              style: theme.textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        "View ›",
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Color(0xFFB06EFF),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'MEALS',
+                    style: GoogleFonts.barlowCondensed(
+                      fontSize: 56,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.lime,
+                      height: 1.0,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '5 scheduled meals for today',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-            
-            const SizedBox(height: 100),
-          ],
-        ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                _buildMealCard(
+                  time: '08:00 AM',
+                  name: 'Oatmeal with Berries',
+                  kcal: '320',
+                  status: 'Done',
+                  accentColor: AppColors.textMuted,
+                  isDone: true,
+                ),
+                const SizedBox(height: 12),
+                _buildMealCard(
+                  time: '11:00 AM',
+                  name: 'Protein Shake',
+                  kcal: '180',
+                  status: 'MISSING',
+                  accentColor: AppColors.coral,
+                  isMissing: true,
+                ),
+                const SizedBox(height: 12),
+                _buildMealCard(
+                  time: '01:30 PM',
+                  name: 'Quinoa Bowl + Chicken',
+                  kcal: '480',
+                  status: 'Upcoming',
+                  accentColor: AppColors.lime,
+                ),
+                const SizedBox(height: 12),
+                _buildMealCard(
+                  time: '04:30 PM',
+                  name: 'Mixed Nuts',
+                  kcal: '150',
+                  status: 'Upcoming',
+                  accentColor: AppColors.lime,
+                ),
+                const SizedBox(height: 12),
+                _buildMealCard(
+                  time: '08:00 PM',
+                  name: 'Grilled Salmon & Veggies',
+                  kcal: '520',
+                  status: 'Upcoming',
+                  accentColor: AppColors.lime,
+                ),
+                const SizedBox(height: 100),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildDot(bool isActive, ThemeData theme) {
+  Widget _buildMealCard({
+    required String time,
+    required String name,
+    required String kcal,
+    required String status,
+    required Color accentColor,
+    bool isDone = false,
+    bool isMissing = false,
+  }) {
     return Container(
-      width: isActive ? 20 : 6,
-      height: 6,
       decoration: BoxDecoration(
-        color: isActive ? theme.colorScheme.primary : const Color(0xFF3A3A35),
-        borderRadius: BorderRadius.circular(10),
+        color: AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isMissing ? AppColors.coral.withOpacity(0.5) : AppColors.border,
+          width: isMissing ? 1.5 : 1.0,
+        ),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 4,
+              decoration: BoxDecoration(
+                color: isDone ? Colors.transparent : accentColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          time,
+                          style: TextStyle(
+                            fontSize: 10,
+                            letterSpacing: 1.2,
+                            color: AppColors.textMuted,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        if (isMissing)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.coral.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              'MISSING',
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.coral,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      name,
+                      style: GoogleFonts.barlowCondensed(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: isDone ? AppColors.textMuted : Colors.white,
+                        decoration: isDone ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: kcal,
+                                style: GoogleFonts.barlowCondensed(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                  color: isDone ? AppColors.textMuted : AppColors.lime,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' kcal',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.textMuted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        if (!isDone)
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: AppColors.border),
+                              ),
+                              child: Text(
+                                'Swap',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (isDone)
+                          const Icon(Icons.check_circle, color: AppColors.textMuted, size: 20),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

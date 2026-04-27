@@ -1,37 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
-class CalorieStatWidget extends StatelessWidget {
-  final String value;
-  final String label;
-  final bool isMain;
-
-  const CalorieStatWidget({
-    super.key,
-    required this.value,
-    required this.label,
-    this.isMain = false,
-  });
+class CalorieStat extends StatelessWidget {
+  const CalorieStat({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      color: AppColors.bgElevated,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _statCell('CONSUMED', '1,380', AppColors.lime),
+          _vDivider(),
+          _statCell('BURNED', '312', AppColors.coral),
+          _vDivider(),
+          _statCell('NET', '1,068', AppColors.textPrimary),
+        ],
+      ),
+    );
+  }
+
+  Widget _statCell(String label, String value, Color color) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          value,
-          style: theme.textTheme.displayMedium?.copyWith(
-            fontSize: isMain ? 32 : 20,
-            color: isMain ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withOpacity(0.6),
+          label,
+          style: TextStyle(
+            fontSize: 8,
+            letterSpacing: 1.4,
+            color: AppColors.textMuted,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        const SizedBox(height: 2),
         Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.5),
+          value,
+          style: GoogleFonts.barlowCondensed(
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
+            color: color,
           ),
         ),
       ],
+    );
+  }
+
+  Widget _vDivider() {
+    return Container(
+      height: 36,
+      width: 1,
+      color: AppColors.border,
     );
   }
 }

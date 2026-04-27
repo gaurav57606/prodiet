@@ -34,14 +34,19 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SliverToBoxAdapter(child: CalorieSummaryCard()),
             
-            const SliverToBoxAdapter(child: HydrationCard()),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                child: HydrationCard(),
+              ),
+            ),
             
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
                 child: _SectionHeader(
                   title: 'Macros Today',
-                  onAction: () {},
+                  onAction: () => context.go('/meals'),
                 ),
               ),
             ),
@@ -53,7 +58,7 @@ class DashboardScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
                 child: _SectionHeader(
                   title: 'Next Meal',
-                  onAction: () {},
+                  onAction: () => context.go('/meals'),
                 ),
               ),
             ),

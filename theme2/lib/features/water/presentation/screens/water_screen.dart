@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dietmate_pro/core/theme/text_styles.dart';
-import 'package:dietmate_pro/shared/widgets/dm_card.dart';
-import '../widgets/water_good_state.dart';
-import '../widgets/water_overdue_state.dart';
-import '../widgets/quick_add_grid.dart';
-import '../widgets/water_log_list.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dietmate_pro/core/theme/color_schemes.dart';
 
 class WaterScreen extends StatefulWidget {
   const WaterScreen({super.key});
@@ -14,61 +10,226 @@ class WaterScreen extends StatefulWidget {
 }
 
 class _WaterScreenState extends State<WaterScreen> {
-  bool isOverdue = false;
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    
     return Scaffold(
+      backgroundColor: AppColors.bgDefault,
       appBar: AppBar(
-        title: Text(
-          "Hydration",
-          style: theme.textTheme.displayMedium?.copyWith(fontSize: 28),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        centerTitle: false,
-        actions: [
-          // Demo toggle
-          Switch(
-            value: isOverdue,
-            onChanged: (val) => setState(() => isOverdue = val),
-            activeColor: const Color(0xFFFF5C3A),
-          ),
-          const SizedBox(width: 8),
-        ],
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // DUAL STATE HERO
-            if (isOverdue)
-              const WaterOverdueState()
-            else
-              const WaterGoodState(),
-            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text(
-                "QUICK ADD",
-                style: AppTextStyles.sectionLabel(colorScheme),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'WATER',
+                    style: GoogleFonts.barlowCondensed(
+                      fontSize: 56,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.sky,
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '1,250',
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' ml / 2,500 ml',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '8 glasses left today',
+                    style: TextStyle(
+                      color: AppColors.sky,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const QuickAddGrid(),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text(
-                "TODAY'S LOG",
-                style: AppTextStyles.sectionLabel(colorScheme),
+            const SizedBox(height: 30),
+            // Glass log row
+            Container(
+              height: 80,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: 10,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  final isFilled = index < 5;
+                  return _buildGlassIcon(isFilled);
+                },
               ),
             ),
-            const WaterLogList(),
-
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'QUICK ADD',
+                style: TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1.8,
+                children: [
+                  _buildAddButton('200ml'),
+                  _buildAddButton('300ml'),
+                  _buildAddButton('500ml'),
+                  _buildAddButton('750ml'),
+                  _buildAddButton('1L'),
+                  _buildAddButton('Custom'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'CUSTOM ENTRY',
+                      style: TextStyle(
+                        fontSize: 10,
+                        letterSpacing: 1.2,
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Enter amount',
+                              hintStyle: TextStyle(color: AppColors.textMuted),
+                              filled: true,
+                              fillColor: AppColors.bgDeep,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.sky,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            'ADD',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 100),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGlassIcon(bool isFilled) {
+    return Container(
+      width: 45,
+      decoration: BoxDecoration(
+        color: isFilled ? AppColors.sky.withOpacity(0.2) : AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isFilled ? AppColors.sky : AppColors.border,
+          width: 1,
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.local_drink_rounded,
+          color: isFilled ? AppColors.sky : AppColors.textMuted,
+          size: 24,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddButton(String label) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.bgElevated,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
         ),
       ),
     );

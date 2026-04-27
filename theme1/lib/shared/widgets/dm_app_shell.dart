@@ -15,7 +15,7 @@ class _DmAppShellState extends State<DmAppShell> {
   int get _currentIndex {
     final location = GoRouterState.of(context).uri.toString();
     if (location.startsWith(AppRoutes.dashboard)) return 0;
-    if (location.startsWith(AppRoutes.mealPlanner)) return 1;
+    if (location.startsWith(AppRoutes.meals)) return 1;
     if (location.startsWith(AppRoutes.inventory)) return 2;
     if (location.startsWith(AppRoutes.dietPlan)) return 3;
     return 0;
@@ -27,7 +27,7 @@ class _DmAppShellState extends State<DmAppShell> {
         context.go(AppRoutes.dashboard);
         break;
       case 1:
-        context.go(AppRoutes.mealPlanner);
+        context.go(AppRoutes.meals);
         break;
       case 2:
         context.go(AppRoutes.inventory);
@@ -62,8 +62,8 @@ class _DmAppShellState extends State<DmAppShell> {
             _navItem(context, Icons.home_rounded, Icons.home_outlined, 'Home', 0),
             _navItem(context, Icons.restaurant_rounded, Icons.restaurant_outlined, 'Meals', 1),
             const SizedBox(width: 56), // space for FAB
-            _navItem(context, Icons.inventory_2_rounded, Icons.inventory_2_outlined, 'Stock', 2),
-            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Plan', 3),
+            _navItem(context, Icons.inventory_2_rounded, Icons.inventory_2_outlined, 'Pantry', 2),
+            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Program', 3),
           ],
         ),
       ),

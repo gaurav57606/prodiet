@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/widgets/dm_card.dart';
 import '../mock/inventory_mock.dart';
 
 class InventoryItemTile extends StatelessWidget {
@@ -10,101 +10,134 @@ class InventoryItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    Color levelColor;
-    switch (item.level) {
-      case StockLevel.low:
-        levelColor = const Color(0xFFFF6080);
-        break;
-      case StockLevel.medium:
-        levelColor = const Color(0xFFFFB040);
-        break;
-      case StockLevel.ok:
-        levelColor = const Color(0xFF40D8B8);
-        break;
+    
+    // Logic for status color
+    Color statusColor;
+    String statusText;
+    if (item.level == StockLevel.low) {
+      statusColor = const Color(0xFFFFB040);
+      statusText = 'LOW STOCK';
+    } else {
+      statusColor = const Color(0xFF40D8B8);
+      statusText = 'IN STOCK';
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.white.withOpacity(0.03) : Colors.white.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.06)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: levelColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  item.level == StockLevel.low ? Icons.warning_amber_rounded : Icons.inventory_2_outlined,
-                  size: 18,
-                  color: levelColor,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      margin: const EdgeInsets.only(bottom: 12),
+      child: DmCard(
+        color: Colors.white.withOpacity(0.02),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
-                    Text(
-                      item.name,
-                      style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      item.subtext,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: item.level == StockLevel.low ? levelColor : theme.colorScheme.onSurface.withOpacity(0.3),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      child: Icon(
+                        _getCategoryIcon(item.name),
+                        color: theme.colorScheme.primary,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.name,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${item.quantity} remaining',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurface.withOpacity(0.35),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    statusText,
+                    style: TextStyle(
+                      color: statusColor,
+                      fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    item.quantity,
-                    style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    '${(item.percentage * 100).toInt()}%',
-                    style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3)),
-                  ),
+                  _buildMacro(theme, 'PROT', '24g', const Color(0xFFFF3060)),
+                  _buildMacro(theme, 'CARB', '0g', const Color(0xFFFFB870)),
+                  _buildMacro(theme, 'FAT', '12g', const Color(0xFF40D8B8)),
+                  _buildMacro(theme, 'KCAL', '210', theme.colorScheme.primary),
                 ],
               ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Container(
-            height: 4,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.onSurface.withOpacity(0.06),
-              borderRadius: BorderRadius.circular(4),
             ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: item.percentage,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: levelColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildMacro(ThemeData theme, String label, String value, Color color) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 7,
+            fontWeight: FontWeight.w900,
+            color: theme.colorScheme.onSurface.withOpacity(0.2),
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w900,
+            color: color.withOpacity(0.8),
+          ),
+        ),
+      ],
+    );
+  }
+
+  IconData _getCategoryIcon(String name) {
+    final n = name.toLowerCase();
+    if (n.contains('chicken') || n.contains('beef') || n.contains('egg')) return Icons.restaurant_rounded;
+    if (n.contains('spinach') || n.contains('kale') || n.contains('broccoli')) return Icons.eco_rounded;
+    if (n.contains('milk') || n.contains('cheese')) return Icons.egg_rounded;
+    return Icons.inventory_2_rounded;
   }
 }

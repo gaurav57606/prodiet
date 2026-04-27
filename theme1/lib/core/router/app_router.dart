@@ -7,6 +7,8 @@ import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../../features/dashboard/presentation/screens/hydration_screen.dart';
+import '../../features/dashboard/presentation/screens/today_meals_screen.dart';
 import '../../features/diet_plan/presentation/screens/diet_plan_screen.dart';
 import '../../features/meal_planner/presentation/screens/meal_planner_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
@@ -38,6 +40,9 @@ class AppRoutes {
   static const String activitySync = '/activity-sync';
   static const String healthGoals = '/health-goals';
   static const String verifyPhone = '/verify-phone';
+  static const String hydration = '/hydration';
+  static const String recipeExplorer = '/recipe-explorer';
+  static const String meals = '/meals';
   static const String forgotPassword = '/forgot-password';
 
   // Names
@@ -115,14 +120,8 @@ final appRouter = GoRouter(
           builder: (context, state) => const DashboardScreen(),
         ),
         GoRoute(
-          path: AppRoutes.dietPlan,
-          name: AppRoutes.dietPlanName,
-          builder: (context, state) => const DietPlanScreen(),
-        ),
-        GoRoute(
-          path: AppRoutes.mealPlanner,
-          name: AppRoutes.mealPlannerName,
-          builder: (context, state) => const MealPlannerScreen(),
+          path: AppRoutes.meals,
+          builder: (context, state) => const TodayMealsScreen(),
         ),
         GoRoute(
           path: AppRoutes.inventory,
@@ -157,6 +156,14 @@ final appRouter = GoRouter(
       path: AppRoutes.activitySync,
       name: AppRoutes.activitySyncName,
       builder: (context, state) => const ActivitySyncScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.hydration,
+      builder: (context, state) => const HydrationScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.recipeExplorer,
+      builder: (context, state) => const MealPlannerScreen(),
     ),
   ],
 );

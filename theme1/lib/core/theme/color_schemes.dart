@@ -46,9 +46,9 @@ class AppColorSchemes {
     onTertiaryContainer: Colors.black,
     error: Color(0xFFFF6080),
     onError: Colors.white,
-    surface: Color(0xFF0D0020), // Darker surface
+    surface: Color(0xFF08080F), // True deep purple-black
     onSurface: Colors.white,
-    surfaceContainerHighest: Color(0xFF1A0030),
+    surfaceContainerHighest: Color(0xFF12121A),
     onSurfaceVariant: Color(0xFFA050FF),
     outline: Color(0x1AFFFFFF),
     shadow: Colors.black,
@@ -76,6 +76,6 @@ class AppColorSchemes {
   );
 
   // Custom Gradient colors extracted from HTML
-  static const List<Color> heroGradient = [Color(0xFF1A0030), Color(0xFF0D0020), Colors.black];
+  static const List<Color> heroGradient = [Color(0xFF12121A), Color(0xFF08080F), Color(0xFF08080F)];
   static const List<Color> heroGradientLightMode = [Color(0xFFE8D5FF), Color(0xFFF5DEFF), Color(0xFFFFE8F0), Color(0xFFFFF0E4)];
 }

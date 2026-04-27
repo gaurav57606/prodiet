@@ -3,10 +3,11 @@ import 'dart:ui';
 class DashboardMockData {
   static const String userName = 'Rohan';
   static const String userLastName = 'Sharma';
-  static const String dateString = 'Saturday · 22 March · Week 3';
-  static const int caloriesRemaining = 620;
+  static const String dateString = 'Saturday · 22 March';
+  static const String planLabel = 'SHREDDING PLAN · WEEK 3';
   static const int calorieGoal = 2000;
   static const int caloriesConsumed = 1380;
+  static const int caloriesRemaining = 620;
   static const int streakDays = 12;
 
   static const List<MacroData> macros = [

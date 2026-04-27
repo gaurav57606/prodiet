@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../shared/widgets/dm_button.dart';
-import '../../../../shared/widgets/dm_macro_chip.dart';
 import '../mock/meal_planner_mock.dart';
 
 class RecipeCard extends StatelessWidget {
@@ -12,100 +10,138 @@ class RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    final headerGradient = recipe.isExotic
-        ? const LinearGradient(colors: [Color(0xFF300810), Color(0xFF702030)])
-        : const LinearGradient(colors: [Color(0xFF1A0040), Color(0xFF3A1090)]);
+    
+    final accentColor = recipe.isExotic
+        ? const Color(0xFFFF3060)
+        : const Color(0xFF8B5CF6);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppSpacing.md),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.1)),
+        color: Colors.white.withOpacity(0.03),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withOpacity(0.06)),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(gradient: headerGradient),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 12,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        accentColor.withOpacity(0.2),
+                        accentColor.withOpacity(0.05),
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      recipe.type == 'Breakfast' ? Icons.wb_sunny_rounded : Icons.restaurant_rounded,
+                      size: 48,
+                      color: accentColor.withOpacity(0.3),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.timer_outlined, size: 12, color: Colors.white),
+                        const SizedBox(width: 4),
+                        Text(
+                          '25m',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 10,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     recipe.type.toUpperCase(),
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: Colors.white.withOpacity(0.55),
-                      letterSpacing: 0.8,
+                      color: accentColor.withOpacity(0.6),
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     recipe.name,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
-                      fontSize: 22,
-                      height: 1.1,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w900,
+                      fontSize: 15,
+                      height: 1.2,
                     ),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              color: isDark ? Colors.white.withOpacity(0.04) : Colors.white.withOpacity(0.6),
-              child: Column(
-                children: [
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      DmMacroChip(value: recipe.protein, label: 'Prot', type: MacroType.protein, large: true),
-                      DmMacroChip(value: recipe.carbs, label: 'Carb', type: MacroType.carbs, large: true),
-                      DmMacroChip(value: recipe.fat, label: 'Fat', type: MacroType.fat, large: true),
-                      DmMacroChip(value: recipe.match, label: 'Match', type: MacroType.calories, large: true), // Match as accent violet
+                      _buildMacro(theme, 'P', recipe.protein, const Color(0xFFFF3060)),
+                      _buildMacro(theme, 'C', recipe.carbs, const Color(0xFFFFB870)),
+                      _buildMacro(theme, 'F', recipe.fat, const Color(0xFF40D8B8)),
                     ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: recipe.tags.map((tag) => _buildTag(theme, tag)).toList(),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  DmButton(
-                    label: 'Add to Plan',
-                    onPressed: () {},
-                    width: double.infinity,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-
-  Widget _buildTag(ThemeData theme, String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.15)),
-      ),
-      child: Text(
-        label,
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: theme.colorScheme.onSurface.withOpacity(0.4),
-          fontSize: 9,
+  Widget _buildMacro(ThemeData theme, String label, String value, Color color) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 8,
+            fontWeight: FontWeight.w900,
+            color: theme.colorScheme.onSurface.withOpacity(0.2),
+          ),
         ),
-      ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            color: color.withOpacity(0.8),
+          ),
+        ),
+      ],
     );
   }
 }
+
