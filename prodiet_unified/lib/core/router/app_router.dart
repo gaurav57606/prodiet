@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 
 // Shells
 import 'package:prodiet_unified/shared/t1/widgets/dm_app_shell.dart';
@@ -118,8 +120,27 @@ final GlobalKey<NavigatorState> _shellT2Key = GlobalKey<NavigatorState>(debugLab
 
 final appRouter = GoRouter(
   navigatorKey: _rootKey,
-  initialLocation: AppRoutes.t1Splash,
+  initialLocation: '/',
+  redirect: (context, state) {
+    if (state.matchedLocation == '/') {
+      try {
+        final container = ProviderScope.containerOf(context);
+        final active = container.read(activeThemeProvider);
+        if (active == ActiveTheme.t2Dark ||
+            active == ActiveTheme.t2Light ||
+            active == ActiveTheme.t2Amoled) {
+          return '/t2/splash';
+        }
+        return '/t1/splash';
+      } catch (e) {
+        return '/t1/splash';
+      }
+    }
+    return null;
+  },
   routes: [
+    // Standalone T1/T2 screens
+
     // T1 Standalone
     GoRoute(path: AppRoutes.t1Splash, name: 't1Splash', builder: (context, state) => const t1_splash.SplashScreen()),
     GoRoute(path: AppRoutes.t1Onboarding, name: 't1Onboarding', builder: (context, state) => const t1_onboarding.OnboardingScreen()),
