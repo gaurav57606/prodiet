@@ -1,57 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/progress/application/progress_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 
-class ProgressScreen extends StatelessWidget {
+class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final summaryAsync = ref.watch(dashboardSummaryProvider);
+    final logsAsync = ref.watch(progressLogsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Progress')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(T1Spacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildStatCard(context),
-            const SizedBox(height: T1Spacing.lg),
-            Text(
-              'WEEKLY COMPLIANCE',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.25),
+      body: summaryAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+        data: (summary) => SingleChildScrollView(
+          padding: const EdgeInsets.all(T1Spacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildStatCard(context, summary),
+              const SizedBox(height: T1Spacing.lg),
+              Text(
+                'WEEKLY COMPLIANCE',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.25),
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildComplianceChart(context),
-            const SizedBox(height: T1Spacing.lg),
-            Text(
-              'ACHIEVEMENTS',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.25),
+              const SizedBox(height: T1Spacing.md),
+              _buildComplianceChart(context),
+              const SizedBox(height: T1Spacing.lg),
+              Text(
+                'ACHIEVEMENTS',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.25),
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildAchievementList(context),
-            const SizedBox(height: 100),
-          ],
+              const SizedBox(height: T1Spacing.md),
+              _buildAchievementList(context),
+              const SizedBox(height: 100),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(BuildContext context) {
+  Widget _buildStatCard(BuildContext context, dynamic summary) {
     final theme = Theme.of(context);
     return DmCard(
-      color: theme.colorScheme.primary.withOpacity(0.08),
+      color: theme.colorScheme.primary.withValues(alpha: 0.08),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(theme, '-1.4kg', 'This week'),
-          _buildStatItem(theme, '92%', 'Adherence'),
-          _buildStatItem(theme, '4.8k', 'Avg Steps'),
+          _buildStatItem(theme, '${summary.currentWeightKg ?? "--"}kg', 'Current'),
+          _buildStatItem(theme, '${summary.streakDays}d', 'Streak'),
+          _buildStatItem(theme, '${(summary.stepsToday / 1000).toStringAsFixed(1)}k', 'Steps'),
         ],
       ),
     );
@@ -60,8 +69,8 @@ class ProgressScreen extends StatelessWidget {
   Widget _buildStatItem(ThemeData theme, String value, String label) {
     return Column(
       children: [
-        Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary)),
-        Text(label, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3))),
+        Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w900)),
+        Text(label, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -89,7 +98,7 @@ class ProgressScreen extends StatelessWidget {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        theme.colorScheme.primary.withOpacity(0.2),
+                        theme.colorScheme.primary.withValues(alpha: 0.2),
                         theme.colorScheme.primary,
                       ],
                     ),
@@ -97,7 +106,7 @@ class ProgressScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(days[index], style: theme.textTheme.labelSmall),
+                Text(days[index], style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold)),
               ],
             );
           }),
@@ -126,7 +135,7 @@ class ProgressScreen extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
             child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: T1Spacing.md),
@@ -134,8 +143,8 @@ class ProgressScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: theme.textTheme.titleSmall),
-                Text(subtitle, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.4))),
+                Text(title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900)),
+                Text(subtitle, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontWeight: FontWeight.w700)),
               ],
             ),
           ),

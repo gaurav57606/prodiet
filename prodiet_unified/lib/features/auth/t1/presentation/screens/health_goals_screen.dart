@@ -1,24 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prodiet_unified/core/router/app_router.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
-class HealthGoalsScreen extends StatefulWidget {
+class HealthGoalsScreen extends ConsumerStatefulWidget {
   const HealthGoalsScreen({super.key});
 
   @override
-  State<HealthGoalsScreen> createState() => _HealthGoalsScreenState();
+  ConsumerState<HealthGoalsScreen> createState() => _HealthGoalsScreenState();
 }
 
-class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
-  int _selectedGoal = 0; // 0 = Lose weight
+class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
+  int _selectedGoal = 0; // 0 = Lose weight, 1 = Build muscle, 2 = Eat healthier, 3 = More energy
   int _selectedActivity = 1; // 0 = Sedentary, 1 = Lightly active, 2 = Very active
+
+  final _ageController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _heightController = TextEditingController();
+
+  @override
+  void dispose() {
+    _ageController.dispose();
+    _weightController.dispose();
+    _heightController.dispose();
+    super.dispose();
+  }
+
+  String _getGoalString() {
+    switch (_selectedGoal) {
+      case 0: return 'lose_weight';
+      case 1: return 'gain_muscle';
+      case 2: return 'eat_healthy';
+      case 3: return 'maintain';
+      default: return 'maintain';
+    }
+  }
+
+  String _getActivityString() {
+    switch (_selectedActivity) {
+      case 0: return 'sedentary';
+      case 1: return 'light';
+      case 2: return 'moderate';
+      default: return 'light';
+    }
+  }
+
+  Future<void> _completeOnboarding() async {
+    final age = int.tryParse(_ageController.text);
+    final weight = double.tryParse(_weightController.text);
+    final height = double.tryParse(_heightController.text);
+
+    if (age == null || weight == null || height == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all health details')),
+      );
+      return;
+    }
+
+    final user = ref.read(currentUserProvider);
+    if (user == null) return;
+
+    await ref.read(authProvider.notifier).completeOnboarding(
+      user.id,
+      {
+        'age': age,
+        'weight_kg': weight,
+        'height_cm': height,
+        'fitness_goal': _getGoalString(),
+        'activity_level': _getActivityString(),
+        'dietary_preferences': [],
+        'allergies': [],
+        'variety_preference': 'balanced',
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final authState = ref.watch(authProvider);
+    final isLoading = authState is AuthLoading;
+
+    ref.listen<AuthState>(authProvider, (_, next) {
+      if (next is AuthFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(next.error.displayMessage),
+          backgroundColor: Colors.red.shade700,
+        ));
+      }
+    });
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -47,7 +120,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white.withOpacity(0.4),
+                      color: Colors.white.withValues(alpha: 0.4),
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -65,7 +138,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                   Text(
                     'Step 2 of 2 — Personalise your plan',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -78,7 +151,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -149,18 +222,41 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                           children: [
                             _buildLabel('AGE'),
                             const SizedBox(height: 8),
-                            const DmTextField(hintText: '25', keyboardType: TextInputType.number),
+                            DmTextField(
+                              controller: _ageController,
+                              hintText: '25',
+                              keyboardType: TextInputType.number,
+                            ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildLabel('WEIGHT (KG)'),
                             const SizedBox(height: 8),
-                            const DmTextField(hintText: '70', keyboardType: TextInputType.number),
+                            DmTextField(
+                              controller: _weightController,
+                              hintText: '70',
+                              keyboardType: TextInputType.number,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildLabel('HEIGHT (CM)'),
+                            const SizedBox(height: 8),
+                            DmTextField(
+                              controller: _heightController,
+                              hintText: '175',
+                              keyboardType: TextInputType.number,
+                            ),
                           ],
                         ),
                       ),
@@ -170,8 +266,9 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
 
                   // Button
                   DmButton(
-                    label: 'Create My Account ✓',
-                    onPressed: () => context.pushNamed(AppRoutes.verifyPhoneName),
+                    label: 'Complete Onboarding ✓',
+                    isLoading: isLoading,
+                    onPressed: isLoading ? null : _completeOnboarding,
                     width: double.infinity,
                   ),
                   const SizedBox(height: 16),
@@ -182,7 +279,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                       child: Text(
                         '< Back to details',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 14,
                         ),
                       ),
@@ -209,7 +306,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.45)),
+          style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.45)),
         ),
       ],
     );
@@ -225,7 +322,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
           color: const Color(0xFF1A1A2E),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withOpacity(0.07),
+            color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.07),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -244,7 +341,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withOpacity(0.45), fontSize: 11),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.45), fontSize: 11),
                 ),
               ],
             ),
@@ -289,7 +386,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withOpacity(0.2),
+                  color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.2),
                   width: isSelected ? 6 : 2,
                 ),
               ),
@@ -308,7 +405,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withOpacity(0.45), fontSize: 12),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.45), fontSize: 12),
                 ),
               ],
             ),
@@ -324,7 +421,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

@@ -1,26 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prodiet_unified/core/router/app_router.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   int _selectedTab = 0; // 0 = Sign In, 1 = Create Account
   bool _keepSignedIn = true;
   bool _obscurePassword = true;
 
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    final isLoading = authState is AuthLoading;
+
+    ref.listen<AuthState>(authProvider, (_, next) {
+      if (next is AuthFailure) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+            content: Text(next.error.displayMessage),
+            backgroundColor: Colors.red.shade700,
+            behavior: SnackBarBehavior.floating,
+          ));
+      }
+    });
+
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -61,15 +86,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   // Title
                   RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
+                    text: const TextSpan(
+                      style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
                         fontFamily: 'Inter', // Assuming Inter is the default
                       ),
                       children: [
-                        const TextSpan(text: 'DietMaster', style: TextStyle(color: Colors.white)),
-                        const TextSpan(text: 'Pro', style: TextStyle(color: Color(0xFFC080FF))),
+                        TextSpan(text: 'DietMaster', style: TextStyle(color: Colors.white)),
+                        TextSpan(text: 'Pro', style: TextStyle(color: Color(0xFFC080FF))),
                       ],
                     ),
                   ),
@@ -78,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     'Your intelligent nutrition companion',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -117,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -128,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              context.pushNamed(AppRoutes.signupName);
+                              context.go('/t1/signup');
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -140,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -156,7 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   // FORM SECTION
                   _buildLabel('EMAIL ADDRESS'),
                   const SizedBox(height: 8),
-                  const DmTextField(
+                  DmTextField(
+                    controller: _emailController,
                     hintText: 'you@example.com',
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -167,11 +193,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       _buildLabel('PASSWORD'),
                       GestureDetector(
-                        onTap: () => context.pushNamed(AppRoutes.forgotPasswordName),
-                        child: Text(
+                        onTap: () => context.go('/t1/forgot-password'),
+                        child: const Text(
                           'Forgot?',
                           style: TextStyle(
-                            color: const Color(0xFF8B5CF6),
+                            color: Color(0xFF8B5CF6),
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
@@ -181,12 +207,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   DmTextField(
+                    controller: _passwordController,
                     hintText: '••••••••',
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -211,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Keep me signed in',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 14,
                         ),
                       ),
@@ -222,7 +249,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Sign In Button
                   DmButton(
                     label: 'Sign In',
-                    onPressed: () => context.goNamed(AppRoutes.dashboardName),
+                    isLoading: isLoading,
+                    onPressed: () async {
+                      if (isLoading) return;
+                      await ref.read(authProvider.notifier).signIn(
+                        _emailController.text.trim(),
+                        _passwordController.text.trim(),
+                      );
+                    },
                     width: double.infinity,
                   ),
                   const SizedBox(height: 24),
@@ -232,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'or continue with',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -269,10 +303,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                       ),
                       GestureDetector(
-                        onTap: () => context.pushNamed(AppRoutes.signupName),
+                        onTap: () => context.go('/t1/signup'),
                         child: const Text(
                           'Create one',
                           style: TextStyle(
@@ -299,7 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

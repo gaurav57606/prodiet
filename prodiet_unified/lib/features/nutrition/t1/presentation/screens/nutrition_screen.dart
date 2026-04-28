@@ -1,58 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_macro_chip.dart';
 
-class NutritionScreen extends StatelessWidget {
+class NutritionScreen extends ConsumerWidget {
   const NutritionScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final summaryAsync = ref.watch(dashboardSummaryProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Nutritional Insights')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(T1Spacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMacroSection(context),
-            const SizedBox(height: T1Spacing.lg),
-            Text(
-              'MICRONUTRIENTS',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.25),
+      body: summaryAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+        data: (summary) => SingleChildScrollView(
+          padding: const EdgeInsets.all(T1Spacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildMacroSection(context, summary),
+              const SizedBox(height: T1Spacing.lg),
+              Text(
+                'MICRONUTRIENTS',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.25),
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildMicronutrientList(context),
-            const SizedBox(height: T1Spacing.lg),
-            Text(
-              'TOP PROTEIN SOURCES',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.25),
+              const SizedBox(height: T1Spacing.md),
+              _buildMicronutrientList(context),
+              const SizedBox(height: T1Spacing.lg),
+              Text(
+                'TOP PROTEIN SOURCES',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.25),
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildContributorList(context),
-            const SizedBox(height: 100),
-          ],
+              const SizedBox(height: T1Spacing.md),
+              _buildContributorList(context),
+              const SizedBox(height: 100),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildMacroSection(BuildContext context) {
+  Widget _buildMacroSection(BuildContext context, dynamic summary) {
     return DmCard(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              DmMacroChip(value: '142g', label: 'Protein', type: MacroType.protein),
-              DmMacroChip(value: '180g', label: 'Carbs', type: MacroType.carbs),
-              DmMacroChip(value: '54g', label: 'Fats', type: MacroType.fat),
+              DmMacroChip(value: '${summary.proteinConsumed}g', label: 'Protein', type: MacroType.protein),
+              DmMacroChip(value: '${summary.carbsConsumed}g', label: 'Carbs', type: MacroType.carbs),
+              DmMacroChip(value: '${summary.fatConsumed}g', label: 'Fats', type: MacroType.fat),
             ],
           ),
         ],

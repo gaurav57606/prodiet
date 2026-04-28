@@ -10,29 +10,67 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # State Management
+  # Environment
+  flutter_dotenv: ^5.1.0
+
+  # Supabase (primary backend)
+  supabase_flutter: ^2.5.0
+
+  # State management
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
 
   # Navigation
-  go_router: ^14.0.0
+  go_router: ^14.2.0
 
-  # Backend (scaffold — wired later)
-  supabase_flutter: ^2.5.0
+  # Functional error handling
+  dartz: ^0.10.1
+
+  # Local Database (offline-first)
+  drift: ^2.18.0
+  drift_flutter: ^0.2.0
+  sqlite3_flutter_libs: ^0.5.0
+
+  # Connectivity
+  connectivity_plus: ^6.0.3
+
+  # Notifications
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.4
+
+  # Firebase (FCM push ONLY — no Firestore, no Auth)
+  firebase_core: ^3.3.0
+  firebase_messaging: ^15.1.0
+
+  # Health / Fitband
+  health: ^10.2.0
+
+  # Image handling (for OCR pre-processing)
+  image: ^4.1.7
+  image_picker: ^1.1.2
+
+  # HTTP for Open Food Facts
+  http: ^1.2.1
+
+  # URL launcher (Zomato/Blinkit/Swiggy redirects)
+  url_launcher: ^6.3.0
+
+  # Utilities
+  logger: ^2.3.0
+  cached_network_image: ^3.3.1
+  intl: ^0.19.0
+  uuid: ^4.4.0
+  crypto: ^3.0.3
 
   # Local Storage
   shared_preferences: ^2.2.3
   flutter_secure_storage: ^9.2.2
-
-  # Error Handling
-  dartz: ^0.10.1
 
   # Models (codegen)
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
 
   # UI Utilities
-  cached_network_image: ^3.3.1
   shimmer: ^3.0.0
   lottie: ^3.1.2
 
@@ -42,40 +80,25 @@ dependencies:
   # Charts
   fl_chart: ^0.68.0
 
-  # Camera / OCR
-  image_picker: ^1.1.0
-
-  # Logging
-  logger: ^2.4.0
-
   # Icons
   cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  drift_dev: ^2.18.0
+  build_runner: ^2.4.11
+  riverpod_generator: ^2.4.3
+  custom_lint: ^0.6.4
   riverpod_lint: ^2.3.13
-  build_runner: ^2.4.9
   freezed: ^2.5.2
   json_serializable: ^6.8.0
-  riverpod_generator: ^2.4.0
   flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
-  # fonts:
-  #   - family: Outfit
-  #     fonts:
-  #       - asset: assets/fonts/Outfit-Regular.ttf
-  #         weight: 400
-  #       - asset: assets/fonts/Outfit-Medium.ttf
-  #         weight: 500
-  #       - asset: assets/fonts/Outfit-SemiBold.ttf
-  #         weight: 600
-  #       - asset: assets/fonts/Outfit-Bold.ttf
-  #         weight: 700
-  #       - asset: assets/fonts/Outfit-ExtraBold.ttf
-  #         weight: 800
-  # assets:
-  #   - assets/images/
-  #   - assets/lottie/
+  assets:
+    - .env
+    - assets/images/
+    - assets/icons/
+    - assets/lottie/

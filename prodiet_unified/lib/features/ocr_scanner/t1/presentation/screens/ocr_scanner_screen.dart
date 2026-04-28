@@ -1,16 +1,22 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
+import 'package:prodiet_unified/features/ocr/application/ocr_providers.dart';
+import 'package:prodiet_unified/features/ocr/domain/models/ocr_result.dart';
 
-class OcrScannerScreen extends StatefulWidget {
+class OcrScannerScreen extends ConsumerStatefulWidget {
   const OcrScannerScreen({super.key});
 
   @override
-  State<OcrScannerScreen> createState() => _OcrScannerScreenState();
+  ConsumerState<OcrScannerScreen> createState() => _OcrScannerScreenState();
 }
 
-class _OcrScannerScreenState extends State<OcrScannerScreen> with SingleTickerProviderStateMixin {
+class _OcrScannerScreenState extends ConsumerState<OcrScannerScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -27,9 +33,33 @@ class _OcrScannerScreenState extends State<OcrScannerScreen> with SingleTickerPr
     super.dispose();
   }
 
+  Future<void> _captureAndAnalyze() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      await ref.read(ocrProvider.notifier).processBill(File(photo.path));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final ocrState = ref.watch(ocrProvider);
+    final isLoading = ocrState is AsyncLoading;
+
+    // Listen for success
+    ref.listen<AsyncValue<OcrResult?>>(ocrProvider, (previous, next) {
+      if (next is AsyncData && next.value != null) {
+        final result = next.value!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Scanned: ${result.detectedItems.length} items found')),
+        );
+        Navigator.pop(context, result);
+      } else if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${next.error}'), backgroundColor: Colors.red),
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -86,7 +116,7 @@ class _OcrScannerScreenState extends State<OcrScannerScreen> with SingleTickerPr
                         width: 300,
                         height: 200,
                         decoration: BoxDecoration(
-                          border: Border.all(color: theme.colorScheme.primary.withOpacity(0.5), width: 2),
+                          border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.5), width: 2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Stack(
@@ -122,20 +152,20 @@ class _OcrScannerScreenState extends State<OcrScannerScreen> with SingleTickerPr
                 Container(
                   padding: const EdgeInsets.all(T1Spacing.xl),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8),
+                    color: Colors.black.withValues(alpha: 0.8),
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Align the nutrition table within the box',
+                        isLoading ? 'Analyzing label...' : 'Align the nutrition table within the box',
                         style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
                       ),
                       const SizedBox(height: T1Spacing.lg),
                       DmButton(
-                        label: 'Capture & Analyze',
-                        onPressed: () {},
+                        label: isLoading ? 'Processing...' : 'Capture & Analyze',
+                        onPressed: isLoading ? null : _captureAndAnalyze,
                         width: double.infinity,
                       ),
                     ],
@@ -144,6 +174,14 @@ class _OcrScannerScreenState extends State<OcrScannerScreen> with SingleTickerPr
               ],
             ),
           ),
+          
+          if (isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );

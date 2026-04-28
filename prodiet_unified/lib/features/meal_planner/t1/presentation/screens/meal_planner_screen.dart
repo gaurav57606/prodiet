@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_chip.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
-import '../mock/meal_planner_mock.dart';
 import '../widgets/recipe_card.dart';
 
-class MealPlannerScreen extends StatelessWidget {
+class MealPlannerScreen extends ConsumerWidget {
   const MealPlannerScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final mealsAsync = ref.watch(todayMealsProvider(todayStr));
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recipe Explorer'),
+        title: const Text('Meal Planner'),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.favorite_border_rounded),
+            icon: const Icon(Icons.calendar_today_rounded),
           ),
           IconButton(
             onPressed: () {},
@@ -33,7 +38,7 @@ class MealPlannerScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.md),
             child: DmTextField(
               hintText: 'Search for keto recipes...',
-              prefixIcon: Icon(Icons.search_rounded, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+              prefixIcon: Icon(Icons.search_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
             ),
           ),
           SizedBox(
@@ -43,10 +48,10 @@ class MealPlannerScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
               children: [
                 _categoryChip('All', true),
-                _categoryChip('Keto', false),
-                _categoryChip('High Protein', false),
-                _categoryChip('Vegan', false),
-                _categoryChip('Quick (15m)', false),
+                _categoryChip('Breakfast', false),
+                _categoryChip('Lunch', false),
+                _categoryChip('Dinner', false),
+                _categoryChip('Snacks', false),
               ],
             ),
           ),
@@ -54,9 +59,9 @@ class MealPlannerScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
             child: Text(
-              'RECOMMENDED FOR YOU',
+              'YOUR MEALS TODAY',
               style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.3),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
               ),
@@ -64,22 +69,52 @@ class MealPlannerScreen extends StatelessWidget {
           ),
           const SizedBox(height: T1Spacing.md),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.62,
-              ),
-              itemCount: MealPlannerMockData.suggestions.length,
-              itemBuilder: (context, index) {
-                final recipe = MealPlannerMockData.suggestions[index];
-                return RecipeCard(recipe: recipe);
+            child: mealsAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text('Error: $err')),
+              data: (meals) {
+                if (meals.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.restaurant_menu_rounded, 
+                          size: 64, 
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.1)
+                        ),
+                        const SizedBox(height: 16),
+                        Text('No meals planned for today',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5)
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return GridView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.62,
+                  ),
+                  itemCount: meals.length,
+                  itemBuilder: (context, index) {
+                    final meal = meals[index];
+                    return RecipeCard(meal: meal);
+                  },
+                );
               },
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/meals/create'),
+        backgroundColor: theme.colorScheme.primary,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

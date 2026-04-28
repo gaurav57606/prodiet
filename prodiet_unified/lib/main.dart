@@ -3,7 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'app.dart';
+import 'core/config/env.dart';
 
 final logger = Logger(
   printer: PrettyPrinter(
@@ -12,7 +17,7 @@ final logger = Logger(
     lineLength: 50,
     colors: true,
     printEmojis: true,
-    printTime: false,
+    dateTimeFormat: DateTimeFormat.none,
   ),
 );
 
@@ -32,6 +37,24 @@ void main() {
       logger.e('Platform Error: $error', error: error, stackTrace: stack);
       return true;
     };
+
+    // 1. Load environment variables
+    await dotenv.load(fileName: '.env');
+
+    // 2. Initialize timezone (for local notifications)
+    tz.initializeTimeZones();
+
+    // 3. Initialize Firebase (FCM push notifications only)
+    await Firebase.initializeApp();
+
+    // 4. Initialize Supabase (primary backend)
+    await Supabase.initialize(
+      url: Env.supabaseUrl,
+      anonKey: Env.supabaseAnonKey,
+      debug: false,
+    );
+
+    logger.i('[Main] All services initialized');
 
     runApp(
       const ProviderScope(

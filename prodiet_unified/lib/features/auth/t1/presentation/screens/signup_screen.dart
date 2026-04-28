@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prodiet_unified/core/router/app_router.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   int _selectedTab = 1; // 0 = Sign In, 1 = Create Account
   bool _agreedToTerms = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   int _passwordStrength = 1; // 0-4
 
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -42,13 +46,56 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _signUp() async {
+    if (!_agreedToTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please agree to the Terms and Privacy Policy')),
+      );
+      return;
+    }
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+
+    if (email.isEmpty || password.isEmpty || firstName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all required fields')),
+      );
+      return;
+    }
+
+    await ref.read(authProvider.notifier).signUp(
+      email,
+      password,
+      '$firstName $lastName'.trim(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final authState = ref.watch(authProvider);
+    final isLoading = authState is AuthLoading;
+
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next is AuthFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error.displayMessage),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -84,7 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Text(
                     'Step 1 of 2 — Personal details',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -106,7 +153,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -135,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () => context.goNamed(AppRoutes.loginName),
+                            onTap: () => context.go('/t1/login'),
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
@@ -146,7 +193,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -167,7 +214,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -189,7 +236,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           children: [
                             _buildLabel('FIRST NAME'),
                             const SizedBox(height: 8),
-                            const DmTextField(hintText: 'John'),
+                            DmTextField(
+                              controller: _firstNameController,
+                              hintText: 'John',
+                            ),
                           ],
                         ),
                       ),
@@ -200,7 +250,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           children: [
                             _buildLabel('LAST NAME'),
                             const SizedBox(height: 8),
-                            const DmTextField(hintText: 'Doe'),
+                            DmTextField(
+                              controller: _lastNameController,
+                              hintText: 'Doe',
+                            ),
                           ],
                         ),
                       ),
@@ -210,7 +263,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   _buildLabel('EMAIL ADDRESS'),
                   const SizedBox(height: 8),
-                  const DmTextField(
+                  DmTextField(
+                    controller: _emailController,
                     hintText: 'you@example.com',
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -233,7 +287,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -250,7 +304,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: BoxDecoration(
                             color: index < _passwordStrength 
                               ? const Color(0xFF8B5CF6) 
-                              : Colors.white.withOpacity(0.1),
+                              : Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -267,7 +321,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
@@ -292,20 +346,20 @@ class _SignupScreenState extends State<SignupScreen> {
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 13),
-                            children: [
-                              const TextSpan(text: 'I agree to the '),
+                            style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 13),
+                            children: const [
+                              TextSpan(text: 'I agree to the '),
                               TextSpan(
                                 text: 'Terms of Service',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Color(0xFF8B5CF6),
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
-                              const TextSpan(text: ' and '),
+                              TextSpan(text: ' and '),
                               TextSpan(
                                 text: 'Privacy Policy',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Color(0xFF8B5CF6),
                                   decoration: TextDecoration.underline,
                                 ),
@@ -321,15 +375,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   // Continue Button
                   DmButton(
                     label: 'Continue →',
-                    onPressed: () {
-                      if (_agreedToTerms) {
-                        context.pushNamed(AppRoutes.healthGoalsName);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please agree to the Terms and Privacy Policy')),
-                        );
-                      }
-                    },
+                    isLoading: isLoading,
+                    onPressed: isLoading ? null : _signUp,
                     width: double.infinity,
                   ),
                   const SizedBox(height: 24),
@@ -339,7 +386,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Text(
                       'or sign up with',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -384,7 +431,7 @@ class _SignupScreenState extends State<SignupScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

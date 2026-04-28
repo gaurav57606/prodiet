@@ -1,11 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
+
+  @override
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  final _emailController = TextEditingController();
+  bool _emailSent = false;
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendReset() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) return;
+
+    setState(() => _isLoading = true);
+    await ref.read(authProvider.notifier).sendPasswordReset(email);
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+        _emailSent = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +90,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   Text(
                     "Enter your email and we'll send a reset link",
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -77,7 +107,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextButton.icon(
-                    onPressed: () => context.pop(),
+                    onPressed: () => context.go('/t1/login'),
                     icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 14),
                     label: const Text('Back to sign in'),
                     style: TextButton.styleFrom(foregroundColor: const Color(0xFF8B5CF6)),
@@ -85,7 +115,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                   const SizedBox(height: 40),
                   _buildLabel('EMAIL ADDRESS'),
                   const SizedBox(height: 8),
-                  const DmTextField(
+                  DmTextField(
+                    controller: _emailController,
                     hintText: 'you@example.com',
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -93,13 +124,19 @@ class ForgotPasswordScreen extends StatelessWidget {
                   // Send Button
                   DmButton(
                     label: 'Send Reset Link',
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Reset link sent to your email')),
-                      );
-                    },
+                    isLoading: _isLoading,
+                    onPressed: _isLoading ? null : _sendReset,
                     width: double.infinity,
                   ),
+                  if (_emailSent) ...[
+                    const SizedBox(height: 16),
+                    Center(
+                      child: Text(
+                        '✅ Reset link sent! Check your inbox.',
+                        style: TextStyle(color: Colors.green.shade400, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 40),
                   // Help Card
                   Container(
@@ -107,7 +144,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFF1A1A2E),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withOpacity(0.07)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,17 +154,17 @@ class ForgotPasswordScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white.withOpacity(0.4),
+                            color: Colors.white.withValues(alpha: 0.4),
                             letterSpacing: 1.2,
                           ),
                         ),
                         const SizedBox(height: 8),
                         RichText(
                           text: TextSpan(
-                            style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 13),
-                            children: [
-                              const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
-                              const TextSpan(
+                            style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 13),
+                            children: const [
+                              TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
+                              TextSpan(
                                 text: 'Resend email',
                                 style: TextStyle(
                                   color: Color(0xFF8B5CF6),
@@ -155,7 +192,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

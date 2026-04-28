@@ -3,19 +3,61 @@ import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_chip.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_macro_chip.dart';
+import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
+import 'package:intl/intl.dart';
 
 class TodayMealsRow extends StatelessWidget {
-  const TodayMealsRow({super.key});
+  final Meal? meal;
+
+  const TodayMealsRow({
+    super.key,
+    this.meal,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    if (meal == null) {
+      return DmCard(
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.1),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: T1Spacing.xl),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.restaurant_menu_rounded,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                  size: 32,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'NO SCHEDULED MEALS TODAY',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                    letterSpacing: 1.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    final mealTime = DateFormat('hh:mm a').format(meal!.scheduledTime);
+    final timeUntil = meal!.scheduledTime.difference(DateTime.now());
+    final hoursUntil = timeUntil.inHours;
+    final minutesUntil = timeUntil.inMinutes % 60;
+    final timeUntilStr = hoursUntil > 0 ? '${hoursUntil}h ${minutesUntil}m' : '${minutesUntil}m';
+
     return DmCard(
       padding: EdgeInsets.zero,
-      color: isDark ? const Color(0xFFFF8C64).withOpacity(0.08) : const Color(0xFFFFE6D7).withOpacity(0.85),
-      borderSide: BorderSide(color: const Color(0xFFFF8C64).withOpacity(0.18)),
+      color: isDark ? const Color(0xFFFF8C64).withValues(alpha: 0.08) : const Color(0xFFFFE6D7).withValues(alpha: 0.85),
+      borderSide: BorderSide(color: const Color(0xFFFF8C64).withValues(alpha: 0.18)),
       child: Column(
         children: [
           Padding(
@@ -27,23 +69,23 @@ class TodayMealsRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'LUNCH · 12:30 PM',
+                      '${meal!.mealType.toUpperCase()} · $mealTime',
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: const Color(0xFFFF8C64).withOpacity(0.6),
+                        color: const Color(0xFFFF8C64).withValues(alpha: 0.6),
                         letterSpacing: 0.8,
                       ),
                     ),
-                    const DmChip(
-                      label: 'In 2h 15m',
+                    DmChip(
+                      label: timeUntil.isNegative ? 'Now' : 'In $timeUntilStr',
                       isSelected: true,
-                      backgroundColor: Color(0x2EFF965A),
-                      textColor: Color(0xFFFFB870),
+                      backgroundColor: const Color(0x2EFF965A),
+                      textColor: const Color(0xFFFFB870),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Quinoa Bowl +\nGrilled Chicken',
+                  meal!.name,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                     fontSize: 20,
@@ -51,9 +93,9 @@ class TodayMealsRow extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '480 kcal · High protein · Easy prep',
+                  '${meal!.nutritionalValues.calories} kcal · Balanced · Easy prep',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.4),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   ),
                 ),
               ],
@@ -62,43 +104,59 @@ class TodayMealsRow extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Colors.white.withOpacity(0.12)),
+                top: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
               ),
             ),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '38g', label: 'PROT', type: MacroType.protein),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(
+                        value: '${meal!.nutritionalValues.proteinG.toInt()}g',
+                        label: 'PROT',
+                        type: MacroType.protein,
+                      ),
                     ),
                   ),
                 ),
                 _buildDivider(),
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '45g', label: 'CARB', type: MacroType.carbs),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(
+                        value: '${meal!.nutritionalValues.carbsG.toInt()}g',
+                        label: 'CARB',
+                        type: MacroType.carbs,
+                      ),
                     ),
                   ),
                 ),
                 _buildDivider(),
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '12g', label: 'FAT', type: MacroType.fat),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(
+                        value: '${meal!.nutritionalValues.fatG.toInt()}g',
+                        label: 'FAT',
+                        type: MacroType.fat,
+                      ),
                     ),
                   ),
                 ),
                 _buildDivider(),
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(value: '4g', label: 'FIBRE', type: MacroType.fibre),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: DmMacroChip(
+                        value: '${meal!.nutritionalValues.fiberG?.toInt() ?? 0}g',
+                        label: 'FIBRE',
+                        type: MacroType.fibre,
+                      ),
                     ),
                   ),
                 ),
@@ -114,7 +172,7 @@ class TodayMealsRow extends StatelessWidget {
     return Container(
       width: 1,
       height: 30,
-      color: Colors.white.withOpacity(0.12),
+      color: Colors.white.withValues(alpha: 0.12),
     );
   }
 }

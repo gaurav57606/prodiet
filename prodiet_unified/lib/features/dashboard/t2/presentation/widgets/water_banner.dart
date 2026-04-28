@@ -3,11 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class WaterBanner extends StatelessWidget {
-  const WaterBanner({super.key});
+  final int consumed;
+  final int target;
+  final double progress;
+
+  const WaterBanner({
+    super.key,
+    required this.consumed,
+    required this.target,
+    required this.progress,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final skyColor = T2Colors.sky;
+    const skyColor = T2Colors.sky;
     
     return Container(
       width: double.infinity,
@@ -27,14 +36,14 @@ class WaterBanner extends StatelessWidget {
               color: skyColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(9),
             ),
-            child: Icon(Icons.water_drop, color: skyColor, size: 16),
+            child: const Icon(Icons.water_drop, color: skyColor, size: 16),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Almost time — prepare',
                   style: TextStyle(
                     fontSize: 14,
@@ -43,8 +52,8 @@ class WaterBanner extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '1.5L of 2.5L · On track',
-                  style: TextStyle(
+                  '${(consumed / 1000).toStringAsFixed(1)}L of ${(target / 1000).toStringAsFixed(1)}L · On track',
+                  style: const TextStyle(
                     fontSize: 12,
                     color: T2Colors.textSecondary,
                   ),
@@ -56,7 +65,7 @@ class WaterBanner extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '18m',
+                '${(progress * 100).toInt()}%',
                 style: GoogleFonts.barlowCondensed(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
@@ -64,7 +73,7 @@ class WaterBanner extends StatelessWidget {
                 ),
               ),
               Text(
-                'NEXT DRINK',
+                'GOAL',
                 style: TextStyle(
                   fontSize: 7,
                   letterSpacing: 1.2,

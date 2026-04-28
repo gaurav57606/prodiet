@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
-import '../mock/dashboard_mock.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:intl/intl.dart';
 
-class CalorieSummaryCard extends StatelessWidget {
-  const CalorieSummaryCard({super.key});
+class CalorieSummaryCard extends ConsumerWidget {
+  final int caloriesConsumed;
+  final int caloriesGoal;
+  final int streakDays;
+  final String? activePlanName;
+
+  const CalorieSummaryCard({
+    super.key,
+    required this.caloriesConsumed,
+    required this.caloriesGoal,
+    required this.streakDays,
+    this.activePlanName,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final user = ref.watch(currentUserProvider);
+    
+    final caloriesRemaining = (caloriesGoal - caloriesConsumed).clamp(0, caloriesGoal);
+    final dateString = DateFormat('EEEE, d MMM').format(DateTime.now());
 
     return Container(
       width: double.infinity,
@@ -30,7 +47,6 @@ class CalorieSummaryCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Decorative Glow
           Positioned(
             top: -60,
             right: -40,
@@ -41,7 +57,7 @@ class CalorieSummaryCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    theme.colorScheme.primary.withOpacity(0.2),
+                    theme.colorScheme.primary.withValues(alpha: 0.2),
                     Colors.transparent,
                   ],
                 ),
@@ -53,9 +69,9 @@ class CalorieSummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DashboardMockData.planLabel,
+                (activePlanName ?? 'No Active Plan').toUpperCase(),
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.primary.withOpacity(0.8),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
                 ),
@@ -70,9 +86,9 @@ class CalorieSummaryCard extends StatelessWidget {
                     letterSpacing: -0.5,
                   ),
                   children: [
-                    const TextSpan(text: 'Rohan '),
+                    TextSpan(text: '${user?.name?.split(' ').first ?? 'Hello'} '),
                     TextSpan(
-                      text: 'Sharma',
+                      text: user?.name?.split(' ').skip(1).join(' ') ?? '',
                       style: TextStyle(color: theme.colorScheme.primary),
                     ),
                   ],
@@ -80,9 +96,9 @@ class CalorieSummaryCard extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                DashboardMockData.dateString.toUpperCase(),
+                dateString.toUpperCase(),
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                   letterSpacing: 1.0,
                   fontWeight: FontWeight.w700,
                 ),
@@ -96,7 +112,7 @@ class CalorieSummaryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${DashboardMockData.caloriesRemaining}',
+                        '$caloriesRemaining',
                         style: theme.textTheme.displayLarge?.copyWith(
                           fontSize: 64,
                           fontWeight: FontWeight.w900,
@@ -108,7 +124,7 @@ class CalorieSummaryCard extends StatelessWidget {
                       Text(
                         'KCAL REMAINING TODAY',
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.0,
                         ),
@@ -121,16 +137,16 @@ class CalorieSummaryCard extends StatelessWidget {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFD070).withOpacity(0.12),
+                      color: const Color(0xFFFFD070).withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: const Color(0xFFFFD070).withOpacity(0.25),
+                        color: const Color(0xFFFFD070).withValues(alpha: 0.25),
                       ),
                     ),
                     child: Column(
                       children: [
                         Text(
-                          '${DashboardMockData.streakDays}',
+                          '$streakDays',
                           style: theme.textTheme.headlineMedium?.copyWith(
                             color: const Color(0xFFFFD070),
                             fontWeight: FontWeight.w900,
@@ -141,7 +157,7 @@ class CalorieSummaryCard extends StatelessWidget {
                         Text(
                           'DAY STREAK',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: const Color(0xFFFFD070).withOpacity(0.6),
+                            color: const Color(0xFFFFD070).withValues(alpha: 0.6),
                             fontSize: 8,
                             letterSpacing: 1.2,
                             fontWeight: FontWeight.w900,

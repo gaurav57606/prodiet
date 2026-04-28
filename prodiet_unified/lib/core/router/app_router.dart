@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 
 // Shells
 import 'package:prodiet_unified/shared/t1/widgets/dm_app_shell.dart';
@@ -118,10 +120,20 @@ final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>(debugLabel:
 final GlobalKey<NavigatorState> _shellT1Key = GlobalKey<NavigatorState>(debugLabel: 'shellT1');
 final GlobalKey<NavigatorState> _shellT2Key = GlobalKey<NavigatorState>(debugLabel: 'shellT2');
 
-final appRouter = GoRouter(
+/// Bridges Riverpod auth state changes into GoRouter's
+/// refreshListenable so redirects fire automatically.
+class _AuthStateNotifier extends ChangeNotifier {
+  _AuthStateNotifier(WidgetRef ref) {
+    ref.listen(authProvider, (_, __) => notifyListeners());
+  }
+}
+
+GoRouter createAppRouter(WidgetRef ref) => GoRouter(
   navigatorKey: _rootKey,
   initialLocation: '/',
+  refreshListenable: _AuthStateNotifier(ref),
   redirect: (context, state) {
+    // ── EXISTING theme-redirect (keep this block EXACTLY) ──
     if (state.matchedLocation == '/') {
       try {
         final container = ProviderScope.containerOf(context);
@@ -135,6 +147,37 @@ final appRouter = GoRouter(
       } catch (e) {
         return '/t1/splash';
       }
+    }
+
+    // ── NEW: Auth guard ──
+    final authState = ref.read(authProvider);
+    final loc = state.matchedLocation;
+
+    const publicRoutes = {
+      '/t1/splash', '/t2/splash',
+      '/t1/login',  '/t2/login',
+      '/t1/signup', '/t2/signup',
+      '/t1/forgot-password',
+      '/t1/onboarding',
+      '/t1/health-goals',
+      '/t1/verify-phone',
+    };
+
+    final isPublic = publicRoutes.contains(loc);
+
+    if (authState is AuthLoading) {
+      return loc.contains('splash') ? null : '/t1/splash';
+    }
+    if (authState is AuthUnauthenticated) {
+      return isPublic ? null : '/t1/login';
+    }
+    if (authState is AuthNeedsOnboarding) {
+      return (loc == '/t1/health-goals') ? null : '/t1/health-goals';
+    }
+    if (authState is AuthAuthenticated) {
+      // Kick authenticated users away from auth pages
+      if (isPublic && !loc.contains('splash')) return '/t1/dashboard';
+      return null;
     }
     return null;
   },

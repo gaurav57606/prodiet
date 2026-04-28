@@ -1,15 +1,60 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_state.dart';
+import 'package:prodiet_unified/core/services/analytics_providers.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/active_theme_provider.dart';
 import 'core/theme/t1/t1_theme.dart';
 import 'core/theme/t2/t2_theme.dart';
 
-class ProDietApp extends ConsumerWidget {
+class ProDietApp extends ConsumerStatefulWidget {
   const ProDietApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProDietApp> createState() => _ProDietAppState();
+}
+
+class _ProDietAppState extends ConsumerState<ProDietApp> {
+  late final AppLifecycleListener _listener;
+
+  @override
+  void initState() {
+    super.initState();
+    _listener = AppLifecycleListener(
+      onResume: _onAppResume,
+      onPause: _onAppPause,
+    );
+  }
+
+  @override
+  void dispose() {
+    _listener.dispose();
+    super.dispose();
+  }
+
+  void _onAppResume() {
+    final authState = ref.read(authProvider);
+    if (authState is AuthAuthenticated) {
+      ref.read(analyticsServiceProvider).startSession(
+        authState.user.id,
+        deviceModel: 'Generic Device', // Requires device_info_plus
+        osVersion: Platform.operatingSystemVersion,
+        appVersion: '1.0.0', // Requires package_info_plus
+      );
+    }
+  }
+
+  void _onAppPause() {
+    final authState = ref.read(authProvider);
+    if (authState is AuthAuthenticated) {
+      ref.read(analyticsServiceProvider).endSession(authState.user.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final active = ref.watch(activeThemeProvider);
 
     ThemeData resolvedTheme() {
@@ -33,7 +78,7 @@ class ProDietApp extends ConsumerWidget {
       title: 'ProDiet',
       debugShowCheckedModeBanner: false,
       theme: resolvedTheme(),
-      routerConfig: appRouter,
+      routerConfig: createAppRouter(ref),
       // Preserves theme1's pixel-perfect layout — no system font scaling
       builder: (context, child) {
         return MediaQuery(

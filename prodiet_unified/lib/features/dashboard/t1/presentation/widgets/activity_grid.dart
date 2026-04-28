@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:intl/intl.dart';
 
 class ActivityGrid extends StatelessWidget {
-  const ActivityGrid({super.key});
+  final int steps;
+  final int caloriesBurned;
+  final int netCalories;
+
+  const ActivityGrid({
+    super.key,
+    required this.steps,
+    required this.caloriesBurned,
+    required this.netCalories,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final stepFormat = NumberFormat('#,###');
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: T1Spacing.md),
       child: Row(
         children: [
           _buildActivityTile(
             context,
-            '4,820',
+            stepFormat.format(steps),
             'STEPS',
             null,
             Colors.white,
@@ -25,20 +37,20 @@ class ActivityGrid extends StatelessWidget {
           const SizedBox(width: T1Spacing.sm),
           _buildActivityTile(
             context,
-            '312',
+            '$caloriesBurned',
             'BURNED',
-            const Color(0xFFFF5082).withOpacity(0.08),
+            const Color(0xFFFF5082).withValues(alpha: 0.08),
             const Color(0xFFFF90B0),
-            border: Border.all(color: const Color(0xFFFF5082).withOpacity(0.15)),
+            border: Border.all(color: const Color(0xFFFF5082).withValues(alpha: 0.15)),
           ),
           const SizedBox(width: T1Spacing.sm),
           _buildActivityTile(
             context,
-            '48m',
-            'ACTIVE',
-            const Color(0xFF00C8B4).withOpacity(0.07),
+            '$netCalories',
+            'NET KCAL',
+            const Color(0xFF00C8B4).withValues(alpha: 0.07),
             const Color(0xFF40D8C0),
-            border: Border.all(color: const Color(0xFF00C8B4).withOpacity(0.13)),
+            border: Border.all(color: const Color(0xFF00C8B4).withValues(alpha: 0.13)),
           ),
         ],
       ),
@@ -78,7 +90,7 @@ class ActivityGrid extends StatelessWidget {
             Text(
               label,
               style: theme.textTheme.labelSmall?.copyWith(
-                color: textColor.withOpacity(0.4),
+                color: textColor.withValues(alpha: 0.4),
                 letterSpacing: 0.4,
               ),
             ),

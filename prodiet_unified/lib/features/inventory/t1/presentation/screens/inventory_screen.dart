@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_chip.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
-import '../mock/inventory_mock.dart';
+import '../application/inventory_providers.dart';
 import '../widgets/inventory_item_tile.dart';
 
-class InventoryScreen extends StatelessWidget {
+class InventoryScreen extends ConsumerStatefulWidget {
   const InventoryScreen({super.key});
+
+  @override
+  ConsumerState<InventoryScreen> createState() => _InventoryScreenState();
+}
+
+class _InventoryScreenState extends ConsumerState<InventoryScreen> {
+  String _searchQuery = '';
+  String _selectedCategory = 'All';
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final inventoryAsync = ref.watch(inventoryProvider);
+    final lowStockAsync = ref.watch(lowStockProvider);
+    final expiringAsync = ref.watch(expiringItemsProvider(0)); // Already expired
 
     return Scaffold(
       appBar: AppBar(
@@ -23,12 +35,13 @@ class InventoryScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildQuickMetrics(theme),
+          _buildQuickMetrics(theme, inventoryAsync, lowStockAsync, expiringAsync),
           Padding(
             padding: const EdgeInsets.all(T1Spacing.lg),
             child: DmTextField(
               hintText: 'Search ingredients...',
-              prefixIcon: Icon(Icons.search_rounded, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+              prefixIcon: Icon(Icons.search_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
+              onChanged: (val) => setState(() => _searchQuery = val.toLowerCase()),
             ),
           ),
           SizedBox(
@@ -37,22 +50,37 @@ class InventoryScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
               children: [
-                _categoryChip('All', true),
-                _categoryChip('Proteins', false),
-                _categoryChip('Vegetables', false),
-                _categoryChip('Dairy', false),
-                _categoryChip('Grains', false),
-              ],
+                'All', 'Proteins', 'Vegetables', 'Dairy', 'Grains', 'Fruits', 'Spices'
+              ].map((cat) => _categoryChip(cat, _selectedCategory == cat)).toList(),
             ),
           ),
           const SizedBox(height: T1Spacing.lg),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
-              itemCount: InventoryMockData.items.length,
-              itemBuilder: (context, index) {
-                final item = InventoryMockData.items[index];
-                return InventoryItemTile(item: item);
+            child: inventoryAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text('Error: $err')),
+              data: (items) {
+                final filtered = items.where((item) {
+                  final matchesSearch = item.ingredientName.toLowerCase().contains(_searchQuery);
+                  final matchesCategory = _selectedCategory == 'All' || item.category == _selectedCategory;
+                  return matchesSearch && matchesCategory;
+                }).toList();
+
+                if (filtered.isEmpty) {
+                  return Center(
+                    child: Text('No items found', 
+                      style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.bold)
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, index) {
+                    return InventoryItemTile(item: filtered[index]);
+                  },
+                );
               },
             ),
           ),
@@ -61,16 +89,16 @@ class InventoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickMetrics(ThemeData theme) {
+  Widget _buildQuickMetrics(ThemeData theme, AsyncValue<List<dynamic>> total, AsyncValue<List<dynamic>> low, AsyncValue<List<dynamic>> expired) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
       child: Row(
         children: [
-          Expanded(child: _metricCard(theme, 'TOTAL ITEMS', '42', const Color(0xFF8B5CF6))),
+          Expanded(child: _metricCard(theme, 'TOTAL ITEMS', total.maybeWhen(data: (d) => '${d.length}', orElse: () => '--'), const Color(0xFF8B5CF6))),
           const SizedBox(width: 12),
-          Expanded(child: _metricCard(theme, 'LOW STOCK', '5', const Color(0xFFFFB040))),
+          Expanded(child: _metricCard(theme, 'LOW STOCK', low.maybeWhen(data: (d) => '${d.length}', orElse: () => '--'), const Color(0xFFFFB040))),
           const SizedBox(width: 12),
-          Expanded(child: _metricCard(theme, 'EXPIRED', '2', const Color(0xFFFF6080))),
+          Expanded(child: _metricCard(theme, 'EXPIRED', expired.maybeWhen(data: (d) => '${d.length}', orElse: () => '--'), const Color(0xFFFF6080))),
         ],
       ),
     );
@@ -78,8 +106,8 @@ class InventoryScreen extends StatelessWidget {
 
   Widget _metricCard(ThemeData theme, String label, String value, Color color) {
     return DmCard(
-      color: color.withOpacity(0.08),
-      borderSide: BorderSide(color: color.withOpacity(0.15)),
+      color: color.withValues(alpha: 0.08),
+      borderSide: BorderSide(color: color.withValues(alpha: 0.15)),
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +117,7 @@ class InventoryScreen extends StatelessWidget {
             style: theme.textTheme.labelSmall?.copyWith(
               fontSize: 8,
               fontWeight: FontWeight.w900,
-              color: color.withOpacity(0.6),
+              color: color.withValues(alpha: 0.6),
             ),
           ),
           const SizedBox(height: 4),
@@ -111,7 +139,9 @@ class InventoryScreen extends StatelessWidget {
       child: DmChip(
         label: label,
         isSelected: isSelected,
-        onSelected: (val) {},
+        onSelected: (val) {
+          if (val) setState(() => _selectedCategory = label);
+        },
       ),
     );
   }

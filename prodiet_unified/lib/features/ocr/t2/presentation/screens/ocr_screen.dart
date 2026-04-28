@@ -1,22 +1,48 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
+import 'package:prodiet_unified/features/ocr/application/ocr_providers.dart';
+import 'package:prodiet_unified/features/ocr/domain/models/ocr_result.dart';
 import '../widgets/scan_preview_box.dart';
 
-class OcrScreen extends StatelessWidget {
+class OcrScreen extends ConsumerStatefulWidget {
   const OcrScreen({super.key});
+
+  @override
+  ConsumerState<OcrScreen> createState() => _OcrScreenState();
+}
+
+class _OcrScreenState extends ConsumerState<OcrScreen> {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickAndProcess(ImageSource source) async {
+    final XFile? photo = await _picker.pickImage(source: source);
+    if (photo != null) {
+      await ref.read(ocrProvider.notifier).processBill(File(photo.path));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final ocrState = ref.watch(ocrProvider);
+    final isLoading = ocrState is AsyncLoading;
+
+    // Listen for success/error
+    ref.listen<AsyncValue<OcrResult?>>(ocrProvider, (previous, next) {
+      if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${next.error}'), backgroundColor: Colors.red),
+        );
+      }
+    });
     
-    final detectedItems = [
-      {'nm': 'Skimmed Milk 1L', 'qty': '×2', 'price': '₹96'},
-      {'nm': 'Paneer 200g', 'qty': '×1', 'price': '₹58'},
-      {'nm': 'Almonds 100g', 'qty': '×1', 'price': '₹180'},
-      {'nm': 'Oats 500g', 'qty': '×1', 'price': '₹95'},
-    ];
+    final result = ocrState.asData?.value;
+    final detectedItems = result?.detectedItems ?? [];
 
     return Scaffold(
       appBar: AppBar(
@@ -30,92 +56,124 @@ class OcrScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text(
-                "Point camera at your grocery bill · Items auto-detected",
-                style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
-              ),
-            ),
-            const ScanPreviewBox(),
-            
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-              child: Row(
-                children: [
-                  Expanded(child: _buildSmallBtn(context, "Gallery")),
-                  const SizedBox(width: 8),
-                  Expanded(child: _buildSmallBtn(context, "Capture", isPrimary: true)),
-                  const SizedBox(width: 8),
-                  Expanded(child: _buildSmallBtn(context, "Torch")),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Detected Items", style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
-                  Text(
-                    "Edit all",
-                    style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                  child: Text(
+                    "Point camera at your grocery bill · Items auto-detected",
+                    style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
                   ),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: DmCard(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  children: [
-                    ...detectedItems.map((item) => _buildDetectedItem(context, item)),
-                    // Unrecognized item
-                    _buildDetectedItem(context, {
-                      'nm': 'Unrecognised item', 
-                      'qty': '—', 
-                      'price': '₹45'
-                    }, isUnrecognized: true),
-                  ],
                 ),
-              ),
-            ),
+                const ScanPreviewBox(),
+                
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                  child: Row(
+                    children: [
+                      Expanded(child: _buildSmallBtn(context, "Gallery", onTap: () => _pickAndProcess(ImageSource.gallery))),
+                      const SizedBox(width: 8),
+                      Expanded(child: _buildSmallBtn(context, "Capture", isPrimary: true, onTap: () => _pickAndProcess(ImageSource.camera))),
+                      const SizedBox(width: 8),
+                      Expanded(child: _buildSmallBtn(context, "Torch")),
+                    ],
+                  ),
+                ),
 
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: DmButton(
-                label: "Update Inventory (4 items)",
-                onPressed: () {},
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Detected Items", style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
+                      if (detectedItems.isNotEmpty)
+                        Text(
+                          "Edit all",
+                          style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary),
+                        ),
+                    ],
+                  ),
+                ),
+
+                if (detectedItems.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: DmCard(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        children: [
+                          ...detectedItems.map((item) => _buildDetectedItem(context, {
+                            'nm': item.name,
+                            'qty': 'x${item.quantity.toInt()}',
+                            'price': '₹${item.confidence > 0.8 ? "" : "?"}', // Simplified mock
+                          })),
+                        ],
+                      ),
+                    ),
+                  )
+                else if (!isLoading)
+                  const Padding(
+                    padding: EdgeInsets.all(40),
+                    child: Center(
+                      child: Opacity(
+                        opacity: 0.5,
+                        child: Text("No items scanned yet"),
+                      ),
+                    ),
+                  ),
+
+                if (detectedItems.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: DmButton(
+                      label: "Update Inventory (${detectedItems.length} items)",
+                      onPressed: () {
+                        // Logic to commit to inventory
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Inventory updated!')),
+                        );
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CircularProgressIndicator(),
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildSmallBtn(BuildContext context, String label, {bool isPrimary = false}) {
+  Widget _buildSmallBtn(BuildContext context, String label, {bool isPrimary = false, VoidCallback? onTap}) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(9),
-      decoration: BoxDecoration(
-        color: isPrimary ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(10),
-        border: isPrimary ? null : Border.all(color: theme.colorScheme.outline),
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: isPrimary ? Colors.black : theme.colorScheme.onSurfaceVariant,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.all(9),
+        decoration: BoxDecoration(
+          color: isPrimary ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(10),
+          border: isPrimary ? null : Border.all(color: theme.colorScheme.outline),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: isPrimary ? Colors.black : theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ),

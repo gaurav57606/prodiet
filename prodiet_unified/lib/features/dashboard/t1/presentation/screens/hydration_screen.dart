@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/water/application/water_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 
-class HydrationScreen extends StatelessWidget {
+class HydrationScreen extends ConsumerWidget {
   const HydrationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final summaryAsync = ref.watch(dashboardSummaryProvider);
+    final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final logsAsync = ref.watch(waterLogsProvider(todayStr));
+    
     final statusColor = const Color(0xFF40D8B8);
 
     return Scaffold(
@@ -16,41 +24,50 @@ class HydrationScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(T1Spacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHero(theme, statusColor),
-            const SizedBox(height: T1Spacing.xl),
-            Text(
-              'QUICK ADD',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.3),
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.2,
+      body: summaryAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+        data: (summary) => SingleChildScrollView(
+          padding: const EdgeInsets.all(T1Spacing.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHero(theme, statusColor, summary.waterMl, summary.waterGoalMl, summary.waterProgress),
+              const SizedBox(height: T1Spacing.xl),
+              Text(
+                'QUICK ADD',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildQuickAddGrid(theme, statusColor),
-            const SizedBox(height: T1Spacing.xl),
-            Text(
-              'TODAY\'S HISTORY',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.3),
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.2,
+              const SizedBox(height: T1Spacing.md),
+              _buildQuickAddGrid(theme, statusColor, ref),
+              const SizedBox(height: T1Spacing.xl),
+              Text(
+                'TODAY\'S HISTORY',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildHistoryList(theme, statusColor),
-          ],
+              const SizedBox(height: T1Spacing.md),
+              logsAsync.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Text('Error loading history: $err'),
+                data: (logs) => _buildHistoryList(theme, statusColor, logs),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildHero(ThemeData theme, Color color) {
+  Widget _buildHero(ThemeData theme, Color color, int consumed, int target, double progress) {
+    final formatter = NumberFormat('#,###');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -58,10 +75,10 @@ class HydrationScreen extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
+          colors: [color.withValues(alpha: 0.15), color.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.withOpacity(0.15)),
+        border: Border.all(color: color.withValues(alpha: 0.15)),
       ),
       child: Column(
         children: [
@@ -71,7 +88,7 @@ class HydrationScreen extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                '1,500',
+                formatter.format(consumed),
                 style: theme.textTheme.displayLarge?.copyWith(
                   color: color,
                   fontSize: 64,
@@ -82,24 +99,24 @@ class HydrationScreen extends StatelessWidget {
               Text(
                 'ml',
                 style: theme.textTheme.headlineMedium?.copyWith(
-                  color: color.withOpacity(0.5),
+                  color: color.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w900,
                 ),
               ),
             ],
           ),
           Text(
-            'OF 2,500 ML TARGET',
+            'OF ${formatter.format(target)} ML TARGET',
             style: theme.textTheme.labelSmall?.copyWith(
-              color: color.withOpacity(0.6),
+              color: color.withValues(alpha: 0.6),
               fontWeight: FontWeight.w900,
               letterSpacing: 1.0,
             ),
           ),
           const SizedBox(height: 24),
           LinearProgressIndicator(
-            value: 0.6,
-            backgroundColor: color.withOpacity(0.1),
+            value: progress.clamp(0.0, 1.0),
+            backgroundColor: color.withValues(alpha: 0.1),
             color: color,
             minHeight: 12,
             borderRadius: BorderRadius.circular(6),
@@ -109,12 +126,12 @@ class HydrationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickAddGrid(ThemeData theme, Color color) {
+  Widget _buildQuickAddGrid(ThemeData theme, Color color, WidgetRef ref) {
     final amounts = [
-      {'val': '250', 'icon': Icons.local_drink_rounded},
-      {'val': '500', 'icon': Icons.water_drop_rounded},
-      {'val': '750', 'icon': Icons.wine_bar_rounded},
-      {'val': '1000', 'icon': Icons.coffee_rounded},
+      {'val': 250, 'icon': Icons.local_drink_rounded},
+      {'val': 500, 'icon': Icons.water_drop_rounded},
+      {'val': 750, 'icon': Icons.wine_bar_rounded},
+      {'val': 1000, 'icon': Icons.coffee_rounded},
     ];
 
     return GridView.count(
@@ -125,64 +142,77 @@ class HydrationScreen extends StatelessWidget {
       mainAxisSpacing: 12,
       childAspectRatio: 1.5,
       children: amounts.map((a) {
-        return DmCard(
-          color: Colors.white.withOpacity(0.03),
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(a['icon'] as IconData, color: color, size: 20),
-              const SizedBox(width: 12),
-              Text(
-                '${a['val']} ml',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 18,
+        final val = a['val'] as int;
+        return InkWell(
+          onTap: () {
+            ref.read(waterActionsProvider.notifier).logWater(val);
+            ref.invalidate(dashboardSummaryProvider);
+          },
+          borderRadius: BorderRadius.circular(24),
+          child: DmCard(
+            color: Colors.white.withValues(alpha: 0.03),
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(a['icon'] as IconData, color: color, size: 20),
+                const SizedBox(width: 12),
+                Text(
+                  '$val ml',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }).toList(),
     );
   }
 
-  Widget _buildHistoryList(ThemeData theme, Color color) {
-    final history = [
-      {'time': '08:30 AM', 'amount': '250 ml'},
-      {'time': '10:15 AM', 'amount': '500 ml'},
-      {'time': '12:45 PM', 'amount': '250 ml'},
-      {'time': '02:30 PM', 'amount': '500 ml'},
-    ];
+  Widget _buildHistoryList(ThemeData theme, Color color, List<dynamic> logs) {
+    if (logs.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: T1Spacing.xl),
+          child: Text('No history for today',
+            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3))
+          ),
+        ),
+      );
+    }
 
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: history.length,
+      itemCount: logs.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        final item = history[index];
+        final log = logs[index];
+        final timeStr = DateFormat('hh:mm a').format(log.createdAt);
         return DmCard(
-          color: Colors.white.withOpacity(0.02),
+          color: Colors.white.withValues(alpha: 0.02),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Icon(Icons.history_rounded, size: 16, color: theme.colorScheme.onSurface.withOpacity(0.2)),
+                  Icon(Icons.history_rounded, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
                   const SizedBox(width: 12),
                   Text(
-                    item['time']!,
+                    timeStr,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
               Text(
-                item['amount']!,
+                '${log.amountMl} ml',
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w900,
                   color: color,

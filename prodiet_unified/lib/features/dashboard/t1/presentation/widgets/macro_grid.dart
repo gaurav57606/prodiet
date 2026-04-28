@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
-import '../mock/dashboard_mock.dart';
 
 class MacroGrid extends StatelessWidget {
-  const MacroGrid({super.key});
+  final int calories;
+  final double calorieProgress;
+  final int protein;
+  final double proteinProgress;
+  final int carbs;
+  final double carbsProgress;
+  final int fat;
+  final double fatProgress;
+
+  const MacroGrid({
+    super.key,
+    required this.calories,
+    required this.calorieProgress,
+    required this.protein,
+    required this.proteinProgress,
+    required this.carbs,
+    required this.carbsProgress,
+    required this.fat,
+    required this.fatProgress,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,36 +38,36 @@ class MacroGrid extends StatelessWidget {
           _buildMacroTile(
             context,
             'CALORIES',
-            '1,380',
+            '$calories',
             'kcal',
-            0.69,
+            calorieProgress,
             [const Color(0xFF3B1FA8), const Color(0xFF6B35FF)],
             Icons.local_fire_department_rounded,
           ),
           _buildMacroTile(
             context,
             'PROTEIN',
-            '87',
+            '$protein',
             'g',
-            0.58,
+            proteinProgress,
             [const Color(0xFFFF3060), const Color(0xFFFF6B9D)],
             Icons.favorite_rounded,
           ),
           _buildMacroTile(
             context,
             'CARBS',
-            '200',
+            '$carbs',
             'g',
-            0.80,
+            carbsProgress,
             [const Color(0xFFFF8C30), const Color(0xFFFFB870)],
             Icons.bolt_rounded,
           ),
           _buildMacroTile(
             context,
             'FAT',
-            '28',
+            '$fat',
             'g',
-            0.40,
+            fatProgress,
             [const Color(0xFF108070), const Color(0xFF40D8B8)],
             Icons.water_drop_rounded,
           ),
@@ -81,7 +98,7 @@ class MacroGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(T1Spacing.radiusLg),
         boxShadow: [
           BoxShadow(
-            color: gradient.last.withOpacity(0.2),
+            color: gradient.last.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -97,7 +114,7 @@ class MacroGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Icon(icon, size: 16, color: Colors.white),
@@ -105,7 +122,7 @@ class MacroGrid extends StatelessWidget {
               Text(
                 '${(percentage * 100).toInt()}%',
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -130,7 +147,7 @@ class MacroGrid extends StatelessWidget {
                     fontFamily: 'Outfit',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -140,18 +157,17 @@ class MacroGrid extends StatelessWidget {
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               letterSpacing: 1.0,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 10),
-          // Progress bar
           Container(
             height: 4,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(2),
             ),
             child: FractionallySizedBox(

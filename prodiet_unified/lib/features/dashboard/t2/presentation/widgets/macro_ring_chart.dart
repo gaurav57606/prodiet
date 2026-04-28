@@ -2,19 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class MacroRingChart extends StatelessWidget {
-  const MacroRingChart({super.key});
+  final double calorieProgress;
+  final int calories;
+  final double proteinProgress;
+  final int protein;
+  final double carbsProgress;
+  final int carbs;
+  final double fatProgress;
+  final int fat;
+
+  const MacroRingChart({
+    super.key,
+    required this.calorieProgress,
+    required this.calories,
+    required this.proteinProgress,
+    required this.protein,
+    required this.carbsProgress,
+    required this.carbs,
+    required this.fatProgress,
+    required this.fat,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _buildMacroItem(context, "69%", "1,380 kcal", "Cals", T2Colors.lime, 0.69),
+        _buildMacroItem(context, "${(calorieProgress * 100).toInt()}%", "$calories kcal", "Cals", T2Colors.lime, calorieProgress),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "58%", "87g", "Protein", T2Colors.coral, 0.58),
+        _buildMacroItem(context, "${(proteinProgress * 100).toInt()}%", "${protein}g", "Protein", T2Colors.coral, proteinProgress),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "80%", "200g", "Carbs", T2Colors.amber, 0.80),
+        _buildMacroItem(context, "${(carbsProgress * 100).toInt()}%", "${carbs}g", "Carbs", T2Colors.amber, carbsProgress),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "40%", "28g", "Fat", T2Colors.purple, 0.40),
+        _buildMacroItem(context, "${(fatProgress * 100).toInt()}%", "${fat}g", "Fat", T2Colors.purple, fatProgress),
       ],
     );
   }
@@ -34,11 +53,11 @@ class MacroRingChart extends StatelessWidget {
               height: 44,
               child: Stack(
                 children: [
-                  Center(
+                  const Center(
                     child: CircularProgressIndicator(
                       value: 1,
                       strokeWidth: 5,
-                      color: const Color(0xFF252520),
+                      color: Color(0xFF252520),
                     ),
                   ),
                   Center(
@@ -63,7 +82,7 @@ class MacroRingChart extends StatelessWidget {
             ),
             Text(
               gramStr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
                 color: T2Colors.textSecondary,
@@ -71,7 +90,7 @@ class MacroRingChart extends StatelessWidget {
             ),
             Text(
               label.toUpperCase(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 8,
                 letterSpacing: 1.2,
                 color: T2Colors.textMuted,

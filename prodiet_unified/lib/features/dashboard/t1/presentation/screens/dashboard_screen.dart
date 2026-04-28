@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_text_styles.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/calorie_summary_card.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/hydration_card.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/macro_grid.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/today_meals_row.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/activity_grid.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/alerts_list.dart';
-
 import 'package:prodiet_unified/core/widgets/theme_toggle.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardAsync = ref.watch(dashboardSummaryProvider);
+
     return Scaffold(
       body: SafeArea(
         top: true,
@@ -32,61 +35,109 @@ class DashboardScreen extends StatelessWidget {
                 SizedBox(width: 8),
               ],
             ),
-            const SliverToBoxAdapter(child: CalorieSummaryCard()),
             
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: T1Spacing.lg),
-                child: HydrationCard(),
-              ),
-            ),
-            
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                child: _SectionHeader(
-                  title: 'Macros Today',
-                  onAction: () => context.go('/meals'),
+            dashboardAsync.when(
+              loading: () => const SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(T1Spacing.xl),
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
               ),
-            ),
-            
-            const SliverToBoxAdapter(child: MacroGrid()),
-            
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                child: _SectionHeader(
-                  title: 'Next Meal',
-                  onAction: () => context.go('/meals'),
+              error: (err, stack) => SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(T1Spacing.lg),
+                  child: Text('Error loading dashboard: $err'),
                 ),
               ),
-            ),
-            
-            const SliverToBoxAdapter(child: TodayMealsRow()),
-            
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                child: _SectionHeader(
-                  title: 'Activity · Fitband',
-                  onAction: () => context.pushNamed(AppRoutes.activitySyncName),
-                ),
+              data: (summary) => SliverMainAxisGroup(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: CalorieSummaryCard(
+                      caloriesConsumed: summary.caloriesConsumed,
+                      caloriesGoal: summary.caloriesGoal,
+                      streakDays: summary.streakDays,
+                      activePlanName: summary.activeDietPlanName,
+                    ),
+                  ),
+                  
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+                      child: HydrationCard(
+                        consumed: summary.waterMl,
+                        target: summary.waterGoalMl,
+                        progress: summary.waterProgress,
+                      ),
+                    ),
+                  ),
+                  
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                      child: _SectionHeader(
+                        title: 'Macros Today',
+                        onAction: () => context.go('/meals'),
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: MacroGrid(
+                      calories: summary.caloriesConsumed,
+                      calorieProgress: summary.calorieProgress,
+                      protein: summary.proteinConsumed,
+                      proteinProgress: summary.proteinProgress,
+                      carbs: summary.carbsConsumed,
+                      carbsProgress: summary.carbsProgress,
+                      fat: summary.fatConsumed,
+                      fatProgress: summary.fatProgress,
+                    ),
+                  ),
+                  
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                      child: _SectionHeader(
+                        title: 'Next Meal',
+                        onAction: () => context.go('/meals'),
+                      ),
+                    ),
+                  ),
+                  
+                  SliverToBoxAdapter(child: TodayMealsRow(meal: summary.nextMeal)),
+                  
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                      child: _SectionHeader(
+                        title: 'Activity · Fitband',
+                        onAction: () => context.pushNamed(AppRoutes.activitySyncName),
+                      ),
+                    ),
+                  ),
+                  
+                  SliverToBoxAdapter(
+                    child: ActivityGrid(
+                      steps: summary.stepsToday,
+                      caloriesBurned: summary.caloriesBurned,
+                      netCalories: summary.netCalories,
+                    ),
+                  ),
+                  
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                      child: _SectionHeader(
+                        title: 'Alerts',
+                      ),
+                    ),
+                  ),
+                  
+                  const SliverToBoxAdapter(child: AlertsList()),
+                ],
               ),
             ),
-            
-            const SliverToBoxAdapter(child: ActivityGrid()),
-            
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                child: _SectionHeader(
-                  title: 'Alerts',
-                ),
-              ),
-            ),
-            
-            const SliverToBoxAdapter(child: AlertsList()),
             
             const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
           ],

@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import '../mock/meal_planner_mock.dart';
+import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
 
 class RecipeCard extends StatelessWidget {
-  final RecipeData recipe;
+  final Meal meal;
 
-  const RecipeCard({super.key, required this.recipe});
+  const RecipeCard({super.key, required this.meal});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    final accentColor = recipe.isExotic
-        ? const Color(0xFFFF3060)
-        : const Color(0xFF8B5CF6);
+    final accentColor = meal.mealType == 'breakfast'
+        ? const Color(0xFFFFB870)
+        : meal.mealType == 'lunch'
+            ? const Color(0xFF8B5CF6)
+            : const Color(0xFFFF3060);
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withOpacity(0.06)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -35,44 +36,32 @@ class RecipeCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        accentColor.withOpacity(0.2),
-                        accentColor.withOpacity(0.05),
+                        accentColor.withValues(alpha: 0.2),
+                        accentColor.withValues(alpha: 0.05),
                       ],
                     ),
                   ),
                   child: Center(
                     child: Icon(
-                      recipe.type == 'Breakfast' ? Icons.wb_sunny_rounded : Icons.restaurant_rounded,
+                      meal.mealType == 'breakfast' ? Icons.wb_sunny_rounded : Icons.restaurant_rounded,
                       size: 48,
-                      color: accentColor.withOpacity(0.3),
+                      color: accentColor.withValues(alpha: 0.3),
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.timer_outlined, size: 12, color: Colors.white),
-                        const SizedBox(width: 4),
-                        Text(
-                          '25m',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
+                if (meal.status == 'completed')
+                  Positioned(
+                    top: 12,
+                    left: 12,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF40D8B8),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.check, size: 12, color: Colors.white),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -84,9 +73,9 @@ class RecipeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    recipe.type.toUpperCase(),
+                    meal.mealType.toUpperCase(),
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: accentColor.withOpacity(0.6),
+                      color: accentColor.withValues(alpha: 0.6),
                       fontSize: 9,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.5,
@@ -94,7 +83,7 @@ class RecipeCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    recipe.name,
+                    meal.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleSmall?.copyWith(
@@ -107,9 +96,9 @@ class RecipeCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildMacro(theme, 'P', recipe.protein, const Color(0xFFFF3060)),
-                      _buildMacro(theme, 'C', recipe.carbs, const Color(0xFFFFB870)),
-                      _buildMacro(theme, 'F', recipe.fat, const Color(0xFF40D8B8)),
+                      _buildMacro(theme, 'P', '${meal.nutritionalValues.proteinG}g', const Color(0xFFFF3060)),
+                      _buildMacro(theme, 'C', '${meal.nutritionalValues.carbsG}g', const Color(0xFFFFB870)),
+                      _buildMacro(theme, 'F', '${meal.nutritionalValues.fatG}g', const Color(0xFF40D8B8)),
                     ],
                   ),
                 ],
@@ -129,7 +118,7 @@ class RecipeCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 8,
             fontWeight: FontWeight.w900,
-            color: theme.colorScheme.onSurface.withOpacity(0.2),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
           ),
         ),
         Text(
@@ -137,7 +126,7 @@ class RecipeCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w900,
-            color: color.withOpacity(0.8),
+            color: color.withValues(alpha: 0.8),
           ),
         ),
       ],

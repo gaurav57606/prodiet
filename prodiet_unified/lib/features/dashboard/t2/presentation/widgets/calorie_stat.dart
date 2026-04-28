@@ -3,7 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class CalorieStat extends StatelessWidget {
-  const CalorieStat({super.key});
+  final int consumed;
+  final int burned;
+  final int net;
+
+  const CalorieStat({
+    super.key,
+    required this.consumed,
+    required this.burned,
+    required this.net,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +23,11 @@ class CalorieStat extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _statCell('CONSUMED', '1,380', T2Colors.lime),
+          _statCell('CONSUMED', consumed.toString(), T2Colors.lime),
           _vDivider(),
-          _statCell('BURNED', '312', T2Colors.coral),
+          _statCell('BURNED', burned.toString(), T2Colors.coral),
           _vDivider(),
-          _statCell('NET', '1,068', T2Colors.textPrimary),
+          _statCell('NET', net.toString(), T2Colors.textPrimary),
         ],
       ),
     );
@@ -29,7 +38,7 @@ class CalorieStat extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 8,
             letterSpacing: 1.4,
             color: T2Colors.textMuted,
