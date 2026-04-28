@@ -41,7 +41,7 @@ import 'package:prodiet_unified/features/inventory/t2/presentation/screens/inven
 import 'package:prodiet_unified/features/voice/t2/presentation/screens/voice_screen.dart' as t2_voice;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_detail_screen.dart' as t2_diet_plan_detail;
 import 'package:prodiet_unified/features/water/t2/presentation/screens/water_screen.dart' as t2_water;
-import 'package:prodiet_unified/features/ocr/t2/presentation/screens/ocr_screen.dart' as t2_ocr;
+import 'package:prodiet_unified/features/ocr_scanner/t2/presentation/screens/ocr_screen.dart' as t2_ocr;
 import 'package:prodiet_unified/features/recipe/t2/presentation/screens/recipe_screen.dart' as t2_recipe;
 import 'package:prodiet_unified/features/compensation/t2/presentation/screens/compensation_screen.dart' as t2_compensation;
 import 'package:prodiet_unified/features/vendor/t2/presentation/screens/vendor_screen.dart' as t2_vendor;

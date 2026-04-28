@@ -52,7 +52,7 @@ serve(async (req) => {
       namespace: 'mealPlan',
       query_hash: hashHex,
       response_json: resultJson,
-      expires_at: new DateTime(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     })
 
     return new Response(JSON.stringify(resultJson), {

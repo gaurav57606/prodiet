@@ -4,8 +4,8 @@ class ShoppingItem {
   final String ingredientName;
   final double quantity;
   final String unit;
-  final bool isBought;
-  final String category;
+  final bool isPurchased;
+  final String source; // manual, auto
 
   const ShoppingItem({
     required this.id,
@@ -13,8 +13,8 @@ class ShoppingItem {
     required this.ingredientName,
     required this.quantity,
     required this.unit,
-    required this.isBought,
-    required this.category,
+    required this.isPurchased,
+    required this.source,
   });
 
   factory ShoppingItem.fromJson(Map<String, dynamic> json) {
@@ -24,8 +24,8 @@ class ShoppingItem {
       ingredientName: json['ingredient_name'],
       quantity: (json['quantity'] as num? ?? 0).toDouble(),
       unit: json['unit'],
-      isBought: json['is_bought'] ?? false,
-      category: json['category'] ?? 'Pantry',
+      isPurchased: json['is_purchased'] ?? false,
+      source: json['source'] ?? 'manual',
     );
   }
 
@@ -36,28 +36,8 @@ class ShoppingItem {
       'ingredient_name': ingredientName,
       'quantity': quantity,
       'unit': unit,
-      'is_bought': isBought,
-      'category': category,
+      'is_purchased': isPurchased,
+      'source': source,
     };
-  }
-
-  ShoppingItem copyWith({
-    String? id,
-    String? userId,
-    String? ingredientName,
-    double? quantity,
-    String? unit,
-    bool? isBought,
-    String? category,
-  }) {
-    return ShoppingItem(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      ingredientName: ingredientName ?? this.ingredientName,
-      quantity: quantity ?? this.quantity,
-      unit: unit ?? this.unit,
-      isBought: isBought ?? this.isBought,
-      category: category ?? this.category,
-    );
   }
 }

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
-import 'package:prodiet_unified/features/ocr/application/ocr_providers.dart';
-import 'package:prodiet_unified/features/ocr/domain/models/ocr_result.dart';
+import 'package:prodiet_unified/features/ocr_scanner/application/ocr_providers.dart';
+import 'package:prodiet_unified/features/ocr_scanner/domain/models/ocr_result.dart';
 
 class OcrScannerScreen extends ConsumerStatefulWidget {
   const OcrScannerScreen({super.key});

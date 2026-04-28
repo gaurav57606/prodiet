@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
-import 'package:prodiet_unified/features/ocr/application/ocr_providers.dart';
-import 'package:prodiet_unified/features/ocr/domain/models/ocr_result.dart';
+import 'package:prodiet_unified/features/ocr_scanner/application/ocr_providers.dart';
+import 'package:prodiet_unified/features/ocr_scanner/domain/models/ocr_result.dart';
 import '../widgets/scan_preview_box.dart';
 
 class OcrScreen extends ConsumerStatefulWidget {
