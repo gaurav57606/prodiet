@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'diet_meal.dart';
 
 part 'diet_day.freezed.dart';
 part 'diet_day.g.dart';
@@ -7,10 +8,11 @@ part 'diet_day.g.dart';
 class DietDay with _$DietDay {
   const factory DietDay({
     required int dayNumber,
-    required String breakfast,
-    required String lunch,
-    required String dinner,
-    required String snacks,
+    required List<DietMeal> breakfast,
+    required List<DietMeal> lunch,
+    required List<DietMeal> dinner,
+    required List<DietMeal> snacks,
+    required double totalCalories,
   }) = _DietDay;
 
   factory DietDay.fromJson(Map<String, dynamic> json) => _$DietDayFromJson(json);

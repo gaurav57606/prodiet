@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
 
 class DietPlanDetailScreen extends StatelessWidget {
   final DietDay day;
@@ -38,34 +39,58 @@ class DietPlanDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMealSection(String title, String content, Color color, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: T2Colors.bgElevated,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: T2Colors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+  Widget _buildMealSection(String title, List<DietMeal> meals, Color color, IconData icon) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, color: color, size: 14),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: TextStyle(fontSize: 10, letterSpacing: 1.5, color: color, fontWeight: FontWeight.w900),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        ...meals.map((meal) => Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: T2Colors.bgElevated,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: T2Colors.border),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: color, size: 18),
-              const SizedBox(width: 12),
-              Text(
-                title,
-                style: TextStyle(fontSize: 10, letterSpacing: 1.5, color: color, fontWeight: FontWeight.w900),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      meal.name.toUpperCase(),
+                      style: GoogleFonts.barlowCondensed(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Text(
+                    '${meal.calories.toInt()} KCAL',
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: T2Colors.textMuted),
+                  ),
+                ],
               ),
+              if (meal.ingredients.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  meal.ingredients.join(', '),
+                  style: TextStyle(fontSize: 11, color: T2Colors.textSecondary, height: 1.4),
+                ),
+              ],
             ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            content,
-            style: GoogleFonts.barlowCondensed(fontSize: 22, color: Colors.white, fontWeight: FontWeight.w700, height: 1.2),
-          ),
-        ],
-      ),
+        )),
+      ],
     );
   }
 }

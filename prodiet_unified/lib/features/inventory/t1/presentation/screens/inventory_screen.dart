@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/inventory/application/inventory_providers.dart';
 import 'package:prodiet_unified/features/inventory/domain/inventory_item.dart';
@@ -55,7 +54,7 @@ class InventoryScreen extends ConsumerWidget {
                 onButtonTap: () => context.push('/t1/ocr'),
               ),
               builder: (items) {
-                final filtered = selectedCategory == 'All'
+                final filtered = selectedCategory == null || selectedCategory == 'All'
                     ? items
                     : items.where((i) => i.category == selectedCategory).toList();
 
@@ -119,16 +118,10 @@ class InventoryScreen extends ConsumerWidget {
   }
 
   Widget _buildInventoryItemCard(BuildContext context, WidgetRef ref, ThemeData theme, InventoryItem item) {
-    return Dismissible(
-      key: Key(item.id),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(16)),
-        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
-      ),
-      confirmDismiss: (direction) async {
+    return _SlidableInventoryCard(
+      item: item,
+      onEdit: () => _showEditQuantitySheet(context, ref, item),
+      onDelete: () async {
         final result = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
@@ -143,7 +136,6 @@ class InventoryScreen extends ConsumerWidget {
         if (result == true) {
           await ref.read(inventoryRepositoryProvider).deleteItem(item.id);
         }
-        return false;
       },
       child: DmCard(
         padding: const EdgeInsets.all(16),
@@ -181,8 +173,6 @@ class InventoryScreen extends ConsumerWidget {
                     Text(item.unit, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.w900)),
                   ],
                 ),
-                const SizedBox(height: 4),
-                _buildQuantityActions(ref, item),
               ],
             ),
           ],
@@ -191,25 +181,54 @@ class InventoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuantityActions(WidgetRef ref, InventoryItem item) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _miniActionBtn(Icons.remove, () => ref.read(inventoryRepositoryProvider).updateQuantity(item.id, (item.quantity - 1).clamp(0, 9999))),
-        const SizedBox(width: 12),
-        _miniActionBtn(Icons.add, () => ref.read(inventoryRepositoryProvider).updateQuantity(item.id, item.quantity + 1)),
-      ],
-    );
-  }
-
-  Widget _miniActionBtn(IconData icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(border: Border.all(color: Colors.white.withValues(alpha: 0.1)), borderRadius: BorderRadius.circular(4)),
-        child: Icon(icon, size: 14, color: Colors.white70),
+  void _showEditQuantitySheet(BuildContext context, WidgetRef ref, InventoryItem item) {
+    final controller = TextEditingController(text: item.quantity.toString());
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: const Color(0xFF0F172A),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('EDIT QUANTITY', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+            const SizedBox(height: 8),
+            Text(item.ingredientName.toUpperCase(), style: const TextStyle(fontSize: 12, color: Colors.white30)),
+            const SizedBox(height: 24),
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
+              decoration: InputDecoration(
+                suffixText: item.unit,
+                filled: true,
+                fillColor: Colors.white.withValues(alpha: 0.05),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final qty = double.tryParse(controller.text);
+                  if (qty != null) {
+                    await ref.read(inventoryRepositoryProvider).updateQuantity(item.id, qty);
+                    if (context.mounted) Navigator.pop(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8B5CF6), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                child: const Text('UPDATE', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+              ),
+            ),
+            const SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }
@@ -308,6 +327,119 @@ class InventoryScreen extends ConsumerWidget {
       ),
       items: items.map((i) => DropdownMenuItem(value: i, child: Text(i.toString()))).toList(),
       onChanged: onChanged,
+    );
+  }
+}
+
+class _SlidableInventoryCard extends StatefulWidget {
+  final Widget child;
+  final InventoryItem item;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _SlidableInventoryCard({
+    required this.child,
+    required this.item,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  State<_SlidableInventoryCard> createState() => _SlidableInventoryCardState();
+}
+
+class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  double _dragOffset = 0;
+  static const double _actionWidth = 80;
+  static const double _totalActionWidth = _actionWidth * 2;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    setState(() {
+      _dragOffset += details.primaryDelta!;
+      _dragOffset = _dragOffset.clamp(-_totalActionWidth, 0);
+    });
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    if (_dragOffset < -_totalActionWidth / 2) {
+      _controller.animateTo(1.0);
+      setState(() => _dragOffset = -_totalActionWidth);
+    } else {
+      _controller.animateTo(0.0);
+      setState(() => _dragOffset = 0);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  widget.onEdit();
+                  setState(() => _dragOffset = 0);
+                },
+                child: Container(
+                  width: _actionWidth,
+                  color: Colors.blueAccent,
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.edit_rounded, color: Colors.white),
+                      Text('Edit', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  widget.onDelete();
+                  setState(() => _dragOffset = 0);
+                },
+                child: Container(
+                  width: _actionWidth,
+                  decoration: const BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(16), bottomRight: Radius.circular(16)),
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.delete_outline_rounded, color: Colors.white),
+                      Text('Delete', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onHorizontalDragUpdate: _onHorizontalDragUpdate,
+          onHorizontalDragEnd: _onHorizontalDragEnd,
+          child: Transform.translate(
+            offset: Offset(_dragOffset, 0),
+            child: widget.child,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:prodiet_unified/features/dashboard/application/dashboard_provide
 import 'package:prodiet_unified/features/diet_plan/application/diet_plan_providers.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_plan_state.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/widgets/loaders/ai_thinking_loader.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
@@ -17,20 +19,14 @@ class DietPlanScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final dietPlanAsync = ref.watch(dietPlanProvider);
-    final isGenerating = ref.watch(isGeneratingDietPlanProvider);
+    final dietPlanState = ref.watch(dietPlanProvider);
     final userId = ref.watch(currentUserIdProvider);
-
-    // STATE 1: Loading / Generating
-    if (isGenerating) {
-      return const AiThinkingLoader(mode: 'diet');
-    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('AI Diet Plan'),
         actions: [
-          if (dietPlanAsync.value != null)
+          if (dietPlanState is DietPlanLoaded)
             IconButton(
               onPressed: () => ref.read(dietPlanProvider.notifier).generate(),
               icon: const Icon(Icons.refresh_rounded),
@@ -38,25 +34,18 @@ class DietPlanScreen extends ConsumerWidget {
             ),
         ],
       ),
-      body: dietPlanAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
-        data: (plan) {
-          // STATE 2: Empty / No Plan
-          if (plan == null) {
-            return ProDietEmptyState(
-              emoji: EmptyStateConfigs.dietPlan.emoji,
-              headline: EmptyStateConfigs.dietPlan.headline,
-              subtext: EmptyStateConfigs.dietPlan.subtext,
-              buttonLabel: 'Create My Plan',
-              onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
-            );
-          }
-
-          // STATE 3: Plan Exists
-          return _buildPlanView(context, ref, theme, plan, userId);
-        },
-      ),
+      body: switch (dietPlanState) {
+        DietPlanLoading() => const AiThinkingLoader(mode: 'diet'),
+        DietPlanError(message: final msg) => Center(child: Text('Error: $msg')),
+        DietPlanInitial() => ProDietEmptyState(
+            emoji: EmptyStateConfigs.dietPlan.emoji,
+            headline: EmptyStateConfigs.dietPlan.headline,
+            subtext: EmptyStateConfigs.dietPlan.subtext,
+            buttonLabel: 'Create My Plan',
+            onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+          ),
+        DietPlanLoaded(plan: final plan) => _buildPlanView(context, ref, theme, plan, userId),
+      },
     );
   }
 
@@ -99,35 +88,16 @@ class DietPlanScreen extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            '~${plan.summaryCalories} kcal/day',
+            '${plan.summaryCalories.toInt()} kcal/day',
             style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
           ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _macroTag('P', '${plan.summaryProteinG}g'),
-              const SizedBox(width: 8),
-              _macroTag('C', '${plan.summaryCarbsG}g'),
-              const SizedBox(width: 8),
-              _macroTag('F', '${plan.summaryFatG}g'),
-            ],
+          const SizedBox(height: 4),
+          Text(
+            'P:${plan.summaryProteinG.toInt()}g C:${plan.summaryCarbsG.toInt()}g F:${plan.summaryFatG.toInt()}g',
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 14, fontWeight: FontWeight.w700),
           ),
+          const SizedBox(height: 16),
         ],
-      ),
-    );
-  }
-
-  Widget _macroTag(String label, String value) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        '$label: $value',
-        style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900),
       ),
     );
   }
@@ -136,28 +106,48 @@ class DietPlanScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(T1Spacing.lg),
       children: [
-        _mealCard(theme, '🌅 BREAKFAST', day.breakfast),
+        _mealSection(theme, '🌅 BREAKFAST', day.breakfast),
         const SizedBox(height: 12),
-        _mealCard(theme, '☀️ LUNCH', day.lunch),
+        _mealSection(theme, '☀️ LUNCH', day.lunch),
         const SizedBox(height: 12),
-        _mealCard(theme, '🌙 DINNER', day.dinner),
+        _mealSection(theme, '🌙 DINNER', day.dinner),
         const SizedBox(height: 12),
-        _mealCard(theme, '🍎 SNACKS', day.snacks),
+        _mealSection(theme, '🍎 SNACKS', day.snacks),
       ],
     );
   }
 
-  Widget _mealCard(ThemeData theme, String title, String content) {
-    return DmCard(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: theme.colorScheme.primary)),
-          const SizedBox(height: 8),
-          Text(content, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
-        ],
-      ),
+  Widget _mealSection(ThemeData theme, String title, List<DietMeal> meals) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(title, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: theme.colorScheme.primary)),
+        ),
+        ...meals.map((meal) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: DmCard(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: Text(meal.name, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700))),
+                    Text('${meal.calories.toInt()} kcal', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Colors.grey)),
+                  ],
+                ),
+                if (meal.ingredients.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(meal.ingredients.join(', '), style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                ],
+              ],
+            ),
+          ),
+        )),
+      ],
     );
   }
 
@@ -169,7 +159,7 @@ class DietPlanScreen extends ConsumerWidget {
         height: 56,
         child: ElevatedButton(
           onPressed: () async {
-            await ref.read(dietPlanRepositoryProvider).savePlanToMeals(userId, plan);
+            await ref.read(dietPlanProvider.notifier).saveTodayMeals();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

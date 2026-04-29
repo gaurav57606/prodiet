@@ -9,10 +9,19 @@ part of 'diet_day.dart';
 _$DietDayImpl _$$DietDayImplFromJson(Map<String, dynamic> json) =>
     _$DietDayImpl(
       dayNumber: (json['dayNumber'] as num).toInt(),
-      breakfast: json['breakfast'] as String,
-      lunch: json['lunch'] as String,
-      dinner: json['dinner'] as String,
-      snacks: json['snacks'] as String,
+      breakfast: (json['breakfast'] as List<dynamic>)
+          .map((e) => DietMeal.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      lunch: (json['lunch'] as List<dynamic>)
+          .map((e) => DietMeal.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      dinner: (json['dinner'] as List<dynamic>)
+          .map((e) => DietMeal.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      snacks: (json['snacks'] as List<dynamic>)
+          .map((e) => DietMeal.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      totalCalories: (json['totalCalories'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$$DietDayImplToJson(_$DietDayImpl instance) =>
@@ -22,4 +31,5 @@ Map<String, dynamic> _$$DietDayImplToJson(_$DietDayImpl instance) =>
       'lunch': instance.lunch,
       'dinner': instance.dinner,
       'snacks': instance.snacks,
+      'totalCalories': instance.totalCalories,
     };

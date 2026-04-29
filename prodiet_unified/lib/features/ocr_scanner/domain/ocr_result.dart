@@ -1,20 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'scanned_item.dart';
 
-part 'ocr_result.freezed.dart';
-part 'ocr_result.g.dart';
+class OcrResult {
+  final List<ScannedItem> items;
+  final String rawText;
 
-@freezed
-class OcrResult with _$OcrResult {
-  const factory OcrResult({
-    required List<ScannedItem> items,
-    required String rawText,
-    required DateTime scannedAt,
-  }) = _OcrResult;
-
-  const OcrResult._();
+  OcrResult({
+    required this.items,
+    required this.rawText,
+  });
 
   int get itemCount => items.length;
 
-  factory OcrResult.fromJson(Map<String, dynamic> json) => _$OcrResultFromJson(json);
+  int get selectedCount => items.where((i) => i.isSelected).length;
+
+  List<ScannedItem> get selectedItems =>
+      items.where((i) => i.isSelected).toList();
 }

@@ -45,7 +45,7 @@ class HydrationScreen extends ConsumerWidget {
           headline: EmptyStateConfigs.water.headline,
           subtext: EmptyStateConfigs.water.subtext,
           buttonLabel: EmptyStateConfigs.water.buttonLabel,
-          onButtonTap: () => ref.read(waterRepositoryProvider).logGlass(userId),
+          onButtonTap: () => _logGlass(ref, context),
         ),
         builder: (summary) => SingleChildScrollView(
           padding: const EdgeInsets.all(T1Spacing.lg),
@@ -153,6 +153,16 @@ class HydrationScreen extends ConsumerWidget {
             minHeight: 12,
             borderRadius: BorderRadius.circular(6),
           ),
+          if (progress >= 1.0) ...[
+            const SizedBox(height: 16),
+            Text(
+              '🎉 Goal reached!',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -252,5 +262,10 @@ class HydrationScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  void _logGlass(WidgetRef ref, BuildContext context) {
+    final userId = ref.read(currentUserIdProvider);
+    ref.read(waterRepositoryProvider).logGlass(userId);
   }
 }

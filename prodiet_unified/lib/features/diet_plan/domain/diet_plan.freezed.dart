@@ -22,15 +22,13 @@ DietPlan _$DietPlanFromJson(Map<String, dynamic> json) {
 mixin _$DietPlan {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  List<DietDay> get days => throw _privateConstructorUsedError;
-  int get summaryCalories => throw _privateConstructorUsedError;
-  int get summaryProteinG => throw _privateConstructorUsedError;
-  int get summaryCarbsG => throw _privateConstructorUsedError;
-  int get summaryFatG => throw _privateConstructorUsedError;
-  String get fitnessGoal => throw _privateConstructorUsedError;
-  String get activityLevel => throw _privateConstructorUsedError;
   DateTime get generatedAt => throw _privateConstructorUsedError;
-  bool get isFavorited => throw _privateConstructorUsedError;
+  List<DietDay> get days => throw _privateConstructorUsedError;
+  double get summaryCalories => throw _privateConstructorUsedError;
+  double get summaryProteinG => throw _privateConstructorUsedError;
+  double get summaryCarbsG => throw _privateConstructorUsedError;
+  double get summaryFatG => throw _privateConstructorUsedError;
+  bool get isActive => throw _privateConstructorUsedError;
 
   /// Serializes this DietPlan to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,15 +48,13 @@ abstract class $DietPlanCopyWith<$Res> {
   $Res call(
       {String id,
       String userId,
-      List<DietDay> days,
-      int summaryCalories,
-      int summaryProteinG,
-      int summaryCarbsG,
-      int summaryFatG,
-      String fitnessGoal,
-      String activityLevel,
       DateTime generatedAt,
-      bool isFavorited});
+      List<DietDay> days,
+      double summaryCalories,
+      double summaryProteinG,
+      double summaryCarbsG,
+      double summaryFatG,
+      bool isActive});
 }
 
 /// @nodoc
@@ -78,15 +74,13 @@ class _$DietPlanCopyWithImpl<$Res, $Val extends DietPlan>
   $Res call({
     Object? id = null,
     Object? userId = null,
+    Object? generatedAt = null,
     Object? days = null,
     Object? summaryCalories = null,
     Object? summaryProteinG = null,
     Object? summaryCarbsG = null,
     Object? summaryFatG = null,
-    Object? fitnessGoal = null,
-    Object? activityLevel = null,
-    Object? generatedAt = null,
-    Object? isFavorited = null,
+    Object? isActive = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -97,6 +91,10 @@ class _$DietPlanCopyWithImpl<$Res, $Val extends DietPlan>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      generatedAt: null == generatedAt
+          ? _value.generatedAt
+          : generatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       days: null == days
           ? _value.days
           : days // ignore: cast_nullable_to_non_nullable
@@ -104,34 +102,22 @@ class _$DietPlanCopyWithImpl<$Res, $Val extends DietPlan>
       summaryCalories: null == summaryCalories
           ? _value.summaryCalories
           : summaryCalories // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       summaryProteinG: null == summaryProteinG
           ? _value.summaryProteinG
           : summaryProteinG // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       summaryCarbsG: null == summaryCarbsG
           ? _value.summaryCarbsG
           : summaryCarbsG // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       summaryFatG: null == summaryFatG
           ? _value.summaryFatG
           : summaryFatG // ignore: cast_nullable_to_non_nullable
-              as int,
-      fitnessGoal: null == fitnessGoal
-          ? _value.fitnessGoal
-          : fitnessGoal // ignore: cast_nullable_to_non_nullable
-              as String,
-      activityLevel: null == activityLevel
-          ? _value.activityLevel
-          : activityLevel // ignore: cast_nullable_to_non_nullable
-              as String,
-      generatedAt: null == generatedAt
-          ? _value.generatedAt
-          : generatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      isFavorited: null == isFavorited
-          ? _value.isFavorited
-          : isFavorited // ignore: cast_nullable_to_non_nullable
+              as double,
+      isActive: null == isActive
+          ? _value.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -148,15 +134,13 @@ abstract class _$$DietPlanImplCopyWith<$Res>
   $Res call(
       {String id,
       String userId,
-      List<DietDay> days,
-      int summaryCalories,
-      int summaryProteinG,
-      int summaryCarbsG,
-      int summaryFatG,
-      String fitnessGoal,
-      String activityLevel,
       DateTime generatedAt,
-      bool isFavorited});
+      List<DietDay> days,
+      double summaryCalories,
+      double summaryProteinG,
+      double summaryCarbsG,
+      double summaryFatG,
+      bool isActive});
 }
 
 /// @nodoc
@@ -174,15 +158,13 @@ class __$$DietPlanImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? userId = null,
+    Object? generatedAt = null,
     Object? days = null,
     Object? summaryCalories = null,
     Object? summaryProteinG = null,
     Object? summaryCarbsG = null,
     Object? summaryFatG = null,
-    Object? fitnessGoal = null,
-    Object? activityLevel = null,
-    Object? generatedAt = null,
-    Object? isFavorited = null,
+    Object? isActive = null,
   }) {
     return _then(_$DietPlanImpl(
       id: null == id
@@ -193,6 +175,10 @@ class __$$DietPlanImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      generatedAt: null == generatedAt
+          ? _value.generatedAt
+          : generatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       days: null == days
           ? _value._days
           : days // ignore: cast_nullable_to_non_nullable
@@ -200,34 +186,22 @@ class __$$DietPlanImplCopyWithImpl<$Res>
       summaryCalories: null == summaryCalories
           ? _value.summaryCalories
           : summaryCalories // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       summaryProteinG: null == summaryProteinG
           ? _value.summaryProteinG
           : summaryProteinG // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       summaryCarbsG: null == summaryCarbsG
           ? _value.summaryCarbsG
           : summaryCarbsG // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       summaryFatG: null == summaryFatG
           ? _value.summaryFatG
           : summaryFatG // ignore: cast_nullable_to_non_nullable
-              as int,
-      fitnessGoal: null == fitnessGoal
-          ? _value.fitnessGoal
-          : fitnessGoal // ignore: cast_nullable_to_non_nullable
-              as String,
-      activityLevel: null == activityLevel
-          ? _value.activityLevel
-          : activityLevel // ignore: cast_nullable_to_non_nullable
-              as String,
-      generatedAt: null == generatedAt
-          ? _value.generatedAt
-          : generatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      isFavorited: null == isFavorited
-          ? _value.isFavorited
-          : isFavorited // ignore: cast_nullable_to_non_nullable
+              as double,
+      isActive: null == isActive
+          ? _value.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -239,15 +213,13 @@ class _$DietPlanImpl implements _DietPlan {
   const _$DietPlanImpl(
       {required this.id,
       required this.userId,
+      required this.generatedAt,
       required final List<DietDay> days,
       required this.summaryCalories,
       required this.summaryProteinG,
       required this.summaryCarbsG,
       required this.summaryFatG,
-      required this.fitnessGoal,
-      required this.activityLevel,
-      required this.generatedAt,
-      this.isFavorited = false})
+      required this.isActive})
       : _days = days;
 
   factory _$DietPlanImpl.fromJson(Map<String, dynamic> json) =>
@@ -257,6 +229,8 @@ class _$DietPlanImpl implements _DietPlan {
   final String id;
   @override
   final String userId;
+  @override
+  final DateTime generatedAt;
   final List<DietDay> _days;
   @override
   List<DietDay> get days {
@@ -266,26 +240,19 @@ class _$DietPlanImpl implements _DietPlan {
   }
 
   @override
-  final int summaryCalories;
+  final double summaryCalories;
   @override
-  final int summaryProteinG;
+  final double summaryProteinG;
   @override
-  final int summaryCarbsG;
+  final double summaryCarbsG;
   @override
-  final int summaryFatG;
+  final double summaryFatG;
   @override
-  final String fitnessGoal;
-  @override
-  final String activityLevel;
-  @override
-  final DateTime generatedAt;
-  @override
-  @JsonKey()
-  final bool isFavorited;
+  final bool isActive;
 
   @override
   String toString() {
-    return 'DietPlan(id: $id, userId: $userId, days: $days, summaryCalories: $summaryCalories, summaryProteinG: $summaryProteinG, summaryCarbsG: $summaryCarbsG, summaryFatG: $summaryFatG, fitnessGoal: $fitnessGoal, activityLevel: $activityLevel, generatedAt: $generatedAt, isFavorited: $isFavorited)';
+    return 'DietPlan(id: $id, userId: $userId, generatedAt: $generatedAt, days: $days, summaryCalories: $summaryCalories, summaryProteinG: $summaryProteinG, summaryCarbsG: $summaryCarbsG, summaryFatG: $summaryFatG, isActive: $isActive)';
   }
 
   @override
@@ -295,6 +262,8 @@ class _$DietPlanImpl implements _DietPlan {
             other is _$DietPlanImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.generatedAt, generatedAt) ||
+                other.generatedAt == generatedAt) &&
             const DeepCollectionEquality().equals(other._days, _days) &&
             (identical(other.summaryCalories, summaryCalories) ||
                 other.summaryCalories == summaryCalories) &&
@@ -304,14 +273,8 @@ class _$DietPlanImpl implements _DietPlan {
                 other.summaryCarbsG == summaryCarbsG) &&
             (identical(other.summaryFatG, summaryFatG) ||
                 other.summaryFatG == summaryFatG) &&
-            (identical(other.fitnessGoal, fitnessGoal) ||
-                other.fitnessGoal == fitnessGoal) &&
-            (identical(other.activityLevel, activityLevel) ||
-                other.activityLevel == activityLevel) &&
-            (identical(other.generatedAt, generatedAt) ||
-                other.generatedAt == generatedAt) &&
-            (identical(other.isFavorited, isFavorited) ||
-                other.isFavorited == isFavorited));
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -320,15 +283,13 @@ class _$DietPlanImpl implements _DietPlan {
       runtimeType,
       id,
       userId,
+      generatedAt,
       const DeepCollectionEquality().hash(_days),
       summaryCalories,
       summaryProteinG,
       summaryCarbsG,
       summaryFatG,
-      fitnessGoal,
-      activityLevel,
-      generatedAt,
-      isFavorited);
+      isActive);
 
   /// Create a copy of DietPlan
   /// with the given fields replaced by the non-null parameter values.
@@ -350,15 +311,13 @@ abstract class _DietPlan implements DietPlan {
   const factory _DietPlan(
       {required final String id,
       required final String userId,
-      required final List<DietDay> days,
-      required final int summaryCalories,
-      required final int summaryProteinG,
-      required final int summaryCarbsG,
-      required final int summaryFatG,
-      required final String fitnessGoal,
-      required final String activityLevel,
       required final DateTime generatedAt,
-      final bool isFavorited}) = _$DietPlanImpl;
+      required final List<DietDay> days,
+      required final double summaryCalories,
+      required final double summaryProteinG,
+      required final double summaryCarbsG,
+      required final double summaryFatG,
+      required final bool isActive}) = _$DietPlanImpl;
 
   factory _DietPlan.fromJson(Map<String, dynamic> json) =
       _$DietPlanImpl.fromJson;
@@ -368,23 +327,19 @@ abstract class _DietPlan implements DietPlan {
   @override
   String get userId;
   @override
-  List<DietDay> get days;
-  @override
-  int get summaryCalories;
-  @override
-  int get summaryProteinG;
-  @override
-  int get summaryCarbsG;
-  @override
-  int get summaryFatG;
-  @override
-  String get fitnessGoal;
-  @override
-  String get activityLevel;
-  @override
   DateTime get generatedAt;
   @override
-  bool get isFavorited;
+  List<DietDay> get days;
+  @override
+  double get summaryCalories;
+  @override
+  double get summaryProteinG;
+  @override
+  double get summaryCarbsG;
+  @override
+  double get summaryFatG;
+  @override
+  bool get isActive;
 
   /// Create a copy of DietPlan
   /// with the given fields replaced by the non-null parameter values.

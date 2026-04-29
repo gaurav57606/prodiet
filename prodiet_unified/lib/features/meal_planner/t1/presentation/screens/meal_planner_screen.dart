@@ -17,6 +17,17 @@ class MealPlannerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final weeklyAsync = ref.watch(weeklyMealsProvider);
+    final todayAsync = ref.watch(todayMealsProvider);
+
+    final combinedAsync = weeklyAsync.whenData((weeklyMeals) {
+      return todayAsync.maybeWhen(
+        data: (todaySummary) {
+          final otherDays = weeklyMeals.where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now())).toList();
+          return [...otherDays, ...todaySummary.meals];
+        },
+        orElse: () => weeklyMeals,
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -29,12 +40,12 @@ class MealPlannerScreen extends ConsumerWidget {
         ],
       ),
       body: AsyncValueWidget<List<Meal>>(
-        value: weeklyAsync,
+        value: combinedAsync,
         skeleton: const Center(child: CircularProgressIndicator()),
         isEmpty: (meals) => meals.isEmpty,
         emptyState: ProDietEmptyState(
           emoji: EmptyStateConfigs.mealPlanner.emoji,
-          headline: 'No weekly plan',
+          headline: EmptyStateConfigs.mealPlanner.headline,
           subtext: EmptyStateConfigs.mealPlanner.subtext,
           buttonLabel: 'Generate AI Plan',
           onButtonTap: () => context.push('/t1/diet-plan'),

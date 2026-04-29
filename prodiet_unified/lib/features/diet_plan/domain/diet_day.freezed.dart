@@ -21,10 +21,11 @@ DietDay _$DietDayFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$DietDay {
   int get dayNumber => throw _privateConstructorUsedError;
-  String get breakfast => throw _privateConstructorUsedError;
-  String get lunch => throw _privateConstructorUsedError;
-  String get dinner => throw _privateConstructorUsedError;
-  String get snacks => throw _privateConstructorUsedError;
+  List<DietMeal> get breakfast => throw _privateConstructorUsedError;
+  List<DietMeal> get lunch => throw _privateConstructorUsedError;
+  List<DietMeal> get dinner => throw _privateConstructorUsedError;
+  List<DietMeal> get snacks => throw _privateConstructorUsedError;
+  double get totalCalories => throw _privateConstructorUsedError;
 
   /// Serializes this DietDay to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,10 +43,11 @@ abstract class $DietDayCopyWith<$Res> {
   @useResult
   $Res call(
       {int dayNumber,
-      String breakfast,
-      String lunch,
-      String dinner,
-      String snacks});
+      List<DietMeal> breakfast,
+      List<DietMeal> lunch,
+      List<DietMeal> dinner,
+      List<DietMeal> snacks,
+      double totalCalories});
 }
 
 /// @nodoc
@@ -68,6 +70,7 @@ class _$DietDayCopyWithImpl<$Res, $Val extends DietDay>
     Object? lunch = null,
     Object? dinner = null,
     Object? snacks = null,
+    Object? totalCalories = null,
   }) {
     return _then(_value.copyWith(
       dayNumber: null == dayNumber
@@ -77,19 +80,23 @@ class _$DietDayCopyWithImpl<$Res, $Val extends DietDay>
       breakfast: null == breakfast
           ? _value.breakfast
           : breakfast // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
       lunch: null == lunch
           ? _value.lunch
           : lunch // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
       dinner: null == dinner
           ? _value.dinner
           : dinner // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
       snacks: null == snacks
           ? _value.snacks
           : snacks // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
+      totalCalories: null == totalCalories
+          ? _value.totalCalories
+          : totalCalories // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -103,10 +110,11 @@ abstract class _$$DietDayImplCopyWith<$Res> implements $DietDayCopyWith<$Res> {
   @useResult
   $Res call(
       {int dayNumber,
-      String breakfast,
-      String lunch,
-      String dinner,
-      String snacks});
+      List<DietMeal> breakfast,
+      List<DietMeal> lunch,
+      List<DietMeal> dinner,
+      List<DietMeal> snacks,
+      double totalCalories});
 }
 
 /// @nodoc
@@ -127,6 +135,7 @@ class __$$DietDayImplCopyWithImpl<$Res>
     Object? lunch = null,
     Object? dinner = null,
     Object? snacks = null,
+    Object? totalCalories = null,
   }) {
     return _then(_$DietDayImpl(
       dayNumber: null == dayNumber
@@ -134,21 +143,25 @@ class __$$DietDayImplCopyWithImpl<$Res>
           : dayNumber // ignore: cast_nullable_to_non_nullable
               as int,
       breakfast: null == breakfast
-          ? _value.breakfast
+          ? _value._breakfast
           : breakfast // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
       lunch: null == lunch
-          ? _value.lunch
+          ? _value._lunch
           : lunch // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
       dinner: null == dinner
-          ? _value.dinner
+          ? _value._dinner
           : dinner // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
       snacks: null == snacks
-          ? _value.snacks
+          ? _value._snacks
           : snacks // ignore: cast_nullable_to_non_nullable
-              as String,
+              as List<DietMeal>,
+      totalCalories: null == totalCalories
+          ? _value.totalCalories
+          : totalCalories // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -158,28 +171,59 @@ class __$$DietDayImplCopyWithImpl<$Res>
 class _$DietDayImpl implements _DietDay {
   const _$DietDayImpl(
       {required this.dayNumber,
-      required this.breakfast,
-      required this.lunch,
-      required this.dinner,
-      required this.snacks});
+      required final List<DietMeal> breakfast,
+      required final List<DietMeal> lunch,
+      required final List<DietMeal> dinner,
+      required final List<DietMeal> snacks,
+      required this.totalCalories})
+      : _breakfast = breakfast,
+        _lunch = lunch,
+        _dinner = dinner,
+        _snacks = snacks;
 
   factory _$DietDayImpl.fromJson(Map<String, dynamic> json) =>
       _$$DietDayImplFromJson(json);
 
   @override
   final int dayNumber;
+  final List<DietMeal> _breakfast;
   @override
-  final String breakfast;
+  List<DietMeal> get breakfast {
+    if (_breakfast is EqualUnmodifiableListView) return _breakfast;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_breakfast);
+  }
+
+  final List<DietMeal> _lunch;
   @override
-  final String lunch;
+  List<DietMeal> get lunch {
+    if (_lunch is EqualUnmodifiableListView) return _lunch;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_lunch);
+  }
+
+  final List<DietMeal> _dinner;
   @override
-  final String dinner;
+  List<DietMeal> get dinner {
+    if (_dinner is EqualUnmodifiableListView) return _dinner;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_dinner);
+  }
+
+  final List<DietMeal> _snacks;
   @override
-  final String snacks;
+  List<DietMeal> get snacks {
+    if (_snacks is EqualUnmodifiableListView) return _snacks;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_snacks);
+  }
+
+  @override
+  final double totalCalories;
 
   @override
   String toString() {
-    return 'DietDay(dayNumber: $dayNumber, breakfast: $breakfast, lunch: $lunch, dinner: $dinner, snacks: $snacks)';
+    return 'DietDay(dayNumber: $dayNumber, breakfast: $breakfast, lunch: $lunch, dinner: $dinner, snacks: $snacks, totalCalories: $totalCalories)';
   }
 
   @override
@@ -189,17 +233,25 @@ class _$DietDayImpl implements _DietDay {
             other is _$DietDayImpl &&
             (identical(other.dayNumber, dayNumber) ||
                 other.dayNumber == dayNumber) &&
-            (identical(other.breakfast, breakfast) ||
-                other.breakfast == breakfast) &&
-            (identical(other.lunch, lunch) || other.lunch == lunch) &&
-            (identical(other.dinner, dinner) || other.dinner == dinner) &&
-            (identical(other.snacks, snacks) || other.snacks == snacks));
+            const DeepCollectionEquality()
+                .equals(other._breakfast, _breakfast) &&
+            const DeepCollectionEquality().equals(other._lunch, _lunch) &&
+            const DeepCollectionEquality().equals(other._dinner, _dinner) &&
+            const DeepCollectionEquality().equals(other._snacks, _snacks) &&
+            (identical(other.totalCalories, totalCalories) ||
+                other.totalCalories == totalCalories));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, dayNumber, breakfast, lunch, dinner, snacks);
+  int get hashCode => Object.hash(
+      runtimeType,
+      dayNumber,
+      const DeepCollectionEquality().hash(_breakfast),
+      const DeepCollectionEquality().hash(_lunch),
+      const DeepCollectionEquality().hash(_dinner),
+      const DeepCollectionEquality().hash(_snacks),
+      totalCalories);
 
   /// Create a copy of DietDay
   /// with the given fields replaced by the non-null parameter values.
@@ -220,23 +272,26 @@ class _$DietDayImpl implements _DietDay {
 abstract class _DietDay implements DietDay {
   const factory _DietDay(
       {required final int dayNumber,
-      required final String breakfast,
-      required final String lunch,
-      required final String dinner,
-      required final String snacks}) = _$DietDayImpl;
+      required final List<DietMeal> breakfast,
+      required final List<DietMeal> lunch,
+      required final List<DietMeal> dinner,
+      required final List<DietMeal> snacks,
+      required final double totalCalories}) = _$DietDayImpl;
 
   factory _DietDay.fromJson(Map<String, dynamic> json) = _$DietDayImpl.fromJson;
 
   @override
   int get dayNumber;
   @override
-  String get breakfast;
+  List<DietMeal> get breakfast;
   @override
-  String get lunch;
+  List<DietMeal> get lunch;
   @override
-  String get dinner;
+  List<DietMeal> get dinner;
   @override
-  String get snacks;
+  List<DietMeal> get snacks;
+  @override
+  double get totalCalories;
 
   /// Create a copy of DietDay
   /// with the given fields replaced by the non-null parameter values.

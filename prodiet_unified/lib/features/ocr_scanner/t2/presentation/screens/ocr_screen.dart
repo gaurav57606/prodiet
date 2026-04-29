@@ -116,7 +116,6 @@ class OcrScreen extends ConsumerWidget {
   }
 
   Widget _buildResultsView(BuildContext context, WidgetRef ref, ThemeData theme, OcrResult result) {
-    final selectedCount = result.items.where((i) => i.isSelected).length;
     final userId = ref.watch(currentUserIdProvider);
 
     return Column(
@@ -125,7 +124,7 @@ class OcrScreen extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'DETECTIONS (${result.itemCount})',
+            'FOUND ${result.itemCount} ITEMS 🎉',
             style: GoogleFonts.barlowCondensed(fontSize: 40, fontWeight: FontWeight.w900, color: T2Colors.lime),
           ),
         ),
@@ -156,7 +155,7 @@ class OcrScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(item.name.toUpperCase(), style: GoogleFonts.barlowCondensed(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-                          Text('${item.quantity} ${item.unit}', style: TextStyle(fontSize: 11, color: T2Colors.textSecondary, fontWeight: FontWeight.w600)),
+                          Text('${item.quantity} ${item.unit}', style: const TextStyle(fontSize: 11, color: T2Colors.textSecondary, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
@@ -171,12 +170,14 @@ class OcrScreen extends ConsumerWidget {
             },
           ),
         ),
-        _buildBottomActions(context, ref, result, userId, selectedCount),
+        _buildBottomActions(context, ref, result, userId),
       ],
     );
   }
 
-  Widget _buildBottomActions(BuildContext context, WidgetRef ref, OcrResult result, String userId, int selectedCount) {
+  Widget _buildBottomActions(BuildContext context, WidgetRef ref, OcrResult result, String userId) {
+    final selectedCount = result.selectedCount;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -189,21 +190,19 @@ class OcrScreen extends ConsumerWidget {
           DmButton(
             label: "ADD $selectedCount TO PANTRY",
             onPressed: selectedCount > 0 ? () async {
-              final selectedItems = result.items
-                .where((i) => i.isSelected)
-                .map((i) => {
-                  'name': i.name,
-                  'quantity': i.quantity,
-                  'unit': i.unit,
-                  'category': i.category,
-                }).toList();
+              final itemsToAdd = result.selectedItems.map((i) => {
+                'name': i.name,
+                'quantity': i.quantity,
+                'unit': i.unit,
+                'category': i.category,
+              }).toList();
               
-              await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, selectedItems);
+              await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, itemsToAdd);
               
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("PANTRY UPDATED ✅", style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
+                  SnackBar(
+                    content: Text("$selectedCount ITEMS ADDED ✅", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
                     backgroundColor: T2Colors.lime,
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -215,7 +214,7 @@ class OcrScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           TextButton(
             onPressed: () => ref.read(ocrStateProvider.notifier).reset(),
-            child: Text(
+            child: const Text(
               'SCAN AGAIN',
               style: TextStyle(color: T2Colors.textMuted, fontWeight: FontWeight.w900, letterSpacing: 1.2, fontSize: 12),
             ),

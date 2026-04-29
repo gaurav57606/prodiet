@@ -1,41 +1,46 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
+import '../domain/diet_meal.dart';
 import '../domain/diet_day.dart';
 import '../domain/diet_plan.dart';
 
 class DietPlanRepository {
   final SupabaseClient _supabase;
-  final MealRepository _mealRepository;
-  static const String _cacheKeyPrefix = 'diet_plan_';
 
-  DietPlanRepository(this._supabase, this._mealRepository);
+  DietPlanRepository(this._supabase);
+
+  Future<DietPlan?> getActivePlan(String userId) async {
+    final response = await _supabase
+        .from('diet_plans')
+        .select()
+        .eq('user_id', userId)
+        .eq('is_active', true)
+        .order('generated_at', ascending: false)
+        .limit(1)
+        .maybeSingle();
+
+    if (response == null) return null;
+    return DietPlan.fromJson(response);
+  }
 
   Future<DietPlan> generatePlan(String userId) async {
     // 1. Fetch user profile
     final profile = await _supabase
         .from('users')
-        .select('fitness_goal, activity_level, dietary_preferences, allergies')
+        .select('age,weight_kg,height_cm,fitness_goal,activity_level,dietary_preferences,allergies,daily_calorie_goal')
         .eq('id', userId)
         .single();
 
-    final fitnessGoal = profile['fitness_goal'] as String? ?? 'General Health';
-    final activityLevel = profile['activity_level'] as String? ?? 'Sedentary';
-    final dietaryPrefs = (profile['dietary_preferences'] as List?)?.join(', ') ?? 'None';
-    final allergies = (profile['allergies'] as List?)?.join(', ') ?? 'None';
+    // 2. Deactivate all previous plans
+    await deactivateAllPlans(userId);
 
-    // 2. Call Edge Function
+    // 3. Call Edge Function
     final response = await _supabase.functions.invoke(
-      'ai-meal-plan',
+      'generate-diet-plan',
       body: {
-        'user_id': userId,
-        'fitness_goal': fitnessGoal,
-        'activity_level': activityLevel,
-        'dietary_preferences': dietaryPrefs,
-        'allergies': allergies,
-        'days': 7,
+        'userId': userId,
+        'profile': profile,
       },
     );
 
@@ -43,90 +48,69 @@ class DietPlanRepository {
       throw Exception('Failed to generate AI Diet Plan: ${response.data}');
     }
 
+    // 4. Parse response
     final data = response.data as Map<String, dynamic>;
-    
-    // 3. Map to DietPlan
-    final plan = DietPlan(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      userId: userId,
-      days: (data['days'] as List).map((d) => DietDay.fromJson(d)).toList(),
-      summaryCalories: (data['summary']['calories'] as num).toInt(),
-      summaryProteinG: (data['summary']['protein'] as num).toInt(),
-      summaryCarbsG: (data['summary']['carbs'] as num).toInt(),
-      summaryFatG: (data['summary']['fat'] as num).toInt(),
-      fitnessGoal: fitnessGoal,
-      activityLevel: activityLevel,
-      generatedAt: DateTime.now(),
-    );
+    final planData = {
+      ...data,
+      'user_id': userId,
+      'is_active': true,
+      'generated_at': DateTime.now().toIso8601String(),
+    };
 
-    // 4. Cache locally
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('$_cacheKeyPrefix$userId', jsonEncode(plan.toJson()));
+    // 5. INSERT into database
+    final inserted = await _supabase
+        .from('diet_plans')
+        .insert(planData)
+        .select()
+        .single();
 
-    return plan;
+    return DietPlan.fromJson(inserted);
   }
 
-  Future<DietPlan?> getCachedPlan(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('$_cacheKeyPrefix$userId');
-    
-    if (jsonString == null) return null;
+  Future<void> savePlanMealsToToday(String userId, DietPlan plan) async {
+    if (plan.days.isEmpty) return;
 
-    try {
-      final plan = DietPlan.fromJson(jsonDecode(jsonString));
-      
-      // Check if plan is < 7 days old
-      final age = DateTime.now().difference(plan.generatedAt);
-      if (age.inDays >= 7) {
-        await prefs.remove('$_cacheKeyPrefix$userId');
-        return null;
+    // 1-based (1 = Monday ... 7 = Sunday)
+    final dayIndex = DateTime.now().weekday - 1;
+    if (dayIndex < 0 || dayIndex >= plan.days.length) return;
+    
+    final todayPlan = plan.days[dayIndex];
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    final mealsToInsert = <Map<String, dynamic>>[];
+
+    void addMeals(List<DietMeal> items, MealType type) {
+      for (final item in items) {
+        mealsToInsert.add({
+          'user_id': userId,
+          'name': item.name,
+          'calories': item.calories,
+          'protein_g': item.proteinG,
+          'carbs_g': item.carbsG,
+          'fat_g': item.fatG,
+          'meal_type': type.name,
+          'ingredients': item.ingredients,
+          'status': 'pending',
+          'planned_date': today.toIso8601String(),
+        });
       }
-      
-      return plan;
-    } catch (e) {
-      return null;
+    }
+
+    addMeals(todayPlan.breakfast, MealType.breakfast);
+    addMeals(todayPlan.lunch, MealType.lunch);
+    addMeals(todayPlan.dinner, MealType.dinner);
+    addMeals(todayPlan.snacks, MealType.snack);
+
+    if (mealsToInsert.isNotEmpty) {
+      await _supabase.from('meals').insert(mealsToInsert);
     }
   }
 
-  Future<void> savePlanToMeals(String userId, DietPlan plan) async {
-    // Take Day 1 (or today's index if we want to be fancy, but prompt says day[0])
-    if (plan.days.isEmpty) return;
-    final today = plan.days[0];
-
-    // Estimate calories per meal (simple split of summary)
-    final calPerMeal = (plan.summaryCalories / 3).roundToDouble();
-    final pPerMeal = (plan.summaryProteinG / 3).roundToDouble();
-    final cPerMeal = (plan.summaryCarbsG / 3).roundToDouble();
-    final fPerMeal = (plan.summaryFatG / 3).roundToDouble();
-
-    await Future.wait([
-      _mealRepository.logMeal(
-        userId,
-        name: today.breakfast,
-        mealType: MealType.breakfast,
-        calories: calPerMeal,
-        proteinG: pPerMeal,
-        carbsG: cPerMeal,
-        fatG: fPerMeal,
-      ),
-      _mealRepository.logMeal(
-        userId,
-        name: today.lunch,
-        mealType: MealType.lunch,
-        calories: calPerMeal,
-        proteinG: pPerMeal,
-        carbsG: cPerMeal,
-        fatG: fPerMeal,
-      ),
-      _mealRepository.logMeal(
-        userId,
-        name: today.dinner,
-        mealType: MealType.dinner,
-        calories: calPerMeal,
-        proteinG: pPerMeal,
-        carbsG: cPerMeal,
-        fatG: fPerMeal,
-      ),
-    ]);
+  Future<void> deactivateAllPlans(String userId) async {
+    await _supabase
+        .from('diet_plans')
+        .update({'is_active': false})
+        .eq('user_id', userId);
   }
 }

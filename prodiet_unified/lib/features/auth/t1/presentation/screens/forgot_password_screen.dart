@@ -49,13 +49,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           Container(
             width: double.infinity,
             height: 240,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFF1A0030),
-                  Color(0xFF0D0020),
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surfaceVariant,
                 ],
               ),
             ),
@@ -67,22 +67,22 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2A1050),
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.lock_outline,
-                      color: Color(0xFFC080FF),
+                      color: theme.colorScheme.primaryContainer,
                       size: 32,
                     ),
                   ),
                   const SizedBox(height: 16),
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                    text: TextSpan(
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                       children: [
-                        TextSpan(text: 'Reset ', style: TextStyle(color: Color(0xFFC080FF))),
-                        TextSpan(text: 'password', style: TextStyle(color: Colors.white)),
+                        TextSpan(text: 'Reset ', style: TextStyle(color: theme.colorScheme.primaryContainer)),
+                        TextSpan(text: 'password', style: TextStyle(color: theme.colorScheme.onSurface)),
                       ],
                     ),
                   ),
@@ -90,7 +90,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   Text(
                     "Enter your email and we'll send a reset link",
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.45),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -110,10 +110,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     onPressed: () => context.go('/t1/login'),
                     icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 14),
                     label: const Text('Back to sign in'),
-                    style: TextButton.styleFrom(foregroundColor: const Color(0xFF8B5CF6)),
+                    style: TextButton.styleFrom(foregroundColor: theme.colorScheme.primary),
                   ),
                   const SizedBox(height: 40),
-                  _buildLabel('EMAIL ADDRESS'),
+                  _buildLabel('EMAIL ADDRESS', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -142,9 +142,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A2E),
+                      color: theme.colorScheme.surfaceContainerHigh,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
+                      border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.1)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,20 +154,20 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white.withValues(alpha: 0.4),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                             letterSpacing: 1.2,
                           ),
                         ),
                         const SizedBox(height: 8),
                         RichText(
                           text: TextSpan(
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 13),
-                            children: const [
-                              TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
+                            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 13),
+                            children: [
+                              const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
                               TextSpan(
                                 text: 'Resend email',
                                 style: TextStyle(
-                                  color: Color(0xFF8B5CF6),
+                                  color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -186,13 +186,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(String text, ThemeData theme) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.4),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

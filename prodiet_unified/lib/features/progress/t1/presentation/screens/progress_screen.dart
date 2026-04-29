@@ -178,6 +178,9 @@ class ProgressScreen extends ConsumerWidget {
       return FlSpot(e.key.toDouble(), e.value.weightKg);
     }).toList();
 
+    // Determine interval for labels
+    final interval = (summary.entries.length / 4).ceil().toDouble();
+
     return DmCard(
       padding: const EdgeInsets.only(top: 24, right: 24, bottom: 12, left: 12),
       child: SizedBox(
@@ -189,8 +192,8 @@ class ProgressScreen extends ConsumerWidget {
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
+                  interval: interval > 0 ? interval : 1,
                   getTitlesWidget: (val, meta) {
-                    if (val % 5 != 0) return const SizedBox.shrink();
                     final index = val.toInt();
                     if (index < 0 || index >= summary.entries.length) return const SizedBox.shrink();
                     final date = summary.entries[index].loggedAt;

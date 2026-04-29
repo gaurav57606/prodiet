@@ -32,6 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final isLoading = authState is AuthLoading;
+    final theme = Theme.of(context);
 
     ref.listen<AuthState>(authProvider, (_, next) {
       if (next is AuthFailure) {
@@ -39,13 +40,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBar(
             content: Text(next.error.displayMessage),
-            backgroundColor: Colors.red.shade700,
+            backgroundColor: theme.colorScheme.error,
             behavior: SnackBarBehavior.floating,
           ));
       }
     });
-
-    final theme = Theme.of(context);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -55,13 +54,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           Container(
             width: double.infinity,
             height: 240,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFF1A0030),
-                  Color(0xFF0D0020),
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surfaceVariant,
                 ],
               ),
             ),
@@ -74,27 +73,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2A1050),
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.track_changes,
-                      color: Color(0xFFC080FF),
+                      color: theme.colorScheme.primaryContainer,
                       size: 40,
                     ),
                   ),
                   const SizedBox(height: 16),
                   // Title
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
+                    text: TextSpan(
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
-                        fontFamily: 'Inter', // Assuming Inter is the default
+                        fontFamily: 'Inter',
                       ),
                       children: [
-                        TextSpan(text: 'DietMaster', style: TextStyle(color: Colors.white)),
-                        TextSpan(text: 'Pro', style: TextStyle(color: Color(0xFFC080FF))),
+                        TextSpan(text: 'DietMaster', style: TextStyle(color: theme.colorScheme.onSurface)),
+                        TextSpan(text: 'Pro', style: TextStyle(color: theme.colorScheme.primaryContainer)),
                       ],
                     ),
                   ),
@@ -103,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Text(
                     'Your intelligent nutrition companion',
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.45),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -124,7 +123,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A1A),
+                      color: theme.colorScheme.surfaceContainerHigh,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -135,14 +134,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 0 ? const Color(0xFF8B5CF6) : Colors.transparent,
+                                color: _selectedTab == 0 ? theme.colorScheme.primary : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withValues(alpha: 0.4),
+                                    color: _selectedTab == 0 ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -158,14 +157,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 1 ? const Color(0xFF8B5CF6) : Colors.transparent,
+                                color: _selectedTab == 1 ? theme.colorScheme.primary : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withValues(alpha: 0.4),
+                                    color: _selectedTab == 1 ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -179,7 +178,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 32),
 
                   // FORM SECTION
-                  _buildLabel('EMAIL ADDRESS'),
+                  _buildLabel('EMAIL ADDRESS', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -191,13 +190,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildLabel('PASSWORD'),
+                      _buildLabel('PASSWORD', theme),
                       GestureDetector(
                         onTap: () => context.go('/t1/forgot-password'),
-                        child: const Text(
+                        child: Text(
                           'Forgot?',
                           style: TextStyle(
-                            color: Color(0xFF8B5CF6),
+                            color: theme.colorScheme.primary,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
@@ -213,7 +212,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -230,7 +229,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: Checkbox(
                           value: _keepSignedIn,
                           onChanged: (val) => setState(() => _keepSignedIn = val ?? false),
-                          activeColor: const Color(0xFF8B5CF6),
+                          activeColor: theme.colorScheme.primary,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                         ),
                       ),
@@ -238,7 +237,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Text(
                         'Keep me signed in',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           fontSize: 14,
                         ),
                       ),
@@ -266,7 +265,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Text(
                       'or continue with',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -303,14 +302,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                        style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                       ),
                       GestureDetector(
                         onTap: () => context.go('/t1/signup'),
-                        child: const Text(
+                        child: Text(
                           'Create one',
                           style: TextStyle(
-                            color: Color(0xFF8B5CF6),
+                            color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -327,13 +326,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(String text, ThemeData theme) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.4),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

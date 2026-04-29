@@ -43,15 +43,14 @@ void main() {
     // 2. Initialize timezone (for local notifications)
     tz.initializeTimeZones();
 
-    // 3. Initialize Firebase (FCM push notifications only)
-    await Firebase.initializeApp();
-
-    // 4. Initialize Supabase (primary backend)
+    // Init Supabase
     await Supabase.initialize(
-      url: Env.supabaseUrl,
-      anonKey: Env.supabaseAnonKey,
-      debug: false,
+      url: dotenv.env['SUPABASE_URL']!,
+      anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
     );
+
+    // Init Firebase
+    await Firebase.initializeApp();
 
     logger.i('[Main] All services initialized');
 

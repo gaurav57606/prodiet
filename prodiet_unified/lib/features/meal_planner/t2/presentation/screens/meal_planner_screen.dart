@@ -15,6 +15,17 @@ class MealPlannerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weeklyAsync = ref.watch(weeklyMealsProvider);
+    final todayAsync = ref.watch(todayMealsProvider);
+
+    final combinedAsync = weeklyAsync.whenData((weeklyMeals) {
+      return todayAsync.maybeWhen(
+        data: (todaySummary) {
+          final otherDays = weeklyMeals.where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now())).toList();
+          return [...otherDays, ...todaySummary.meals];
+        },
+        orElse: () => weeklyMeals,
+      );
+    });
 
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
@@ -27,12 +38,12 @@ class MealPlannerScreen extends ConsumerWidget {
         ),
       ),
       body: AsyncValueWidget<List<Meal>>(
-        value: weeklyAsync,
+        value: combinedAsync,
         skeleton: const Center(child: CircularProgressIndicator(color: T2Colors.lime)),
         isEmpty: (meals) => meals.isEmpty,
         emptyState: ProDietEmptyState(
           emoji: EmptyStateConfigs.mealPlanner.emoji,
-          headline: 'NO PLAN DETECTED',
+          headline: EmptyStateConfigs.mealPlanner.headline,
           subtext: EmptyStateConfigs.mealPlanner.subtext,
           buttonLabel: 'GENERATE AI PLAN',
           onButtonTap: () => Navigator.of(context).pushNamed('/t2/diet-plan'),

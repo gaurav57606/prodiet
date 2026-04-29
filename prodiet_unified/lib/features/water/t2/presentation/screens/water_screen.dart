@@ -8,6 +8,8 @@ import 'package:prodiet_unified/features/water/application/water_providers.dart'
 import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/loading_widget.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class WaterScreen extends ConsumerStatefulWidget {
   const WaterScreen({super.key});
@@ -50,6 +52,14 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
       body: AsyncValueWidget<WaterSummary>(
         value: summaryAsync,
         skeleton: const ProDietLoader(),
+        isEmpty: (s) => s.totalMl == 0,
+        emptyState: ProDietEmptyState(
+          emoji: EmptyStateConfigs.water.emoji,
+          headline: EmptyStateConfigs.water.headline,
+          subtext: EmptyStateConfigs.water.subtext,
+          buttonLabel: EmptyStateConfigs.water.buttonLabel,
+          onButtonTap: () => ref.read(waterRepositoryProvider).logGlass(userId),
+        ),
         builder: (summary) => SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

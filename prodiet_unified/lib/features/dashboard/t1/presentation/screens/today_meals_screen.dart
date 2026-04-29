@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
@@ -11,7 +10,6 @@ import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/skeletons/meal_list_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
-import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class TodayMealsScreen extends ConsumerWidget {
   const TodayMealsScreen({super.key});
@@ -21,7 +19,6 @@ class TodayMealsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final summaryAsync = ref.watch(todayMealsProvider);
     final dashboardAsync = ref.watch(dashboardProvider);
-    final userId = ref.watch(currentUserIdProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,11 +31,11 @@ class TodayMealsScreen extends ConsumerWidget {
         skeleton: const MealListSkeleton(),
         isEmpty: (s) => s.meals.isEmpty,
         emptyState: ProDietEmptyState(
-          emoji: EmptyStateConfigs.mealPlanner.emoji,
+          emoji: '🍽️',
           headline: 'Nothing logged today',
           subtext: 'Tap + to log your first meal.',
           buttonLabel: 'Log a Meal',
-          onButtonTap: () => _showLogMealSheet(context, ref, userId),
+          onButtonTap: () => _showLogMealSheet(context, ref),
         ),
         builder: (summary) => ListView(
           padding: const EdgeInsets.all(T1Spacing.lg),
@@ -67,7 +64,7 @@ class TodayMealsScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showLogMealSheet(context, ref, userId),
+        onPressed: () => _showLogMealSheet(context, ref),
         backgroundColor: theme.colorScheme.primary,
         icon: const Icon(Icons.add_rounded, color: Colors.white),
         label: const Text('LOG MEAL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
@@ -158,15 +155,21 @@ class TodayMealsScreen extends ConsumerWidget {
     
     return Dismissible(
       key: Key(meal.id),
-      direction: DismissDirection.endToStart,
+      direction: DismissDirection.horizontal,
       background: Container(
-        alignment: Alignment.centerRight,
+        alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(16)),
         child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
       ),
+      secondaryBackground: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(color: const Color(0xFF40D8B8), borderRadius: BorderRadius.circular(16)),
+        child: const Icon(Icons.check_circle_outline_rounded, color: Colors.black),
+      ),
       confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
+        if (direction == DismissDirection.startToEnd) {
           final result = await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
@@ -180,7 +183,11 @@ class TodayMealsScreen extends ConsumerWidget {
           );
           if (result == true) {
             await ref.read(mealRepositoryProvider).deleteMeal(meal.id);
+            return true;
           }
+        } else if (direction == DismissDirection.endToStart) {
+          await ref.read(mealRepositoryProvider).markEaten(meal.id);
+          return false; // Don't remove the card, the StreamProvider will update the state
         }
         return false;
       },
@@ -321,7 +328,8 @@ class TodayMealsScreen extends ConsumerWidget {
     );
   }
 
-  void _showLogMealSheet(BuildContext context, WidgetRef ref, String userId) {
+  void _showLogMealSheet(BuildContext context, WidgetRef ref) {
+    final userId = ref.read(currentUserIdProvider);
     final nameController = TextEditingController();
     final calController = TextEditingController();
     final protController = TextEditingController();

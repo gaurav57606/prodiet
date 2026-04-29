@@ -37,6 +37,8 @@ import 'package:prodiet_unified/features/auth/t2/presentation/screens/signup_scr
 import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2_dashboard;
 import 'package:prodiet_unified/features/meal_planner/t2/presentation/screens/meal_planner_screen.dart' as t2_meal_planner;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_screen.dart' as t2_diet_plan;
+import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
 import 'package:prodiet_unified/features/inventory/t2/presentation/screens/inventory_screen.dart' as t2_inventory;
 import 'package:prodiet_unified/features/voice/t2/presentation/screens/voice_screen.dart' as t2_voice;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_detail_screen.dart' as t2_diet_plan_detail;
@@ -160,7 +162,7 @@ GoRouter createAppRouter(WidgetRef ref) => GoRouter(
       '/t1/forgot-password',
       '/t1/onboarding',
       '/t1/health-goals',
-      '/t1/verify-phone',
+//      '/t1/verify-phone', // TODO: re-enable when phone auth is implemented
     };
 
     final isPublic = publicRoutes.contains(loc);
@@ -191,7 +193,7 @@ GoRouter createAppRouter(WidgetRef ref) => GoRouter(
     GoRoute(path: AppRoutes.t1Signup, name: 't1Signup', builder: (context, state) => const t1_signup.SignupScreen()),
     GoRoute(path: AppRoutes.t1ForgotPassword, name: 't1ForgotPassword', builder: (context, state) => const t1_forgot_password.ForgotPasswordScreen()),
     GoRoute(path: AppRoutes.t1HealthGoals, name: 't1HealthGoals', builder: (context, state) => const t1_health_goals.HealthGoalsScreen()),
-    GoRoute(path: AppRoutes.t1VerifyPhone, name: 't1VerifyPhone', builder: (context, state) => const t1_verify_phone.VerifyPhoneScreen()),
+//    GoRoute(path: AppRoutes.t1VerifyPhone, name: 't1VerifyPhone', builder: (context, state) => const t1_verify_phone.VerifyPhoneScreen()), // TODO: re-enable when phone auth is implemented
 
     // T1 Shell
     ShellRoute(
@@ -234,7 +236,13 @@ GoRouter createAppRouter(WidgetRef ref) => GoRouter(
     ),
 
     // T2 Standalone Features
-    GoRoute(path: AppRoutes.t2DietPlanDetail, name: 't2DietPlanDetail', builder: (context, state) => const t2_diet_plan_detail.DietPlanDetailScreen()),
+    GoRoute(
+      path: AppRoutes.t2DietPlanDetail, 
+      name: 't2DietPlanDetail', 
+      builder: (context, state) => t2_diet_plan_detail.DietPlanDetailScreen(
+        day: state.extra as DietDay,
+      ),
+    ),
     GoRoute(path: AppRoutes.t2Water, name: 't2Water', builder: (context, state) => const t2_water.WaterScreen()),
     GoRoute(path: AppRoutes.t2Ocr, name: 't2Ocr', builder: (context, state) => const t2_ocr.OcrScreen()),
     GoRoute(path: AppRoutes.t2Recipe, name: 't2Recipe', builder: (context, state) => const t2_recipe.RecipeScreen()),

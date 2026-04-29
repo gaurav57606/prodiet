@@ -30,7 +30,6 @@ class OcrScannerScreen extends ConsumerWidget {
     final ocrAsync = ref.watch(ocrStateProvider);
     final isScanning = ref.watch(isScanningProvider);
 
-    // STATE 2: Scanning
     if (isScanning) {
       return const AiThinkingLoader(mode: 'ocr');
     }
@@ -47,12 +46,9 @@ class OcrScannerScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
         data: (result) {
-          // STATE 1: Ready to Scan
           if (result == null) {
             return _buildEmptyState(context, ref);
           }
-
-          // STATE 3: Results Ready
           return _buildResultsView(context, ref, theme, result);
         },
       ),
@@ -97,7 +93,6 @@ class OcrScannerScreen extends ConsumerWidget {
   }
 
   Widget _buildResultsView(BuildContext context, WidgetRef ref, ThemeData theme, OcrResult result) {
-    final selectedCount = result.items.where((i) => i.isSelected).length;
     final userId = ref.watch(currentUserIdProvider);
 
     return Column(
@@ -144,7 +139,7 @@ class OcrScannerScreen extends ConsumerWidget {
             },
           ),
         ),
-        _buildBottomBar(context, ref, theme, result, userId, selectedCount),
+        _buildBottomBar(context, ref, theme, result, userId),
       ],
     );
   }
@@ -163,7 +158,9 @@ class OcrScannerScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, WidgetRef ref, ThemeData theme, OcrResult result, String userId, int selectedCount) {
+  Widget _buildBottomBar(BuildContext context, WidgetRef ref, ThemeData theme, OcrResult result, String userId) {
+    final selectedCount = result.selectedCount;
+
     return Container(
       padding: const EdgeInsets.all(T1Spacing.lg),
       decoration: BoxDecoration(
@@ -180,21 +177,19 @@ class OcrScannerScreen extends ConsumerWidget {
             height: 56,
             child: ElevatedButton(
               onPressed: selectedCount > 0 ? () async {
-                final selectedItems = result.items
-                  .where((i) => i.isSelected)
-                  .map((i) => {
-                    'name': i.name,
-                    'quantity': i.quantity,
-                    'unit': i.unit,
-                    'category': i.category,
-                  }).toList();
+                final itemsToAdd = result.selectedItems.map((i) => {
+                  'name': i.name,
+                  'quantity': i.quantity,
+                  'unit': i.unit,
+                  'category': i.category,
+                }).toList();
                 
-                await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, selectedItems);
+                await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, itemsToAdd);
                 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('$selectedCount items added to pantry ✅', style: const TextStyle(fontWeight: FontWeight.w900)),
+                      content: Text('$selectedCount items added ✅', style: const TextStyle(fontWeight: FontWeight.w900)),
                       backgroundColor: const Color(0xFF40D8B8),
                       behavior: SnackBarBehavior.floating,
                     ),

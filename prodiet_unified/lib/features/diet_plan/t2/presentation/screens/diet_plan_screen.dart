@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
@@ -6,6 +7,7 @@ import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/diet_plan/application/diet_plan_providers.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_plan_state.dart';
 import 'package:prodiet_unified/core/widgets/loaders/ai_thinking_loader.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
@@ -15,13 +17,8 @@ class DietPlanScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dietPlanAsync = ref.watch(dietPlanProvider);
-    final isGenerating = ref.watch(isGeneratingDietPlanProvider);
+    final dietPlanState = ref.watch(dietPlanProvider);
     final userId = ref.watch(currentUserIdProvider);
-
-    if (isGenerating) {
-      return const AiThinkingLoader(mode: 'diet');
-    }
 
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
@@ -33,32 +30,27 @@ class DietPlanScreen extends ConsumerWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          if (dietPlanAsync.value != null)
+          if (dietPlanState is DietPlanLoaded)
             IconButton(
               onPressed: () => ref.read(dietPlanProvider.notifier).generate(),
               icon: const Icon(Icons.refresh_rounded, color: T2Colors.lime),
             ),
         ],
       ),
-      body: dietPlanAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: T2Colors.lime)),
-        error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.white))),
-        data: (plan) {
-          if (plan == null) {
-            return Center(
-              child: ProDietEmptyState(
-                emoji: EmptyStateConfigs.dietPlan.emoji,
-                headline: EmptyStateConfigs.dietPlan.headline.toUpperCase(),
-                subtext: EmptyStateConfigs.dietPlan.subtext,
-                buttonLabel: 'CREATE MY PLAN',
-                onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
-              ),
-            );
-          }
-
-          return _buildPlanContent(context, ref, plan, userId);
-        },
-      ),
+      body: switch (dietPlanState) {
+        DietPlanLoading() => const AiThinkingLoader(mode: 'diet'),
+        DietPlanError(message: final msg) => Center(child: Text('Error: $msg', style: const TextStyle(color: Colors.white))),
+        DietPlanInitial() => Center(
+            child: ProDietEmptyState(
+              emoji: EmptyStateConfigs.dietPlan.emoji,
+              headline: EmptyStateConfigs.dietPlan.headline.toUpperCase(),
+              subtext: EmptyStateConfigs.dietPlan.subtext,
+              buttonLabel: 'CREATE MY PLAN',
+              onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+            ),
+          ),
+        DietPlanLoaded(plan: final plan) => _buildPlanContent(context, ref, plan, userId),
+      },
     );
   }
 
@@ -88,9 +80,9 @@ class DietPlanScreen extends ConsumerWidget {
                     color: T2Colors.lime.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Text(
-                    'GOAL: ${plan.fitnessGoal.toUpperCase()}',
-                    style: const TextStyle(fontSize: 9, letterSpacing: 1.2, fontWeight: FontWeight.w800, color: T2Colors.lime),
+                  child: const Text(
+                    'AI GENERATED 7-DAY PLAN',
+                    style: TextStyle(fontSize: 9, letterSpacing: 1.2, fontWeight: FontWeight.w800, color: T2Colors.lime),
                   ),
                 ),
               ],
@@ -127,10 +119,10 @@ class DietPlanScreen extends ConsumerWidget {
         crossAxisSpacing: 12,
         childAspectRatio: 1.5,
         children: [
-          _buildTargetCard('CALORIES', '${plan.summaryCalories}', 'kcal/day', T2Colors.sky),
-          _buildTargetCard('PROTEIN', '${plan.summaryProteinG}g', 'Daily Target', T2Colors.coral),
-          _buildTargetCard('CARBS', '${plan.summaryCarbsG}g', 'Daily Target', T2Colors.amber),
-          _buildTargetCard('FATS', '${plan.summaryFatG}g', 'Daily Target', T2Colors.purple),
+          _buildTargetCard('CALORIES', '${plan.summaryCalories.toInt()}', 'kcal/day', T2Colors.sky),
+          _buildTargetCard('PROTEIN', '${plan.summaryProteinG.toInt()}g', 'Daily Target', T2Colors.coral),
+          _buildTargetCard('CARBS', '${plan.summaryCarbsG.toInt()}g', 'Daily Target', T2Colors.amber),
+          _buildTargetCard('FATS', '${plan.summaryFatG.toInt()}g', 'Daily Target', T2Colors.purple),
         ],
       ),
     );
@@ -163,9 +155,9 @@ class DietPlanScreen extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: plan.days.map((day) {
-          final isToday = day.dayNumber == 1; // Simplify for demo
+          final isToday = day.dayNumber == (DateTime.now().weekday); 
           return InkWell(
-            onTap: () => Navigator.of(context).pushNamed('/t2/diet-detail', arguments: day),
+            onTap: () => context.pushNamed('t2DietPlanDetail', extra: day),
             child: Container(
               width: 40,
               height: 40,
@@ -207,14 +199,14 @@ class DietPlanScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              "Add Day 1's meals to your daily log to begin tracking.",
+              "Add today's meals to your daily log to begin tracking.",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: T2Colors.textSecondary),
             ),
             const SizedBox(height: 24),
             InkWell(
               onTap: () async {
-                await ref.read(dietPlanRepositoryProvider).savePlanToMeals(userId, plan);
+                await ref.read(dietPlanProvider.notifier).saveTodayMeals();
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -230,7 +222,7 @@ class DietPlanScreen extends ConsumerWidget {
                 height: 50,
                 decoration: BoxDecoration(color: T2Colors.lime, borderRadius: BorderRadius.circular(12)),
                 alignment: Alignment.center,
-                child: const Text('ADD TO MEALS', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
+                child: const Text('ADD TODAY TO MEALS', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
               ),
             ),
           ],

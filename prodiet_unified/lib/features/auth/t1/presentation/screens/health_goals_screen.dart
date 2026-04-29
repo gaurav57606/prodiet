@@ -93,7 +93,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
       if (next is AuthFailure) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(next.error.displayMessage),
-          backgroundColor: Colors.red.shade700,
+          backgroundColor: theme.colorScheme.error,
         ));
       }
     });
@@ -106,13 +106,13 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
           Container(
             width: double.infinity,
             height: 240,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFF1A0030),
-                  Color(0xFF0D0020),
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surfaceVariant,
                 ],
               ),
             ),
@@ -125,17 +125,17 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white.withValues(alpha: 0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                       letterSpacing: 1.2,
                     ),
                   ),
                   const SizedBox(height: 8),
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                    text: TextSpan(
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                       children: [
-                        TextSpan(text: 'Your health ', style: TextStyle(color: Colors.white)),
-                        TextSpan(text: 'goals', style: TextStyle(color: Color(0xFF8B5CF6))),
+                        TextSpan(text: 'Your health ', style: TextStyle(color: theme.colorScheme.onSurface)),
+                        TextSpan(text: 'goals', style: TextStyle(color: theme.colorScheme.primary)),
                       ],
                     ),
                   ),
@@ -143,7 +143,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   Text(
                     'Step 2 of 2 — Personalise your plan',
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.45),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -156,7 +156,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: theme.colorScheme.outline.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -165,7 +165,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         width: 16,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF8B5CF6),
+                          color: theme.colorScheme.primary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -186,6 +186,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   _buildSectionHeader(
                     "What's your primary goal?",
                     "This helps us personalise your meal plan",
+                    theme,
                   ),
                   const SizedBox(height: 16),
                   // GOAL GRID
@@ -197,10 +198,10 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                     crossAxisSpacing: 12,
                     childAspectRatio: 1.3,
                     children: [
-                      _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit'),
-                      _buildGoalCard(1, '💪', 'Build muscle', 'High protein'),
-                      _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros'),
-                      _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals'),
+                      _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
+                      _buildGoalCard(1, '💪', 'Build muscle', 'High protein', theme),
+                      _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', theme),
+                      _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', theme),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -208,14 +209,15 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   _buildSectionHeader(
                     "Activity level",
                     "Helps calculate your daily needs",
+                    theme,
                   ),
                   const SizedBox(height: 16),
                   // ACTIVITY OPTIONS
-                  _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise'),
+                  _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise', theme),
                   const SizedBox(height: 12),
-                  _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week'),
+                  _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', theme),
                   const SizedBox(height: 12),
-                  _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days'),
+                  _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', theme),
                   const SizedBox(height: 32),
 
                   // BOTTOM INPUTS
@@ -225,7 +227,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('AGE'),
+                            _buildLabel('AGE', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _ageController,
@@ -240,7 +242,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('WEIGHT (KG)'),
+                            _buildLabel('WEIGHT (KG)', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _weightController,
@@ -255,7 +257,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('HEIGHT (CM)'),
+                            _buildLabel('HEIGHT (CM)', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _heightController,
@@ -284,7 +286,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                       child: Text(
                         '< Back to details',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           fontSize: 14,
                         ),
                       ),
@@ -300,34 +302,34 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title, String subtitle) {
+  Widget _buildSectionHeader(String title, String subtitle, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: theme.colorScheme.onSurface),
         ),
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.45)),
+          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.45)),
         ),
       ],
     );
   }
 
-  Widget _buildGoalCard(int index, String emoji, String title, String subtitle) {
+  Widget _buildGoalCard(int index, String emoji, String title, String subtitle, ThemeData theme) {
     final isSelected = _selectedGoal == index;
     return GestureDetector(
       onTap: () => setState(() => _selectedGoal = index),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1A2E),
+          color: theme.colorScheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.07),
+            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withValues(alpha: 0.1),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -341,12 +343,12 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                 const SizedBox(height: 8),
                 Text(
                   title,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                  style: TextStyle(color: theme.colorScheme.onSurface, fontWeight: FontWeight.w700, fontSize: 14),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.45), fontSize: 11),
+                  style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.45), fontSize: 11),
                 ),
               ],
             ),
@@ -356,11 +358,11 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                 right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF8B5CF6),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.check, color: Colors.white, size: 12),
+                  child: Icon(Icons.check, color: theme.colorScheme.onSurface, size: 12),
                 ),
               ),
           ],
@@ -369,17 +371,17 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildActivityOption(int index, String title, String subtitle) {
+  Widget _buildActivityOption(int index, String title, String subtitle, ThemeData theme) {
     final isSelected = _selectedActivity == index;
     return GestureDetector(
       onTap: () => setState(() => _selectedActivity = index),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1A2E),
+          color: theme.colorScheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? const Color(0xFF8B5CF6) : Colors.transparent,
+            color: isSelected ? theme.colorScheme.primary : Colors.transparent,
             width: 1.5,
           ),
         ),
@@ -391,12 +393,12 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.2),
+                  color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withValues(alpha: 0.2),
                   width: isSelected ? 6 : 2,
                 ),
               ),
               child: isSelected 
-                ? const Center(child: Icon(Icons.check, color: Colors.white, size: 10))
+                ? Center(child: Icon(Icons.check, color: theme.colorScheme.onSurface, size: 10))
                 : null,
             ),
             const SizedBox(width: 16),
@@ -405,12 +407,12 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: TextStyle(color: theme.colorScheme.onSurface, fontWeight: FontWeight.w600, fontSize: 14),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.45), fontSize: 12),
+                  style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.45), fontSize: 12),
                 ),
               ],
             ),
@@ -420,13 +422,13 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(String text, ThemeData theme) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.4),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

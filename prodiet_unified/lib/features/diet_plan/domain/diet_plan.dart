@@ -9,15 +9,13 @@ class DietPlan with _$DietPlan {
   const factory DietPlan({
     required String id,
     required String userId,
-    required List<DietDay> days,
-    required int summaryCalories,
-    required int summaryProteinG,
-    required int summaryCarbsG,
-    required int summaryFatG,
-    required String fitnessGoal,
-    required String activityLevel,
     required DateTime generatedAt,
-    @Default(false) bool isFavorited,
+    required List<DietDay> days,
+    required double summaryCalories,
+    required double summaryProteinG,
+    required double summaryCarbsG,
+    required double summaryFatG,
+    required bool isActive,
   }) = _DietPlan;
 
   factory DietPlan.fromJson(Map<String, dynamic> json) => _$DietPlanFromJson(json);
