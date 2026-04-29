@@ -41,6 +41,7 @@ dependencies:
   # Firebase (FCM push ONLY — no Firestore, no Auth)
   firebase_core: ^3.3.0
   firebase_messaging: ^15.1.0
+  firebase_crashlytics: ^4.1.0
 
   # Health / Fitband
   health: ^10.2.0

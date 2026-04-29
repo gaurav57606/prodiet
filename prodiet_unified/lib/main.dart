@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'app.dart';
 import 'core/config/env.dart';
@@ -26,15 +27,13 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
 
     FlutterError.onError = (FlutterErrorDetails details) {
-      logger.e(
-        'Flutter Error: ${details.exception}',
-        error: details.exception,
-        stackTrace: details.stack,
-      );
+      logger.e('Flutter Error: ${details.exception}', error: details.exception, stackTrace: details.stack);
+      FirebaseCrashlytics.instance.recordFlutterFatalError(details);
     };
 
     PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
       logger.e('Platform Error: $error', error: error, stackTrace: stack);
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
 

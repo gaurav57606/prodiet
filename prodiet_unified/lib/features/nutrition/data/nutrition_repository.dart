@@ -112,7 +112,7 @@ class NutritionRepository {
         }
       }
 
-      // 4. Call Supabase Edge Function 'nutrition-lookup' (Gemini)
+      // 4. Call Supabase Edge Function 'nutrition-lookup'
       final edgeResult = await _client.functions.invoke(
         'nutrition-lookup',
         body: {'query': query},
