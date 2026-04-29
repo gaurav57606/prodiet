@@ -9,7 +9,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'app.dart';
-import 'core/config/env.dart';
 
 final logger = Logger(
   printer: PrettyPrinter(

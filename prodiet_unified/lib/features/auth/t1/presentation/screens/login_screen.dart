@@ -33,6 +33,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authProvider);
     final isLoading = authState is AuthLoading;
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
     ref.listen<AuthState>(authProvider, (_, next) {
       if (next is AuthFailure) {
@@ -40,7 +41,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBar(
             content: Text(next.error.displayMessage),
-            backgroundColor: theme.colorScheme.error,
+            backgroundColor: scheme.error,
             behavior: SnackBarBehavior.floating,
           ));
       }
@@ -59,8 +60,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  theme.colorScheme.surface,
-                  theme.colorScheme.surfaceVariant,
+                  scheme.surface,
+                  scheme.surfaceVariant,
                 ],
               ),
             ),
@@ -73,12 +74,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest,
+                      color: scheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Icon(
                       Icons.track_changes,
-                      color: theme.colorScheme.primaryContainer,
+                      color: scheme.primaryContainer,
                       size: 40,
                     ),
                   ),
@@ -92,8 +93,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontFamily: 'Inter',
                       ),
                       children: [
-                        TextSpan(text: 'DietMaster', style: TextStyle(color: theme.colorScheme.onSurface)),
-                        TextSpan(text: 'Pro', style: TextStyle(color: theme.colorScheme.primaryContainer)),
+                        TextSpan(text: 'DietMaster', style: TextStyle(color: scheme.onSurface)),
+                        TextSpan(text: 'Pro', style: TextStyle(color: scheme.primaryContainer)),
                       ],
                     ),
                   ),
@@ -102,7 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Text(
                     'Your intelligent nutrition companion',
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                      color: scheme.onSurface.withOpacity(0.45),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -123,7 +124,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHigh,
+                      color: scheme.surfaceContainerHigh,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -134,14 +135,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 0 ? theme.colorScheme.primary : Colors.transparent,
+                                color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -157,14 +158,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 1 ? theme.colorScheme.primary : Colors.transparent,
+                                color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -178,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 32),
 
                   // FORM SECTION
-                  _buildLabel('EMAIL ADDRESS', theme),
+                  _buildLabel('EMAIL ADDRESS', scheme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -190,13 +191,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildLabel('PASSWORD', theme),
+                      _buildLabel('PASSWORD', scheme),
                       GestureDetector(
                         onTap: () => context.go('/t1/forgot-password'),
                         child: Text(
                           'Forgot?',
                           style: TextStyle(
-                            color: theme.colorScheme.primary,
+                            color: scheme.primary,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
@@ -212,7 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                        color: scheme.onSurface.withOpacity(0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -229,7 +230,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: Checkbox(
                           value: _keepSignedIn,
                           onChanged: (val) => setState(() => _keepSignedIn = val ?? false),
-                          activeColor: theme.colorScheme.primary,
+                          activeColor: scheme.primary,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                         ),
                       ),
@@ -237,7 +238,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Text(
                         'Keep me signed in',
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: scheme.onSurface.withOpacity(0.7),
                           fontSize: 14,
                         ),
                       ),
@@ -265,7 +266,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Text(
                       'or continue with',
                       style: TextStyle(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                        color: scheme.onSurface.withOpacity(0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -302,14 +303,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+                        style: TextStyle(color: scheme.onSurface.withOpacity(0.5)),
                       ),
                       GestureDetector(
                         onTap: () => context.go('/t1/signup'),
                         child: Text(
                           'Create one',
                           style: TextStyle(
-                            color: theme.colorScheme.primary,
+                            color: scheme.primary,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -326,13 +327,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ThemeData theme) {
+  Widget _buildLabel(String text, ColorScheme scheme) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+        color: scheme.onSurface.withOpacity(0.4),
         letterSpacing: 1.2,
       ),
     );

@@ -131,9 +131,9 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
               const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
+                child: const Text(
                   'QUICK ADD',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                     letterSpacing: 1.5,
                     color: T2Colors.textMuted,
@@ -174,9 +174,9 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'CUSTOM ENTRY',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 10,
                           letterSpacing: 1.2,
                           color: T2Colors.textMuted,

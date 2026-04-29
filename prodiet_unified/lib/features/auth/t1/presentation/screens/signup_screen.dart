@@ -105,6 +105,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final authState = ref.watch(authProvider);
     final isLoading = authState is AuthLoading;
 
@@ -113,7 +114,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.error.displayMessage),
-            backgroundColor: theme.colorScheme.error,
+            backgroundColor: scheme.error,
           ),
         );
       }
@@ -132,8 +133,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  theme.colorScheme.surface,
-                  theme.colorScheme.surfaceVariant,
+                  scheme.surface,
+                  scheme.surfaceVariant,
                 ],
               ),
             ),
@@ -144,7 +145,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   Text(
                     'Create your account',
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface,
+                      color: scheme.onSurface,
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
@@ -153,7 +154,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   Text(
                     'Step 1 of 2 — Personal details',
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                      color: scheme.onSurface.withOpacity(0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -166,7 +167,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         width: 16,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary,
+                          color: scheme.primary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -175,7 +176,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                          color: scheme.outline.withOpacity(0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -197,7 +198,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHigh,
+                      color: scheme.surfaceContainerHigh,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -208,14 +209,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 0 ? theme.colorScheme.primary : Colors.transparent,
+                                color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -229,14 +230,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 1 ? theme.colorScheme.primary : Colors.transparent,
+                                color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -256,7 +257,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('FIRST NAME', theme),
+                            _buildLabel('FIRST NAME', scheme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _firstNameController,
@@ -270,7 +271,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('LAST NAME', theme),
+                            _buildLabel('LAST NAME', scheme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _lastNameController,
@@ -283,7 +284,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('EMAIL ADDRESS', theme),
+                  _buildLabel('EMAIL ADDRESS', scheme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -292,7 +293,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('PHONE (OPTIONAL)', theme),
+                  _buildLabel('PHONE (OPTIONAL)', scheme),
                   const SizedBox(height: 8),
                   const DmTextField(
                     hintText: '+91 98765 43210',
@@ -300,7 +301,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('PASSWORD', theme),
+                  _buildLabel('PASSWORD', scheme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _passwordController,
@@ -309,7 +310,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                        color: scheme.onSurface.withOpacity(0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -325,8 +326,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           margin: EdgeInsets.only(right: index == 3 ? 0 : 4),
                           decoration: BoxDecoration(
                             color: index < _passwordStrength 
-                              ? theme.colorScheme.primary 
-                              : theme.colorScheme.outline.withValues(alpha: 0.2),
+                              ? scheme.primary 
+                              : scheme.outline.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -335,7 +336,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('CONFIRM PASSWORD', theme),
+                  _buildLabel('CONFIRM PASSWORD', scheme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _confirmPasswordController,
@@ -344,7 +345,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                        color: scheme.onSurface.withOpacity(0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
@@ -361,7 +362,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Checkbox(
                           value: _agreedToTerms,
                           onChanged: (val) => setState(() => _agreedToTerms = val ?? false),
-                          activeColor: theme.colorScheme.primary,
+                          activeColor: scheme.primary,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                         ),
                       ),
@@ -369,13 +370,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontSize: 13),
+                            style: TextStyle(color: scheme.onSurface.withOpacity(0.6), fontSize: 13),
                             children: [
                               const TextSpan(text: 'I agree to the '),
                               TextSpan(
                                 text: 'Terms of Service',
                                 style: TextStyle(
-                                  color: theme.colorScheme.primary,
+                                  color: scheme.primary,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
@@ -383,7 +384,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               TextSpan(
                                 text: 'Privacy Policy',
                                 style: TextStyle(
-                                  color: theme.colorScheme.primary,
+                                  color: scheme.primary,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
@@ -409,7 +410,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     child: Text(
                       'or sign up with',
                       style: TextStyle(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                        color: scheme.onSurface.withOpacity(0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -448,13 +449,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ThemeData theme) {
+  Widget _buildLabel(String text, ColorScheme scheme) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+        color: scheme.onSurface.withOpacity(0.4),
         letterSpacing: 1.2,
       ),
     );

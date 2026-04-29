@@ -49,7 +49,7 @@ class TodayMealsScreen extends ConsumerWidget {
             Text(
               'LOGGED MEALS',
               style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                color: theme.colorScheme.onSurface.withOpacity(0.3),
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
               ),
@@ -73,16 +73,17 @@ class TodayMealsScreen extends ConsumerWidget {
   }
 
   Widget _buildSummaryHeader(ThemeData theme, DailyMealSummary summary, int calorieGoal) {
+    final remaining = (calorieGoal - summary.totalCalories).toInt().clamp(0, 9999);
     return DmCard(
-      color: theme.colorScheme.primary.withValues(alpha: 0.1),
+      color: theme.colorScheme.primary.withOpacity(0.1),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildSummaryStat(theme, 'TOTAL KCAL', '${summary.totalCalories.toInt()}', theme.colorScheme.primary),
-              _buildSummaryStat(theme, 'REMAINING', '${(calorieGoal - summary.totalCalories).toInt().clamp(0, 9999)}', const Color(0xFF40D8B8)),
-              _buildSummaryStat(theme, 'MEALS', '${summary.eatenCount}/${summary.meals.length}', Colors.white.withValues(alpha: 0.5)),
+              _buildSummaryStat(theme, 'REMAINING', '$remaining', const Color(0xFF40D8B8)),
+              _buildSummaryStat(theme, 'MEALS', '${summary.eatenCount}/${summary.meals.length}', theme.colorScheme.onSurface.withOpacity(0.5)),
             ],
           ),
           const SizedBox(height: 20),
@@ -132,7 +133,7 @@ class TodayMealsScreen extends ConsumerWidget {
       children: [
         Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 6),
-        Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withValues(alpha: 0.3))),
+        Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withOpacity(0.3))),
         const SizedBox(width: 4),
         Text(value, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface)),
       ],
@@ -142,7 +143,7 @@ class TodayMealsScreen extends ConsumerWidget {
   Widget _buildSummaryStat(ThemeData theme, String label, String value, Color color) {
     return Column(
       children: [
-        Text(label, style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.w900)),
+        Text(label, style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, color: theme.colorScheme.onSurface.withOpacity(0.3), fontWeight: FontWeight.w900)),
         const SizedBox(height: 4),
         Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: color, fontWeight: FontWeight.w900, fontSize: 20)),
       ],
@@ -151,7 +152,6 @@ class TodayMealsScreen extends ConsumerWidget {
 
   Widget _buildMealCard(BuildContext context, WidgetRef ref, ThemeData theme, Meal meal) {
     final accentColor = _getMealColor(meal.mealType);
-    final timeStr = DateFormat('hh:mm a').format(meal.createdAt);
     
     return Dismissible(
       key: Key(meal.id),
@@ -166,7 +166,14 @@ class TodayMealsScreen extends ConsumerWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(color: const Color(0xFF40D8B8), borderRadius: BorderRadius.circular(16)),
-        child: const Icon(Icons.check_circle_outline_rounded, color: Colors.black),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            const Text('Mark Eaten', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            const SizedBox(width: 8),
+            const Icon(Icons.check_circle_outline_rounded, color: Colors.black),
+          ],
+        ),
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
@@ -187,14 +194,17 @@ class TodayMealsScreen extends ConsumerWidget {
           }
         } else if (direction == DismissDirection.endToStart) {
           await ref.read(mealRepositoryProvider).markEaten(meal.id);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Meal marked as eaten'), duration: Duration(seconds: 1)),
+          );
           return false; // Don't remove the card, the StreamProvider will update the state
         }
         return false;
       },
       child: DmCard(
         padding: EdgeInsets.zero,
-        color: accentColor.withValues(alpha: 0.06),
-        borderSide: BorderSide(color: accentColor.withValues(alpha: 0.15)),
+        color: accentColor.withOpacity(0.06),
+        borderSide: BorderSide(color: accentColor.withOpacity(0.15)),
         child: InkWell(
           onTap: () => _showMealDetailSheet(context, meal),
           borderRadius: BorderRadius.circular(16),
@@ -212,9 +222,9 @@ class TodayMealsScreen extends ConsumerWidget {
                         Row(
                           children: [
                             Text(
-                              '${meal.mealType.name.toUpperCase()} · $timeStr',
+                              meal.mealType.name.toUpperCase(),
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: accentColor.withValues(alpha: 0.6),
+                                color: accentColor.withOpacity(0.6),
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 0.8,
                               ),
@@ -231,30 +241,6 @@ class TodayMealsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              if (meal.status == MealStatus.pending)
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.1), border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05)))),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => ref.read(mealRepositoryProvider).markSkipped(meal.id),
-                          style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.white.withValues(alpha: 0.1))),
-                          child: const Text('SKIP', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.white70)),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => ref.read(mealRepositoryProvider).markEaten(meal.id),
-                          style: ElevatedButton.styleFrom(backgroundColor: accentColor),
-                          child: const Text('EATEN', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.black)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
             ],
           ),
         ),
@@ -263,11 +249,12 @@ class TodayMealsScreen extends ConsumerWidget {
   }
 
   Widget _buildStatusBadge(ThemeData theme, MealStatus status) {
-    final color = status == MealStatus.eaten ? const Color(0xFF40D8B8) : (status == MealStatus.skipped ? Colors.redAccent : Colors.orangeAccent);
+    final color = status == MealStatus.eaten ? const Color(0xFF40D8B8) : (status == MealStatus.skipped ? theme.colorScheme.outline : Colors.orangeAccent);
+    final label = status == MealStatus.eaten ? 'Eaten' : (status == MealStatus.skipped ? 'Skipped' : 'Pending');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4), border: Border.all(color: color.withValues(alpha: 0.2))),
-      child: Text(status.name.toUpperCase(), style: TextStyle(color: color, fontSize: 8, fontWeight: FontWeight.w900)),
+      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(4), border: Border.all(color: color.withOpacity(0.2))),
+      child: Text(label.toUpperCase(), style: TextStyle(color: color, fontSize: 8, fontWeight: FontWeight.w900)),
     );
   }
 
@@ -310,7 +297,7 @@ class TodayMealsScreen extends ConsumerWidget {
             if (meal.ingredients.isEmpty)
               const Text('No ingredients listed', style: TextStyle(color: Colors.white24))
             else
-              Wrap(spacing: 8, runSpacing: 8, children: meal.ingredients.map((i) => Chip(label: Text(i), backgroundColor: Colors.white.withValues(alpha: 0.05))).toList()),
+              Wrap(spacing: 8, runSpacing: 8, children: meal.ingredients.map((i) => Chip(label: Text(i), backgroundColor: Colors.white.withOpacity(0.05))).toList()),
             const SizedBox(height: 40),
           ],
         ),
@@ -340,68 +327,99 @@ class TodayMealsScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: const Color(0xFF1E293B),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('LOG A MEAL', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
-              const SizedBox(height: 20),
-              TextField(controller: nameController, decoration: _inputDecoration('Meal Name (e.g. Chicken Salad)')),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<MealType>(
-                value: selectedType,
-                dropdownColor: const Color(0xFF1E293B),
-                decoration: _inputDecoration('Meal Type'),
-                items: MealType.values.map((t) => DropdownMenuItem(value: t, child: Text(t.name.toUpperCase()))).toList(),
-                onChanged: (v) => setState(() => selectedType = v!),
-              ),
-              const SizedBox(height: 12),
-              TextField(controller: calController, keyboardType: TextInputType.number, decoration: _inputDecoration('Calories (kcal)')),
-              const SizedBox(height: 12),
-              Row(
+        builder: (context, setState) {
+          final isLogging = ref.watch(isLoggingMealProvider);
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: TextField(controller: protController, keyboardType: TextInputType.number, decoration: _inputDecoration('Prot g'))),
-                  const SizedBox(width: 8),
-                  Expanded(child: TextField(controller: carbController, keyboardType: TextInputType.number, decoration: _inputDecoration('Carb g'))),
-                  const SizedBox(width: 8),
-                  Expanded(child: TextField(controller: fatController, keyboardType: TextInputType.number, decoration: _inputDecoration('Fat g'))),
+                  const Text('LOG A MEAL', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: nameController,
+                    autofocus: true,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: _inputDecoration('Meal Name (e.g. Chicken Salad)'),
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<MealType>(
+                    value: selectedType,
+                    dropdownColor: const Color(0xFF1E293B),
+                    style: const TextStyle(color: Colors.white),
+                    decoration: _inputDecoration('Meal Type'),
+                    items: MealType.values.map((t) => DropdownMenuItem(
+                      value: t,
+                      child: Text(t.name[0].toUpperCase() + t.name.substring(1)),
+                    )).toList(),
+                    onChanged: (v) => setState(() => selectedType = v!),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: calController,
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: _inputDecoration('Calories (kcal)'),
+                  ),
+                  const SizedBox(height: 12),
+                  Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      title: const Text('Macros (optional)', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      tilePadding: EdgeInsets.zero,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(child: TextFormField(controller: protController, keyboardType: TextInputType.number, style: const TextStyle(color: Colors.white), decoration: _inputDecoration('Prot g'))),
+                            const SizedBox(width: 8),
+                            Expanded(child: TextFormField(controller: carbController, keyboardType: TextInputType.number, style: const TextStyle(color: Colors.white), decoration: _inputDecoration('Carb g'))),
+                            const SizedBox(width: 8),
+                            Expanded(child: TextFormField(controller: fatController, keyboardType: TextInputType.number, style: const TextStyle(color: Colors.white), decoration: _inputDecoration('Fat g'))),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 54,
+                    child: FilledButton(
+                      onPressed: isLogging ? null : () async {
+                        if (nameController.text.isEmpty || calController.text.isEmpty) return;
+                        ref.read(isLoggingMealProvider.notifier).state = true;
+                        try {
+                          await ref.read(mealRepositoryProvider).logMeal(
+                            userId,
+                            name: nameController.text,
+                            mealType: selectedType,
+                            calories: double.parse(calController.text),
+                            proteinG: double.tryParse(protController.text) ?? 0,
+                            carbsG: double.tryParse(carbController.text) ?? 0,
+                            fatG: double.tryParse(fatController.text) ?? 0,
+                          );
+                          if (context.mounted) Navigator.pop(context);
+                        } finally {
+                          ref.read(isLoggingMealProvider.notifier).state = false;
+                        }
+                      },
+                      style: FilledButton.styleFrom(backgroundColor: const Color(0xFF4C84FF), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                      child: isLogging 
+                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                        : const Text('Log Meal', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
                 ],
               ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (nameController.text.isEmpty || calController.text.isEmpty) return;
-                    ref.read(isLoggingMealProvider.notifier).state = true;
-                    await ref.read(mealRepositoryProvider).logMeal(
-                      userId,
-                      name: nameController.text,
-                      mealType: selectedType,
-                      calories: double.parse(calController.text),
-                      proteinG: double.tryParse(protController.text) ?? 0,
-                      carbsG: double.tryParse(carbController.text) ?? 0,
-                      fatG: double.tryParse(fatController.text) ?? 0,
-                    );
-                    ref.read(isLoggingMealProvider.notifier).state = false;
-                    if (context.mounted) Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4C84FF), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                  child: ref.watch(isLoggingMealProvider) 
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('LOG MEAL', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -411,7 +429,7 @@ class TodayMealsScreen extends ConsumerWidget {
       labelText: label,
       labelStyle: const TextStyle(color: Colors.white30, fontSize: 12),
       filled: true,
-      fillColor: Colors.white.withValues(alpha: 0.05),
+      fillColor: Colors.white.withOpacity(0.05),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
     );
   }

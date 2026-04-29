@@ -1,230 +1,329 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
+import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/features/diet_plan/application/diet_plan_providers.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan_state.dart';
-import 'package:prodiet_unified/core/widgets/loaders/ai_thinking_loader.dart';
-import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
-import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class DietPlanScreen extends ConsumerWidget {
   const DietPlanScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dietPlanState = ref.watch(dietPlanProvider);
-    final userId = ref.watch(currentUserIdProvider);
+    final state = ref.watch(dietPlanProvider);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
-    return Scaffold(
-      backgroundColor: T2Colors.bgDefault,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+    if (state is DietPlanInitial) {
+      return Scaffold(
+        backgroundColor: T2Colors.bgDefault,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text('DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
         ),
-        actions: [
-          if (dietPlanState is DietPlanLoaded)
-            IconButton(
-              onPressed: () => ref.read(dietPlanProvider.notifier).generate(),
-              icon: const Icon(Icons.refresh_rounded, color: T2Colors.lime),
-            ),
-        ],
-      ),
-      body: switch (dietPlanState) {
-        DietPlanLoading() => const AiThinkingLoader(mode: 'diet'),
-        DietPlanError(message: final msg) => Center(child: Text('Error: $msg', style: const TextStyle(color: Colors.white))),
-        DietPlanInitial() => Center(
-            child: ProDietEmptyState(
-              emoji: EmptyStateConfigs.dietPlan.emoji,
-              headline: EmptyStateConfigs.dietPlan.headline.toUpperCase(),
-              subtext: EmptyStateConfigs.dietPlan.subtext,
-              buttonLabel: 'CREATE MY PLAN',
-              onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
-            ),
-          ),
-        DietPlanLoaded(plan: final plan) => _buildPlanContent(context, ref, plan, userId),
-      },
-    );
-  }
+        body: ProDietEmptyState(
+          emoji: '🥗',
+          headline: 'NO DIET PLAN YET',
+          subtext: 'Let AI build your personalised 7-day plan based on your goals.',
+          buttonLabel: '✨ CREATE MY PLAN',
+          onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+        ),
+      );
+    }
 
-  Widget _buildPlanContent(BuildContext context, WidgetRef ref, DietPlan plan, String userId) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'PLAN',
-                  style: GoogleFonts.barlowCondensed(
-                    fontSize: 56,
-                    fontWeight: FontWeight.w900,
-                    color: T2Colors.lime,
-                    height: 1.0,
-                  ),
+    if (state is DietPlanLoading) {
+      return Scaffold(
+        backgroundColor: T2Colors.bgDefault,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(color: T2Colors.lime),
+              const SizedBox(height: 24),
+              Text(
+                'BUILDING YOUR PLAN...',
+                style: GoogleFonts.barlowCondensed(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
                 ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: T2Colors.lime.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    'AI GENERATED 7-DAY PLAN',
-                    style: TextStyle(fontSize: 9, letterSpacing: 1.2, fontWeight: FontWeight.w800, color: T2Colors.lime),
-                  ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'ANALYSING YOUR GOALS & PREFERENCES',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white.withOpacity(0.5),
                 ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (state is DietPlanError) {
+      return Scaffold(
+        backgroundColor: T2Colors.bgDefault,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text('DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
+        ),
+        body: ProDietEmptyState(
+          emoji: '⚠️',
+          headline: 'SOMETHING WENT WRONG',
+          subtext: state.message,
+          buttonLabel: 'TRY AGAIN',
+          onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+        ),
+      );
+    }
+
+    if (state is DietPlanLoaded) {
+      final plan = state.plan;
+      return DefaultTabController(
+        length: 7,
+        child: Scaffold(
+          backgroundColor: T2Colors.bgDefault,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text('YOUR DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh, color: T2Colors.lime),
+                onPressed: () => ref.read(dietPlanProvider.notifier).generate(),
+              ),
+            ],
+            bottom: TabBar(
+              isScrollable: true,
+              indicatorColor: T2Colors.lime,
+              labelColor: T2Colors.lime,
+              unselectedLabelColor: Colors.white.withOpacity(0.5),
+              labelStyle: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w800, fontSize: 16),
+              tabs: const [
+                Tab(text: 'MON'),
+                Tab(text: 'TUE'),
+                Tab(text: 'WED'),
+                Tab(text: 'THU'),
+                Tab(text: 'FRI'),
+                Tab(text: 'SAT'),
+                Tab(text: 'SUN'),
               ],
             ),
           ),
-          const SizedBox(height: 24),
-          _buildMacroGrid(plan),
-          const SizedBox(height: 32),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'WEEKLY OVERVIEW',
-              style: TextStyle(fontSize: 10, letterSpacing: 1.5, color: T2Colors.textMuted, fontWeight: FontWeight.w700),
-            ),
+          body: Column(
+            children: [
+              _buildSummaryCard(context, ref, plan),
+              Expanded(
+                child: TabBarView(
+                  children: plan.days.map((day) => _buildDayTab(context, day)).toList(),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          _buildDaySelector(context, plan),
-          const SizedBox(height: 40),
-          _buildActionCard(context, ref, plan, userId),
-          const SizedBox(height: 100),
-        ],
-      ),
-    );
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
-  Widget _buildMacroGrid(DietPlan plan) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.count(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.5,
-        children: [
-          _buildTargetCard('CALORIES', '${plan.summaryCalories.toInt()}', 'kcal/day', T2Colors.sky),
-          _buildTargetCard('PROTEIN', '${plan.summaryProteinG.toInt()}g', 'Daily Target', T2Colors.coral),
-          _buildTargetCard('CARBS', '${plan.summaryCarbsG.toInt()}g', 'Daily Target', T2Colors.amber),
-          _buildTargetCard('FATS', '${plan.summaryFatG.toInt()}g', 'Daily Target', T2Colors.purple),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTargetCard(String label, String value, String sub, Color color) {
+  Widget _buildSummaryCard(BuildContext context, WidgetRef ref, DietPlan plan) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: T2Colors.bgElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: T2Colors.border),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontSize: 8, letterSpacing: 1.2, color: T2Colors.textMuted, fontWeight: FontWeight.w700)),
-          const Spacer(),
-          Text(value, style: GoogleFonts.barlowCondensed(fontSize: 28, fontWeight: FontWeight.w800, color: color)),
-          Text(sub, style: TextStyle(fontSize: 10, color: T2Colors.textSecondary)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildStat(plan.summaryCalories.toInt().toString(), 'KCAL'),
+              _buildStat(plan.summaryProteinG.toInt().toString(), 'PROT'),
+              _buildStat(plan.summaryCarbsG.toInt().toString(), 'CARB'),
+              _buildStat(plan.summaryFatG.toInt().toString(), 'FAT'),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: () async {
+                await ref.read(dietPlanProvider.notifier).saveTodayMeals();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Today\'s meals added ✅')),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: T2Colors.lime,
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: Text(
+                'ADD TODAY\'S MEALS TO LOG',
+                style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, fontSize: 16),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDaySelector(BuildContext context, DietPlan plan) {
-    return Container(
-      height: 70,
+  Widget _buildStat(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: GoogleFonts.barlowCondensed(
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
+        ),
+        Text(
+          label,
+          style: GoogleFonts.barlowCondensed(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: T2Colors.lime,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDayTab(BuildContext context, DietDay day) {
+    return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: plan.days.map((day) {
-          final isToday = day.dayNumber == (DateTime.now().weekday); 
-          return InkWell(
-            onTap: () => context.pushNamed('t2DietPlanDetail', extra: day),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: isToday ? T2Colors.lime : T2Colors.bgDeep,
-                shape: BoxShape.circle,
-                border: Border.all(color: isToday ? T2Colors.lime : T2Colors.border),
+      children: [
+        _buildMealSection(context, 'BREAKFAST', day.breakfast),
+        _buildMealSection(context, 'LUNCH', day.lunch),
+        _buildMealSection(context, 'DINNER', day.dinner),
+        _buildMealSection(context, 'SNACKS', day.snacks),
+      ],
+    );
+  }
+
+  Widget _buildMealSection(BuildContext context, String title, List<DietMeal> meals) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.barlowCondensed(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: T2Colors.lime,
+                  letterSpacing: 1.2,
+                ),
               ),
-              alignment: Alignment.center,
-              child: Text(
-                '${day.dayNumber}',
-                style: TextStyle(color: isToday ? Colors.black : T2Colors.textPrimary, fontWeight: FontWeight.w800, fontSize: 14),
+              Text(
+                '${meals.fold(0.0, (sum, m) => sum + m.calories).toInt()} KCAL',
+                style: GoogleFonts.barlowCondensed(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withOpacity(0.5),
+                ),
               ),
-            ),
-          );
-        }).toList(),
+            ],
+          ),
+        ),
+        ...meals.map((meal) => _buildMealTile(context, meal)),
+        const SizedBox(height: 12),
+      ],
+    );
+  }
+
+  Widget _buildMealTile(BuildContext context, DietMeal meal) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: T2Colors.bgElevated,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: T2Colors.border),
+      ),
+      child: ListTile(
+        title: Text(
+          meal.name.toUpperCase(),
+          style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w800, color: Colors.white),
+        ),
+        subtitle: Text(
+          '${meal.calories.toInt()} KCAL  •  P${meal.proteinG.toInt()} C${meal.carbsG.toInt()} F${meal.fatG.toInt()}',
+          style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 12),
+        ),
+        trailing: meal.ingredients.isNotEmpty
+            ? IconButton(
+                icon: const Icon(Icons.info_outline, color: T2Colors.border, size: 20),
+                onPressed: () => _showIngredients(context, meal),
+              )
+            : null,
       ),
     );
   }
 
-  Widget _buildActionCard(BuildContext context, WidgetRef ref, DietPlan plan, String userId) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        width: double.infinity,
+  void _showIngredients(BuildContext context, DietMeal meal) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: T2Colors.bgElevated,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
         padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: T2Colors.bgDeep,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: T2Colors.border),
-        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.check_circle_outline_rounded, color: T2Colors.lime, size: 32),
-            const SizedBox(height: 16),
             Text(
-              'READY TO START?',
-              style: GoogleFonts.barlowCondensed(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Add today's meals to your daily log to begin tracking.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: T2Colors.textSecondary),
-            ),
-            const SizedBox(height: 24),
-            InkWell(
-              onTap: () async {
-                await ref.read(dietPlanProvider.notifier).saveTodayMeals();
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("MEALS ADDED ✅", style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
-                      backgroundColor: T2Colors.lime,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              },
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(color: T2Colors.lime, borderRadius: BorderRadius.circular(12)),
-                alignment: Alignment.center,
-                child: const Text('ADD TODAY TO MEALS', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
+              'INGREDIENTS: ${meal.name.toUpperCase()}',
+              style: GoogleFonts.barlowCondensed(
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                color: T2Colors.lime,
               ),
             ),
+            const SizedBox(height: 16),
+            ...meal.ingredients.map((ing) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.bolt, size: 14, color: T2Colors.lime),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          ing.toUpperCase(),
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            const SizedBox(height: 24),
           ],
         ),
       ),

@@ -20,6 +20,7 @@ class MealPlannerScreen extends ConsumerWidget {
     final combinedAsync = weeklyAsync.whenData((weeklyMeals) {
       return todayAsync.maybeWhen(
         data: (todaySummary) {
+          // Remove any entries from history that match "today" to avoid duplicates
           final otherDays = weeklyMeals.where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now())).toList();
           return [...otherDays, ...todaySummary.meals];
         },
@@ -71,8 +72,10 @@ class MealPlannerScreen extends ConsumerWidget {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final date = DateTime.now().add(Duration(days: index - DateTime.now().weekday + 1));
-                      final dayMeals = groupedMeals[DateFormat('yyyy-MM-dd').format(date)] ?? [];
+                      // Show last 6 days + today
+                      final date = DateTime.now().subtract(Duration(days: 6 - index));
+                      final dateKey = DateFormat('yyyy-MM-dd').format(date);
+                      final dayMeals = groupedMeals[dateKey] ?? [];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: _buildWeeklyDayCard(context, date, dayMeals),
@@ -148,7 +151,6 @@ class MealPlannerScreen extends ConsumerWidget {
           ),
         ),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, color: T2Colors.border, size: 16),
-        onTap: () => Navigator.of(context).pushNamed('/t2/today-meals'),
       ),
     );
   }
