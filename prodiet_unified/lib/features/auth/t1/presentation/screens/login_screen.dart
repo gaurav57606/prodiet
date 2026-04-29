@@ -179,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 32),
 
                   // FORM SECTION
-                  _buildLabel('EMAIL ADDRESS', scheme),
+                  _buildLabel('EMAIL ADDRESS', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -191,7 +191,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildLabel('PASSWORD', scheme),
+                      _buildLabel('PASSWORD', theme),
                       GestureDetector(
                         onTap: () => context.go('/t1/forgot-password'),
                         child: Text(
@@ -327,7 +327,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ColorScheme scheme) {
+  Widget _buildLabel(String text, ThemeData theme) {
+    final scheme = theme.colorScheme;
     return Text(
       text,
       style: TextStyle(

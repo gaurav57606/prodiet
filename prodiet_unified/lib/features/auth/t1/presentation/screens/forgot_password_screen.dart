@@ -114,7 +114,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     style: TextButton.styleFrom(foregroundColor: scheme.primary),
                   ),
                   const SizedBox(height: 40),
-                  _buildLabel('EMAIL ADDRESS', scheme),
+                  _buildLabel('EMAIL ADDRESS', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -150,15 +150,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'DIDN\'T RECEIVE IT?',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: scheme.onSurface.withOpacity(0.4),
-                            letterSpacing: 1.2,
-                          ),
-                        ),
+                        _buildLabel('DIDN\'T RECEIVE IT?', theme),
                         const SizedBox(height: 8),
                         RichText(
                           text: TextSpan(
@@ -187,7 +179,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ColorScheme scheme) {
+  Widget _buildLabel(String text, ThemeData theme) {
+    final scheme = theme.colorScheme;
     return Text(
       text,
       style: TextStyle(

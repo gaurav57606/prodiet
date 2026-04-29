@@ -257,7 +257,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('FIRST NAME', scheme),
+                            _buildLabel('FIRST NAME', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _firstNameController,
@@ -271,7 +271,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('LAST NAME', scheme),
+                            _buildLabel('LAST NAME', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _lastNameController,
@@ -284,7 +284,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('EMAIL ADDRESS', scheme),
+                  _buildLabel('EMAIL ADDRESS', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _emailController,
@@ -293,7 +293,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('PHONE (OPTIONAL)', scheme),
+                  _buildLabel('PHONE (OPTIONAL)', theme),
                   const SizedBox(height: 8),
                   const DmTextField(
                     hintText: '+91 98765 43210',
@@ -301,7 +301,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('PASSWORD', scheme),
+                  _buildLabel('PASSWORD', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _passwordController,
@@ -336,7 +336,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel('CONFIRM PASSWORD', scheme),
+                  _buildLabel('CONFIRM PASSWORD', theme),
                   const SizedBox(height: 8),
                   DmTextField(
                     controller: _confirmPasswordController,
@@ -449,7 +449,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ColorScheme scheme) {
+  Widget _buildLabel(String text, ThemeData theme) {
+    final scheme = theme.colorScheme;
     return Text(
       text,
       style: TextStyle(

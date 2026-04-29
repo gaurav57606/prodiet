@@ -187,7 +187,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   _buildSectionHeader(
                     "What's your primary goal?",
                     "This helps us personalise your meal plan",
-                    scheme,
+                    theme,
                   ),
                   const SizedBox(height: 16),
                   // GOAL GRID
@@ -199,10 +199,10 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                     crossAxisSpacing: 12,
                     childAspectRatio: 1.3,
                     children: [
-                      _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', scheme),
-                      _buildGoalCard(1, '💪', 'Build muscle', 'High protein', scheme),
-                      _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', scheme),
-                      _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', scheme),
+                      _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
+                      _buildGoalCard(1, '💪', 'Build muscle', 'High protein', theme),
+                      _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', theme),
+                      _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', theme),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -210,15 +210,15 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   _buildSectionHeader(
                     "Activity level",
                     "Helps calculate your daily needs",
-                    scheme,
+                    theme,
                   ),
                   const SizedBox(height: 16),
                   // ACTIVITY OPTIONS
-                  _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise', scheme),
+                  _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise', theme),
                   const SizedBox(height: 12),
-                  _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', scheme),
+                  _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', theme),
                   const SizedBox(height: 12),
-                  _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', scheme),
+                  _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', theme),
                   const SizedBox(height: 32),
 
                   // BOTTOM INPUTS
@@ -228,7 +228,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('AGE', scheme),
+                            _buildLabel('AGE', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _ageController,
@@ -243,7 +243,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('WEIGHT (KG)', scheme),
+                             _buildLabel('WEIGHT (KG)', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _weightController,
@@ -258,7 +258,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildLabel('HEIGHT (CM)', scheme),
+                             _buildLabel('HEIGHT (CM)', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _heightController,
@@ -303,7 +303,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title, String subtitle, ColorScheme scheme) {
+  Widget _buildSectionHeader(String title, String subtitle, ThemeData theme) {
+    final scheme = theme.colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,7 +321,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildGoalCard(int index, String emoji, String title, String subtitle, ColorScheme scheme) {
+  Widget _buildGoalCard(int index, String emoji, String title, String subtitle, ThemeData theme) {
+    final scheme = theme.colorScheme;
     final isSelected = _selectedGoal == index;
     return GestureDetector(
       onTap: () => setState(() => _selectedGoal = index),
@@ -372,7 +374,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildActivityOption(int index, String title, String subtitle, ColorScheme scheme) {
+  Widget _buildActivityOption(int index, String title, String subtitle, ThemeData theme) {
+    final scheme = theme.colorScheme;
     final isSelected = _selectedActivity == index;
     return GestureDetector(
       onTap: () => setState(() => _selectedActivity = index),
@@ -423,7 +426,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ColorScheme scheme) {
+  Widget _buildLabel(String text, ThemeData theme) {
+    final scheme = theme.colorScheme;
     return Text(
       text,
       style: TextStyle(

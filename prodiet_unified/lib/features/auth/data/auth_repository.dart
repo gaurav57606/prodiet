@@ -1,7 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../core/error/app_error.dart';
-import '../../../core/error/error_handler.dart';
-import '../../../main.dart'; // for logger
 import '../domain/models/app_user.dart';
 
 class AuthRepository {
