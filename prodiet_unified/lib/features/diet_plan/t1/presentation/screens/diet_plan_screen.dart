@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/diet_plan/application/diet_plan_providers.dart';
-import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
+import 'package:prodiet_unified/core/widgets/loaders/ai_thinking_loader.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class DietPlanScreen extends ConsumerWidget {
   const DietPlanScreen({super.key});
@@ -13,220 +17,176 @@ class DietPlanScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final user = ref.watch(currentUserProvider);
-    final activePlanAsync = ref.watch(activeDietPlanProvider);
-    final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final mealsAsync = ref.watch(todayMealsProvider(todayStr));
+    final dietPlanAsync = ref.watch(dietPlanProvider);
+    final isGenerating = ref.watch(isGeneratingDietPlanProvider);
+    final userId = ref.watch(currentUserIdProvider);
+
+    // STATE 1: Loading / Generating
+    if (isGenerating) {
+      return const AiThinkingLoader(mode: 'diet');
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Program'),
+        title: const Text('AI Diet Plan'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.calendar_month_rounded)),
+          if (dietPlanAsync.value != null)
+            IconButton(
+              onPressed: () => ref.read(dietPlanProvider.notifier).generate(),
+              icon: const Icon(Icons.refresh_rounded),
+              tooltip: 'Regenerate Plan',
+            ),
         ],
       ),
-      body: activePlanAsync.when(
+      body: dietPlanAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
-        data: (plan) => ListView(
-          padding: const EdgeInsets.all(T1Spacing.lg),
-          children: [
-            _buildHeroCard(theme, plan),
-            const SizedBox(height: T1Spacing.xl),
-            _buildGoalMetrics(theme, user),
-            const SizedBox(height: T1Spacing.xl),
-            Text(
-              'TODAY\'S SCHEDULE',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.2,
-              ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            mealsAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error loading meals: $err'),
-              data: (meals) => _buildTimeline(theme, meals),
-            ),
-          ],
-        ),
+        data: (plan) {
+          // STATE 2: Empty / No Plan
+          if (plan == null) {
+            return ProDietEmptyState(
+              emoji: EmptyStateConfigs.dietPlan.emoji,
+              headline: EmptyStateConfigs.dietPlan.headline,
+              subtext: EmptyStateConfigs.dietPlan.subtext,
+              buttonLabel: 'Create My Plan',
+              onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+            );
+          }
+
+          // STATE 3: Plan Exists
+          return _buildPlanView(context, ref, theme, plan, userId);
+        },
       ),
     );
   }
 
-  Widget _buildHeroCard(ThemeData theme, dynamic plan) {
+  Widget _buildPlanView(BuildContext context, WidgetRef ref, ThemeData theme, DietPlan plan, String userId) {
+    return DefaultTabController(
+      length: plan.days.length,
+      child: Column(
+        children: [
+          _buildSummaryHeader(theme, plan),
+          const SizedBox(height: 16),
+          TabBar(
+            isScrollable: true,
+            labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+            tabs: plan.days.map((d) => Tab(text: 'DAY ${d.dayNumber}')).toList(),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: plan.days.map((day) => _buildDayView(context, theme, day)).toList(),
+            ),
+          ),
+          _buildAddTodayButton(context, ref, plan, userId),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryHeader(ThemeData theme, DietPlan plan) {
     return Container(
-      height: 200,
-      width: double.infinity,
+      margin: const EdgeInsets.all(T1Spacing.lg),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
+          colors: [Color(0xFF3B1FA8), Color(0xFF6B35FF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF3B1FA8), Color(0xFF6B35FF)],
         ),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF3B1FA8).withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
       ),
-      child: Stack(
+      child: Column(
         children: [
-          Positioned(
-            right: -20,
-            bottom: -20,
-            child: Icon(Icons.fitness_center_rounded, size: 180, color: Colors.white.withValues(alpha: 0.1)),
+          Text(
+            '~${plan.summaryCalories} kcal/day',
+            style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
           ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    'ACTIVE PLAN',
-                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900),
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  plan?.name ?? 'No Active Plan',
-                  style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  plan != null 
-                    ? 'Duration: ${plan.durationWeeks} Weeks'
-                    : 'Select a plan to get started',
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 14, fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _macroTag('P', '${plan.summaryProteinG}g'),
+              const SizedBox(width: 8),
+              _macroTag('C', '${plan.summaryCarbsG}g'),
+              const SizedBox(width: 8),
+              _macroTag('F', '${plan.summaryFatG}g'),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildGoalMetrics(ThemeData theme, dynamic user) {
-    return Row(
+  Widget _macroTag(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '$label: $value',
+        style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900),
+      ),
+    );
+  }
+
+  Widget _buildDayView(BuildContext context, ThemeData theme, DietDay day) {
+    return ListView(
+      padding: const EdgeInsets.all(T1Spacing.lg),
       children: [
-        Expanded(child: _metric(theme, 'WEIGHT', user?.weightKg?.toString() ?? '--', 'kg', const Color(0xFF40D8B8))),
-        const SizedBox(width: 12),
-        Expanded(child: _metric(theme, 'BMI', user?.bmi?.toStringAsFixed(1) ?? '--', '', const Color(0xFFFF3060))),
-        const SizedBox(width: 12),
-        Expanded(child: _metric(theme, 'WATER GOAL', (user?.dailyWaterGoalMl ?? 2000 / 1000).toString(), 'L', const Color(0xFF3B1FA8))),
+        _mealCard(theme, '🌅 BREAKFAST', day.breakfast),
+        const SizedBox(height: 12),
+        _mealCard(theme, '☀️ LUNCH', day.lunch),
+        const SizedBox(height: 12),
+        _mealCard(theme, '🌙 DINNER', day.dinner),
+        const SizedBox(height: 12),
+        _mealCard(theme, '🍎 SNACKS', day.snacks),
       ],
     );
   }
 
-  Widget _metric(ThemeData theme, String label, String value, String unit, Color color) {
+  Widget _mealCard(ThemeData theme, String title, String content) {
     return DmCard(
-      color: color.withValues(alpha: 0.06),
-      borderSide: BorderSide(color: color.withValues(alpha: 0.15)),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              fontSize: 8,
-              fontWeight: FontWeight.w900,
-              color: color.withValues(alpha: 0.6),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                value,
-                style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900, color: color),
-              ),
-              const SizedBox(width: 2),
-              Text(
-                unit,
-                style: theme.textTheme.labelSmall?.copyWith(color: color.withValues(alpha: 0.5), fontWeight: FontWeight.w900),
-              ),
-            ],
-          ),
+          Text(title, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: theme.colorScheme.primary)),
+          const SizedBox(height: 8),
+          Text(content, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
         ],
       ),
     );
   }
 
-  Widget _buildTimeline(ThemeData theme, List<dynamic> meals) {
-    if (meals.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(T1Spacing.xl),
-          child: Text('No meals scheduled for today',
-            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5))
+  Widget _buildAddTodayButton(BuildContext context, WidgetRef ref, DietPlan plan, String userId) {
+    return Padding(
+      padding: const EdgeInsets.all(T1Spacing.lg),
+      child: SizedBox(
+        width: double.infinity,
+        height: 56,
+        child: ElevatedButton(
+          onPressed: () async {
+            await ref.read(dietPlanRepositoryProvider).savePlanToMeals(userId, plan);
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Today's meals added to your log ✅", style: TextStyle(fontWeight: FontWeight.w900)),
+                  backgroundColor: Color(0xFF40D8B8),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF3B1FA8),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
+          child: const Text('ADD TODAY TO MEALS', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
         ),
-      );
-    }
-
-    return Column(
-      children: meals.map((meal) {
-        final isDone = meal.status == 'completed';
-        final timeStr = meal.scheduledTime != null 
-            ? DateFormat('HH:mm').format(meal.scheduledTime)
-            : '--:--';
-
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 50,
-                child: Text(
-                  timeStr,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: isDone ? 0.2 : 0.5),
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isDone ? const Color(0xFF40D8B8) : Colors.white.withValues(alpha: 0.1),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: DmCard(
-                  color: Colors.white.withValues(alpha: isDone ? 0.01 : 0.03),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Text(
-                    meal.name,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: isDone ? 0.3 : 1.0),
-                      fontWeight: FontWeight.w700,
-                      decoration: isDone ? TextDecoration.lineThrough : null,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
+      ),
     );
   }
 }

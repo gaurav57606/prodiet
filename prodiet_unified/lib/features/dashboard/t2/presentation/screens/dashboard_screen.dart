@@ -6,33 +6,50 @@ import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/macro_ring_chart.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/water_banner.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/next_meal_card.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/activity_row.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/alert_strip.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/calorie_stat.dart';
+import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
+import 'package:prodiet_unified/core/widgets/skeletons/dashboard_skeleton.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
+
+  String _getGreeting(String name) {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning, $name 👋';
+    if (hour < 17) return 'Good afternoon, $name 👋';
+    return 'Good evening, $name 👋';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final user = ref.watch(currentUserProvider);
-    final dashboardAsync = ref.watch(dashboardSummaryProvider);
 
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
       body: SafeArea(
         top: true,
-        child: dashboardAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text("Error: $err")),
-          data: (summary) => CustomScrollView(
+        child: AsyncValueWidget<DashboardSummary>(
+          value: ref.watch(dashboardProvider),
+          skeleton: const DashboardSkeleton(),
+          isEmpty: (data) => data.mealsToday == 0 && data.waterMl == 0,
+          emptyState: ProDietEmptyState(
+            emoji: EmptyStateConfigs.dashboard.emoji,
+            headline: EmptyStateConfigs.dashboard.headline,
+            subtext: EmptyStateConfigs.dashboard.subtext,
+            buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,
+            onButtonTap: () => context.push(AppRoutes.t2Meals), // T2 uses /meals
+          ),
+          builder: (data) => CustomScrollView(
             slivers: [
               // Static Header
               SliverToBoxAdapter(
@@ -47,7 +64,7 @@ class DashboardScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Good morning, ${user?.displayName?.split(' ')[0] ?? 'Explorer'}",
+                            _getGreeting(data.userName.split(' ')[0]),
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: T2Colors.textSecondary,
                             ),
@@ -87,7 +104,7 @@ class DashboardScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            (summary.caloriesGoal - summary.caloriesConsumed).toString(),
+                            (data.caloriesGoal - data.caloriesConsumed).toString(),
                             style: GoogleFonts.barlowCondensed(
                               fontSize: 56,
                               fontWeight: FontWeight.w900,
@@ -98,7 +115,7 @@ class DashboardScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'of ${summary.caloriesGoal}',
+                            'of ${data.caloriesGoal}',
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: T2Colors.textSecondary,
                             ),
@@ -113,9 +130,9 @@ class DashboardScreen extends ConsumerWidget {
               // Calorie Stat Bar
               SliverToBoxAdapter(
                 child: CalorieStat(
-                  consumed: summary.caloriesConsumed,
-                  burned: summary.caloriesBurned,
-                  net: summary.netCalories,
+                  consumed: data.caloriesConsumed,
+                  burned: data.caloriesBurned,
+                  net: data.netCalories,
                 ),
               ),
 
@@ -129,9 +146,9 @@ class DashboardScreen extends ConsumerWidget {
                 child: GestureDetector(
                   onTap: () => context.goNamed(AppRoutes.t2Water),
                   child: WaterBanner(
-                    consumed: summary.waterMl,
-                    target: summary.waterGoalMl,
-                    progress: summary.waterProgress,
+                    consumed: data.waterMl,
+                    target: data.waterGoalMl,
+                    progress: data.waterProgress,
                   ),
                 ),
               ),
@@ -165,14 +182,14 @@ class DashboardScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(T2Spacing.lg, T2Spacing.md, T2Spacing.lg, T2Spacing.md),
                   child: MacroRingChart(
-                    calorieProgress: summary.calorieProgress,
-                    calories: summary.caloriesConsumed,
-                    proteinProgress: summary.proteinProgress,
-                    protein: summary.proteinConsumed,
-                    carbsProgress: summary.carbsProgress,
-                    carbs: summary.carbsConsumed,
-                    fatProgress: summary.fatProgress,
-                    fat: summary.fatConsumed,
+                    calorieProgress: data.calorieProgress,
+                    calories: data.caloriesConsumed,
+                    proteinProgress: data.proteinProgress,
+                    protein: data.proteinConsumed,
+                    carbsProgress: data.carbsProgress,
+                    carbs: data.carbsConsumed,
+                    fatProgress: data.fatProgress,
+                    fat: data.fatConsumed,
                   ),
                 ),
               ),
@@ -203,7 +220,7 @@ class DashboardScreen extends ConsumerWidget {
               ),
               
               SliverToBoxAdapter(
-                child: NextMealCard(meal: summary.nextMeal),
+                child: NextMealCard(meal: data.nextMeal),
               ),
 
               // Activity Section
@@ -232,7 +249,7 @@ class DashboardScreen extends ConsumerWidget {
               ),
               
               const SliverToBoxAdapter(
-                child: ActivityRow(), // Internal wiring if possible or just mock
+                child: ActivityRow(),
               ),
 
               SliverToBoxAdapter(
@@ -246,9 +263,7 @@ class DashboardScreen extends ConsumerWidget {
                 ),
               ),
               
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 100),
-              ),
+              const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
             ],
           ),
         ),

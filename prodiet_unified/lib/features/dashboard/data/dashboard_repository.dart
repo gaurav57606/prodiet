@@ -10,128 +10,74 @@ class DashboardRepository {
 
   DashboardRepository(this._supabase);
 
-  Future<Either<AppError, DashboardSummary>> getTodaySummary({
-    required String userId,
-    required int caloriesGoal,
-    required int waterGoalMl,
-    int proteinGoal = 150,
-    int carbsGoal = 200,
-    int fatGoal = 60,
-  }) async {
+  Future<DashboardSummary> getTodaySummary(String userId) async {
     try {
-      final now = DateTime.now();
-      final today = now.toIso8601String().split('T')[0];
+      final today = DateTime.now().toIso8601String().split('T')[0];
 
-      // 1. Meal Logs (Consumed Calories & Macros)
-      // Note: We join with meals to get nutritional values if they aren't in meal_logs
-      final mealLogsResponse = await _supabase
-          .from('meal_logs')
-          .select('actual_calories, meal_id, meals(nutritional_values)')
-          .eq('user_id', userId)
-          .eq('date', today);
-      
+      final results = await Future.wait<dynamic>([
+        _supabase
+            .from('meals')
+            .select()
+            .eq('user_id', userId)
+            .eq('date', today),
+        _supabase
+            .from('water_logs')
+            .select()
+            .eq('user_id', userId)
+            .eq('date', today),
+        _supabase
+            .from('users')
+            .select('name, daily_calorie_goal, daily_water_goal_ml')
+            .eq('id', userId)
+            .single(),
+      ]);
+
+      final mealsData = results[0] as List<dynamic>;
+      final waterData = results[1] as List<dynamic>;
+      final userData = results[2] as Map<String, dynamic>;
+
       int caloriesConsumed = 0;
       int proteinConsumed = 0;
       int carbsConsumed = 0;
       int fatConsumed = 0;
-      
-      for (var row in mealLogsResponse) {
-        caloriesConsumed += (row['actual_calories'] as num).toInt();
-        final mealData = row['meals'] as Map<String, dynamic>?;
-        if (mealData != null && mealData['nutritional_values'] != null) {
-          final nv = mealData['nutritional_values'];
+      int mealsLogged = 0;
+
+      for (var meal in mealsData) {
+        if (meal['status'] == 'completed') {
+          mealsLogged++;
+          final nv = meal['nutritional_values'] as Map<String, dynamic>? ?? {};
+          caloriesConsumed += (nv['calories'] as num? ?? 0).toInt();
           proteinConsumed += (nv['protein_g'] as num? ?? 0).toInt();
           carbsConsumed += (nv['carbs_g'] as num? ?? 0).toInt();
           fatConsumed += (nv['fat_g'] as num? ?? 0).toInt();
         }
       }
 
-      // 2. Water Logs
-      final waterLogsResponse = await _supabase
-          .from('water_logs')
-          .select('amount_ml')
-          .eq('user_id', userId)
-          .eq('date', today);
-      
       int waterMl = 0;
-      for (var row in waterLogsResponse) {
-        waterMl += (row['amount_ml'] as num).toInt();
+      for (var log in waterData) {
+        waterMl += (log['amount_ml'] as num? ?? 0).toInt();
       }
 
-      // 3. Next Meal
-      final nextMealResponse = await _supabase
-          .from('meals')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('date', today)
-          .eq('status', 'pending')
-          .gte('scheduled_time', now.toIso8601String())
-          .order('scheduled_time', ascending: true)
-          .limit(1)
-          .maybeSingle();
-      
-      Meal? nextMeal;
-      if (nextMealResponse != null) {
-        nextMeal = Meal.fromJson(nextMealResponse);
-      }
-
-      // 4. Meals Summary (Scheduled vs Completed)
-      final mealsResponse = await _supabase
-          .from('meals')
-          .select('status')
-          .eq('user_id', userId)
-          .eq('date', today);
-      
-      int mealsScheduled = mealsResponse.length;
-      int mealsLogged = mealsResponse.where((m) => m['status'] == 'completed').length;
-
-      // 5. Active Diet Plan
-      final dietPlanResponse = await _supabase
-          .from('diet_plans')
-          .select('plan_name')
-          .eq('user_id', userId)
-          .lte('start_date', today)
-          .gte('end_date', today)
-          .maybeSingle();
-      
-      String? activeDietPlanName = dietPlanResponse?['plan_name'] as String?;
-
-      // 6. Activity Logs (Steps, Calories Burned)
-      final activityLogResponse = await _supabase
-          .from('activity_logs')
-          .select('steps, calories_burned')
-          .eq('user_id', userId)
-          .eq('date', today)
-          .maybeSingle();
-      
-      int stepsToday = (activityLogResponse?['steps'] as num?)?.toInt() ?? 0;
-      int caloriesBurned = (activityLogResponse?['calories_burned'] as num?)?.toInt() ?? 0;
-
-      // 7. Streak (Fetched from a streak table or user metadata if available)
-      int streakDays = 0;
-
-      return Right(DashboardSummary(
+      return DashboardSummary(
+        userName: userData['name'] ?? 'User',
         caloriesConsumed: caloriesConsumed,
-        caloriesGoal: caloriesGoal,
+        caloriesGoal: (userData['daily_calorie_goal'] as num? ?? 2000).toInt(),
         proteinConsumed: proteinConsumed,
-        proteinGoal: proteinGoal,
+        proteinGoal: 150, // Default or derived
         carbsConsumed: carbsConsumed,
-        carbsGoal: carbsGoal,
+        carbsGoal: 200, // Default or derived
         fatConsumed: fatConsumed,
-        fatGoal: fatGoal,
+        fatGoal: 60, // Default or derived
         waterMl: waterMl,
-        waterGoalMl: waterGoalMl,
-        mealsLogged: mealsLogged,
-        mealsScheduled: mealsScheduled,
-        activeDietPlanName: activeDietPlanName,
-        streakDays: streakDays,
-        stepsToday: stepsToday,
-        caloriesBurned: caloriesBurned,
-        currentWeightKg: null,
-        nextMeal: nextMeal,
-      ));
+        waterGoalMl: (userData['daily_water_goal_ml'] as num? ?? 2000).toInt(),
+        mealsToday: mealsLogged,
+        mealsScheduled: mealsData.length,
+        streakDays: 0,
+        stepsToday: 0,
+        caloriesBurned: 0,
+      );
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: 'DashboardRepository.getTodaySummary'));
+      throw ErrorHandler.handle(e, context: 'DashboardRepository.getTodaySummary');
     }
   }
 }

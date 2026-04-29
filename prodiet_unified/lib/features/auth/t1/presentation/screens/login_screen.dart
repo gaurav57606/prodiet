@@ -281,7 +281,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           label: 'Google',
                           variant: DmButtonVariant.outline,
                           icon: Icons.g_mobiledata_rounded,
-                          onPressed: () {},
+                          onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
                         ),
                       ),
                       const SizedBox(width: 16),

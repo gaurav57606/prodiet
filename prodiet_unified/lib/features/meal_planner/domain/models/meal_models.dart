@@ -6,9 +6,9 @@ class Meal {
   final String name;
   final List<Ingredient> ingredients;
   final NutritionalValues nutritionalValues;
-  final String scheduledTime;
+  final DateTime scheduledTime;
   final String status; // pending, completed, skipped
-  final String date;
+  final DateTime date;
 
   const Meal({
     required this.id,
@@ -34,9 +34,9 @@ class Meal {
           .map((i) => Ingredient.fromJson(i))
           .toList(),
       nutritionalValues: NutritionalValues.fromJson(json['nutritional_values'] ?? {}),
-      scheduledTime: json['scheduled_time'],
+      scheduledTime: DateTime.parse(json['scheduled_time']),
       status: json['status'],
-      date: json['date'],
+      date: DateTime.parse(json['date']),
     );
   }
 
@@ -49,9 +49,9 @@ class Meal {
       'name': name,
       'ingredients': ingredients.map((i) => i.toJson()).toList(),
       'nutritional_values': nutritionalValues.toJson(),
-      'scheduled_time': scheduledTime,
+      'scheduled_time': scheduledTime.toIso8601String(),
       'status': status,
-      'date': date,
+      'date': date.toIso8601String().split('T')[0],
     };
   }
 }

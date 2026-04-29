@@ -1,6 +1,7 @@
 import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
 
 class DashboardSummary {
+  final String userName;
   final int caloriesConsumed;
   final int caloriesGoal;
   final int proteinConsumed;
@@ -11,7 +12,7 @@ class DashboardSummary {
   final int fatGoal;
   final int waterMl;
   final int waterGoalMl;
-  final int mealsLogged;
+  final int mealsToday;
   final int mealsScheduled;
   final double? currentWeightKg;
   final String? activeDietPlanName;
@@ -21,6 +22,7 @@ class DashboardSummary {
   final Meal? nextMeal;
 
   const DashboardSummary({
+    required this.userName,
     required this.caloriesConsumed,
     required this.caloriesGoal,
     required this.proteinConsumed,
@@ -31,7 +33,7 @@ class DashboardSummary {
     required this.fatGoal,
     required this.waterMl,
     required this.waterGoalMl,
-    required this.mealsLogged,
+    required this.mealsToday,
     required this.mealsScheduled,
     this.currentWeightKg,
     this.activeDietPlanName,
@@ -67,6 +69,7 @@ class DashboardSummary {
     int fatGoal = 60,
   }) {
     return DashboardSummary(
+      userName: 'User',
       caloriesConsumed: 0,
       caloriesGoal: caloriesGoal,
       proteinConsumed: 0,
@@ -77,7 +80,7 @@ class DashboardSummary {
       fatGoal: fatGoal,
       waterMl: 0,
       waterGoalMl: waterGoalMl,
-      mealsLogged: 0,
+      mealsToday: 0,
       mealsScheduled: 0,
       streakDays: 0,
       stepsToday: 0,

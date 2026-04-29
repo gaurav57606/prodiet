@@ -1,40 +1,47 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/ocr_repository.dart';
-import '../domain/models/ocr_result.dart';
-import 'package:prodiet_unified/features/inventory/application/inventory_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/ocr_scanner/data/ocr_repository.dart';
+import 'package:prodiet_unified/features/ocr_scanner/domain/ocr_result.dart';
 
-import 'package:prodiet_unified/core/services/analytics_providers.dart';
-
-final ocrRepositoryProvider = Provider<OcrRepository>((ref) => OcrRepository(
-  ref.watch(supabaseClientProvider),
-  ref.watch(inventoryRepositoryProvider),
-  ref.watch(analyticsServiceProvider),
-));
-
-final ocrProvider = StateNotifierProvider<OcrNotifier, AsyncValue<OcrResult?>>((ref) {
-  return OcrNotifier(ref.watch(ocrRepositoryProvider), ref.watch(currentUserProvider)?.id);
+final ocrRepositoryProvider = Provider<OcrRepository>((ref) {
+  return OcrRepository(ref.watch(supabaseClientProvider));
 });
 
-class OcrNotifier extends StateNotifier<AsyncValue<OcrResult?>> {
-  final OcrRepository _repository;
-  final String? _userId;
+final ocrStateProvider = AsyncNotifierProvider.autoDispose<OcrNotifier, OcrResult?>(() {
+  return OcrNotifier();
+});
 
-  OcrNotifier(this._repository, this._userId) : super(const AsyncValue.data(null));
+class OcrNotifier extends AutoDisposeAsyncNotifier<OcrResult?> {
+  @override
+  Future<OcrResult?> build() async {
+    return null;
+  }
 
-  Future<void> processBill(File file) async {
-    if (_userId == null) return;
-    state = const AsyncValue.loading();
-    final result = await _repository.scanBill(file, _userId!);
-    state = result.fold(
-      (e) => AsyncValue.error(e, StackTrace.current),
-      (data) => AsyncValue.data(data),
+  Future<void> scan(File imageFile) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => 
+      ref.read(ocrRepositoryProvider).scanBill(imageFile)
     );
   }
 
+  void toggleItemSelection(int index) {
+    final currentData = state.value;
+    if (currentData == null) return;
+
+    final updatedItems = [...currentData.items];
+    final item = updatedItems[index];
+    updatedItems[index] = item.copyWith(isSelected: !item.isSelected);
+
+    state = AsyncData(currentData.copyWith(items: updatedItems));
+  }
 
   void reset() {
-    state = const AsyncValue.data(null);
+    state = const AsyncData(null);
   }
 }
+
+final isScanningProvider = Provider.autoDispose<bool>((ref) {
+  return ref.watch(ocrStateProvider).isLoading;
+});

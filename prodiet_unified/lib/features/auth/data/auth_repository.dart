@@ -11,135 +11,80 @@ class AuthRepository {
 
   AuthRepository(this._supabase);
 
-  Future<Either<AppError, AppUser>> signUp({
-    required String email,
-    required String password,
-    required String name,
-  }) async {
-    logger.i('[$_tag] signUp: $email');
+  Future<void> signUpWithEmail(String email, String password, String name) async {
     try {
-      final response = await _supabase.auth.signUp(
+      await _supabase.auth.signUp(
         email: email,
         password: password,
+        data: {'name': name},
       );
-
-      final user = response.user;
-      if (user == null) {
-        return const Left(UnknownError(message: 'Sign up failed: User is null'));
-      }
-
-      final now = DateTime.now().toIso8601String();
-      final profileData = {
-        'id': user.id,
-        'email': email,
-        'name': name,
-        'onboarding_complete': false,
-        'daily_water_goal_ml': 2000,
-        'variety_preference': 'balanced',
-        'created_at': now,
-        'updated_at': now,
-      };
-
-      await _supabase.from('users').upsert(profileData);
-
-      return _fetchProfile(user.id);
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.signUp'));
+      rethrow;
     }
   }
 
-  Future<Either<AppError, AppUser>> signIn({
-    required String email,
-    required String password,
-  }) async {
-    logger.i('[$_tag] signIn: $email');
+  Future<void> signInWithEmail(String email, String password) async {
     try {
-      final response = await _supabase.auth.signInWithPassword(
+      await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
-
-      final user = response.user;
-      if (user == null) {
-        return const Left(UnknownError(message: 'Sign in failed: User is null'));
-      }
-
-      return _fetchProfile(user.id);
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.signIn'));
+      rethrow;
     }
   }
 
-  Future<Either<AppError, void>> signOut() async {
-    logger.i('[$_tag] signOut');
+  Future<void> signInWithGoogle() async {
+    try {
+      await _supabase.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'com.prodiet.app://login-callback',
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
-      return const Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.signOut'));
+      rethrow;
     }
   }
 
-  Future<Either<AppError, void>> sendPasswordReset(String email) async {
-    logger.i('[$_tag] sendPasswordReset: $email');
+  Future<void> sendPasswordReset(String email) async {
     try {
       await _supabase.auth.resetPasswordForEmail(email);
-      return const Right(null);
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.sendPasswordReset'));
+      rethrow;
     }
   }
 
-  Future<Either<AppError, AppUser?>> getSessionUser() async {
-    logger.i('[$_tag] getSessionUser');
-    try {
-      final user = _supabase.auth.currentUser;
-      if (user == null) return const Right(null);
-
-      final profileResult = await _fetchProfile(user.id);
-      return profileResult.fold(
-        (l) => Left(l),
-        (r) => Right(r),
-      );
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getSessionUser'));
-    }
+  Stream<AuthState> authStateChanges() {
+    return _supabase.auth.onAuthStateChange;
   }
 
-  Future<Either<AppError, AppUser>> updateProfile(
-    String userId,
-    Map<String, dynamic> data,
-  ) async {
-    logger.i('[$_tag] updateProfile: $userId');
-    try {
-      data['updated_at'] = DateTime.now().toIso8601String();
-      await _supabase.from('users').update(data).eq('id', userId);
-      return _fetchProfile(userId);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.updateProfile'));
-    }
-  }
-
-  Future<Either<AppError, void>> saveToken(String userId, String fcmToken) async {
-    logger.i('[$_tag] saveToken: $userId');
-    try {
-      await _supabase.from('users').update({'fcm_token': fcmToken}).eq('id', userId);
-      return const Right(null);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.saveToken'));
-    }
-  }
-
-  Future<Either<AppError, AppUser>> _fetchProfile(String userId) async {
+  Future<AppUser?> fetchProfile(String userId) async {
     try {
       final data = await _supabase
           .from('users')
           .select()
           .eq('id', userId)
-          .single();
-      return Right(AppUser.fromJson(data));
+          .maybeSingle();
+      if (data == null) return null;
+      return AppUser.fromJson(data);
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag._fetchProfile'));
+      rethrow;
+    }
+  }
+
+  Future<void> updateProfile(String userId, Map<String, dynamic> data) async {
+    try {
+      data['updated_at'] = DateTime.now().toIso8601String();
+      await _supabase.from('users').update(data).eq('id', userId);
+    } catch (e) {
+      rethrow;
     }
   }
 }

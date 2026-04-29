@@ -1,106 +1,91 @@
-import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../core/error/app_error.dart';
-import '../../../core/error/error_handler.dart';
-import '../../../core/services/analytics_service.dart';
-import '../domain/models/water_log.dart';
+import '../domain/water_log.dart';
+import '../domain/water_summary.dart';
 
 class WaterRepository {
   final SupabaseClient _supabase;
-  final AnalyticsService _analytics;
-  static const String _tag = 'WaterRepository';
 
-  WaterRepository(this._supabase, this._analytics);
+  WaterRepository(this._supabase);
 
-  Future<Either<AppError, int>> getTodayWaterTotal(String userId) async {
-    try {
-      final today = DateTime.now().toIso8601String().split('T')[0];
-      final response = await _supabase
+  Future<WaterSummary> getTodaySummary(String userId) async {
+    final today = DateTime.now().toIso8601String().split('T')[0];
+    
+    final results = await Future.wait<dynamic>([
+      _supabase
           .from('water_logs')
           .select('amount_ml')
           .eq('user_id', userId)
-          .eq('date', today);
-      
-      int total = 0;
-      for (var row in response) {
-        total += (row['amount_ml'] as num).toInt();
-      }
-      return Right(total);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getTodayWaterTotal'));
+          .eq('date', today),
+      _supabase
+          .from('users')
+          .select('daily_water_goal_ml')
+          .eq('id', userId)
+          .single(),
+    ]);
+
+    final logs = results[0] as List<dynamic>;
+    final userData = results[1] as Map<String, dynamic>;
+    final targetMl = (userData['daily_water_goal_ml'] as num? ?? 2000).toInt();
+
+    int total = 0;
+    for (var log in logs) {
+      total += (log['amount_ml'] as num).toInt();
+    }
+
+    return WaterSummary(
+      totalMl: total,
+      targetMl: targetMl,
+      glasses: (total / 250).floor(),
+      targetGlasses: (targetMl / 250).floor(),
+    );
+  }
+
+  Future<void> logGlass(String userId, {int ml = 250}) async {
+    await logCustomAmount(userId, ml);
+  }
+
+  Future<void> logCustomAmount(String userId, int ml) async {
+    final now = DateTime.now();
+    final date = DateTime(now.year, now.month, now.day);
+    
+    final data = {
+      'user_id': userId,
+      'amount_ml': ml,
+      'logged_at': now.toIso8601String(),
+      'date': date.toIso8601String().split('T')[0],
+    };
+    
+    await _supabase.from('water_logs').insert(data);
+  }
+
+  Future<void> deleteLastLog(String userId) async {
+    final today = DateTime.now().toIso8601String().split('T')[0];
+    
+    final lastLog = await _supabase
+        .from('water_logs')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('date', today)
+        .order('logged_at', ascending: false)
+        .limit(1)
+        .maybeSingle();
+    
+    if (lastLog != null) {
+      await _supabase.from('water_logs').delete().eq('id', lastLog['id']);
     }
   }
 
-  Future<Either<AppError, List<WaterLog>>> getWaterLogs(String userId, String date) async {
-    try {
-      final response = await _supabase
-          .from('water_logs')
-          .select()
-          .eq('user_id', userId)
-          .eq('date', date);
-      
-      final logs = (response as List).map((l) => WaterLog.fromJson(l)).toList();
-      return Right(logs);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getWaterLogs'));
-    }
-  }
-
-  Future<Either<AppError, WaterLog>> logWater(String userId, int amountMl) async {
-    try {
-      final now = DateTime.now();
-      final date = now.toIso8601String().split('T')[0];
-      final data = {
-        'user_id': userId,
-        'amount_ml': amountMl,
-        'logged_at': now.toIso8601String(),
-        'date': date,
-      };
-      
-      final response = await _supabase.from('water_logs').insert(data).select().single();
-      
-      _analytics.logEvent(
-        userId, 
-        AnalyticsService.kWaterLogged, 
-        data: {'amount_ml': amountMl},
-        screen: 'water_tracker',
-      );
-      
-      return Right(WaterLog.fromJson(response));
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.logWater'));
-    }
-  }
-
-  Future<Either<AppError, void>> deleteLog(String logId) async {
-    try {
-      await _supabase.from('water_logs').delete().eq('id', logId);
-      return const Right(null);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.deleteLog'));
-    }
-  }
-
-  Future<Either<AppError, double>> getWeeklyAverage(String userId) async {
-    try {
-      final weekAgo = DateTime.now().subtract(const Duration(days: 7)).toIso8601String().split('T')[0];
-      final response = await _supabase
-          .from('water_logs')
-          .select('amount_ml, date')
-          .eq('user_id', userId)
-          .gte('date', weekAgo);
-      
-      Map<String, int> dailyTotals = {};
-      for (var row in response) {
-        final date = row['date'];
-        dailyTotals[date] = (dailyTotals[date] ?? 0) + (row['amount_ml'] as num).toInt();
-      }
-      
-      if (dailyTotals.isEmpty) return const Right(0.0);
-      double avg = dailyTotals.values.reduce((a, b) => a + b) / 7.0;
-      return Right(avg);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getWeeklyAverage'));
-    }
+  Stream<List<WaterLog>> watchTodayLogs(String userId) {
+    final today = DateTime.now().toIso8601String().split('T')[0];
+    
+    return _supabase
+        .from('water_logs')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', userId)
+        .map((data) => data
+            .where((row) => row['date'] == today)
+            .map((row) => WaterLog.fromJson(row))
+            .toList()
+            ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt)));
   }
 }

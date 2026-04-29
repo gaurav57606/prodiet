@@ -1,80 +1,42 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
-import 'package:prodiet_unified/core/services/analytics_providers.dart';
-import '../domain/models/water_log.dart';
-import '../data/water_repository.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/water/data/water_repository.dart';
+import 'package:prodiet_unified/features/water/domain/water_summary.dart';
+import '../domain/water_log.dart';
 
 final waterRepositoryProvider = Provider<WaterRepository>((ref) {
-  return WaterRepository(
-    ref.watch(supabaseClientProvider),
-    ref.watch(analyticsServiceProvider),
-  );
+  return WaterRepository(ref.watch(supabaseClientProvider));
 });
 
-final todayWaterTotalProvider = FutureProvider.autoDispose<int>((ref) async {
-  final authState = ref.watch(authProvider);
-  if (authState is! AuthAuthenticated) return 0;
+final userWaterTargetProvider = FutureProvider.autoDispose<int>((ref) async {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId.isEmpty) return 2000;
   
-  final repository = ref.watch(waterRepositoryProvider);
-  final result = await repository.getTodayWaterTotal(authState.user.id);
+  final data = await ref.read(supabaseClientProvider)
+      .from('users')
+      .select('daily_water_goal_ml')
+      .eq('id', userId)
+      .single();
   
-  return result.fold(
-    (l) => throw l,
-    (r) => r,
-  );
+  return (data['daily_water_goal_ml'] as num? ?? 2000).toInt();
 });
 
-final waterLogsProvider = FutureProvider.autoDispose.family<List<WaterLog>, String>((ref, date) async {
-  final authState = ref.watch(authProvider);
-  if (authState is! AuthAuthenticated) return [];
+final waterSummaryProvider = StreamProvider.autoDispose<WaterSummary>((ref) {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId.isEmpty) return Stream.value(WaterSummary.empty(2000));
   
-  final repository = ref.watch(waterRepositoryProvider);
-  final result = await repository.getWaterLogs(authState.user.id, date);
+  final targetAsync = ref.watch(userWaterTargetProvider);
+  final targetMl = targetAsync.value ?? 2000;
   
-  return result.fold(
-    (l) => throw l,
-    (r) => r,
-  );
+  return ref.watch(waterRepositoryProvider).watchTodayLogs(userId).map((logs) {
+    return WaterSummary.calculate(logs, targetMl);
+  });
 });
 
-final waterActionsProvider = StateNotifierProvider<WaterActionsNotifier, AsyncValue<void>>((ref) {
-  return WaterActionsNotifier(ref.watch(waterRepositoryProvider), ref);
+final todayWaterLogsProvider = StreamProvider.autoDispose<List<WaterLog>>((ref) {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId.isEmpty) return Stream.value([]);
+  
+  return ref.watch(waterRepositoryProvider).watchTodayLogs(userId);
 });
-
-class WaterActionsNotifier extends StateNotifier<AsyncValue<void>> {
-  final WaterRepository _repository;
-  final Ref _ref;
-
-  WaterActionsNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
-
-  Future<void> logWater(int amountMl) async {
-    final authState = _ref.read(authProvider);
-    if (authState is! AuthAuthenticated) return;
-
-    state = const AsyncValue.loading();
-    final result = await _repository.logWater(authState.user.id, amountMl);
-    result.fold(
-      (l) => state = AsyncValue.error(l, StackTrace.current),
-      (r) {
-        state = const AsyncValue.data(null);
-        _ref.invalidate(todayWaterTotalProvider);
-        _ref.invalidate(waterLogsProvider(DateTime.now().toIso8601String().split('T')[0]));
-      },
-    );
-  }
-
-  Future<void> deleteLog(String logId, String date) async {
-    state = const AsyncValue.loading();
-    final result = await _repository.deleteLog(logId);
-    result.fold(
-      (l) => state = AsyncValue.error(l, StackTrace.current),
-      (r) {
-        state = const AsyncValue.data(null);
-        _ref.invalidate(todayWaterTotalProvider);
-        _ref.invalidate(waterLogsProvider(date));
-      },
-    );
-  }
-}

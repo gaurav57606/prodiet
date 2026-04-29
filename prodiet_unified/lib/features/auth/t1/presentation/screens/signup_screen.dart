@@ -24,6 +24,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -63,13 +65,27 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
 
-    if (email.isEmpty || password.isEmpty || firstName.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields')),
-      );
+    if (firstName.isEmpty) {
+      _showError('Name cannot be empty');
+      return;
+    }
+
+    if (email.isEmpty || !email.contains('@')) {
+      _showError('Please enter a valid email address');
+      return;
+    }
+
+    if (password.length < 8) {
+      _showError('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (password != confirmPassword) {
+      _showError('Passwords do not match');
       return;
     }
 
@@ -77,6 +93,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       email,
       password,
       '$firstName $lastName'.trim(),
+    );
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
     );
   }
 
@@ -316,6 +338,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   _buildLabel('CONFIRM PASSWORD'),
                   const SizedBox(height: 8),
                   DmTextField(
+                    controller: _confirmPasswordController,
                     hintText: '••••••••',
                     obscureText: _obscureConfirmPassword,
                     suffixIcon: IconButton(
@@ -401,7 +424,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           label: 'Google',
                           variant: DmButtonVariant.outline,
                           icon: Icons.g_mobiledata_rounded,
-                          onPressed: () {},
+                          onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
                         ),
                       ),
                       const SizedBox(width: 16),

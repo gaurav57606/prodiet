@@ -1,87 +1,63 @@
-import 'dart:io';
-import 'package:dartz/dartz.dart';
+// -- Run this in Supabase SQL Editor before using this feature:
+// CREATE TABLE public.weight_logs (
+//   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+//   user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+//   weight_kg NUMERIC NOT NULL,
+//   logged_at TIMESTAMPTZ DEFAULT NOW()
+// );
+// ALTER TABLE public.weight_logs ENABLE ROW LEVEL SECURITY;
+// CREATE POLICY "own_weight" ON public.weight_logs
+//   FOR ALL USING (auth.uid() = user_id);
+
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../core/error/app_error.dart';
-import '../../../core/error/error_handler.dart';
-import '../domain/models/progress_log.dart';
+import '../domain/weight_entry.dart';
+import '../domain/progress_summary.dart';
 
 class ProgressRepository {
   final SupabaseClient _supabase;
-  static const String _tag = 'ProgressRepository';
 
   ProgressRepository(this._supabase);
 
-  Future<Either<AppError, List<ProgressLog>>> getLogs(String userId, {int limit = 30}) async {
-    try {
-      final response = await _supabase
-          .from('progress_logs')
-          .select()
-          .eq('user_id', userId)
-          .order('logged_at', ascending: false)
-          .limit(limit);
-      
-      final logs = (response as List).map((l) => ProgressLog.fromJson(l)).toList();
-      return Right(logs);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getLogs'));
-    }
+  Future<List<WeightEntry>> getWeightHistory(String userId, {int days = 30}) async {
+    final startDate = DateTime.now().subtract(Duration(days: days)).toIso8601String();
+    
+    final response = await _supabase
+        .from('weight_logs')
+        .select()
+        .eq('user_id', userId)
+        .gte('logged_at', startDate)
+        .order('logged_at', ascending: true);
+    
+    return (response as List).map((row) => WeightEntry.fromJson(row)).toList();
   }
 
-  Future<Either<AppError, ProgressLog>> addLog(ProgressLog log) async {
-    try {
-      final response = await _supabase
-          .from('progress_logs')
-          .insert(log.toJson())
-          .select()
-          .single();
-      
-      return Right(ProgressLog.fromJson(response));
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.addLog'));
-    }
+  Future<void> logWeight(String userId, double weightKg) async {
+    // 1. Insert into history
+    await _supabase.from('weight_logs').insert({
+      'user_id': userId,
+      'weight_kg': weightKg,
+      'logged_at': DateTime.now().toIso8601String(),
+    });
+
+    // 2. Update current weight in users table
+    await _supabase
+        .from('users')
+        .update({'weight_kg': weightKg})
+        .eq('id', userId);
   }
 
-  Future<Either<AppError, void>> deleteLog(String logId) async {
-    try {
-      await _supabase.from('progress_logs').delete().eq('id', logId);
-      return const Right(null);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.deleteLog'));
-    }
-  }
+  Future<ProgressSummary> getProgressSummary(String userId, {int days = 30}) async {
+    final results = await Future.wait<dynamic>([
+      getWeightHistory(userId, days: days),
+      _supabase.from('users').select('target_weight_kg, weight_kg').eq('id', userId).single(),
+    ]);
 
-  Future<Either<AppError, List<Map<String, dynamic>>>> getWeightTrend(String userId, int days) async {
-    try {
-      final sinceDate = DateTime.now().subtract(Duration(days: days)).toIso8601String();
-      final response = await _supabase
-          .from('progress_logs')
-          .select('logged_at, weight_kg')
-          .eq('user_id', userId)
-          .gte('logged_at', sinceDate)
-          .order('logged_at', ascending: true);
-      
-      final trend = (response as List).map((row) => {
-        'date': (row['logged_at'] as String).split('T')[0],
-        'weight': (row['weight_kg'] as num).toDouble(),
-      }).toList();
-      
-      return Right(trend);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getWeightTrend'));
-    }
-  }
+    final entries = results[0] as List<WeightEntry>;
+    final userProfile = results[1] as Map<String, dynamic>;
+    
+    final targetWeight = (userProfile['target_weight_kg'] as num? ?? 70.0).toDouble();
+    final initialWeight = (userProfile['weight_kg'] as num? ?? 70.0).toDouble();
 
-  Future<Either<AppError, String>> uploadPhoto(String userId, File file) async {
-    try {
-      final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final path = '$userId/$fileName';
-      
-      await _supabase.storage.from('progress_photos').upload(path, file);
-      final url = _supabase.storage.from('progress_photos').getPublicUrl(path);
-      
-      return Right(url);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.uploadPhoto'));
-    }
+    return ProgressSummary.calculate(entries, targetWeight, initialWeight);
   }
 }

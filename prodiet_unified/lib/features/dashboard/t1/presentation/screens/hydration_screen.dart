@@ -4,7 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/water/application/water_providers.dart';
+import 'package:prodiet_unified/features/water/domain/water_summary.dart';
+import 'package:prodiet_unified/features/water/domain/water_log.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
+import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
+import 'package:prodiet_unified/core/widgets/loading_widget.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class HydrationScreen extends ConsumerWidget {
   const HydrationScreen({super.key});
@@ -12,9 +18,9 @@ class HydrationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final summaryAsync = ref.watch(dashboardSummaryProvider);
-    final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final logsAsync = ref.watch(waterLogsProvider(todayStr));
+    final summaryAsync = ref.watch(waterSummaryProvider);
+    final logsAsync = ref.watch(todayWaterLogsProvider);
+    final userId = ref.watch(currentUserIdProvider);
     
     final statusColor = const Color(0xFF40D8B8);
 
@@ -23,27 +29,53 @@ class HydrationScreen extends ConsumerWidget {
         title: const Text('Hydration Details'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.undo_rounded),
+            onPressed: () => ref.read(waterRepositoryProvider).deleteLastLog(userId),
+          ),
+        ],
       ),
-      body: summaryAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
-        data: (summary) => SingleChildScrollView(
+      body: AsyncValueWidget<WaterSummary>(
+        value: summaryAsync,
+        skeleton: const ProDietLoader(),
+        isEmpty: (s) => s.totalMl == 0,
+        emptyState: ProDietEmptyState(
+          emoji: EmptyStateConfigs.water.emoji,
+          headline: EmptyStateConfigs.water.headline,
+          subtext: EmptyStateConfigs.water.subtext,
+          buttonLabel: EmptyStateConfigs.water.buttonLabel,
+          onButtonTap: () => ref.read(waterRepositoryProvider).logGlass(userId),
+        ),
+        builder: (summary) => SingleChildScrollView(
           padding: const EdgeInsets.all(T1Spacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHero(theme, statusColor, summary.waterMl, summary.waterGoalMl, summary.waterProgress),
+              _buildHero(theme, statusColor, summary.totalMl, summary.targetMl, summary.percentFilled),
               const SizedBox(height: T1Spacing.xl),
-              Text(
-                'QUICK ADD',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'QUICK ADD',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  Text(
+                    '${summary.glasses} / ${summary.targetGlasses} Glasses',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: statusColor,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: T1Spacing.md),
-              _buildQuickAddGrid(theme, statusColor, ref),
+              _buildQuickAddGrid(theme, statusColor, ref, userId),
               const SizedBox(height: T1Spacing.xl),
               Text(
                 'TODAY\'S HISTORY',
@@ -126,7 +158,7 @@ class HydrationScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickAddGrid(ThemeData theme, Color color, WidgetRef ref) {
+  Widget _buildQuickAddGrid(ThemeData theme, Color color, WidgetRef ref, String userId) {
     final amounts = [
       {'val': 250, 'icon': Icons.local_drink_rounded},
       {'val': 500, 'icon': Icons.water_drop_rounded},
@@ -144,10 +176,7 @@ class HydrationScreen extends ConsumerWidget {
       children: amounts.map((a) {
         final val = a['val'] as int;
         return InkWell(
-          onTap: () {
-            ref.read(waterActionsProvider.notifier).logWater(val);
-            ref.invalidate(dashboardSummaryProvider);
-          },
+          onTap: () => ref.read(waterRepositoryProvider).logCustomAmount(userId, val),
           borderRadius: BorderRadius.circular(24),
           child: DmCard(
             color: Colors.white.withValues(alpha: 0.03),
@@ -172,7 +201,7 @@ class HydrationScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHistoryList(ThemeData theme, Color color, List<dynamic> logs) {
+  Widget _buildHistoryList(ThemeData theme, Color color, List<WaterLog> logs) {
     if (logs.isEmpty) {
       return Center(
         child: Padding(
@@ -191,7 +220,7 @@ class HydrationScreen extends ConsumerWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final log = logs[index];
-        final timeStr = DateFormat('hh:mm a').format(log.createdAt);
+        final timeStr = DateFormat('hh:mm a').format(log.loggedAt);
         return DmCard(
           color: Colors.white.withValues(alpha: 0.02),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

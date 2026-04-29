@@ -1,86 +1,41 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
-import '../domain/models/diet_plan.dart';
-import '../data/diet_plan_repository.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
+import 'package:prodiet_unified/features/diet_plan/data/diet_plan_repository.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 
 final dietPlanRepositoryProvider = Provider<DietPlanRepository>((ref) {
-  return DietPlanRepository(Supabase.instance.client);
-});
-
-final activeDietPlanProvider = FutureProvider.autoDispose<DietPlan?>((ref) async {
-  final authState = ref.watch(authProvider);
-  if (authState is! AuthAuthenticated) return null;
-  
-  final repository = ref.watch(dietPlanRepositoryProvider);
-  final result = await repository.getActivePlan(authState.user.id);
-  
-  return result.fold(
-    (l) => throw l,
-    (r) => r,
+  return DietPlanRepository(
+    ref.watch(supabaseClientProvider),
+    ref.watch(mealRepositoryProvider),
   );
 });
 
-final allDietPlansProvider = FutureProvider.autoDispose<List<DietPlan>>((ref) async {
-  final authState = ref.watch(authProvider);
-  if (authState is! AuthAuthenticated) return [];
-  
-  final repository = ref.watch(dietPlanRepositoryProvider);
-  final result = await repository.getAllPlans(authState.user.id);
-  
-  return result.fold(
-    (l) => throw l,
-    (r) => r,
-  );
+final dietPlanProvider = AsyncNotifierProvider.autoDispose<DietPlanNotifier, DietPlan?>(() {
+  return DietPlanNotifier();
 });
 
-final dietPlanActionsProvider = StateNotifierProvider<DietPlanActionsNotifier, AsyncValue<void>>((ref) {
-  return DietPlanActionsNotifier(ref.watch(dietPlanRepositoryProvider), ref);
-});
-
-class DietPlanActionsNotifier extends StateNotifier<AsyncValue<void>> {
-  final DietPlanRepository _repository;
-  final Ref _ref;
-
-  DietPlanActionsNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
-
-  Future<void> createPlan(DietPlan plan) async {
-    state = const AsyncValue.loading();
-    final result = await _repository.createPlan(plan);
-    result.fold(
-      (l) => state = AsyncValue.error(l, StackTrace.current),
-      (r) {
-        state = const AsyncValue.data(null);
-        _ref.invalidate(allDietPlansProvider);
-        _ref.invalidate(activeDietPlanProvider);
-      },
-    );
+class DietPlanNotifier extends AutoDisposeAsyncNotifier<DietPlan?> {
+  @override
+  Future<DietPlan?> build() async {
+    final userId = ref.watch(currentUserIdProvider);
+    if (userId.isEmpty) return null;
+    
+    return ref.read(dietPlanRepositoryProvider).getCachedPlan(userId);
   }
 
-  Future<void> updatePlan(DietPlan plan) async {
-    state = const AsyncValue.loading();
-    final result = await _repository.updatePlan(plan);
-    result.fold(
-      (l) => state = AsyncValue.error(l, StackTrace.current),
-      (r) {
-        state = const AsyncValue.data(null);
-        _ref.invalidate(allDietPlansProvider);
-        _ref.invalidate(activeDietPlanProvider);
-      },
-    );
-  }
+  Future<void> generate() async {
+    final userId = ref.read(currentUserIdProvider);
+    if (userId.isEmpty) return;
 
-  Future<void> deletePlan(String planId) async {
-    state = const AsyncValue.loading();
-    final result = await _repository.deletePlan(planId);
-    result.fold(
-      (l) => state = AsyncValue.error(l, StackTrace.current),
-      (r) {
-        state = const AsyncValue.data(null);
-        _ref.invalidate(allDietPlansProvider);
-        _ref.invalidate(activeDietPlanProvider);
-      },
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => 
+      ref.read(dietPlanRepositoryProvider).generatePlan(userId)
     );
   }
 }
+
+final isGeneratingDietPlanProvider = Provider.autoDispose<bool>((ref) {
+  return ref.watch(dietPlanProvider).isLoading;
+});

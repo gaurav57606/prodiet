@@ -63,6 +63,9 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     final user = ref.read(currentUserProvider);
     if (user == null) return;
 
+    // Simple calorie estimation: Weight (kg) * 28 (moderate activity multiplier)
+    final dailyCalorieTarget = (weight * 28).toInt();
+
     await ref.read(authProvider.notifier).completeOnboarding(
       user.id,
       {
@@ -74,6 +77,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
         'dietary_preferences': [],
         'allergies': [],
         'variety_preference': 'balanced',
+        'daily_calorie_goal': dailyCalorieTarget,
+        'daily_water_goal_ml': 2500,
       },
     );
   }

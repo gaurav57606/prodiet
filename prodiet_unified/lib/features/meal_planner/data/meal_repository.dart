@@ -1,136 +1,89 @@
-import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../core/error/app_error.dart';
-import '../../../core/error/error_handler.dart';
-import '../../../core/services/analytics_service.dart';
-import '../domain/models/meal_models.dart';
+import '../domain/meal.dart';
 
 class MealRepository {
   final SupabaseClient _supabase;
-  final AnalyticsService _analytics;
-  static const String _tag = 'MealRepository';
 
-  MealRepository(this._supabase, this._analytics);
+  MealRepository(this._supabase);
 
-  Future<Either<AppError, List<Meal>>> getTodayMeals(String userId, String date) async {
-    try {
-      final response = await _supabase
-          .from('meals')
-          .select()
-          .eq('user_id', userId)
-          .eq('date', date);
-      
-      final meals = (response as List).map((m) => Meal.fromJson(m)).toList();
-      return Right(meals);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getTodayMeals'));
-    }
+  Stream<List<Meal>> watchTodayMeals(String userId) {
+    final today = DateTime.now().toIso8601String().split('T')[0];
+    
+    return _supabase
+        .from('meals')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', userId)
+        .map((data) {
+          // Filter client-side for planned_date = today
+          // We support both 'planned_date' and 'date' columns to be robust
+          return data.where((row) {
+            final rowDate = row['planned_date'] ?? row['date'];
+            return rowDate == today;
+          }).map((row) {
+            // Ensure status and mealType are strings for the model
+            return Meal.fromJson(row);
+          }).toList()
+          ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        });
   }
 
-  Future<Either<AppError, List<Meal>>> getMealsByDateRange(
-    String userId,
-    String startDate,
-    String endDate,
-  ) async {
-    try {
-      final response = await _supabase
-          .from('meals')
-          .select()
-          .eq('user_id', userId)
-          .gte('date', startDate)
-          .lte('date', endDate);
-      
-      final meals = (response as List).map((m) => Meal.fromJson(m)).toList();
-      return Right(meals);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getMealsByDateRange'));
-    }
-  }
-
-  Future<Either<AppError, MealLog>> logMeal({
-    required String mealId,
-    required String userId,
-    required int actualCalories,
-    String? notes,
+  Future<void> logMeal(String userId, {
+    required String name,
+    required MealType mealType,
+    required double calories,
+    double proteinG = 0,
+    double carbsG = 0,
+    double fatG = 0,
+    List<String> ingredients = const [],
   }) async {
-    try {
-      final data = {
-        'meal_id': mealId,
-        'user_id': userId,
-        'actual_calories': actualCalories,
-        'notes': notes,
-        'actual_time': DateTime.now().toIso8601String(),
-        'date': DateTime.now().toIso8601String().split('T')[0],
-      };
-      
-      final response = await _supabase.from('meal_logs').insert(data).select().single();
-      
-      // Also update meal status to completed
-      await updateMealStatus(mealId, 'completed');
-      
-      _analytics.logEvent(
-        userId, 
-        AnalyticsService.kMealLogged,
-        data: {'meal_id': mealId, 'calories': actualCalories},
-        screen: 'meal_planner',
-      );
-      
-      return Right(MealLog.fromJson(response));
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.logMeal'));
-    }
+    final now = DateTime.now();
+    final today = now.toIso8601String().split('T')[0];
+    
+    final data = {
+      'user_id': userId,
+      'name': name,
+      'meal_type': mealType.name,
+      'calories': calories,
+      'protein_g': proteinG,
+      'carbs_g': carbsG,
+      'fat_g': fatG,
+      'ingredients': ingredients,
+      'status': MealStatus.pending.name,
+      'planned_date': today,
+      'date': today, // backup for legacy columns
+      'created_at': now.toIso8601String(),
+    };
+    
+    await _supabase.from('meals').insert(data);
   }
 
-  Future<Either<AppError, Meal>> updateMealStatus(String mealId, String status) async {
-    try {
-      final response = await _supabase
-          .from('meals')
-          .update({'status': status})
-          .eq('id', mealId)
-          .select()
-          .single();
-      
-      return Right(Meal.fromJson(response));
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.updateMealStatus'));
-    }
+  Future<void> markEaten(String mealId) async {
+    await _supabase
+        .from('meals')
+        .update({'status': MealStatus.eaten.name})
+        .eq('id', mealId);
   }
 
-  Future<Either<AppError, Meal>> addMeal(Meal meal) async {
-    try {
-      final response = await _supabase
-          .from('meals')
-          .insert(meal.toJson())
-          .select()
-          .single();
-      
-      return Right(Meal.fromJson(response));
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.addMeal'));
-    }
+  Future<void> markSkipped(String mealId) async {
+    await _supabase
+        .from('meals')
+        .update({'status': MealStatus.skipped.name})
+        .eq('id', mealId);
   }
 
-  Future<Either<AppError, void>> deleteMeal(String mealId) async {
-    try {
-      await _supabase.from('meals').delete().eq('id', mealId);
-      return const Right(null);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.deleteMeal'));
-    }
+  Future<void> deleteMeal(String mealId) async {
+    await _supabase.from('meals').delete().eq('id', mealId);
   }
 
-  Future<Either<AppError, List<MealLog>>> getMealLogs(String userId, String date) async {
-    try {
-      final response = await _supabase
-          .from('meal_logs')
-          .select()
-          .eq('user_id', userId)
-          .eq('date', date);
-      
-      final logs = (response as List).map((l) => MealLog.fromJson(l)).toList();
-      return Right(logs);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getMealLogs'));
-    }
+  Future<List<Meal>> getMealHistory(String userId, {int days = 7}) async {
+    final startDate = DateTime.now().subtract(Duration(days: days)).toIso8601String().split('T')[0];
+    
+    final response = await _supabase
+        .from('meals')
+        .select()
+        .eq('user_id', userId)
+        .gte('planned_date', startDate);
+    
+    return (response as List).map((row) => Meal.fromJson(row)).toList();
   }
 }
