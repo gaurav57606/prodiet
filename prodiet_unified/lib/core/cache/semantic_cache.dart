@@ -12,9 +12,6 @@ enum CacheNamespace {
 class SemanticCache {
   final SupabaseClient _client;
   final AnalyticsService _analytics;
-  // ignore: unused_field
-  static const _tag = 'SemanticCache';
-
   SemanticCache(this._client, this._analytics);
 
   // Returns cached response JSON or null on miss
@@ -62,15 +59,18 @@ class SemanticCache {
         'namespace': namespace.name,
         'query_hash': hash,
         'response_json': response,
-        'hit_count': 1,
+        'hit_count': 0,           // Start at 0; RPC increments on reads
         'created_at': DateTime.now().toIso8601String(),
         'expires_at': DateTime.now().add(ttl).toIso8601String(),
-      });
+      }, onConflict: 'query_hash');   // Explicit conflict target
     } catch (e) {
       // Cache write failure is silent — never block main flow
     }
   }
 
+  // Hash format: '${namespace.name}::${query}' (lowercase, trimmed)
+  // MUST match the hash logic in all Supabase edge functions that share this cache table.
+  // Edge functions use CacheNamespace.name values: 'nutrition', 'recipe', 'mealPlan'
   String _hash(CacheNamespace ns, String query) {
     final normalized = '${ns.name}::${query.toLowerCase().trim()}';
     return sha256.convert(utf8.encode(normalized)).toString();

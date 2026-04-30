@@ -77,13 +77,13 @@ class WaterRepository {
 
   Stream<List<WaterLog>> watchTodayLogs(String userId) {
     final today = DateTime.now().toIso8601String().split('T')[0];
-    
+
     return _supabase
         .from('water_logs')
         .stream(primaryKey: ['id'])
-        .eq('user_id', userId)
+        .eq('date', today)                    // Server-side date filter
         .map((data) => data
-            .where((row) => row['date'] == today)
+            .where((row) => row['user_id'] == userId) // Client-side user filter
             .map((row) => WaterLog.fromJson(row))
             .toList()
             ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt)));

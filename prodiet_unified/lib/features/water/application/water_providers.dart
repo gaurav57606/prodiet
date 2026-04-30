@@ -9,25 +9,16 @@ final waterRepositoryProvider = Provider<WaterRepository>((ref) {
   return WaterRepository(ref.watch(supabaseClientProvider));
 });
 
-final userWaterTargetProvider = FutureProvider.autoDispose<int>((ref) async {
-  final userId = ref.watch(currentUserIdProvider);
-  if (userId.isEmpty) return 2000;
-  
-  final data = await ref.read(supabaseClientProvider)
-      .from('users')
-      .select('daily_water_goal_ml')
-      .eq('id', userId)
-      .single();
-  
-  return (data['daily_water_goal_ml'] as num? ?? 2000).toInt();
+final userWaterTargetProvider = Provider.autoDispose<int>((ref) {
+  final user = ref.watch(currentUserProvider);
+  return user?.dailyWaterGoalMl ?? 2000;
 });
 
 final waterSummaryProvider = StreamProvider.autoDispose<WaterSummary>((ref) {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return Stream.value(WaterSummary.empty(2000));
   
-  final targetAsync = ref.watch(userWaterTargetProvider);
-  final targetMl = targetAsync.value ?? 2000;
+  final targetMl = ref.watch(userWaterTargetProvider);
   
   return ref.watch(waterRepositoryProvider).watchTodayLogs(userId).map((logs) {
     return WaterSummary.calculate(logs, targetMl);

@@ -1,12 +1,17 @@
+// Analytics Architecture:
+// ALL product analytics (sessions, screen views, events, errors, retention)
+// are tracked via Supabase tables — NOT via Firebase Analytics.
+// Firebase is used ONLY for:
+//   - Crashlytics: unhandled exception capture (main.dart)
+//   - FCM: push notification delivery (fcm_service.dart)
+// Do NOT add firebase_analytics — it would duplicate Supabase tracking.
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class AnalyticsService {
   final SupabaseClient _client;
   String? _currentSessionId;
-  // ignore: unused_field
-  static const _tag = 'Analytics';
-
   AnalyticsService(this._client);
 
   // ── SESSION ──────────────────────────────────────────
@@ -16,7 +21,7 @@ class AnalyticsService {
     required String appVersion,
   }) async {
     _currentSessionId = const Uuid().v4();
-    await _client.from('analytics.user_sessions').insert({
+    await _client.from('user_sessions').insert({
       'id': _currentSessionId,
       'user_id': userId,
       'device_model': deviceModel,
@@ -32,7 +37,7 @@ class AnalyticsService {
     if (_currentSessionId == null) return;
     final now = DateTime.now();
     await _client
-      .from('analytics.user_sessions')
+      .from('user_sessions')
       .update({'session_end': now.toIso8601String()})
       .eq('id', _currentSessionId!);
     _currentSessionId = null;
@@ -40,7 +45,7 @@ class AnalyticsService {
 
   // ── SCREEN VIEWS ──────────────────────────────────────
   Future<void> logScreen(String userId, String screenName) async {
-    await _client.from('analytics.screen_views').insert({
+    await _client.from('screen_views').insert({
       'user_id': userId,
       'session_id': _currentSessionId,
       'screen_name': screenName,
@@ -55,7 +60,7 @@ class AnalyticsService {
     Map<String, dynamic>? data,
     String? screen,
   }) async {
-    await _client.from('analytics.feature_events').insert({
+    await _client.from('feature_events').insert({
       'user_id': userId,
       'session_id': _currentSessionId,
       'event_name': eventName,
@@ -67,7 +72,7 @@ class AnalyticsService {
 
   // ── ERRORS ─────────────────────────────────────────────
   Future<void> logError(String userId, String screen, String errorMsg) async {
-    await _client.from('analytics.error_logs').insert({
+    await _client.from('error_logs').insert({
       'user_id': userId,
       'screen': screen,
       'error_message': errorMsg,
@@ -77,7 +82,7 @@ class AnalyticsService {
 
   // ── RETENTION ─────────────────────────────────────────
   Future<void> _upsertRetentionFlag(String userId) async {
-    await _client.from('analytics.retention_flags').upsert({
+    await _client.from('retention_flags').upsert({
       'user_id': userId,
       'last_seen': DateTime.now().toIso8601String(),
     }, onConflict: 'user_id');

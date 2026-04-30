@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:prodiet_unified/core/config/app_config.dart';
 import 'app.dart';
 
 final logger = Logger(
@@ -36,16 +36,14 @@ void main() {
       return true;
     };
 
-    // 1. Load environment variables
-    await dotenv.load(fileName: '.env');
-
-    // 2. Initialize timezone (for local notifications)
+    // 1. Initialize timezone (for local notifications)
     tz.initializeTimeZones();
 
-    // Init Supabase
+    // 2. Init Supabase with secure config
+    AppConfig.assertValid();
     await Supabase.initialize(
-      url: dotenv.env['SUPABASE_URL']!,
-      anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+      url: AppConfig.supabaseUrl,
+      anonKey: AppConfig.supabaseAnonKey,
     );
 
     // Init Firebase

@@ -82,8 +82,8 @@ class NutritionRepository {
           .ilike('product_name', '%$query%')
           .limit(10);
 
-      if (localResults != null && (localResults as List).isNotEmpty) {
-        final items = (localResults as List)
+      if (localResults.isNotEmpty) {
+        final items = localResults
             .map((i) => NutritionItem.fromJson(i))
             .toList();
         return Right(items);
@@ -97,7 +97,9 @@ class NutritionRepository {
         final data = jsonDecode(response.body);
         final products = data['products'] as List? ?? [];
         if (products.isNotEmpty) {
-          final items = products.map((p) => _mapOFFToNutritionItem(p)).toList();
+          final items = products
+              .map((p) => _mapOFFToNutritionItem(p, p['code'] as String?))
+              .toList();
           
           // Cache and save (limit to top results)
           final topItems = items.take(5).toList();

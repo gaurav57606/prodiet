@@ -12,10 +12,11 @@ class MealRepository {
     return _supabase
         .from('meals')
         .stream(primaryKey: ['id'])
-        .eq('user_id', userId)
-        .eq('planned_date', today) // Server-side filtering
+        .eq('planned_date', today) // Server-side date filtering
         .map((data) {
-          return data.map((row) => Meal.fromJson(row)).toList()
+          return data
+            .where((row) => row['user_id'] == userId) // Client-side user filtering
+            .map((row) => Meal.fromJson(row)).toList()
             ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
         });
   }
@@ -43,7 +44,6 @@ class MealRepository {
       'ingredients': ingredients,
       'status': MealStatus.pending.name,
       'planned_date': today,
-      'date': today, // backup for legacy columns
       'created_at': now.toIso8601String(),
     };
     
