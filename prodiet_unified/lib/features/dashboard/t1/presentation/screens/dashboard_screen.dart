@@ -108,7 +108,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Macros Today',
-                    onAction: () => context.go('/meals'),
+                    onAction: () => context.go(AppRoutes.t1MealPlanner),
                   ),
                 ),
               ),
@@ -130,7 +130,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Next Meal',
-                    onAction: () => context.go('/meals'),
+                    onAction: () => context.go(AppRoutes.t1MealPlanner),
                   ),
                 ),
               ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
@@ -112,6 +114,7 @@ class MealPlannerScreen extends ConsumerWidget {
         border: Border.all(color: isToday ? T2Colors.lime : T2Colors.border),
       ),
       child: ListTile(
+        onTap: () => context.push(AppRoutes.t1TodayMeals),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,

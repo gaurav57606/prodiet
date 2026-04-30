@@ -40,19 +40,28 @@ class _DmAppShellState extends State<DmAppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     return Scaffold(
       body: widget.child,
       extendBody: true,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color(0xFF8B5CF6),
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Voice entry coming soon'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        },
+        backgroundColor: scheme.primary,
         elevation: 6,
         shape: const CircleBorder(),
-        child: const Icon(Icons.mic_rounded, color: Colors.white, size: 28),
+        child: Icon(Icons.mic_rounded, color: scheme.onPrimary, size: 28),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xFF0A0A0F),
+        color: scheme.surface,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         padding: EdgeInsets.zero,
@@ -73,8 +82,10 @@ class _DmAppShellState extends State<DmAppShell> {
   Widget _navItem(BuildContext ctx, IconData filled, IconData outlined, 
                   String label, int index) {
     final isActive = _currentIndex == index;
-    const activeColor = Color(0xFF8B5CF6);
-    const inactiveColor = Color(0x40FFFFFF);
+    final theme = Theme.of(ctx);
+    final scheme = theme.colorScheme;
+    final activeColor = scheme.primary;
+    final inactiveColor = scheme.onSurface.withOpacity(0.4);
     return GestureDetector(
       onTap: () => _onTap(index),
       child: Column(
@@ -86,8 +97,7 @@ class _DmAppShellState extends State<DmAppShell> {
               size: 24),
           const SizedBox(height: 2),
           Text(label,
-            style: TextStyle(
-              fontFamily: 'Outfit',
+            style: theme.textTheme.labelSmall?.copyWith(
               fontSize: 9,
               fontWeight: FontWeight.w700,
               color: isActive ? activeColor : inactiveColor,

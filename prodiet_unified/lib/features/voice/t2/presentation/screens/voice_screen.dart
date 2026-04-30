@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
-import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_text_field.dart';
 
-class VoiceScreen extends StatelessWidget {
+class VoiceScreen extends StatefulWidget {
   const VoiceScreen({super.key});
+
+  @override
+  State<VoiceScreen> createState() => _VoiceScreenState();
+}
+
+class _VoiceScreenState extends State<VoiceScreen> {
+  bool _isListening = false;
+  String _detectedText = '"150g chicken breast"';
+  final TextEditingController _typeController = TextEditingController();
+
+  @override
+  void dispose() {
+    _typeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +48,21 @@ class VoiceScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: primary.withOpacity(0.3), width: 2),
+                      GestureDetector(
+                        onTap: () => setState(() => _isListening = !_isListening),
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: primary.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: primary.withOpacity(0.3), width: 2),
+                          ),
+                          child: Icon(
+                            _isListening ? Icons.stop : Icons.mic,
+                            color: primary, size: 32,
+                          ),
                         ),
-                        child: Icon(Icons.mic, color: primary, size: 32),
                       ),
                       const SizedBox(height: 14),
                       Row(
@@ -61,11 +81,11 @@ class VoiceScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        "\"150g chicken breast\"",
+                        _detectedText,
                         style: theme.textTheme.headlineMedium?.copyWith(fontSize: 20, color: primary),
                       ),
                       Text(
-                        "Tap mic to start · Speak naturally",
+                        _isListening ? "Listening..." : "Tap mic to start · Speak naturally",
                         style: theme.textTheme.bodySmall,
                       ),
                     ],
@@ -88,7 +108,12 @@ class VoiceScreen extends StatelessWidget {
                       Text("Detected: Chicken Breast 150g", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontWeight: FontWeight.w700)),
                       Text("246 kcal · 46g protein · 0g carbs · 5g fat", style: theme.textTheme.bodySmall),
                       const SizedBox(height: 6),
-                      Text("Add to inventory ›", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontSize: 10)),
+                      GestureDetector(
+                        onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Item added to pantry')),
+                        ),
+                        child: Text("Add to inventory ›", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontSize: 10)),
+                      ),
                     ],
                   ),
                 ),
@@ -112,19 +137,33 @@ class VoiceScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: DmTextField(
+                        controller: _typeController,
                         hint: "Type ingredient + quantity...",
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius: BorderRadius.circular(7),
+                    GestureDetector(
+                      onTap: () {
+                        if (_typeController.text.isNotEmpty) {
+                          setState(() {
+                            _detectedText = '"${_typeController.text}"';
+                            _typeController.clear();
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Added to inventory')),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: primary,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Text("Add", style: theme.textTheme.labelLarge?.copyWith(color: Colors.black)),
                       ),
-                      child: Text("Add", style: theme.textTheme.labelLarge?.copyWith(color: Colors.black)),
                     ),
                   ],
                 ),

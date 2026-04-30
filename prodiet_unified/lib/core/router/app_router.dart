@@ -100,6 +100,7 @@ class AppRoutes {
   static const String t2Onboarding = '/t2/onboarding';
   static const String t2Login = '/t2/login';
   static const String t2Signup = '/t2/signup';
+  static const String t2ForgotPassword = '/t2/forgot-password';
 
   // T2 Shell
   static const String t2Dashboard = '/t2/dashboard';
@@ -165,6 +166,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
       '/t1/login',  '/t2/login',
       '/t1/signup', '/t2/signup',
       '/t1/forgot-password',
+      '/t2/forgot-password',
       '/t1/onboarding', '/t2/onboarding',
       '/t1/health-goals',
 //      '/t1/verify-phone', // TODO: re-enable when phone auth is implemented
@@ -233,6 +235,11 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t2Onboarding, name: 't2Onboarding', builder: (context, state) => const t2_onboarding.OnboardingScreen()),
     GoRoute(path: AppRoutes.t2Login, name: 't2Login', builder: (context, state) => const t2_login.LoginScreen()),
     GoRoute(path: AppRoutes.t2Signup, name: 't2Signup', builder: (context, state) => const t2_signup.SignupScreen()),
+    GoRoute(
+      path: AppRoutes.t2ForgotPassword,
+      name: 't2ForgotPassword',
+      builder: (context, state) => const t1_forgot_password.ForgotPasswordScreen(),
+    ),
 
     // T2 Shell
     ShellRoute(

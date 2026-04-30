@@ -83,16 +83,54 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
             isEmpty: (items) => items.isEmpty,
             emptyState: SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(40),
-                child: Center(
-                  child: Text(
-                    'PANTRY EMPTY',
-                    style: GoogleFonts.barlowCondensed(
-                      color: T2Colors.textMuted,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.inventory_2_outlined, color: T2Colors.textMuted, size: 48),
+                    const SizedBox(height: 16),
+                    Text(
+                      'PANTRY EMPTY',
+                      style: GoogleFonts.barlowCondensed(
+                        color: T2Colors.textMuted,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Scan a bill or add items manually to get started.',
+                      style: TextStyle(color: T2Colors.textSecondary, fontSize: 13),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () => Navigator.of(context).pushNamed('/t2/ocr'),
+                      icon: const Icon(Icons.qr_code_scanner, color: Colors.black),
+                      label: const Text(
+                        'SCAN A BILL',
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: T2Colors.lime,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () => _showAddItemSheet(context, ref, userId),
+                      child: Text(
+                        'ADD MANUALLY',
+                        style: GoogleFonts.barlowCondensed(
+                          color: T2Colors.amber,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

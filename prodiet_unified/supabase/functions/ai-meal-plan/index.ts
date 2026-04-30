@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { corsHeaders } from '../_shared/cors.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
@@ -8,6 +9,9 @@ const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')
 const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!)
 
 serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
   try {
     const params = await req.json()
     const { user_id, fitness_goal, activity_level, dietary_preferences, allergies, days = 7 } = params
@@ -28,7 +32,7 @@ serve(async (req) => {
       // Update hit count
       await supabase.rpc('increment_cache_hit', { hash: hashHex })
       return new Response(JSON.stringify(cached.response_json), {
-        headers: { "Content-Type": "application/json" },
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       })
     }
 
@@ -56,9 +60,12 @@ serve(async (req) => {
     })
 
     return new Response(JSON.stringify(resultJson), {
-      headers: { "Content-Type": "application/json" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     })
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
+    return new Response(JSON.stringify({ error: error.message }), { 
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
+    })
   }
 })
