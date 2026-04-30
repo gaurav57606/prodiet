@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/core/services/fcm_service.dart';
 import '../../../main.dart'; // for logger
 import '../../../core/error/error_handler.dart';
 import '../data/auth_repository.dart';
@@ -8,10 +9,13 @@ import 'auth_state.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
+  final FcmService? _fcm;
   static const _tag = 'AuthNotifier';
   StreamSubscription? _authSubscription;
 
-  AuthNotifier(this._repo) : super(const AuthLoading()) {
+  AuthNotifier(this._repo, {FcmService? fcm})
+      : _fcm = fcm,
+        super(const AuthLoading()) {
     _init();
   }
 
@@ -55,6 +59,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
   void _handleProfile(AppUser profile) {
     if (profile.onboardingComplete) {
       state = AuthAuthenticated(profile);
+      _fcm?.initialize(profile.id).catchError((e) {
+        logger.w('[$_tag] FCM init failed: $e');
+      });
     } else {
       state = AuthNeedsOnboarding(profile);
     }

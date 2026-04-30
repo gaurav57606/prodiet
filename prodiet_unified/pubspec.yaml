@@ -33,6 +33,8 @@ dependencies:
 
   # Connectivity
   connectivity_plus: ^6.0.3
+  device_info_plus: ^10.1.0
+  package_info_plus: ^8.0.0
 
   # Notifications
   flutter_local_notifications: ^17.2.2

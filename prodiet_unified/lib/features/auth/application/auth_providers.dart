@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/core/services/fcm_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import '../data/auth_repository.dart';
 import '../domain/models/app_user.dart';
@@ -17,7 +18,10 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 // Main auth state — THE single source of truth
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(ref.watch(authRepositoryProvider));
+  return AuthNotifier(
+    ref.watch(authRepositoryProvider),
+    fcm: ref.watch(fcmServiceProvider),
+  );
 });
 
 // Convenience selectors

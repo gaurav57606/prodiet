@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/core/services/analytics_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_text_styles.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
@@ -18,8 +21,25 @@ import 'package:prodiet_unified/core/widgets/skeletons/dashboard_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authState = ref.read(authProvider);
+      if (authState is AuthAuthenticated) {
+        ref.read(analyticsServiceProvider)
+            .logScreen(authState.user.id, 't1_dashboard');
+      }
+    });
+  }
 
   String _getGreeting(String name) {
     final hour = DateTime.now().hour;
@@ -29,7 +49,7 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         top: true,
@@ -135,9 +155,9 @@ class DashboardScreen extends ConsumerWidget {
                 ),
               ),
               
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                  padding: EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Alerts',
                   ),
@@ -146,7 +166,11 @@ class DashboardScreen extends ConsumerWidget {
               
               const SliverToBoxAdapter(child: AlertsList()),
               
-              const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom + 80,
+                ),
+              ),
             ],
           ),
         ),

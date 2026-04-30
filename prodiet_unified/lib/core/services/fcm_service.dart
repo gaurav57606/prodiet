@@ -1,3 +1,4 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
@@ -55,8 +56,13 @@ class FcmService {
   }
 }
 
+final notificationServiceProvider = Provider<NotificationService>((ref) {
+  return NotificationService();
+});
+
 final fcmServiceProvider = Provider<FcmService>((ref) {
   final supabase = ref.watch(supabaseClientProvider);
-  // We need a way to get notification service, maybe another provider
-  return FcmService(supabase, NotificationService());
+  final notifications = ref.watch(notificationServiceProvider);
+  return FcmService(supabase, notifications);
 });
+

@@ -1,12 +1,13 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:logger/logger.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
+  final _logger = Logger();
 
   Future<void> initialize() async {
-    tz.initializeTimeZones();
+    // Initialized in main.dart
 
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings(
@@ -28,7 +29,7 @@ class NotificationService {
     );
 
     // Create Android channels
-    const androidPlugin = FlutterLocalNotificationsPlugin();
+    final androidPlugin = FlutterLocalNotificationsPlugin();
     await androidPlugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(const AndroidNotificationChannel(
@@ -73,20 +74,30 @@ class NotificationService {
   }
 
   Future<void> scheduleWaterReminder(int intervalHours) async {
-    // Basic implementation: Schedule for the next occurrence
-    // In a real app, you might use a work manager or multiple scheduled notifications
-    await _notifications.periodicallyShow(
-      999, // Static ID for water
-      'Time to hydrate!',
+    // Cancel any existing water reminder first
+    await _notifications.cancel(999);
+
+    final scheduledTime = tz.TZDateTime.now(tz.local).add(Duration(hours: intervalHours));
+
+    await _notifications.zonedSchedule(
+      999,
+      'Time to hydrate! 💧',
       'Drink a glass of water to stay on track with your goal.',
-      RepeatInterval.everyTwoHours, // IntervalHours support is limited in periodicShow
+      scheduledTime,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'prodiet_reminders',
           'ProDiet Reminders',
+          importance: Importance.defaultImportance,
+          priority: Priority.defaultPriority,
         ),
+        iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      payload: 'water|reminder',
     );
   }
 
@@ -110,8 +121,8 @@ class NotificationService {
   }
 
   Future<void> cancelMealReminders() async {
-    // This requires tracking IDs or using a specific range
-    // For now, simple implementation
-    await _notifications.cancelAll();
+    // TODO: Implement selective cancel using stored meal notification IDs.
+    // Do NOT call _notifications.cancelAll() — it also cancels water reminders (ID: 999).
+    _logger.d('[NotificationService] cancelMealReminders called — selective cancel not yet implemented');
   }
 }

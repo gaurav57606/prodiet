@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Which visual theme is currently active.
 /// Each value maps to a completely isolated ThemeData.
@@ -12,7 +13,32 @@ enum ActiveTheme {
   t2Amoled,   // theme2 — BarlowCondensed+DmSans — lime/amoled
 }
 
-/// Default: t1Dark — matches theme1's original ThemeMode.dark default.
-final activeThemeProvider = StateProvider<ActiveTheme>(
-  (ref) => ActiveTheme.t1Dark,
+const _kThemeKey = 'active_theme';
+
+class ActiveThemeNotifier extends Notifier<ActiveTheme> {
+  @override
+  ActiveTheme build() => ActiveTheme.t1Dark;
+
+  Future<void> init() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_kThemeKey);
+    if (saved != null) {
+      final match = ActiveTheme.values.firstWhere(
+        (e) => e.name == saved,
+        orElse: () => ActiveTheme.t1Dark,
+      );
+      state = match;
+    }
+  }
+
+  Future<void> setTheme(ActiveTheme theme) async {
+    state = theme;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kThemeKey, theme.name);
+  }
+}
+
+/// Default: t1Dark — persisted to SharedPreferences across restarts.
+final activeThemeProvider = NotifierProvider<ActiveThemeNotifier, ActiveTheme>(
+  ActiveThemeNotifier.new,
 );

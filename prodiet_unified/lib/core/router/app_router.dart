@@ -90,6 +90,7 @@ class AppRoutes {
   static const String activitySyncName = 't1ActivitySync';
   static const String ocrName = 't1Ocr';
   static const String progressName = 't1Progress';
+  // TODO: These routes are not yet registered. Do not use goNamed() with these until screens are built.
   static const String recipeName = 't1Recipe';
   static const String profileName = 't1Profile';
   static const String notificationsName = 't1Notifications';
@@ -125,12 +126,16 @@ final GlobalKey<NavigatorState> _shellT2Key = GlobalKey<NavigatorState>(debugLab
 /// Bridges Riverpod auth state changes into GoRouter's
 /// refreshListenable so redirects fire automatically.
 class _AuthStateNotifier extends ChangeNotifier {
-  _AuthStateNotifier(WidgetRef ref) {
-    ref.listen(authProvider, (_, __) => notifyListeners());
+  _AuthStateNotifier(ProviderContainer container) {
+    container.listen<AuthState>(
+      authProvider,
+      (_, __) => notifyListeners(),
+      fireImmediately: false,
+    );
   }
 }
 
-GoRouter createAppRouter(WidgetRef ref) => GoRouter(
+GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
   navigatorKey: _rootKey,
   initialLocation: '/',
   refreshListenable: _AuthStateNotifier(ref),
@@ -160,25 +165,32 @@ GoRouter createAppRouter(WidgetRef ref) => GoRouter(
       '/t1/login',  '/t2/login',
       '/t1/signup', '/t2/signup',
       '/t1/forgot-password',
-      '/t1/onboarding',
+      '/t1/onboarding', '/t2/onboarding',
       '/t1/health-goals',
 //      '/t1/verify-phone', // TODO: re-enable when phone auth is implemented
     };
 
     final isPublic = publicRoutes.contains(loc);
 
+    final activeTheme = ref.read(activeThemeProvider);
+    final isT2 = activeTheme == ActiveTheme.t2Dark ||
+                 activeTheme == ActiveTheme.t2Light ||
+                 activeTheme == ActiveTheme.t2Amoled;
+
     if (authState is AuthLoading) {
-      return loc.contains('splash') ? null : '/t1/splash';
+      return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
     }
     if (authState is AuthUnauthenticated) {
-      return isPublic ? null : '/t1/login';
+      return isPublic ? null : (isT2 ? '/t2/login' : '/t1/login');
     }
     if (authState is AuthNeedsOnboarding) {
+      if (isT2) return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
       return (loc == '/t1/health-goals') ? null : '/t1/health-goals';
     }
     if (authState is AuthAuthenticated) {
-      // Kick authenticated users away from auth pages
-      if (isPublic && !loc.contains('splash')) return '/t1/dashboard';
+      if (isPublic && !loc.contains('splash')) {
+        return isT2 ? '/t2/dashboard' : '/t1/dashboard';
+      }
       return null;
     }
     return null;

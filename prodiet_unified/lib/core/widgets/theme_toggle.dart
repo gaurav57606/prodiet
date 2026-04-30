@@ -20,13 +20,13 @@ class ThemeToggle extends ConsumerWidget {
         final current = ref.read(activeThemeProvider);
         // Simplified toggle logic for the unified structure
         if (current == ActiveTheme.t1Dark || current == ActiveTheme.t1Amoled) {
-          ref.read(activeThemeProvider.notifier).state = ActiveTheme.t1Light;
+          ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t1Light);
         } else if (current == ActiveTheme.t1Light) {
-          ref.read(activeThemeProvider.notifier).state = ActiveTheme.t1Dark;
+          ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t1Dark);
         } else if (current == ActiveTheme.t2Dark || current == ActiveTheme.t2Amoled) {
-          ref.read(activeThemeProvider.notifier).state = ActiveTheme.t2Light;
+          ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t2Light);
         } else if (current == ActiveTheme.t2Light) {
-          ref.read(activeThemeProvider.notifier).state = ActiveTheme.t2Dark;
+          ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t2Dark);
         }
       },
       tooltip: 'Toggle Theme',

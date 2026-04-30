@@ -13,17 +13,10 @@ class MealRepository {
         .from('meals')
         .stream(primaryKey: ['id'])
         .eq('user_id', userId)
+        .eq('planned_date', today) // Server-side filtering
         .map((data) {
-          // Filter client-side for planned_date = today
-          // We support both 'planned_date' and 'date' columns to be robust
-          return data.where((row) {
-            final rowDate = row['planned_date'] ?? row['date'];
-            return rowDate == today;
-          }).map((row) {
-            // Ensure status and mealType are strings for the model
-            return Meal.fromJson(row);
-          }).toList()
-          ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+          return data.map((row) => Meal.fromJson(row)).toList()
+            ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
         });
   }
 
