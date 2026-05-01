@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
+// import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:prodiet_unified/core/config/app_config.dart';
+import 'package:prodiet_unified/core/widgets/error_boundary.dart';
 import 'app.dart';
 
 final logger = Logger(
@@ -26,8 +28,10 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
 
     FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
       logger.e('Flutter Error: ${details.exception}', error: details.exception, stackTrace: details.stack);
       FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+      ErrorBoundary.reportError(details.exception, details.stack ?? StackTrace.empty);
     };
 
     PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
@@ -53,7 +57,9 @@ void main() {
 
     runApp(
       const ProviderScope(
-        child: ProDietApp(),
+        child: ErrorBoundary(
+          child: ProDietApp(),
+        ),
       ),
     );
     // TODO: Wire FCM navigator to GoRouter's root navigator key:

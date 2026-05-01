@@ -59,7 +59,7 @@ class DietPlanScreen extends ConsumerWidget {
               Text(
                 'ANALYSING YOUR GOALS & PREFERENCES',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -106,7 +106,7 @@ class DietPlanScreen extends ConsumerWidget {
               isScrollable: true,
               indicatorColor: T2Colors.lime,
               labelColor: T2Colors.lime,
-              unselectedLabelColor: Colors.white.withOpacity(0.5),
+              unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
               labelStyle: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w800, fontSize: 16),
               tabs: const [
                 Tab(text: 'MON'),
@@ -243,7 +243,7 @@ class DietPlanScreen extends ConsumerWidget {
                 style: GoogleFonts.barlowCondensed(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -270,7 +270,7 @@ class DietPlanScreen extends ConsumerWidget {
         ),
         subtitle: Text(
           '${meal.calories.toInt()} KCAL  •  P${meal.proteinG.toInt()} C${meal.carbsG.toInt()} F${meal.fatG.toInt()}',
-          style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 12),
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
         ),
         trailing: meal.ingredients.isNotEmpty
             ? IconButton(

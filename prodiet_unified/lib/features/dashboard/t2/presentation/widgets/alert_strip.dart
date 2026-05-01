@@ -21,9 +21,9 @@ class AlertStrip extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         border: Border.symmetric(
-          horizontal: BorderSide(color: color.withOpacity(0.20), width: 1),
+          horizontal: BorderSide(color: color.withValues(alpha: 0.20), width: 1),
         ),
       ),
       child: Row(
@@ -32,7 +32,7 @@ class AlertStrip extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
+              color: color.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(

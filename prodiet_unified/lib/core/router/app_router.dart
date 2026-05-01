@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
@@ -16,7 +18,7 @@ import 'package:prodiet_unified/features/auth/t1/presentation/screens/login_scre
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/signup_screen.dart' as t1_signup;
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/forgot_password_screen.dart' as t1_forgot_password;
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/health_goals_screen.dart' as t1_health_goals;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart' as t1_verify_phone;
+// import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart' as t1_verify_phone; // TODO: re-enable when phone auth is implemented
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1_dashboard;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/today_meals_screen.dart' as t1_today_meals;
 import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_screen.dart' as t1_diet_plan;
@@ -118,6 +120,7 @@ class AppRoutes {
   static const String t2Vendor = '/t2/vendor';
   static const String t2Fitband = '/t2/fitband';
   static const String t2Preferences = '/t2/preferences';
+  static const String t2ProfileRetry = '/t2/profile-retry';
 }
 
 final GlobalKey<NavigatorState> appRouterNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -185,6 +188,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     if (authState is AuthUnauthenticated) {
       return isPublic ? null : (isT2 ? '/t2/login' : '/t1/login');
     }
+    if (authState is AuthProfileMissing) return AppRoutes.t2ProfileRetry;
     if (authState is AuthNeedsOnboarding) {
       if (isT2) return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
       return (loc == '/t1/health-goals') ? null : '/t1/health-goals';
@@ -263,9 +267,13 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(
       path: AppRoutes.t2DietPlanDetail, 
       name: 't2DietPlanDetail', 
-      builder: (context, state) => t2_diet_plan_detail.DietPlanDetailScreen(
-        day: state.extra as DietDay,
-      ),
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>;
+        return t2_diet_plan_detail.DietPlanDetailScreen(
+          plan: extras['plan'] as DietPlan,
+          day: extras['day'] as DietDay,
+        );
+      },
     ),
     GoRoute(path: AppRoutes.t2Water, name: 't2Water', builder: (context, state) => const t2_water.WaterScreen()),
     GoRoute(path: AppRoutes.t2Ocr, name: 't2Ocr', builder: (context, state) => const t2_ocr.OcrScreen()),
@@ -274,5 +282,67 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t2Vendor, name: 't2Vendor', builder: (context, state) => const t2_vendor.VendorScreen()),
     GoRoute(path: AppRoutes.t2Fitband, name: 't2Fitband', builder: (context, state) => const t2_fitband.FitbandScreen()),
     GoRoute(path: AppRoutes.t2Preferences, name: 't2Preferences', builder: (context, state) => const t2_preferences.PreferencesScreen()),
+    GoRoute(
+      path: AppRoutes.t2ProfileRetry,
+      builder: (context, state) => const _ProfileRetryScreen(),
+    ),
   ],
 );
+
+class _ProfileRetryScreen extends ConsumerWidget {
+  const _ProfileRetryScreen();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final userId = authState is AuthProfileMissing ? authState.userId : '';
+    final isLoading = authState is AuthLoading;
+
+    return Scaffold(
+      backgroundColor: T2Colors.bgDefault,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('⏳', style: TextStyle(fontSize: 52)),
+              const SizedBox(height: 24),
+              Text('Setting up your account',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.barlowCondensed(fontSize: 32,
+                  fontWeight: FontWeight.w900, color: Colors.white)),
+              const SizedBox(height: 12),
+              const Text('This usually takes just a second.\nTap below if it\'s taking too long.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: T2Colors.textSecondary, fontSize: 14)),
+              const SizedBox(height: 40),
+              if (isLoading)
+                const CircularProgressIndicator(color: T2Colors.lime)
+              else
+                ElevatedButton(
+                  onPressed: () =>
+                    ref.read(authProvider.notifier).retryProfileLoad(userId),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: T2Colors.lime,
+                    minimumSize: const Size(220, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14))),
+                  child: const Text('RETRY',
+                    style: TextStyle(color: Colors.black,
+                      fontWeight: FontWeight.w900, fontSize: 16)),
+                ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () =>
+                  ref.read(authProvider.notifier).signOut(),
+                child: const Text('Sign out and try again',
+                  style: TextStyle(color: T2Colors.textMuted)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

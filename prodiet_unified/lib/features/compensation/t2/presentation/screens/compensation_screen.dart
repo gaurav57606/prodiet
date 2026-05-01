@@ -75,9 +75,9 @@ class CompensationScreen extends ConsumerWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: T2Colors.coral.withOpacity(0.12),
+                      color: T2Colors.coral.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: T2Colors.coral.withOpacity(0.5), width: 1.5),
+                      border: Border.all(color: T2Colors.coral.withValues(alpha: 0.5), width: 1.5),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class CompensationScreen extends ConsumerWidget {
                 const SizedBox(height: 32),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
+                  child: const Text(
                     'IMPACT ANALYSIS',
                     style: TextStyle(
                       fontSize: 10,
@@ -153,7 +153,7 @@ class CompensationScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: T2Colors.lime.withOpacity(0.05),
+                            color: T2Colors.lime.withValues(alpha: 0.05),
                             border: Border(left: BorderSide(color: T2Colors.lime, width: 3)),
                           ),
                           child: Row(
@@ -215,16 +215,23 @@ class CompensationScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: T2Colors.border),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'CUSTOMISE',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
+                        child: GestureDetector(
+                          onTap: () => _showCustomiseSheet(context),
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: T2Colors.border),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'CUSTOMISE',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -241,13 +248,53 @@ class CompensationScreen extends ConsumerWidget {
     );
   }
 
+  void _showCustomiseSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: T2Colors.bgElevated,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          left: 24, right: 24, top: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('CUSTOMISE PLAN', style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white)),
+            const SizedBox(height: 8),
+            const Text('Modify the AI adjustments before applying.',
+              style: TextStyle(color: T2Colors.textSecondary, fontSize: 13)),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: T2Colors.lime,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12))),
+              child: const Text('APPLY',
+                style: TextStyle(color: Colors.black,
+                  fontWeight: FontWeight.w900)),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+
   Widget _buildImpactChip(String label, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
         label,

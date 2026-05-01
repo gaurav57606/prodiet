@@ -36,9 +36,7 @@ class DashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
-      body: SafeArea(
-        top: true,
-        child: AsyncValueWidget<DashboardSummary>(
+      body: AsyncValueWidget<DashboardSummary>(
           value: ref.watch(dashboardProvider),
           skeleton: const DashboardSkeleton(),
           isEmpty: (data) => data.mealsToday == 0 && data.waterMl == 0,
@@ -144,7 +142,7 @@ class DashboardScreen extends ConsumerWidget {
               // Water Banner
               SliverToBoxAdapter(
                 child: GestureDetector(
-                  onTap: () => context.goNamed(AppRoutes.t2Water),
+                  onTap: () => context.go(AppRoutes.t2Water),
                   child: WaterBanner(
                     consumed: data.waterMl,
                     target: data.waterGoalMl,
@@ -165,7 +163,7 @@ class DashboardScreen extends ConsumerWidget {
                         style: T2TextStyles.sectionLabel(colorScheme),
                       ),
                       GestureDetector(
-                        onTap: () => context.goNamed(AppRoutes.t2DietPlan),
+                        onTap: () => context.go(AppRoutes.t2DietPlan),
                         child: Text(
                           "Full view",
                           style: theme.textTheme.labelLarge?.copyWith(
@@ -206,7 +204,7 @@ class DashboardScreen extends ConsumerWidget {
                         style: T2TextStyles.sectionLabel(colorScheme),
                       ),
                       GestureDetector(
-                        onTap: () => context.goNamed(AppRoutes.t2Meals),
+                        onTap: () => context.go(AppRoutes.t2Meals),
                         child: Text(
                           "Meal plan ›",
                           style: theme.textTheme.labelLarge?.copyWith(
@@ -235,7 +233,7 @@ class DashboardScreen extends ConsumerWidget {
                         style: T2TextStyles.sectionLabel(colorScheme),
                       ),
                       GestureDetector(
-                        onTap: () => context.goNamed(AppRoutes.t2Fitband),
+                        onTap: () => context.go(AppRoutes.t2Fitband),
                         child: Text(
                           "Details",
                           style: theme.textTheme.labelLarge?.copyWith(
@@ -254,7 +252,7 @@ class DashboardScreen extends ConsumerWidget {
 
               SliverToBoxAdapter(
                 child: GestureDetector(
-                  onTap: () => context.goNamed(AppRoutes.t2Compensation),
+                  onTap: () => context.go(AppRoutes.t2Compensation),
                   child: const AlertStrip(
                     message: "Check AI Insights",
                     subMessage: "Click to see plan adjustments",
@@ -267,7 +265,6 @@ class DashboardScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

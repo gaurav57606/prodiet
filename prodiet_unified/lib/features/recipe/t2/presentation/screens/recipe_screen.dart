@@ -23,6 +23,11 @@ class RecipeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const AlertStrip(
+              message: 'DEMO MODE — Sample data only',
+              subMessage: 'Live integration coming in next version',
+              isWarning: true,
+            ),
             const Padding(
               padding: EdgeInsets.all(18),
               child: VarietyToggle(),
@@ -65,11 +70,11 @@ class RecipeScreen extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      DmChip(label: "No Dairy", isSelected: true, color: const Color(0xFFFF5C3A)),
-                      DmChip(label: "No Nuts", isSelected: true, color: const Color(0xFFFF5C3A)),
-                      DmChip(label: "No Gluten", isSelected: false),
-                      DmChip(label: "No Eggs", isSelected: false),
-                      DmChip(label: "No Soy", isSelected: false),
+                      const DmChip(label: "No Dairy", isSelected: true, color: Color(0xFFFF5C3A)),
+                      const DmChip(label: "No Nuts", isSelected: true, color: Color(0xFFFF5C3A)),
+                      const DmChip(label: "No Gluten", isSelected: false),
+                      const DmChip(label: "No Eggs", isSelected: false),
+                      const DmChip(label: "No Soy", isSelected: false),
                     ],
                   ),
                 ],

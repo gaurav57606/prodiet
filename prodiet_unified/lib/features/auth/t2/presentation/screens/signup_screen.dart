@@ -93,7 +93,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
             const SizedBox(height: T2Spacing.xs),
             Text(
-              "Start your journey with DietMate Pro",
+              "Start your ProDiet journey",
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),

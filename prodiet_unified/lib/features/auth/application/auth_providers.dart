@@ -36,3 +36,9 @@ final isAuthenticatedProvider = Provider<bool>((ref) {
 final isLoadingAuthProvider = Provider<bool>((ref) {
   return ref.watch(authProvider) is AuthLoading;
 });
+
+/// Returns the current authenticated user's ID, or empty string if not
+/// authenticated. Used by stream providers that require a userId.
+final currentUserIdProvider = Provider<String>((ref) {
+  return ref.watch(authProvider.notifier).currentUser?.id ?? '';
+});

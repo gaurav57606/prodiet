@@ -126,7 +126,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: scheme.onSurface.withOpacity(0.4),
+                      color: scheme.onSurface.withValues(alpha: 0.4),
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -144,7 +144,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   Text(
                     'Step 2 of 2 — Personalise your plan',
                     style: TextStyle(
-                      color: scheme.onSurface.withOpacity(0.45),
+                      color: scheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -157,7 +157,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: scheme.outline.withOpacity(0.2),
+                          color: scheme.outline.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -287,7 +287,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                       child: Text(
                         '< Back to details',
                         style: TextStyle(
-                          color: scheme.onSurface.withOpacity(0.5),
+                          color: scheme.onSurface.withValues(alpha: 0.5),
                           fontSize: 14,
                         ),
                       ),
@@ -315,7 +315,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 13, color: scheme.onSurface.withOpacity(0.45)),
+          style: TextStyle(fontSize: 13, color: scheme.onSurface.withValues(alpha: 0.45)),
         ),
       ],
     );
@@ -332,7 +332,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
           color: scheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? scheme.primary : scheme.outline.withOpacity(0.1),
+            color: isSelected ? scheme.primary : scheme.outline.withValues(alpha: 0.1),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -351,7 +351,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: scheme.onSurface.withOpacity(0.45), fontSize: 11),
+                  style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.45), fontSize: 11),
                 ),
               ],
             ),
@@ -397,7 +397,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? scheme.primary : scheme.outline.withOpacity(0.2),
+                  color: isSelected ? scheme.primary : scheme.outline.withValues(alpha: 0.2),
                   width: isSelected ? 6 : 2,
                 ),
               ),
@@ -416,7 +416,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: scheme.onSurface.withOpacity(0.45), fontSize: 12),
+                  style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.45), fontSize: 12),
                 ),
               ],
             ),
@@ -433,7 +433,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: scheme.onSurface.withOpacity(0.4),
+        color: scheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

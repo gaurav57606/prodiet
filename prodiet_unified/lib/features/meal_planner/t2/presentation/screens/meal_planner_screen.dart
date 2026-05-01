@@ -11,6 +11,8 @@ import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
+import 'package:prodiet_unified/core/widgets/skeletons/meal_planner_skeleton.dart';
+
 class MealPlannerScreen extends ConsumerWidget {
   const MealPlannerScreen({super.key});
 
@@ -42,7 +44,7 @@ class MealPlannerScreen extends ConsumerWidget {
       ),
       body: AsyncValueWidget<List<Meal>>(
         value: combinedAsync,
-        skeleton: const Center(child: CircularProgressIndicator(color: T2Colors.lime)),
+        skeleton: const MealPlannerSkeleton(),
         isEmpty: (meals) => meals.isEmpty,
         emptyState: ProDietEmptyState(
           emoji: EmptyStateConfigs.mealPlanner.emoji,
@@ -114,7 +116,7 @@ class MealPlannerScreen extends ConsumerWidget {
         border: Border.all(color: isToday ? T2Colors.lime : T2Colors.border),
       ),
       child: ListTile(
-        onTap: () => context.push(AppRoutes.t1TodayMeals),
+        onTap: () => context.go(AppRoutes.t2DietPlan),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +149,7 @@ class MealPlannerScreen extends ConsumerWidget {
         ),
         subtitle: Text(
           '${totalCals.toInt()} KCAL PLANNED',
-          style: TextStyle(
+          style: const TextStyle(
             color: T2Colors.textSecondary,
             fontSize: 12,
             fontWeight: FontWeight.w600,

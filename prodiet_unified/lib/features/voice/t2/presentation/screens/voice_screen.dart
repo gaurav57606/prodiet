@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
+import 'package:prodiet_unified/features/inventory/application/inventory_providers.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_text_field.dart';
 
-class VoiceScreen extends StatefulWidget {
+class VoiceScreen extends ConsumerStatefulWidget {
   const VoiceScreen({super.key});
 
   @override
-  State<VoiceScreen> createState() => _VoiceScreenState();
+  ConsumerState<VoiceScreen> createState() => _VoiceScreenState();
 }
 
-class _VoiceScreenState extends State<VoiceScreen> {
+class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProviderStateMixin {
   bool _isListening = false;
   String _detectedText = '"150g chicken breast"';
   final TextEditingController _typeController = TextEditingController();
+  late final AnimationController _waveCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _waveCtrl = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 700));
+  }
 
   @override
   void dispose() {
+    _waveCtrl.dispose();
     _typeController.dispose();
     super.dispose();
   }
@@ -28,6 +41,7 @@ class _VoiceScreenState extends State<VoiceScreen> {
     final primary = theme.colorScheme.primary;
     
     return Scaffold(
+      backgroundColor: T2Colors.bgDefault,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -49,14 +63,22 @@ class _VoiceScreenState extends State<VoiceScreen> {
                   child: Column(
                     children: [
                       GestureDetector(
-                        onTap: () => setState(() => _isListening = !_isListening),
+                        onTap: () {
+                          setState(() => _isListening = !_isListening);
+                          if (_isListening) {
+                            _waveCtrl.repeat(reverse: true);
+                          } else {
+                            _waveCtrl.stop();
+                            _waveCtrl.reset();
+                          }
+                        },
                         child: Container(
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: primary.withOpacity(0.1),
+                            color: primary.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
-                            border: Border.all(color: primary.withOpacity(0.3), width: 2),
+                            border: Border.all(color: primary.withValues(alpha: 0.3), width: 2),
                           ),
                           child: Icon(
                             _isListening ? Icons.stop : Icons.mic,
@@ -65,19 +87,24 @@ class _VoiceScreenState extends State<VoiceScreen> {
                         ),
                       ),
                       const SizedBox(height: 14),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(12, (index) {
-                          return Container(
-                            width: 3,
-                            height: 4 + (index % 4 * 4).toDouble(),
-                            margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                            decoration: BoxDecoration(
-                              color: primary,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          );
-                        }),
+                      AnimatedBuilder(
+                        animation: _waveCtrl,
+                        builder: (_, __) => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(12, (i) {
+                            const bases = [4.0, 8.0, 6.0, 12.0, 7.0, 10.0, 5.0, 9.0, 6.0, 11.0, 4.0, 8.0];
+                            final h = _isListening
+                              ? bases[i] + (_waveCtrl.value * bases[i] * 0.9)
+                              : 4.0;
+                            return Container(
+                              width: 3, height: h,
+                              margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                              decoration: BoxDecoration(
+                                color: T2Colors.lime.withValues(alpha: _isListening ? 1.0 : 0.3),
+                                borderRadius: BorderRadius.circular(2)),
+                            );
+                          }),
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Text(
@@ -98,9 +125,9 @@ class _VoiceScreenState extends State<VoiceScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(13),
                   decoration: BoxDecoration(
-                    color: primary.withOpacity(0.12),
+                    color: primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: primary.withOpacity(0.2)),
+                    border: Border.all(color: primary.withValues(alpha: 0.2)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,9 +136,16 @@ class _VoiceScreenState extends State<VoiceScreen> {
                       Text("246 kcal · 46g protein · 0g carbs · 5g fat", style: theme.textTheme.bodySmall),
                       const SizedBox(height: 6),
                       GestureDetector(
-                        onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Item added to pantry')),
-                        ),
+                        onTap: () async {
+                          final userId = ref.read(currentUserIdProvider);
+                          await ref.read(inventoryRepositoryProvider).addItem(
+                            userId, name: "Chicken Breast", quantity: 150, unit: 'g', category: 'Protein');
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Item added to pantry ✓')),
+                            );
+                          }
+                        },
                         child: Text("Add to inventory ›", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontSize: 10)),
                       ),
                     ],
@@ -145,15 +179,21 @@ class _VoiceScreenState extends State<VoiceScreen> {
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () {
-                        if (_typeController.text.isNotEmpty) {
-                          setState(() {
-                            _detectedText = '"${_typeController.text}"';
-                            _typeController.clear();
-                          });
+                      onTap: () async {
+                        final text = _typeController.text.trim();
+                        if (text.isEmpty) return;
+                        final userId = ref.read(currentUserIdProvider);
+                        await ref.read(inventoryRepositoryProvider).addItem(
+                          userId, name: text, quantity: 1, unit: 'pcs', category: 'Other');
+                        setState(() => _detectedText = '"$text"');
+                        _typeController.clear();
+                        FocusScope.of(context).unfocus();
+                        if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to inventory')),
-                          );
+                            SnackBar(
+                              content: Text('$text added to pantry ✓'),
+                              backgroundColor: T2Colors.lime,
+                              behavior: SnackBarBehavior.floating));
                         }
                       },
                       child: Container(
@@ -178,47 +218,44 @@ class _VoiceScreenState extends State<VoiceScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: DmCard(
                   padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      _buildRecentItem(context, '🥩', 'Chicken Breast', '200g', '328'),
-                      _buildRecentItem(context, '🌾', 'Oats', '80g', '298'),
-                      _buildRecentItem(context, '🥦', 'Broccoli', '100g', '34'),
-                    ],
-                  ),
+                  child: Builder(builder: (context) {
+                    final invAsync = ref.watch(inventoryStreamProvider);
+                    return invAsync.when(
+                      loading: () => const SizedBox(height: 48,
+                        child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
+                      error: (_, __) => const SizedBox.shrink(),
+                      data: (items) {
+                        final recent = items.take(5).toList();
+                        if (recent.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Text('No items yet — add some above',
+                              style: const TextStyle(color: T2Colors.textMuted, fontSize: 12)),
+                          );
+                        }
+                        return Column(
+                          children: recent.map((item) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: Row(children: [
+                              const Icon(Icons.circle, size: 6, color: T2Colors.lime),
+                              const SizedBox(width: 10),
+                              Expanded(child: Text(item.ingredientName,
+                                style: const TextStyle(color: Colors.white,
+                                  fontWeight: FontWeight.w600, fontSize: 14))),
+                              Text('${item.quantity.toInt()} ${item.unit}',
+                                style: const TextStyle(color: T2Colors.textMuted, fontSize: 12)),
+                            ]),
+                          )).toList(),
+                        );
+                      },
+                    );
+                  }),
                 ),
               ),
               const SizedBox(height: 80),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildRecentItem(BuildContext context, String ico, String nm, String qty, String cal) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colorScheme.outline)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(child: Text(ico, style: const TextStyle(fontSize: 14))),
-          ),
-          const SizedBox(width: 8),
-          Expanded(child: Text(nm, style: theme.textTheme.titleMedium)),
-          Text(qty, style: theme.textTheme.bodySmall),
-          const SizedBox(width: 12),
-          Text(cal, style: theme.textTheme.headlineMedium?.copyWith(fontSize: 14, color: theme.colorScheme.primary)),
-        ],
       ),
     );
   }

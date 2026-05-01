@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/inventory/application/inventory_providers.dart';
 import 'package:prodiet_unified/features/ocr_scanner/application/ocr_providers.dart';
 import 'package:prodiet_unified/features/ocr_scanner/domain/ocr_result.dart';
@@ -14,10 +14,17 @@ import 'package:prodiet_unified/core/widgets/loaders/ai_thinking_loader.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
-class OcrScreen extends ConsumerWidget {
+class OcrScreen extends ConsumerStatefulWidget {
   const OcrScreen({super.key});
 
-  Future<void> _pickImage(WidgetRef ref, ImageSource source) async {
+  @override
+  ConsumerState<OcrScreen> createState() => _OcrScreenState();
+}
+
+class _OcrScreenState extends ConsumerState<OcrScreen> {
+  bool _isSaving = false;
+
+  Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: source);
     if (image != null) {
@@ -26,7 +33,7 @@ class OcrScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final ocrAsync = ref.watch(ocrStateProvider);
     final isScanning = ref.watch(isScanningProvider);
@@ -54,15 +61,15 @@ class OcrScreen extends ConsumerWidget {
         error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.white))),
         data: (result) {
           if (result == null) {
-            return _buildEmptyState(context, ref);
+            return _buildEmptyState(context);
           }
-          return _buildResultsView(context, ref, theme, result);
+          return _buildResultsView(context, theme, result);
         },
       ),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, WidgetRef ref) {
+  Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -79,12 +86,12 @@ class OcrScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _buildActionBtn(context, "CAMERA", Icons.camera_alt_rounded, 
-                    onTap: () => _pickImage(ref, ImageSource.camera)),
+                    onTap: () => _pickImage(ImageSource.camera)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildActionBtn(context, "GALLERY", Icons.photo_library_rounded, 
-                    onTap: () => _pickImage(ref, ImageSource.gallery)),
+                    onTap: () => _pickImage(ImageSource.gallery)),
                 ),
               ],
             ),
@@ -115,7 +122,7 @@ class OcrScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildResultsView(BuildContext context, WidgetRef ref, ThemeData theme, OcrResult result) {
+  Widget _buildResultsView(BuildContext context, ThemeData theme, OcrResult result) {
     final userId = ref.watch(currentUserIdProvider);
 
     return Column(
@@ -170,13 +177,14 @@ class OcrScreen extends ConsumerWidget {
             },
           ),
         ),
-        _buildBottomActions(context, ref, result, userId),
+        _buildBottomActions(context, result, userId),
       ],
     );
   }
 
-  Widget _buildBottomActions(BuildContext context, WidgetRef ref, OcrResult result, String userId) {
-    final selectedCount = result.selectedCount;
+  Widget _buildBottomActions(BuildContext context, OcrResult result, String userId) {
+    final selectedItems = result.selectedItems;
+    final selectedCount = selectedItems.length;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -189,25 +197,41 @@ class OcrScreen extends ConsumerWidget {
         children: [
           DmButton(
             label: "ADD $selectedCount TO PANTRY",
+            isLoading: _isSaving,
             onPressed: selectedCount > 0 ? () async {
-              final itemsToAdd = result.selectedItems.map((i) => {
-                'name': i.name,
-                'quantity': i.quantity,
-                'unit': i.unit,
-                'category': i.category,
-              }).toList();
-              
-              await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, itemsToAdd);
-              
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("$selectedCount ITEMS ADDED ✅", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
-                    backgroundColor: T2Colors.lime,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-                Navigator.pop(context);
+              setState(() => _isSaving = true);
+              try {
+                final itemsToAdd = selectedItems.map((i) => {
+                  'name': i.name,
+                  'quantity': i.quantity,
+                  'unit': i.unit,
+                  'category': i.category,
+                }).toList();
+                
+                await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, itemsToAdd);
+                
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("$selectedCount ITEMS ADDED ✅", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
+                      backgroundColor: T2Colors.lime,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  Navigator.pop(context);
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("FAILED TO SAVE: $e", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                      backgroundColor: T2Colors.coral,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              } finally {
+                if (mounted) setState(() => _isSaving = false);
               }
             } : null,
           ),

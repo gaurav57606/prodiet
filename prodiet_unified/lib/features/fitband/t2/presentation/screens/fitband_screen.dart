@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
+import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/alert_strip.dart';
 
 class FitbandScreen extends StatelessWidget {
   const FitbandScreen({super.key});
@@ -21,6 +22,11 @@ class FitbandScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const AlertStrip(
+              message: 'DEMO MODE — Sample data only',
+              subMessage: 'Live integration coming in next version',
+              isWarning: true,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
@@ -112,7 +118,7 @@ class FitbandScreen extends StatelessWidget {
                             width: 4,
                             height: h.toDouble(),
                             decoration: BoxDecoration(
-                              color: T2Colors.purple.withOpacity(0.5),
+                              color: T2Colors.purple.withValues(alpha: 0.5),
                               borderRadius: BorderRadius.circular(2),
                             ),
                           );
@@ -190,9 +196,9 @@ class FitbandScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
         label,

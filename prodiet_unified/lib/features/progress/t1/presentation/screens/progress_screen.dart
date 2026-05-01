@@ -10,6 +10,8 @@ import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
+import 'package:prodiet_unified/features/achievements/application/achievement_providers.dart';
+import 'package:prodiet_unified/features/achievements/presentation/screens/achievements_screen.dart';
 
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
@@ -76,7 +78,7 @@ class ProgressScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: T1Spacing.md),
-              _buildAchievementList(context),
+              _buildAchievementList(context, ref),
               const SizedBox(height: 100),
             ],
           ),
@@ -256,41 +258,48 @@ class ProgressScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAchievementList(BuildContext context) {
-    return Column(
-      children: [
-        _buildAchievementTile(context, 'Consistent Crusader', '7 days of hitting protein goals', Icons.star_rounded, const Color(0xFFFFD700)),
-        const SizedBox(height: T1Spacing.sm),
-        _buildAchievementTile(context, 'Hydration Master', 'Drank 3L+ for 3 consecutive days', Icons.water_drop_rounded, const Color(0xFF40D8B8)),
-      ],
-    );
-  }
-
-  Widget _buildAchievementTile(BuildContext context, String title, String subtitle, IconData icon, Color color) {
+  Widget _buildAchievementList(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    return DmCard(
-      padding: const EdgeInsets.all(12),
-      child: Row(
+    final recentAsync = ref.watch(recentAchievementsProvider(3));
+    return recentAsync.when(
+      loading: () => const SizedBox(height: 60,
+        child: Center(child: CircularProgressIndicator())),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (list) => Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          const SizedBox(width: T1Spacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900)),
-                Text(subtitle, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontWeight: FontWeight.w700)),
-              ],
-            ),
+          if (list.isEmpty)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(children: [
+                  const Text('🏆', style: TextStyle(fontSize: 20)),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(
+                    'Complete your first goal to earn achievements!',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5)))),
+                ]),
+              ),
+            )
+          else
+            ...list.map((a) => Card(
+              child: ListTile(
+                leading: const Icon(Icons.star_rounded),
+                title: Text(a.title),
+                subtitle: Text(a.description),
+              ),
+            )),
+          TextButton(
+            onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const AchievementsScreen())),
+            child: const Text('See all achievements →'),
           ),
         ],
       ),
     );
   }
+
+
 
   void _showLogWeightSheet(BuildContext context, WidgetRef ref, String userId) {
     final weightController = TextEditingController();
