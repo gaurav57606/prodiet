@@ -52,15 +52,33 @@ jobs:
           channel: stable
           cache: true
 
+      # IMPORTANT: Use unquoted heredoc (<<ENVEOF not <<'ENVEOF')
+      # Single-quoted heredoc disables ${{ }} expansion → empty secrets
       - name: Create .env.json
         run: |
-          cat > .env.json << 'ENVEOF'
+          cat > .env.json <<ENVEOF
           {
             "SUPABASE_URL": "${{ secrets.SUPABASE_URL }}",
             "SUPABASE_ANON_KEY": "${{ secrets.SUPABASE_ANON_KEY }}",
-            "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}"
+            "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+            "OPEN_FOOD_FACTS_BASE_URL": "https://world.openfoodfacts.org/api/v2"
           }
           ENVEOF
+
+      # Verify secrets are actually set — fail early with clear message
+      - name: Verify required secrets
+        run: |
+          SUPABASE_URL="${{ secrets.SUPABASE_URL }}"
+          SUPABASE_ANON_KEY="${{ secrets.SUPABASE_ANON_KEY }}"
+          if [ -z "$SUPABASE_URL" ]; then
+            echo "ERROR: SUPABASE_URL secret is not set in GitHub Actions secrets"
+            exit 1
+          fi
+          if [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "ERROR: SUPABASE_ANON_KEY secret is not set in GitHub Actions secrets"
+            exit 1
+          fi
+          echo "Secrets verified. Supabase URL starts with: ${SUPABASE_URL:0:20}..."
 
       - name: Create google-services.json
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' | python3 -c "import sys,json; data=json.load(sys.stdin); open('android/app/google-services.json','w').write(json.dumps(data,indent=2)); print('OK:', data['project_info']['project_id'])"
@@ -145,9 +163,8 @@ jobs:
           printf '%s\n' '|---|---|' >> "$GITHUB_STEP_SUMMARY"
           printf '| Commit | `%s` |\n' "${GITHUB_SHA:0:7}" >> "$GITHUB_STEP_SUMMARY"
           printf '| Flutter | %s |\n' '3.29.3 stable' >> "$GITHUB_STEP_SUMMARY"
-          printf '| Build type | %s |\n' '${{ github.event.inputs.build_type || 'debug' }}' >> "$GITHUB_STEP_SUMMARY"
           DEBUG_APK=$(ls build/app/outputs/flutter-apk/prodiet-debug-*.apk 2>/dev/null | head -1)
           RELEASE_APK=$(ls build/app/outputs/flutter-apk/prodiet-release-*.apk 2>/dev/null | head -1)
-          [ -n "$DEBUG_APK" ]   && printf '| Debug APK | Built - %s |\n' "$(du -sh $DEBUG_APK | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
-          [ -n "$RELEASE_APK" ] && printf '| Release APK | Built - %s |\n' "$(du -sh $RELEASE_APK | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          [ -n "$DEBUG_APK" ]   && printf '| Debug APK | Built %s |\n' "$(du -sh $DEBUG_APK | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          [ -n "$RELEASE_APK" ] && printf '| Release APK | Built %s |\n' "$(du -sh $RELEASE_APK | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
           true

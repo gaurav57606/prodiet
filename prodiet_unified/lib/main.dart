@@ -1,5 +1,4 @@
 import 'dart:async';
-// import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,31 +30,50 @@ void main() {
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);
-      logger.e('Flutter Error: ${details.exception}', error: details.exception, stackTrace: details.stack);
-      FirebaseCrashlytics.instance.recordFlutterFatalError(details);
-      ErrorBoundary.reportError(details.exception, details.stack ?? StackTrace.empty);
+      logger.e('Flutter Error: ${details.exception}',
+          error: details.exception, stackTrace: details.stack);
+      // Only call Crashlytics after Firebase is initialized
+      try {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+      } catch (_) {}
+      ErrorBoundary.reportError(
+          details.exception, details.stack ?? StackTrace.empty);
     };
 
     PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
       logger.e('Platform Error: $error', error: error, stackTrace: stack);
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      try {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      } catch (_) {}
       return true;
     };
 
-    // 1. Initialize timezone (for local notifications)
+    // 1. Validate config FIRST — throws StateError with clear message if keys missing
+    // This replaces the old assert() which was silently skipped in release/profile builds
+    AppConfig.assertValid();
+
+    // 2. Initialize timezone (for local notifications)
     tz.initializeTimeZones();
 
-    // 2. Init Supabase with secure config
-    AppConfig.assertValid();
+    // 3. Init Supabase
     await Supabase.initialize(
       url: AppConfig.supabaseUrl,
       anonKey: AppConfig.supabaseAnonKey,
     );
 
-    // Init Firebase
-    await Firebase.initializeApp();
+    // 4. Init Firebase — wrapped so a bad google-services.json shows a clear error
+    try {
+      await Firebase.initializeApp();
+      // Enable Crashlytics in release; disable verbose logging in debug
+      await FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(!kDebugMode);
+    } catch (e, st) {
+      logger.e('Firebase init failed: $e', error: e, stackTrace: st);
+      // App can still run without Firebase — Supabase is the primary backend
+    }
 
-    logger.i('[Main] All services initialized');
+    logger.i('[Main] All services initialized. '
+        'Supabase: ${AppConfig.supabaseUrl.substring(0, 20)}...');
 
     runApp(
       const ProviderScope(
@@ -64,10 +82,11 @@ void main() {
         ),
       ),
     );
-    // TODO: Wire FCM navigator to GoRouter's root navigator key:
-    // AppRouterNavigator.setKey(appRouterNavigatorKey);
-
   }, (Object error, StackTrace stack) {
     logger.e('Zone Error: $error', error: error, stackTrace: stack);
+    // Report unhandled zone errors to Crashlytics
+    try {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    } catch (_) {}
   });
 }
