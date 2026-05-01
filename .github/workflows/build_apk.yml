@@ -48,8 +48,6 @@ jobs:
           java-version: '17'
 
       # ── 3. Flutter 3.29.3 stable ────────────────────────────
-      # Must match the Flutter version used during development.
-      # withValues() and CardThemeData require Flutter >= 3.27
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -68,19 +66,32 @@ jobs:
           }
           EOF
 
-      # ── 5. Create google-services.json from secret ───────────
+      # ── 5. Write google-services.json using env var (safe for JSON) ─
+      # Using env + python write avoids shell quoting issues with echo/printf
       - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
+          python3 -c "
+import os, json, sys
+content = os.environ['GOOGLE_SERVICES_JSON']
+# Validate it's proper JSON before writing
+try:
+    parsed = json.loads(content)
+except Exception as e:
+    print('ERROR: GOOGLE_SERVICES_JSON secret is not valid JSON:', e)
+    sys.exit(1)
+with open('android/app/google-services.json', 'w') as f:
+    json.dump(parsed, f, indent=2)
+print('google-services.json written successfully')
+print('Project ID:', parsed.get('project_info', {}).get('project_id', 'unknown'))
+"
 
       # ── 6. Flutter pub get ───────────────────────────────────
       - name: Flutter pub get
         run: flutter pub get
 
-      # ── 7. Flutter analyze (warnings only — don't block build) ─
-      # NOTE: project has pre-existing lint warnings (unused imports, const
-      # suggestions). These are tracked separately and do not block APK output.
-      # Change continue-on-error to false once warnings are resolved.
+      # ── 7. Flutter analyze (non-blocking) ──────────────────────
       - name: Flutter analyze
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
         continue-on-error: true
@@ -96,7 +107,7 @@ jobs:
             --debug \
             --dart-define-from-file=.env.json
 
-      # ── 9. Build RELEASE APK (signed with debug key if no keystore) ─
+      # ── 9. Build RELEASE APK ────────────────────────────────
       - name: Build RELEASE APK
         if: |
           github.event.inputs.build_type == 'release' ||
@@ -120,13 +131,11 @@ jobs:
           DEBUG_SRC="build/app/outputs/flutter-apk/app-debug.apk"
           if [ -f "$DEBUG_SRC" ]; then
             cp "$DEBUG_SRC" "build/app/outputs/flutter-apk/prodiet-debug-${DATE}-${SHORT_SHA}.apk"
-            echo "DEBUG_APK=prodiet-debug-${DATE}-${SHORT_SHA}.apk" >> $GITHUB_ENV
           fi
 
           RELEASE_SRC="build/app/outputs/flutter-apk/app-release.apk"
           if [ -f "$RELEASE_SRC" ]; then
             cp "$RELEASE_SRC" "build/app/outputs/flutter-apk/prodiet-release-${DATE}-${SHORT_SHA}.apk"
-            echo "RELEASE_APK=prodiet-release-${DATE}-${SHORT_SHA}.apk" >> $GITHUB_ENV
           fi
 
       # ── 11. Upload DEBUG APK ─────────────────────────────────
@@ -149,7 +158,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
-      # ── 13. Upload obfuscation debug symbols ─────────────────
+      # ── 13. Upload debug symbols ─────────────────────────────
       - name: Upload debug symbols
         if: |
           github.event.inputs.build_type == 'release' ||
@@ -182,11 +191,11 @@ jobs:
             SIZE=$(du -sh "$DEBUG_APK" | cut -f1)
             echo "| Debug APK | ✅ $SIZE |" >> $GITHUB_STEP_SUMMARY
           else
-            echo "| Debug APK | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+            echo "| Debug APK | ⏭️ Skipped / Failed |" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -n "$RELEASE_APK" ]; then
             SIZE=$(du -sh "$RELEASE_APK" | cut -f1)
             echo "| Release APK | ✅ $SIZE |" >> $GITHUB_STEP_SUMMARY
           else
-            echo "| Release APK | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+            echo "| Release APK | ⏭️ Skipped / Failed |" >> $GITHUB_STEP_SUMMARY
           fi
