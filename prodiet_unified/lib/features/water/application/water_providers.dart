@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' hide currentUserIdProvider;
 import 'package:prodiet_unified/features/water/data/water_repository.dart';
 import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 import '../domain/water_log.dart';

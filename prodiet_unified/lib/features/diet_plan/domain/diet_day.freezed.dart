@@ -168,7 +168,7 @@ class __$$DietDayImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$DietDayImpl implements _DietDay {
+class _$DietDayImpl extends _DietDay {
   const _$DietDayImpl(
       {required this.dayNumber,
       required final List<DietMeal> breakfast,
@@ -179,7 +179,8 @@ class _$DietDayImpl implements _DietDay {
       : _breakfast = breakfast,
         _lunch = lunch,
         _dinner = dinner,
-        _snacks = snacks;
+        _snacks = snacks,
+        super._();
 
   factory _$DietDayImpl.fromJson(Map<String, dynamic> json) =>
       _$$DietDayImplFromJson(json);
@@ -269,7 +270,7 @@ class _$DietDayImpl implements _DietDay {
   }
 }
 
-abstract class _DietDay implements DietDay {
+abstract class _DietDay extends DietDay {
   const factory _DietDay(
       {required final int dayNumber,
       required final List<DietMeal> breakfast,
@@ -277,6 +278,7 @@ abstract class _DietDay implements DietDay {
       required final List<DietMeal> dinner,
       required final List<DietMeal> snacks,
       required final double totalCalories}) = _$DietDayImpl;
+  const _DietDay._() : super._();
 
   factory _DietDay.fromJson(Map<String, dynamic> json) = _$DietDayImpl.fromJson;
 

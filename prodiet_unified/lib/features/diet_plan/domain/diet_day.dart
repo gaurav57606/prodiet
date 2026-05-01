@@ -6,6 +6,8 @@ part 'diet_day.g.dart';
 
 @freezed
 class DietDay with _$DietDay {
+  const DietDay._();
+
   const factory DietDay({
     required int dayNumber,
     required List<DietMeal> breakfast,

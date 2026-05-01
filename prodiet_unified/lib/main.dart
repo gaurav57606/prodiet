@@ -10,6 +10,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:prodiet_unified/core/config/app_config.dart';
 import 'package:prodiet_unified/core/widgets/error_boundary.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app.dart';
 
 final logger = Logger(
@@ -26,6 +27,7 @@ final logger = Logger(
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    GoogleFonts.config.allowRuntimeFetching = false;
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);

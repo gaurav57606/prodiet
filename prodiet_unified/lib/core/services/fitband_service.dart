@@ -34,8 +34,6 @@ class FitbandService {
       HealthDataType.HEART_RATE,
     ];
 
-    final permissions = types.map((e) => HealthFileObjectType.DATA).toList();
-    
     // The health package API might have changed slightly depending on version,
     // but the general flow is requestAuthorization.
     try {

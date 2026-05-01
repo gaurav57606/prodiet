@@ -48,4 +48,7 @@ class CompensationLog {
       'created_at': createdAt.toIso8601String(),
     };
   }
+
+  String get reason => compensationType;
+  Map<String, dynamic> get planAdjustments => aiAdjustmentJson ?? {};
 }

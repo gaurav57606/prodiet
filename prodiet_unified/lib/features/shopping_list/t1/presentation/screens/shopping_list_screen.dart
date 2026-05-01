@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
-import '../application/shopping_providers.dart';
-import '../models/shopping_item.dart';
+import '../../../application/shopping_providers.dart';
+import '../../../domain/models/shopping_item.dart';
 
 class ShoppingListScreen extends ConsumerWidget {
   const ShoppingListScreen({super.key});
@@ -19,7 +19,7 @@ class ShoppingListScreen extends ConsumerWidget {
         title: const Text('Shopping List'),
         actions: [
           IconButton(
-            onPressed: () => ref.read(shoppingActionsProvider).clearBought(), 
+            onPressed: () => ref.read(shoppingActionsProvider.notifier).clearPurchased(), 
             icon: const Icon(Icons.delete_sweep_rounded)
           ),
           IconButton(onPressed: () {}, icon: const Icon(Icons.share_rounded)),
@@ -42,10 +42,10 @@ class ShoppingListScreen extends ConsumerWidget {
             );
           }
 
-          // Group by category
+          // Group by source (since category is missing in model)
           final Map<String, List<ShoppingItem>> grouped = {};
           for (var item in items) {
-            (grouped[item.category] ??= []).add(item);
+            (grouped[item.source] ??= []).add(item);
           }
 
           return Column(
@@ -65,11 +65,11 @@ class ShoppingListScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(T1Spacing.md),
                 child: DmButton(
-                  label: 'Sync to Inventory',
+                  label: 'Generate from Low Stock',
                   onPressed: () async {
-                    await ref.read(shoppingActionsProvider).syncToInventory();
+                    await ref.read(shoppingActionsProvider.notifier).generateFromLowStock();
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Inventory updated!')));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('List generated from low stock!')));
                     }
                   },
                   width: double.infinity,
@@ -109,10 +109,10 @@ class ShoppingListScreen extends ConsumerWidget {
       child: Row(
         children: [
           Checkbox(
-            value: item.isBought,
+            value: item.isPurchased,
             onChanged: (val) {
               if (val != null) {
-                ref.read(shoppingActionsProvider).toggleBought(item.id, val);
+                ref.read(shoppingActionsProvider.notifier).markPurchased(item.id, val);
               }
             },
             activeColor: theme.colorScheme.primary,
@@ -126,8 +126,8 @@ class ShoppingListScreen extends ConsumerWidget {
                 Text(
                   item.ingredientName,
                   style: theme.textTheme.titleSmall?.copyWith(
-                    decoration: item.isBought ? TextDecoration.lineThrough : null,
-                    color: item.isBought ? theme.colorScheme.onSurface.withValues(alpha: 0.3) : null,
+                    decoration: item.isPurchased ? TextDecoration.lineThrough : null,
+                    color: item.isPurchased ? theme.colorScheme.onSurface.withValues(alpha: 0.3) : null,
                   ),
                 ),
                 Text(
