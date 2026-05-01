@@ -120,7 +120,7 @@ class AppRoutes {
   static const String t2Preferences = '/t2/preferences';
 }
 
-final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> appRouterNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellT1Key = GlobalKey<NavigatorState>(debugLabel: 'shellT1');
 final GlobalKey<NavigatorState> _shellT2Key = GlobalKey<NavigatorState>(debugLabel: 'shellT2');
 
@@ -137,7 +137,7 @@ class _AuthStateNotifier extends ChangeNotifier {
 }
 
 GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
-  navigatorKey: _rootKey,
+  navigatorKey: appRouterNavigatorKey,
   initialLocation: '/',
   refreshListenable: _AuthStateNotifier(ref),
   redirect: (context, state) {
@@ -195,7 +195,12 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
       }
       return null;
     }
+    if (authState is AuthProfileMissing) {
+      // Keep user on splash — the splash screen will observe this state and show retry UI
+      return isT2 ? '/t2/splash' : '/t1/splash';
+    }
     return null;
+
   },
   routes: [
     // Standalone T1/T2 screens

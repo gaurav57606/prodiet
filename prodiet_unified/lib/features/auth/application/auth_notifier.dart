@@ -6,6 +6,8 @@ import '../../../core/error/error_handler.dart';
 import '../data/auth_repository.dart';
 import '../domain/models/app_user.dart';
 import 'auth_state.dart';
+import '../../../core/error/app_error.dart';
+
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
@@ -35,24 +37,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final profile = await _repo.fetchProfile(userId);
       if (profile == null) {
-        // Profile not created yet (happens right after signup before trigger)
-        // Or if trigger fails. We'll wait or assume onboarding needed.
-        state = const AuthLoading();
-        // Give trigger a moment or retry
-        await Future.delayed(const Duration(seconds: 1));
-        final retryProfile = await _repo.fetchProfile(userId);
-        if (retryProfile == null) {
-          // If still null, we might need to manually create or show error
-          state = const AuthUnauthenticated();
-          return;
-        }
-        _handleProfile(retryProfile);
-      } else {
-        _handleProfile(profile);
+        // Profile row not yet created (DB trigger may be delayed).
+        // Emit AuthProfileMissing so the UI can show a retry option.
+        state = AuthProfileMissing(userId);
+        return;
       }
+      _handleProfile(profile);
     } catch (e) {
       logger.e('[$_tag] _handleSession error: $e');
-      state = const AuthUnauthenticated();
+      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag._handleSession'));
     }
   }
 
@@ -100,6 +93,29 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       logger.e('[$_tag] signOut error: $e');
     }
+  }
+
+  /// Called from the UI "Retry" button when state is AuthProfileMissing.
+  /// Polls up to 5 times with 1.5s delay before giving up.
+  Future<void> retryProfileLoad(String userId) async {
+    state = const AuthLoading();
+    for (int attempt = 1; attempt <= 5; attempt++) {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      try {
+        final profile = await _repo.fetchProfile(userId);
+        if (profile != null) {
+          _handleProfile(profile);
+          return;
+        }
+        logger.w('[$_tag] retryProfileLoad attempt $attempt — profile still null');
+      } catch (e) {
+        logger.e('[$_tag] retryProfileLoad error on attempt $attempt: $e');
+      }
+    }
+    // Exhausted all retries — emit a descriptive failure
+    state = const AuthFailure(UnknownError(
+      message: 'Could not load your profile. Please check your connection and try again.',
+    ));
   }
 
   Future<void> sendPasswordReset(String email) async {

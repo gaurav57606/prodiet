@@ -50,6 +50,22 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
   try {
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ error: 'Missing authorization header' }), {
+        status: 401, headers: { 'Content-Type': 'application/json' }
+      })
+    }
+    const userClient = createClient(SUPABASE_URL, Deno.env.get('SUPABASE_ANON_KEY')!, {
+      global: { headers: { Authorization: authHeader } }
+    })
+    const { data: { user }, error: authError } = await userClient.auth.getUser()
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
     const { record } = await req.json()
     const { user_id, title, body } = record
 

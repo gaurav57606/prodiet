@@ -56,6 +56,9 @@ void main() {
         child: ProDietApp(),
       ),
     );
+    // TODO: Wire FCM navigator to GoRouter's root navigator key:
+    // AppRouterNavigator.setKey(appRouterNavigatorKey);
+
   }, (Object error, StackTrace stack) {
     logger.e('Zone Error: $error', error: error, stackTrace: stack);
   });
