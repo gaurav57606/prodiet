@@ -79,7 +79,7 @@ class NutritionRepository {
       final localResults = await _client
           .from('nutrition')
           .select()
-          .ilike('product_name', '%$query%')
+          .ilike('product_name', '%${_escapeLike(query)}%')
           .limit(10);
 
       if (localResults.isNotEmpty) {
@@ -176,5 +176,12 @@ class NutritionRepository {
     } catch (e) {
       // Silent fail for background storage
     }
+  }
+
+  String _escapeLike(String input) {
+    return input
+        .replaceAll('\\', '\\\\')
+        .replaceAll('%', '\\%')
+        .replaceAll('_', '\\_');
   }
 }
