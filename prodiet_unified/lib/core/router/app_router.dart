@@ -134,7 +134,7 @@ class _AuthStateNotifier extends ChangeNotifier {
     container.listen<AuthState>(
       authProvider,
       (_, __) => notifyListeners(),
-      fireImmediately: false,
+      fireImmediately: true,
     );
   }
 }
@@ -146,18 +146,16 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
   redirect: (context, state) {
     // ── EXISTING theme-redirect (keep this block EXACTLY) ──
     if (state.matchedLocation == '/') {
+      // Use ref (ProviderContainer) directly — it is always safe
       try {
-        final container = ProviderScope.containerOf(context);
-        final active = container.read(activeThemeProvider);
+        final active = ref.read(activeThemeProvider);
         if (active == ActiveTheme.t2Dark ||
             active == ActiveTheme.t2Light ||
             active == ActiveTheme.t2Amoled) {
           return '/t2/splash';
         }
-        return '/t1/splash';
-      } catch (e) {
-        return '/t1/splash';
-      }
+      } catch (_) {}
+      return '/t1/splash';
     }
 
     // ── NEW: Auth guard ──

@@ -56,7 +56,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   scheme.surface,
-                  scheme.surfaceVariant,
+                  scheme.surfaceContainerHighest,
                 ],
               ),
             ),
@@ -91,7 +91,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   Text(
                     "Enter your email and we'll send a reset link",
                     style: TextStyle(
-                      color: scheme.onSurface.withOpacity(0.45),
+                      color: scheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -145,7 +145,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     decoration: BoxDecoration(
                       color: scheme.surfaceContainerHigh,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: scheme.outline.withOpacity(0.1)),
+                      border: Border.all(color: scheme.outline.withValues(alpha: 0.1)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +154,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         const SizedBox(height: 8),
                         RichText(
                           text: TextSpan(
-                            style: TextStyle(color: scheme.onSurface.withOpacity(0.5), fontSize: 13),
+                            style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.5), fontSize: 13),
                             children: [
                               const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
                               TextSpan(
@@ -186,7 +186,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: scheme.onSurface.withOpacity(0.4),
+        color: scheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

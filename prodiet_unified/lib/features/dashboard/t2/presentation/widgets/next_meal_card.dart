@@ -20,9 +20,7 @@ class NextMealCard extends StatelessWidget {
       );
     }
 
-    final timeStr = meal!.scheduledTime != null 
-        ? DateFormat('HH:mm').format(meal!.scheduledTime!)
-        : '--:--';
+    final timeStr = DateFormat('HH:mm').format(meal!.scheduledTime);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),

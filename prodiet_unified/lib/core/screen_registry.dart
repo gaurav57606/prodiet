@@ -1,18 +1,18 @@
-/// ═══════════════════════════════════════════════════════════════
-/// SCREEN LOCK REGISTRY
-/// ═══════════════════════════════════════════════════════════════
-/// Rules:
-///   locked      → Screen is final. Do NOT edit its file.
-///                 Commit prefix when locking: 🔒 lock:
-///   inProgress  → Actively being worked on.
-///   todo        → Not started yet.
-///
-/// To lock a screen:
-///   1. Change its value below to ScreenStatus.locked
-///   2. Commit: 🔒 lock: <screen_key>
-///   3. Never touch that screen file again without first
-///      changing it back to inProgress in a separate commit.
-/// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// SCREEN LOCK REGISTRY
+// ═══════════════════════════════════════════════════════════════
+// Rules:
+//   locked      → Screen is final. Do NOT edit its file.
+//                 Commit prefix when locking: 🔒 lock:
+//   inProgress  → Actively being worked on.
+//   todo        → Not started yet.
+//
+// To lock a screen:
+//   1. Change its value below to ScreenStatus.locked
+//   2. Commit: 🔒 lock: <screen_key>
+//   3. Never touch that screen file again without first
+//      changing it back to inProgress in a separate commit.
+// ═══════════════════════════════════════════════════════════════
 
 enum ScreenStatus { locked, inProgress, todo }
 

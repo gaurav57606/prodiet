@@ -61,7 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   scheme.surface,
-                  scheme.surfaceVariant,
+                  scheme.surfaceContainerHighest,
                 ],
               ),
             ),
@@ -103,7 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Text(
                     'Your intelligent nutrition companion',
                     style: TextStyle(
-                      color: scheme.onSurface.withOpacity(0.45),
+                      color: scheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -142,7 +142,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -165,7 +165,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -213,7 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: scheme.onSurface.withOpacity(0.3),
+                        color: scheme.onSurface.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -238,7 +238,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Text(
                         'Keep me signed in',
                         style: TextStyle(
-                          color: scheme.onSurface.withOpacity(0.7),
+                          color: scheme.onSurface.withValues(alpha: 0.7),
                           fontSize: 14,
                         ),
                       ),
@@ -266,7 +266,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Text(
                       'or continue with',
                       style: TextStyle(
-                        color: scheme.onSurface.withOpacity(0.3),
+                        color: scheme.onSurface.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -303,7 +303,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: scheme.onSurface.withOpacity(0.5)),
+                        style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.5)),
                       ),
                       GestureDetector(
                         onTap: () => context.go('/t1/signup'),
@@ -334,7 +334,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: scheme.onSurface.withOpacity(0.4),
+        color: scheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

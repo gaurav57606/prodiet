@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,7 +31,11 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       onPause: _onAppPause,
     );
     _router = createAppRouter(ProviderScope.containerOf(context));
-    ref.read(activeThemeProvider.notifier).init();
+    // Await theme init so the correct theme is active before first redirect
+    ref.read(activeThemeProvider.notifier).init().then((_) {
+      // Notify router to re-evaluate redirect after theme is loaded
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -46,13 +50,19 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
-      final deviceInfo = DeviceInfoPlugin();
-      if (Platform.isAndroid) {
-        final androidInfo = await deviceInfo.androidInfo;
-        deviceModel = '${androidInfo.manufacturer} ${androidInfo.model}';
-      } else if (Platform.isIOS) {
-        final iosInfo = await deviceInfo.iosInfo;
-        deviceModel = iosInfo.utsname.machine;
+      
+      if (!kIsWeb) {
+        final deviceInfo = DeviceInfoPlugin();
+        // Use defaultTargetPlatform instead of Platform.isXXX to avoid dart:io dependency
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          final androidInfo = await deviceInfo.androidInfo;
+          deviceModel = '${androidInfo.manufacturer} ${androidInfo.model}';
+        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+          final iosInfo = await deviceInfo.iosInfo;
+          deviceModel = iosInfo.utsname.machine;
+        }
+      } else {
+        deviceModel = 'Web Browser';
       }
     } catch (_) {}
     return {'deviceModel': deviceModel, 'appVersion': appVersion};
@@ -67,7 +77,7 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
           ref.read(analyticsServiceProvider).startSession(
             userId,
             deviceModel: info['deviceModel'] ?? 'Unknown',
-            osVersion: Platform.operatingSystemVersion,
+            osVersion: kIsWeb ? 'Web' : 'Mobile', // Simple fallback, or use device_info_plus more extensively
             appVersion: info['appVersion'] ?? '1.0.0',
           );
         }

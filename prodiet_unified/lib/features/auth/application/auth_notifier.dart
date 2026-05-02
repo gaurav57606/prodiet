@@ -23,6 +23,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void _init() {
     _authSubscription?.cancel();
+
+    // Check current session IMMEDIATELY — onAuthStateChange only fires on changes,
+    // not on the current state. Without this, a returning user stays AuthLoading forever.
+    final existingSession = _repo.currentSession();
+    if (existingSession != null) {
+      _handleSession(existingSession.user.id);
+    } else {
+      state = const AuthUnauthenticated();
+    }
+
+    // Still subscribe for future changes (sign-in, sign-out, token refresh)
     _authSubscription = _repo.authStateChanges().listen((data) async {
       final session = data.session;
       if (session == null) {

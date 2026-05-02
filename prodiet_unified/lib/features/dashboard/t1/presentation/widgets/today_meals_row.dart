@@ -153,7 +153,7 @@ class TodayMealsRow extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: DmMacroChip(
-                        value: '${meal!.nutritionalValues.fiberG?.toInt() ?? 0}g',
+                        value: '${meal!.nutritionalValues.fiberG}g',
                         label: 'FIBRE',
                         type: MacroType.fibre,
                       ),

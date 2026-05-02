@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
-import 'package:prodiet_unified/features/diet_plan/data/diet_plan_repository.dart';
 import 'package:prodiet_unified/core/services/analytics_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

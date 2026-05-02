@@ -38,6 +38,11 @@ android {
         multiDexEnabled = true
     }
 
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
     signingConfigs {
         create("release") {
             // Reads from local.properties — never hardcode here

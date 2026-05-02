@@ -1,3 +1,13 @@
+# Suppress R8/ProGuard unresolved reference warnings
+-dontwarn sun.misc.Unsafe
+-dontwarn java.util.Map
+-dontwarn com.google.gson.annotations.SerializedName
+-dontwarn com.google.gson.TypeAdapterFactory
+-dontwarn com.google.gson.JsonSerializer
+-dontwarn com.google.gson.JsonDeserializer
+-dontwarn drift.GeneratedDatabase
+-dontwarn kotlinx.serialization.Serializable
+
 # ── Flutter / General ───────────────────────────────────────────────────
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }

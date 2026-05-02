@@ -26,12 +26,12 @@ class T1Theme {
       cardTheme: CardThemeData(
         color: scheme.brightness == Brightness.dark 
             ? scheme.surfaceContainerHighest 
-            : Colors.white.withOpacity(0.7),
+            : Colors.white.withValues(alpha: 0.7),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(T1Spacing.radiusXl),
           side: BorderSide(
-            color: scheme.primary.withOpacity(0.12),
+            color: scheme.primary.withValues(alpha: 0.12),
             width: 1.0,
           ),
         ),
@@ -46,13 +46,13 @@ class T1Theme {
           if (states.contains(WidgetState.selected)) {
             return scheme.onPrimary;
           }
-          return scheme.onSurface.withOpacity(0.4);
+          return scheme.onSurface.withValues(alpha: 0.4);
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return scheme.primary;
           }
-          return scheme.onSurface.withOpacity(0.15);
+          return scheme.onSurface.withValues(alpha: 0.15);
         }),
       ),
 
@@ -70,9 +70,9 @@ class T1Theme {
       ),
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: scheme.surface.withOpacity(0.92),
+        backgroundColor: scheme.surface.withValues(alpha: 0.92),
         selectedItemColor: scheme.primary,
-        unselectedItemColor: scheme.onSurface.withOpacity(0.25),
+        unselectedItemColor: scheme.onSurface.withValues(alpha: 0.25),
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
@@ -83,7 +83,7 @@ class T1Theme {
           size: 24,
         ),
         unselectedIconTheme: IconThemeData(
-          color: scheme.onSurface.withOpacity(0.25),
+          color: scheme.onSurface.withValues(alpha: 0.25),
           size: 22,
         ),
       ),
@@ -91,8 +91,8 @@ class T1Theme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: scheme.brightness == Brightness.dark
-            ? Colors.white.withOpacity(0.05)
-            : Colors.white.withOpacity(0.6),
+            ? Colors.white.withValues(alpha: 0.05)
+            : Colors.white.withValues(alpha: 0.6),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(T1Spacing.radiusMd),
           borderSide: BorderSide.none,
@@ -100,7 +100,7 @@ class T1Theme {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(T1Spacing.radiusMd),
           borderSide: BorderSide(
-            color: scheme.primary.withOpacity(0.15),
+            color: scheme.primary.withValues(alpha: 0.15),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -108,7 +108,7 @@ class T1Theme {
           borderSide: BorderSide(color: scheme.primary, width: 1.5),
         ),
         hintStyle: tt.bodyMedium?.copyWith(
-          color: scheme.onSurface.withOpacity(0.35),
+          color: scheme.onSurface.withValues(alpha: 0.35),
         ),
       ),
     );
@@ -151,10 +151,6 @@ class T1Theme {
           onError:                  Colors.white,
           errorContainer:           T1ColorsLight.alertAmberBg,
           onErrorContainer:         T1ColorsLight.alertAmber,
-
-          // Background (deprecated but still used in M3)
-          background:               T1ColorsLight.bgPage,
-          onBackground:             T1ColorsLight.text1,
 
           // Outline / border
           outline:                  T1ColorsLight.border,
@@ -228,7 +224,7 @@ class T1Theme {
 
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor:      T1ColorsLight.navBg,
-          indicatorColor:       T1ColorsLight.primary.withOpacity(0.15),
+          indicatorColor:       T1ColorsLight.primary.withValues(alpha: 0.15),
           iconTheme: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return const IconThemeData(color: T1ColorsLight.primary);
@@ -309,7 +305,7 @@ class T1Theme {
             s.contains(WidgetState.selected) ? T1ColorsLight.primary : Colors.white),
           trackColor: WidgetStateProperty.resolveWith((s) =>
             s.contains(WidgetState.selected)
-              ? T1ColorsLight.primary.withOpacity(0.4)
+              ? T1ColorsLight.primary.withValues(alpha: 0.4)
               : T1ColorsLight.border),
         ),
 
@@ -322,7 +318,7 @@ class T1Theme {
 
         chipTheme: ChipThemeData(
           backgroundColor:   T1ColorsLight.tagNormalBg,
-          selectedColor:     T1ColorsLight.primary.withOpacity(0.15),
+          selectedColor:     T1ColorsLight.primary.withValues(alpha: 0.15),
           disabledColor:     T1ColorsLight.bgCard,
           labelStyle:        const TextStyle(fontFamily:'Outfit', color:T1ColorsLight.text2, fontSize:11),
           side:              const BorderSide(color: T1ColorsLight.border),

@@ -1,9 +1,6 @@
-import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/core/error/error_handler.dart';
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
-import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
 
 class DashboardRepository {
   final SupabaseClient _supabase;

@@ -3,7 +3,6 @@ import '../domain/models/app_user.dart';
 
 class AuthRepository {
   final SupabaseClient _supabase;
-  static const String _tag = 'AuthRepository';
 
   AuthRepository(this._supabase);
 
@@ -59,6 +58,13 @@ class AuthRepository {
 
   Stream<AuthState> authStateChanges() {
     return _supabase.auth.onAuthStateChange;
+  }
+
+  /// Returns the current active session synchronously.
+  /// Used by AuthNotifier on startup to avoid waiting for a stream event
+  /// that may have already fired before the listener was attached.
+  Session? currentSession() {
+    return _supabase.auth.currentSession;
   }
 
   Future<AppUser?> fetchProfile(String userId) async {

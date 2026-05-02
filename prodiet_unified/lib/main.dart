@@ -26,18 +26,16 @@ final logger = Logger(
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    GoogleFonts.config.allowRuntimeFetching = false;
+    ErrorBoundary.setup();
+    GoogleFonts.config.allowRuntimeFetching = true;
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);
       logger.e('Flutter Error: ${details.exception}',
           error: details.exception, stackTrace: details.stack);
-      // Only call Crashlytics after Firebase is initialized
       try {
         FirebaseCrashlytics.instance.recordFlutterFatalError(details);
       } catch (_) {}
-      ErrorBoundary.reportError(
-          details.exception, details.stack ?? StackTrace.empty);
     };
 
     PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
@@ -48,45 +46,105 @@ void main() {
       return true;
     };
 
-    // 1. Validate config FIRST — throws StateError with clear message if keys missing
-    // This replaces the old assert() which was silently skipped in release/profile builds
-    AppConfig.assertValid();
-
-    // 2. Initialize timezone (for local notifications)
-    tz.initializeTimeZones();
-
-    // 3. Init Supabase
-    await Supabase.initialize(
-      url: AppConfig.supabaseUrl,
-      anonKey: AppConfig.supabaseAnonKey,
-    );
-
-    // 4. Init Firebase — wrapped so a bad google-services.json shows a clear error
+    // Validate config — show error UI instead of white screen if keys missing
     try {
-      await Firebase.initializeApp();
-      // Enable Crashlytics in release; disable verbose logging in debug
-      await FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(!kDebugMode);
-    } catch (e, st) {
-      logger.e('Firebase init failed: $e', error: e, stackTrace: st);
-      // App can still run without Firebase — Supabase is the primary backend
+      AppConfig.assertValid();
+    } catch (e) {
+      runApp(
+        MaterialApp(
+          home: Scaffold(
+            backgroundColor: const Color(0xFF0D0D0D),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Text(
+                  '⚠️ Build Config Error\n\n$e\n\nRun with:\nflutter run --dart-define-from-file=.env.json',
+                  style: const TextStyle(
+                    color: Colors.orangeAccent,
+                    fontSize: 13,
+                    fontFamily: 'monospace',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      return; // Stop execution — don't proceed to Supabase.initialize
     }
 
-    logger.i('[Main] All services initialized. '
-        'Supabase: ${AppConfig.supabaseUrl.substring(0, 20)}...');
+    tz.initializeTimeZones();
 
-    runApp(
-      const ProviderScope(
-        child: ErrorBoundary(
-          child: ProDietApp(),
+    try {
+
+      // Init Supabase
+      await Supabase.initialize(
+        url: AppConfig.supabaseUrl,
+        anonKey: AppConfig.supabaseAnonKey,
+      );
+
+      // Init Firebase
+      if (!kIsWeb) {
+        try {
+          await Firebase.initializeApp();
+          await FirebaseCrashlytics.instance
+              .setCrashlyticsCollectionEnabled(!kDebugMode);
+        } catch (e) {
+          logger.e('Firebase init failed: $e');
+        }
+      }
+
+      runApp(
+        const ProviderScope(
+          child: ErrorBoundary(
+            child: ProDietApp(),
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e, st) {
+      logger.e('Initialization failed: $e', error: e, stackTrace: st);
+      // If initialization fails, show a clear error UI instead of a blank screen
+      runApp(
+        MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            backgroundColor: const Color(0xFF111111),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('⚙️', style: TextStyle(fontSize: 64)),
+                    const SizedBox(height: 24),
+                    const Text('Configuration Error',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    Text(e.toString().replaceAll('StateError: ', ''),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Color(0xFF888888), fontSize: 14)),
+                    const SizedBox(height: 32),
+                    const Text(
+                        'Please ensure you built the app with:\n--dart-define-from-file=.env.json',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Color(0xFFD4F263),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }, (Object error, StackTrace stack) {
     logger.e('Zone Error: $error', error: error, stackTrace: stack);
-    // Report unhandled zone errors to Crashlytics
-    try {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } catch (_) {}
   });
 }

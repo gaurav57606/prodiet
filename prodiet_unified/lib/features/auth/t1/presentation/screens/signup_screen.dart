@@ -134,7 +134,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   scheme.surface,
-                  scheme.surfaceVariant,
+                  scheme.surfaceContainerHighest,
                 ],
               ),
             ),
@@ -154,7 +154,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   Text(
                     'Step 1 of 2 — Personal details',
                     style: TextStyle(
-                      color: scheme.onSurface.withOpacity(0.45),
+                      color: scheme.onSurface.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -176,7 +176,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: scheme.outline.withOpacity(0.2),
+                          color: scheme.outline.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -216,7 +216,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -237,7 +237,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -310,7 +310,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: scheme.onSurface.withOpacity(0.3),
+                        color: scheme.onSurface.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -327,7 +327,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           decoration: BoxDecoration(
                             color: index < _passwordStrength 
                               ? scheme.primary 
-                              : scheme.outline.withOpacity(0.2),
+                              : scheme.outline.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -345,7 +345,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: scheme.onSurface.withOpacity(0.3),
+                        color: scheme.onSurface.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
@@ -370,7 +370,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(color: scheme.onSurface.withOpacity(0.6), fontSize: 13),
+                            style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6), fontSize: 13),
                             children: [
                               const TextSpan(text: 'I agree to the '),
                               TextSpan(
@@ -410,7 +410,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     child: Text(
                       'or sign up with',
                       style: TextStyle(
-                        color: scheme.onSurface.withOpacity(0.3),
+                        color: scheme.onSurface.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -456,7 +456,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: scheme.onSurface.withOpacity(0.4),
+        color: scheme.onSurface.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );
