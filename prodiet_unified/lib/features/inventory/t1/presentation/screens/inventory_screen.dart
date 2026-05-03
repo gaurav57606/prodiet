@@ -182,11 +182,12 @@ class InventoryScreen extends ConsumerWidget {
   }
 
   void _showEditQuantitySheet(BuildContext context, WidgetRef ref, InventoryItem item) {
+    final theme = Theme.of(context);
     final controller = TextEditingController(text: item.quantity.toString());
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: theme.colorScheme.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
@@ -194,19 +195,19 @@ class InventoryScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('EDIT QUANTITY', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+            Text('EDIT QUANTITY', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
             const SizedBox(height: 8),
-            Text(item.ingredientName.toUpperCase(), style: const TextStyle(fontSize: 12, color: Colors.white30)),
+            Text(item.ingredientName.toUpperCase(), style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3))),
             const SizedBox(height: 24),
             TextField(
               controller: controller,
               keyboardType: TextInputType.number,
               autofocus: true,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
               decoration: InputDecoration(
                 suffixText: item.unit,
                 filled: true,
-                fillColor: Colors.white.withValues(alpha: 0.05),
+                fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
               ),
             ),
@@ -219,11 +220,15 @@ class InventoryScreen extends ConsumerWidget {
                   final qty = double.tryParse(controller.text);
                   if (qty != null) {
                     await ref.read(inventoryRepositoryProvider).updateQuantity(item.id, qty);
-                    if (context.mounted) Navigator.pop(context);
+                    if (context.mounted) context.pop();
                   }
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8B5CF6), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                child: const Text('UPDATE', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text('UPDATE', style: TextStyle(fontWeight: FontWeight.w900)),
               ),
             ),
             const SizedBox(height: 40),
@@ -234,6 +239,7 @@ class InventoryScreen extends ConsumerWidget {
   }
 
   void _showAddItemSheet(BuildContext context, WidgetRef ref, String userId) {
+    final theme = Theme.of(context);
     final nameController = TextEditingController();
     final qtyController = TextEditingController();
     String selectedUnit = 'g';
@@ -242,7 +248,7 @@ class InventoryScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: theme.colorScheme.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => Padding(
@@ -251,16 +257,17 @@ class InventoryScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('ADD TO PANTRY', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+              Text('ADD TO PANTRY', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
               const SizedBox(height: 20),
-              _sheetInput(nameController, 'Ingredient Name'),
+              _sheetInput(context, nameController, 'Ingredient Name'),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(flex: 2, child: _sheetInput(qtyController, 'Quantity', isNumber: true)),
+                  Expanded(flex: 2, child: _sheetInput(context, qtyController, 'Quantity', isNumber: true)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: _sheetDropdown<String>(
+                      context: context,
                       value: selectedUnit,
                       items: ['g', 'kg', 'ml', 'L', 'pcs', 'cups'],
                       onChanged: (v) => setState(() => selectedUnit = v!),
@@ -270,6 +277,7 @@ class InventoryScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
               _sheetDropdown<String>(
+                context: context,
                 value: selectedCategory,
                 items: ['Grains', 'Protein', 'Dairy', 'Vegetables', 'Fruits', 'Oils', 'Spices', 'Other'],
                 onChanged: (v) => setState(() => selectedCategory = v!),
@@ -288,10 +296,14 @@ class InventoryScreen extends ConsumerWidget {
                       unit: selectedUnit,
                       category: selectedCategory,
                     );
-                    if (context.mounted) Navigator.pop(context);
+                    if (context.mounted) context.pop();
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8B5CF6), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                  child: const Text('ADD TO PANTRY', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text('ADD TO PANTRY', style: TextStyle(fontWeight: FontWeight.w900)),
                 ),
               ),
               const SizedBox(height: 24),
@@ -302,27 +314,29 @@ class InventoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _sheetInput(TextEditingController controller, String label, {bool isNumber = false}) {
+  Widget _sheetInput(BuildContext context, TextEditingController controller, String label, {bool isNumber = false}) {
+    final theme = Theme.of(context);
     return TextField(
       controller: controller,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white30, fontSize: 12),
+        labelStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.3), fontSize: 12),
         filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.05),
+        fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
       ),
     );
   }
 
-  Widget _sheetDropdown<T>({required T value, required List<T> items, required ValueChanged<T?> onChanged}) {
+  Widget _sheetDropdown<T>({required BuildContext context, required T value, required List<T> items, required ValueChanged<T?> onChanged}) {
+    final theme = Theme.of(context);
     return DropdownButtonFormField<T>(
       value: value,
-      dropdownColor: const Color(0xFF1E293B),
+      dropdownColor: theme.colorScheme.surface,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.05),
+        fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
       ),
       items: items.map((i) => DropdownMenuItem(value: i, child: Text(i.toString()))).toList(),

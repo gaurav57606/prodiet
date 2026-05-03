@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/core/widgets/loading_widget.dart';
@@ -32,12 +31,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context, ) {
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final authState = ref.watch(authProvider);
+
+    ref.listen<AuthState>(authProvider, (_, next) {
+      if (next is AuthFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(next.error.displayMessage),
+          backgroundColor: scheme.error,
+        ));
+      }
+    });
 
     if (_timedOut || authState is AuthFailure) {
       return Scaffold(
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: scheme.surface,
         body: SafeArea(
           child: Center(
             child: Padding(
@@ -49,7 +59,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   const SizedBox(height: 16),
                   Text(
                     authState is AuthFailure ? 'Authentication Error' : 'Could not connect',
-                    style: const TextStyle(color: Colors.white, fontSize: 20,
+                    style: TextStyle(color: scheme.onSurface, fontSize: 20,
                       fontWeight: FontWeight.w800),
                     textAlign: TextAlign.center,
                   ),
@@ -58,7 +68,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     authState is AuthFailure
                       ? authState.error.displayMessage
                       : 'Connection timed out. Check your internet and try again.',
-                    style: const TextStyle(color: Color(0xFFAAAAAA), fontSize: 13),
+                    style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6), fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
@@ -72,12 +82,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                       ref.invalidate(authProvider);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFD4F263),
+                      backgroundColor: scheme.primary,
                       minimumSize: const Size(180, 48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12))),
-                    child: const Text('RETRY',
-                      style: TextStyle(color: Colors.black,
+                    child: Text('RETRY',
+                      style: TextStyle(color: scheme.onPrimary,
                         fontWeight: FontWeight.w900)),
                   ),
                 ],
@@ -88,9 +98,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       );
     }
 
-    return const Scaffold(
-      backgroundColor: Color(0xFF08080F),
-      body: ProDietAuthLoader(message: 'Getting things ready...'),
+    return Scaffold(
+      backgroundColor: scheme.surface,
+      body: const ProDietAuthLoader(message: 'Getting things ready...'),
     );
   }
 }

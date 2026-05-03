@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/inventory/application/inventory_providers.dart';
@@ -31,7 +33,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
@@ -41,7 +43,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).pushNamed('/t2/ocr'),
+        onPressed: () => context.pushNamed(AppRoutes.t2Ocr),
         backgroundColor: T2Colors.lime,
         label: const Text(
           'SCAN BILL',
@@ -105,7 +107,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context).pushNamed('/t2/ocr'),
+                      onPressed: () => context.pushNamed(AppRoutes.t2Ocr),
                       icon: const Icon(Icons.qr_code_scanner, color: Colors.black),
                       label: const Text(
                         'SCAN A BILL',

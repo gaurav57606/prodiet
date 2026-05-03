@@ -181,120 +181,123 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSectionHeader(
-                    "What's your primary goal?",
-                    "This helps us personalise your meal plan",
-                    theme,
-                  ),
-                  const SizedBox(height: 16),
-                  // GOAL GRID
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 1.3,
-                    children: [
-                      _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
-                      _buildGoalCard(1, '💪', 'Build muscle', 'High protein', theme),
-                      _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', theme),
-                      _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', theme),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-
-                  _buildSectionHeader(
-                    "Activity level",
-                    "Helps calculate your daily needs",
-                    theme,
-                  ),
-                  const SizedBox(height: 16),
-                  // ACTIVITY OPTIONS
-                  _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise', theme),
-                  const SizedBox(height: 12),
-                  _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', theme),
-                  const SizedBox(height: 12),
-                  _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', theme),
-                  const SizedBox(height: 32),
-
-                  // BOTTOM INPUTS
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildLabel('AGE', theme),
-                            const SizedBox(height: 8),
-                            DmTextField(
-                              controller: _ageController,
-                              hintText: '25',
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
+              child: AbsorbPointer(
+                absorbing: isLoading,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionHeader(
+                      "What's your primary goal?",
+                      "This helps us personalise your meal plan",
+                      theme,
+                    ),
+                    const SizedBox(height: 16),
+                    // GOAL GRID
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 1.3,
+                      children: [
+                        _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
+                        _buildGoalCard(1, '💪', 'Build muscle', 'High protein', theme),
+                        _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', theme),
+                        _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', theme),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+  
+                    _buildSectionHeader(
+                      "Activity level",
+                      "Helps calculate your daily needs",
+                      theme,
+                    ),
+                    const SizedBox(height: 16),
+                    // ACTIVITY OPTIONS
+                    _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise', theme),
+                    const SizedBox(height: 12),
+                    _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', theme),
+                    const SizedBox(height: 12),
+                    _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', theme),
+                    const SizedBox(height: 32),
+  
+                    // BOTTOM INPUTS
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel('AGE', theme),
+                              const SizedBox(height: 8),
+                              DmTextField(
+                                controller: _ageController,
+                                hintText: '25',
+                                keyboardType: TextInputType.number,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                             _buildLabel('WEIGHT (KG)', theme),
-                            const SizedBox(height: 8),
-                            DmTextField(
-                              controller: _weightController,
-                              hintText: '70',
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                               _buildLabel('WEIGHT (KG)', theme),
+                              const SizedBox(height: 8),
+                              DmTextField(
+                                controller: _weightController,
+                                hintText: '70',
+                                keyboardType: TextInputType.number,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                             _buildLabel('HEIGHT (CM)', theme),
-                            const SizedBox(height: 8),
-                            DmTextField(
-                              controller: _heightController,
-                              hintText: '175',
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                               _buildLabel('HEIGHT (CM)', theme),
+                              const SizedBox(height: 8),
+                              DmTextField(
+                                controller: _heightController,
+                                hintText: '175',
+                                keyboardType: TextInputType.number,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-
-                  // Button
-                  DmButton(
-                    label: 'Complete Onboarding ✓',
-                    isLoading: isLoading,
-                    onPressed: isLoading ? null : _completeOnboarding,
-                    width: double.infinity,
-                  ),
-                  const SizedBox(height: 16),
-
-                  Center(
-                    child: TextButton(
-                      onPressed: () => context.pop(),
-                      child: Text(
-                        '< Back to details',
-                        style: TextStyle(
-                          color: scheme.onSurface.withValues(alpha: 0.5),
-                          fontSize: 14,
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+  
+                    // Button
+                    DmButton(
+                      label: 'Complete Onboarding ✓',
+                      isLoading: isLoading,
+                      onPressed: isLoading ? null : _completeOnboarding,
+                      width: double.infinity,
+                    ),
+                    const SizedBox(height: 16),
+  
+                    Center(
+                      child: TextButton(
+                        onPressed: () => context.pop(),
+                        child: Text(
+                          '< Back to details',
+                          style: TextStyle(
+                            color: scheme.onSurface.withValues(alpha: 0.5),
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
           ),

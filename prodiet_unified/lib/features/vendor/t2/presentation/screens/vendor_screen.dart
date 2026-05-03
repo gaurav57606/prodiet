@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/alert_strip.dart';
@@ -20,7 +21,7 @@ class VendorScreen extends StatelessWidget {
         centerTitle: false,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SingleChildScrollView(

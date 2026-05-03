@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SingleChildScrollView(
@@ -54,7 +55,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             const SizedBox(height: 24),
             
             _buildSectionTitle('Contact'),
-            Text(
+            const Text(
               'support@prodiet.com',
               style: TextStyle(color: T2Colors.lime, fontWeight: FontWeight.bold),
             ),

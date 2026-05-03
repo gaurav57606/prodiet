@@ -79,14 +79,17 @@ class FcmService {
   /// Shows a local notification for foreground messages.
   void _handleMessageDisplay(RemoteMessage message) {
     if (message.notification == null) return;
-    _localNotifications.scheduleLowStockAlert(
-      message.notification!.title ?? 'ProDiet Alert',
+    final route = message.data['route'] as String?;
+    
+    _localNotifications.showNotification(
+      id: message.hashCode,
+      title: message.notification!.title ?? 'ProDiet Alert',
+      body: message.notification!.body ?? '',
+      payload: route,
     );
   }
 
   /// Handles navigation when a notification is tapped.
-  /// Uses message.data['route'] to determine where to go.
-  /// Expected data payload format: { "route": "/t1/shopping" } or { "route": "/t2/inventory" }
   void _handleMessageNavigation(RemoteMessage message) {
     final route = message.data['route'] as String?;
     if (route == null || route.isEmpty) {
@@ -94,13 +97,7 @@ class FcmService {
       return;
     }
     _logger.i('[FCM] Navigating to: $route');
-    // Use the global navigator key to push the route
-    // The app_router.dart navigatorKey is exposed via navigatorKey getter below
-    try {
-      AppRouterNavigator.navigateTo(route);
-    } catch (e) {
-      _logger.e('[FCM] Navigation failed: $e');
-    }
+    AppRouterNavigator.navigateTo(route);
   }
 }
 
@@ -116,15 +113,19 @@ final fcmServiceProvider = Provider<FcmService?>((ref) {
 });
 
 /// Static navigator helper — lets FCM navigate without a BuildContext.
-/// Wire this to the GoRouter's navigatorKey in main.dart or app_router.dart.
 class AppRouterNavigator {
-  static GlobalKey<NavigatorState>? _navigatorKey;
+  static GoRouter? _router;
 
-  static void setKey(GlobalKey<NavigatorState> key) {
-    _navigatorKey = key;
+  static void setRouter(GoRouter router) {
+    _router = router;
   }
 
   static void navigateTo(String route) {
-    _navigatorKey?.currentState?.pushNamed(route);
+    if (_router == null) {
+      debugPrint('[AppRouterNavigator] Router not set!');
+      return;
+    }
+    // Use go() to replace stack or push() to add on top
+    _router!.push(route);
   }
 }

@@ -10,6 +10,9 @@ class DmTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
+  final int? maxLength;
+  final ValueChanged<String>? onChanged;
+  final FocusNode? focusNode;
 
   const DmTextField({
     super.key,
@@ -21,6 +24,9 @@ class DmTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.validator,
+    this.maxLength,
+    this.onChanged,
+    this.focusNode,
   });
 
   @override
@@ -44,11 +50,15 @@ class DmTextField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           validator: validator,
+          maxLength: maxLength,
+          onChanged: onChanged,
+          focusNode: focusNode,
           style: theme.textTheme.bodyLarge,
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
+            counterText: '',
             contentPadding: const EdgeInsets.symmetric(
               vertical: T2Spacing.md,
               horizontal: T2Spacing.md,

@@ -1,5 +1,8 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/alert_strip.dart';
 
@@ -8,6 +11,50 @@ class FitbandScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Platform guard for BLE/Sensors simulation
+    final isSupported = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+
+    if (!isSupported) {
+      return Scaffold(
+        backgroundColor: T2Colors.bgDefault,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.pop(),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.watch_off_rounded, color: T2Colors.textMuted, size: 64),
+              const SizedBox(height: 24),
+              Text(
+                'DEVICE NOT SUPPORTED',
+                style: GoogleFonts.barlowCondensed(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  'Fitband integration requires a physical mobile device with BLE support.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: T2Colors.textSecondary, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
       appBar: AppBar(
@@ -15,7 +62,7 @@ class FitbandScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SingleChildScrollView(

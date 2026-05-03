@@ -26,7 +26,7 @@ class DmChip extends StatelessWidget {
 
     final bgColor = isSelected 
         ? (backgroundColor ?? colorScheme.primary)
-        : (backgroundColor ?? (theme.brightness == Brightness.dark ? Colors.white.withOpacity(0.05) : Colors.white.withOpacity(0.4)));
+        : (backgroundColor ?? (theme.brightness == Brightness.dark ? colorScheme.onSurface.withOpacity(0.05) : colorScheme.onSurface.withOpacity(0.08)));
     
     final txtColor = isSelected
         ? (textColor ?? colorScheme.onPrimary)

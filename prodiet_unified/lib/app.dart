@@ -30,7 +30,7 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       onPause: _onAppPause,
     );
     // Await theme init so the correct theme is active before first redirect
-    ref.read(activeThemeProvider.notifier).init().then((_) {
+    ref.read(activeThemeProvider.notifier).init(ref).then((_) {
       // Notify router to re-evaluate redirect after theme is loaded
       if (mounted) setState(() {});
     });

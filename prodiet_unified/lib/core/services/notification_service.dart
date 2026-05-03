@@ -101,18 +101,36 @@ class NotificationService {
     );
   }
 
-  Future<void> scheduleLowStockAlert(String ingredientName) async {
+  Future<void> showNotification({
+    required int id,
+    required String title,
+    required String body,
+    String? payload,
+    Importance importance = Importance.high,
+  }) async {
     await _notifications.show(
-      ingredientName.hashCode,
-      'Low stock: $ingredientName',
-      'You are running low on $ingredientName. Consider adding it to your shopping list.',
-      const NotificationDetails(
+      id,
+      title,
+      body,
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'prodiet_reminders',
           'ProDiet Reminders',
-          importance: Importance.high,
+          importance: importance,
+          priority: Priority.high,
         ),
+        iOS: const DarwinNotificationDetails(),
       ),
+      payload: payload,
+    );
+  }
+
+  Future<void> scheduleLowStockAlert(String ingredientName) async {
+    await showNotification(
+      id: ingredientName.hashCode,
+      title: 'Low stock: $ingredientName',
+      body: 'You are running low on $ingredientName. Consider adding it to your shopping list.',
+      importance: Importance.high,
     );
   }
 

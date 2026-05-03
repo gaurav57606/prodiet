@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
@@ -82,102 +83,105 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           onPressed: () => context.pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(T2Spacing.xl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Create Account",
-              style: theme.textTheme.displayMedium,
-            ),
-            const SizedBox(height: T2Spacing.xs),
-            Text(
-              "Start your ProDiet journey",
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+      body: AbsorbPointer(
+        absorbing: isLoading,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(T2Spacing.xl),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Create Account",
+                style: theme.textTheme.displayMedium,
               ),
-            ),
-            const SizedBox(height: T2Spacing.xl),
-            DmTextField(
-              controller: _nameController,
-              label: "Full Name",
-              hint: "John Doe",
-              prefixIcon: const Icon(Icons.person_outline, size: 20),
-            ),
-            const SizedBox(height: T2Spacing.lg),
-            DmTextField(
-              controller: _emailController,
-              label: "Email Address",
-              hint: "name@example.com",
-              keyboardType: TextInputType.emailAddress,
-              prefixIcon: const Icon(Icons.email_outlined, size: 20),
-            ),
-            const SizedBox(height: T2Spacing.lg),
-            DmTextField(
-              controller: _passwordController,
-              label: "Password",
-              hint: "Minimum 8 characters",
-              obscureText: _obscurePassword,
-              prefixIcon: const Icon(Icons.lock_outline, size: 20),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                  size: 20,
+              const SizedBox(height: T2Spacing.xs),
+              Text(
+                "Start your ProDiet journey",
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
               ),
-            ),
-            const SizedBox(height: T2Spacing.lg),
-            DmTextField(
-              controller: _confirmPasswordController,
-              label: "Confirm Password",
-              hint: "Re-enter your password",
-              obscureText: _obscureConfirmPassword,
-              prefixIcon: const Icon(Icons.lock_outline, size: 20),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                  size: 20,
+              const SizedBox(height: T2Spacing.xl),
+              DmTextField(
+                controller: _nameController,
+                label: "Full Name",
+                hint: "John Doe",
+                prefixIcon: const Icon(Icons.person_outline, size: 20),
+              ),
+              const SizedBox(height: T2Spacing.lg),
+              DmTextField(
+                controller: _emailController,
+                label: "Email Address",
+                hint: "name@example.com",
+                keyboardType: TextInputType.emailAddress,
+                prefixIcon: const Icon(Icons.email_outlined, size: 20),
+              ),
+              const SizedBox(height: T2Spacing.lg),
+              DmTextField(
+                controller: _passwordController,
+                label: "Password",
+                hint: "Minimum 8 characters",
+                obscureText: _obscurePassword,
+                prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    size: 20,
+                  ),
+                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                 ),
-                onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
               ),
-            ),
-            const SizedBox(height: T2Spacing.xl),
-            Text(
-              "By signing up, you agree to our Terms and Conditions and Privacy Policy.",
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: T2Spacing.xl),
-            DmButton(
-              label: "Create Account",
-              isLoading: isLoading,
-              onPressed: isLoading ? null : _signUp,
-            ),
-            const SizedBox(height: T2Spacing.xl),
-            Center(
-              child: TextButton(
-                onPressed: () => context.goNamed('t2Login'),
-                child: RichText(
-                  text: TextSpan(
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    children: [
-                      const TextSpan(text: "Already have an account? "),
-                      TextSpan(
-                        text: "Log In",
-                        style: TextStyle(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+              const SizedBox(height: T2Spacing.lg),
+              DmTextField(
+                controller: _confirmPasswordController,
+                label: "Confirm Password",
+                hint: "Re-enter your password",
+                obscureText: _obscureConfirmPassword,
+                prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    size: 20,
+                  ),
+                  onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                ),
+              ),
+              const SizedBox(height: T2Spacing.xl),
+              Text(
+                "By signing up, you agree to our Terms and Conditions and Privacy Policy.",
+                style: theme.textTheme.bodySmall,
+              ),
+              const SizedBox(height: T2Spacing.xl),
+              DmButton(
+                label: "Create Account",
+                isLoading: isLoading,
+                onPressed: isLoading ? null : _signUp,
+              ),
+              const SizedBox(height: T2Spacing.xl),
+              Center(
+                child: TextButton(
+                  onPressed: () => context.goNamed(AppRoutes.t2Login),
+                  child: RichText(
+                    text: TextSpan(
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
-                    ],
+                      children: [
+                        const TextSpan(text: "Already have an account? "),
+                        TextSpan(
+                          text: "Log In",
+                          style: TextStyle(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

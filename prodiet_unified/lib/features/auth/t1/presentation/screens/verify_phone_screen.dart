@@ -1,19 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
-class VerifyPhoneScreen extends StatefulWidget {
+const String _indiaCountryCode = '+91';
+
+class VerifyPhoneScreen extends ConsumerStatefulWidget {
   const VerifyPhoneScreen({super.key});
 
   @override
-  State<VerifyPhoneScreen> createState() => _VerifyPhoneScreenState();
+  ConsumerState<VerifyPhoneScreen> createState() => _VerifyPhoneScreenState();
 }
 
-class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
+class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   final _phoneController = TextEditingController();
   final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _otpFocusNodes = List.generate(6, (_) => FocusNode());
@@ -35,6 +38,15 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
     }
     _timer?.cancel();
     super.dispose();
+  }
+
+  String _friendlyError(dynamic e) {
+    final msg = e.toString().toLowerCase();
+    if (msg.contains('invalid') && msg.contains('token')) return 'Invalid OTP code. Please check and try again.';
+    if (msg.contains('expired')) return 'OTP has expired. Please request a new one.';
+    if (msg.contains('too many')) return 'Too many attempts. Please wait a few minutes.';
+    if (msg.contains('network')) return 'Connection error. Check your internet.';
+    return 'Something went wrong. Please try again.';
   }
 
   void _startTimer() {
@@ -66,8 +78,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
     });
 
     try {
-      final supabase = Supabase.instance.client;
-      await supabase.auth.signInWithOtp(phone: '+91$phone');
+      final repo = ref.read(authRepositoryProvider);
+      await repo.sendPhoneOtp('$_indiaCountryCode$phone');
       
       if (mounted) {
         setState(() {
@@ -80,7 +92,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = e.toString();
+          _errorMessage = _friendlyError(e);
         });
       }
     }
@@ -101,20 +113,39 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
     });
 
     try {
-      final supabase = Supabase.instance.client;
-      await supabase.auth.verifyOTP(
-        phone: '+91$phone',
-        token: otp,
-        type: OtpType.sms,
-      );
+      final repo = ref.read(authRepositoryProvider);
+      await repo.verifyPhoneOtp('$_indiaCountryCode$phone', otp);
       // Success - AuthNotifier will pick up the session and redirect automatically
     } catch (e) {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Invalid or expired OTP. Please try again.';
+          _errorMessage = _friendlyError(e);
         });
       }
+    }
+  }
+
+  void _handleOtpInput(String value, int index) {
+    // Paste logic
+    if (value.length > 1) {
+      final digits = value.trim().split('').where((char) => int.tryParse(char) != null).toList();
+      for (int i = 0; i < 6 && i < digits.length; i++) {
+        _otpControllers[i].text = digits[i];
+      }
+      _otpFocusNodes[digits.length < 6 ? digits.length : 5].requestFocus();
+      return;
+    }
+
+    if (value.isNotEmpty) {
+      if (index < 5) {
+        _otpFocusNodes[index + 1].requestFocus();
+      } else {
+        _otpFocusNodes[index].unfocus();
+        // Removed auto-submit as per TASK requirement
+      }
+    } else if (value.isEmpty && index > 0) {
+      _otpFocusNodes[index - 1].requestFocus();
     }
   }
 
@@ -150,7 +181,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
             const SizedBox(height: 8),
             Text(
               _otpSent 
-                ? 'Enter the 6-digit code sent to +91 ${_phoneController.text}' 
+                ? 'Enter the 6-digit code sent to $_indiaCountryCode ${_phoneController.text}' 
                 : 'Enter your mobile number to receive a verification code',
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.5),
@@ -171,7 +202,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                   width: 60,
                   alignment: Alignment.center,
                   child: const Text(
-                    '+91',
+                    _indiaCountryCode,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -250,12 +281,15 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
         focusNode: _otpFocusNodes[index],
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
-        maxLength: 1,
+        maxLength: index == 0 ? 10 : 1, // Allow paste catch on first box if needed
         style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+        ],
         decoration: InputDecoration(
           counterText: '',
           enabledBorder: OutlineInputBorder(
@@ -269,18 +303,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
           fillColor: Colors.white.withValues(alpha: 0.05),
           filled: true,
         ),
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            if (index < 5) {
-              _otpFocusNodes[index + 1].requestFocus();
-            } else {
-              _otpFocusNodes[index].unfocus();
-              _verifyOtp();
-            }
-          } else if (value.isEmpty && index > 0) {
-            _otpFocusNodes[index - 1].requestFocus();
-          }
-        },
+        onChanged: (value) => _handleOtpInput(value, index),
       ),
     );
   }

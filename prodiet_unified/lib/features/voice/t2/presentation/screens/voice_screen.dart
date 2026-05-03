@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
@@ -42,6 +43,14 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
     
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => context.pop(),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -49,7 +58,7 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 12, 18, 8),
+                padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
                 child: Text(
                   "Add Ingredients",
                   style: theme.textTheme.displayMedium?.copyWith(fontSize: 26),
@@ -64,13 +73,12 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                     children: [
                       GestureDetector(
                         onTap: () {
-                          setState(() => _isListening = !_isListening);
-                          if (_isListening) {
-                            _waveCtrl.repeat(reverse: true);
-                          } else {
-                            _waveCtrl.stop();
-                            _waveCtrl.reset();
-                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Voice input coming soon!'),
+                              backgroundColor: T2Colors.purple,
+                            ),
+                          );
                         },
                         child: Container(
                           width: 80,

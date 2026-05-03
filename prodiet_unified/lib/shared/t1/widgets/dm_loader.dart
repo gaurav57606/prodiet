@@ -44,13 +44,13 @@ class DmLoader extends StatelessWidget {
     }
 
     return Shimmer.fromColors(
-      baseColor: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05),
-      highlightColor: isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.02),
+      baseColor: isDark ? theme.colorScheme.onSurface.withOpacity(0.05) : theme.colorScheme.onSurface.withOpacity(0.05),
+      highlightColor: isDark ? theme.colorScheme.onSurface.withOpacity(0.1) : theme.colorScheme.onSurface.withOpacity(0.02),
       child: Container(
         width: width ?? double.infinity,
         height: height ?? 20,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(borderRadius ?? T1Spacing.radiusMd),
         ),
       ),

@@ -172,15 +172,20 @@ class DietPlanScreen extends ConsumerWidget {
   }
 
   Widget _buildChip(BuildContext context, String label) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: theme.colorScheme.onPrimary.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+        style: TextStyle(
+          color: theme.colorScheme.onPrimary,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
       ),
     );
   }
@@ -231,20 +236,20 @@ class DietPlanScreen extends ConsumerWidget {
   }
 
   Widget _buildMealTile(BuildContext context, DietMeal meal) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(
-          '${meal.calories.toInt()} kcal  •  P${meal.proteinG.toInt()} C${meal.carbsG.toInt()} F${meal.fatG.toInt()}',
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: DmCard(
+        padding: EdgeInsets.zero,
+        child: ListTile(
+          onTap: () => context.goNamed(AppRoutes.t1DietPlanDetail, extra: meal),
+          title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.w900)),
+          subtitle: Text(
+            '${meal.calories.toInt()} kcal  •  P${meal.proteinG.toInt()}g C${meal.carbsG.toInt()}g F${meal.fatG.toInt()}g',
+            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+          ),
+          trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.2)),
         ),
-        trailing: meal.ingredients.isNotEmpty
-            ? IconButton(
-                icon: const Icon(Icons.info_outline),
-                onPressed: () => _showIngredients(context, meal),
-              )
-            : null,
       ),
     );
   }

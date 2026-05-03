@@ -89,4 +89,24 @@ class AuthRepository {
       rethrow;
     }
   }
+
+  Future<void> sendPhoneOtp(String phoneWithCountryCode) async {
+    try {
+      await _supabase.auth.signInWithOtp(phone: phoneWithCountryCode);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> verifyPhoneOtp(String phoneWithCountryCode, String token) async {
+    try {
+      await _supabase.auth.verifyOTP(
+        phone: phoneWithCountryCode,
+        token: token,
+        type: OtpType.sms,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

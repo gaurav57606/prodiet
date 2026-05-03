@@ -19,7 +19,7 @@ class ActiveThemeNotifier extends Notifier<ActiveTheme> {
   @override
   ActiveTheme build() => ActiveTheme.t1Dark;
 
-  Future<void> init() async {
+  Future<void> init(WidgetRef ref) async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_kThemeKey);
     if (saved != null) {
@@ -29,6 +29,8 @@ class ActiveThemeNotifier extends Notifier<ActiveTheme> {
       );
       state = match;
     }
+    // Mark as initialized
+    ref.read(activeThemeInitializedProvider.notifier).state = true;
   }
 
   Future<void> setTheme(ActiveTheme theme) async {
@@ -37,6 +39,9 @@ class ActiveThemeNotifier extends Notifier<ActiveTheme> {
     await prefs.setString(_kThemeKey, theme.name);
   }
 }
+
+/// False until SharedPreferences has been read.
+final activeThemeInitializedProvider = StateProvider<bool>((ref) => false);
 
 /// Default: t1Dark — persisted to SharedPreferences across restarts.
 final activeThemeProvider = NotifierProvider<ActiveThemeNotifier, ActiveTheme>(

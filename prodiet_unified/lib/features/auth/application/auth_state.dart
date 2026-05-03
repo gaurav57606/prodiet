@@ -3,6 +3,14 @@ import '../domain/models/app_user.dart';
 
 sealed class AuthState {
   const AuthState();
+
+  AppUser? get currentUser {
+    if (this is AuthAuthenticated) return (this as AuthAuthenticated).user;
+    if (this is AuthNeedsOnboarding) return (this as AuthNeedsOnboarding).user;
+    return null;
+  }
+
+  bool get isAuthenticated => this is AuthAuthenticated || this is AuthNeedsOnboarding;
 }
 
 class AuthLoading extends AuthState {

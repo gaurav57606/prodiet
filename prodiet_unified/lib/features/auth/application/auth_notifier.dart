@@ -183,11 +183,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> sendPasswordReset(String email) async {
     try {
+      state = const AuthLoading();
       await _repo.sendPasswordReset(email);
       if (!mounted) return;
+      // Reset back to unauthenticated after success, or just let the screen handle it
+      state = const AuthUnauthenticated();
     } catch (e) {
       if (!mounted) return;
       logger.e('[$_tag] resetPassword error: $e');
+      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.sendPasswordReset'));
     }
   }
 

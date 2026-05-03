@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class DmBadge extends StatelessWidget {
   final Widget child;
@@ -27,17 +28,18 @@ class DmBadge extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
-                color: color ?? theme.colorScheme.error,
+                color: color ?? const Color(0xFFFF5C3A), // T2 Danger/Error color
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: theme.colorScheme.surface, width: 1.5),
+                border: const Border.all(color: T2Colors.bgDefault, width: 1.5),
               ),
               constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
               child: Center(
                 child: Text(
                   label!,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onError,
+                    color: Colors.white,
                     fontSize: 8,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

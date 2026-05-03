@@ -21,6 +21,8 @@ import 'package:prodiet_unified/core/widgets/skeletons/dashboard_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
+import 'package:prodiet_unified/core/utils/date_utils.dart';
+
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
@@ -41,15 +43,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     });
   }
 
-  String _getGreeting(String name) {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning, $name 👋';
-    if (hour < 17) return 'Good afternoon, $name 👋';
-    return 'Good evening, $name 👋';
-  }
-
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authProvider).currentUser;
+    final name = user?.name?.split(' ')[0] ?? 'there';
+    final greeting = '${getTimeGreeting()}, $name 👋';
+
     return Scaffold(
       body: SafeArea(
         top: true,
@@ -62,7 +61,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             headline: EmptyStateConfigs.dashboard.headline,
             subtext: EmptyStateConfigs.dashboard.subtext,
             buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,
-            onButtonTap: () => context.push(AppRoutes.t1TodayMeals),
+            onButtonTap: () => context.goNamed(AppRoutes.dashboardName),
           ),
           builder: (data) => CustomScrollView(
             physics: const BouncingScrollPhysics(),
@@ -72,14 +71,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 title: Text(
-                  _getGreeting(data.userName.isNotEmpty ? data.userName.split(' ')[0] : 'there'),
+                  greeting,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                actions: const [
-                  ThemeToggle(),
-                  SizedBox(width: 8),
+                actions: [
+                  const ThemeToggle(),
+                  IconButton(
+                    icon: const Icon(Icons.person_rounded),
+                    onPressed: () => context.pushNamed(AppRoutes.t1Profile),
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
               
@@ -108,7 +111,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Macros Today',
-                    onAction: () => context.go(AppRoutes.t1MealPlanner),
+                    onAction: () => context.goNamed(AppRoutes.mealsName),
                   ),
                 ),
               ),
@@ -130,7 +133,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Next Meal',
-                    onAction: () => context.go(AppRoutes.t1MealPlanner),
+                    onAction: () => context.goNamed(AppRoutes.mealsName),
                   ),
                 ),
               ),

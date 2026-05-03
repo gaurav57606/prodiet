@@ -41,6 +41,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final authState = ref.watch(authProvider);
+    final isLoading = authState is AuthLoading;
+
+    ref.listen<AuthState>(authProvider, (_, next) {
+      if (next is AuthFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(next.error.displayMessage),
+          backgroundColor: scheme.error,
+        ));
+      }
+    });
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -104,73 +115,76 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextButton.icon(
-                    onPressed: () => context.go('/t1/login'),
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 14),
-                    label: const Text('Back to sign in'),
-                    style: TextButton.styleFrom(foregroundColor: scheme.primary),
-                  ),
-                  const SizedBox(height: 40),
-                  _buildLabel('EMAIL ADDRESS', theme),
-                  const SizedBox(height: 8),
-                  DmTextField(
-                    controller: _emailController,
-                    hintText: 'you@example.com',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 32),
-                  // Send Button
-                  DmButton(
-                    label: 'Send Reset Link',
-                    isLoading: _isLoading,
-                    onPressed: _isLoading ? null : _sendReset,
-                    width: double.infinity,
-                  ),
-                  if (_emailSent) ...[
-                    const SizedBox(height: 16),
-                    Center(
-                      child: Text(
-                        '✅ Reset link sent! Check your inbox.',
-                        style: TextStyle(color: Colors.green.shade400, fontWeight: FontWeight.w600),
+              child: AbsorbPointer(
+                absorbing: isLoading,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () => context.goNamed(AppRoutes.loginName),
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 14),
+                      label: const Text('Back to sign in'),
+                      style: TextButton.styleFrom(foregroundColor: scheme.primary),
+                    ),
+                    const SizedBox(height: 40),
+                    _buildLabel('EMAIL ADDRESS', theme),
+                    const SizedBox(height: 8),
+                    DmTextField(
+                      controller: _emailController,
+                      hintText: 'you@example.com',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 32),
+                    // Send Button
+                    DmButton(
+                      label: 'Send Reset Link',
+                      isLoading: isLoading,
+                      onPressed: () => _sendReset(),
+                      width: double.infinity,
+                    ),
+                    if (_emailSent) ...[
+                      const SizedBox(height: 16),
+                      Center(
+                        child: Text(
+                          '✅ Reset link sent! Check your inbox.',
+                          style: TextStyle(color: Colors.green.shade400, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 40),
+                    // Help Card
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: scheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: scheme.outline.withValues(alpha: 0.1)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLabel('DIDN\'T RECEIVE IT?', theme),
+                          const SizedBox(height: 8),
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.5), fontSize: 13),
+                              children: [
+                                const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
+                                TextSpan(
+                                  text: 'Resend email',
+                                  style: TextStyle(
+                                    color: scheme.primary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                  const SizedBox(height: 40),
-                  // Help Card
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: scheme.surfaceContainerHigh,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: scheme.outline.withValues(alpha: 0.1)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel('DIDN\'T RECEIVE IT?', theme),
-                        const SizedBox(height: 8),
-                        RichText(
-                          text: TextSpan(
-                            style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.5), fontSize: 13),
-                            children: [
-                              const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
-                              TextSpan(
-                                text: 'Resend email',
-                                style: TextStyle(
-                                  color: scheme.primary,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

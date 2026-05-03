@@ -23,6 +23,7 @@ import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_pho
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1_dashboard;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/today_meals_screen.dart' as t1_today_meals;
 import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_screen.dart' as t1_diet_plan;
+import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_detail_screen.dart' as t1_diet_plan_detail;
 import 'package:prodiet_unified/features/meal_planner/t1/presentation/screens/meal_planner_screen.dart' as t1_meal_planner;
 import 'package:prodiet_unified/features/inventory/t1/presentation/screens/inventory_screen.dart' as t1_inventory;
 import 'package:prodiet_unified/features/progress/t1/presentation/screens/progress_screen.dart' as t1_progress;
@@ -31,6 +32,10 @@ import 'package:prodiet_unified/features/shopping_list/t1/presentation/screens/s
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/hydration_screen.dart' as t1_hydration;
 import 'package:prodiet_unified/features/progress/t1/presentation/screens/activity_sync_screen.dart' as t1_activity_sync;
 import 'package:prodiet_unified/features/ocr_scanner/t1/presentation/screens/ocr_scanner_screen.dart' as t1_ocr;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/profile_screen.dart' as t1_profile;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/preferences_screen.dart' as t1_preferences;
+import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/notifications_screen.dart' as t1_notifications;
+import 'package:prodiet_unified/features/recipe/t1/presentation/screens/recipe_screen.dart' as t1_recipe;
 
 // T2 Screens
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/splash_screen.dart' as t2_splash;
@@ -54,6 +59,7 @@ import 'package:prodiet_unified/features/compensation/t2/presentation/screens/co
 import 'package:prodiet_unified/features/vendor/t2/presentation/screens/vendor_screen.dart' as t2_vendor;
 import 'package:prodiet_unified/features/fitband/t2/presentation/screens/fitband_screen.dart' as t2_fitband;
 import 'package:prodiet_unified/features/preferences/t2/presentation/screens/preferences_screen.dart' as t2_preferences;
+import 'package:prodiet_unified/core/services/fcm_service.dart';
 
 class AppRoutes {
   // T1 Standalone
@@ -74,6 +80,7 @@ class AppRoutes {
   static const String t1Progress = '/t1/progress';
   static const String t1Nutrition = '/t1/nutrition';
   static const String t1Shopping = '/t1/shopping';
+  static const String t1DietPlanDetail = '/t1/diet-plan/detail';
 
   // T1 Standalone Features
   static const String t1Hydration = '/t1/hydration';
@@ -82,6 +89,7 @@ class AppRoutes {
   static const String t1Profile = '/t1/profile';
   static const String t1Notifications = '/t1/notifications';
   static const String t1Recipe = '/t1/recipe';
+  static const String t1Preferences = '/t1/preferences';
 
   // T1 Aliases (to fix undefined getter errors in migrated T1 screens)
   static const String splashName = 't1Splash';
@@ -98,10 +106,10 @@ class AppRoutes {
   static const String activitySyncName = 't1ActivitySync';
   static const String ocrName = 't1Ocr';
   static const String progressName = 't1Progress';
-  // TODO: These routes are not yet registered. Do not use goNamed() with these until screens are built.
   static const String recipeName = 't1Recipe';
   static const String profileName = 't1Profile';
   static const String notificationsName = 't1Notifications';
+  static const String preferencesName = 't1Preferences';
 
   // T2 Standalone
   static const String t2Splash = '/t2/splash';
@@ -152,7 +160,10 @@ class _AppStateNotifier extends ChangeNotifier {
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
-  return createAppRouter(ref.container);
+  final router = createAppRouter(ref.container);
+  // Wire the router to the static helper for FCM/Global navigation
+  AppRouterNavigator.setRouter(router);
+  return router;
 });
 
 GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
@@ -160,6 +171,10 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
   initialLocation: '/',
   refreshListenable: _AppStateNotifier(ref),
   redirect: (context, state) {
+    // ── Guard: Wait for theme initialization ──
+    final isInitialized = ref.read(activeThemeInitializedProvider);
+    if (!isInitialized) return '/';
+
     // ── Root redirect — fully theme aware ──
     if (state.matchedLocation == '/') {
       final active = ref.read(activeThemeProvider);
@@ -229,6 +244,14 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
 
   },
   routes: [
+    // Safe loading fallback for root path
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator(color: Colors.white)),
+      ),
+    ),
     // Standalone T1/T2 screens
 
     // T1 Standalone
@@ -258,14 +281,20 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
 
     // T1 Standalone Features
     GoRoute(path: AppRoutes.t1Hydration, name: 't1Hydration', builder: (context, state) => const t1_hydration.HydrationScreen()),
+    GoRoute(
+      path: AppRoutes.t1DietPlanDetail,
+      name: 't1DietPlanDetail',
+      builder: (context, state) {
+        final meal = state.extra as DietMeal;
+        return t1_diet_plan_detail.DietPlanDetailScreen(meal: meal);
+      },
+    ),
     GoRoute(path: AppRoutes.t1ActivitySync, name: 't1ActivitySync', builder: (context, state) => const t1_activity_sync.ActivitySyncScreen()),
     GoRoute(path: AppRoutes.t1Ocr, name: 't1Ocr', builder: (context, state) => const t1_ocr.OcrScannerScreen()),
-    // TODO: Replace with t1_profile.ProfileScreen() when built
-    GoRoute(path: AppRoutes.t1Profile, name: 't1Profile', builder: (context, state) => const PlaceholderScreen(title: 'Profile')),
-    // TODO: Replace with t1_notifications.NotificationsScreen() when built
-    GoRoute(path: AppRoutes.t1Notifications, name: 't1Notifications', builder: (context, state) => const PlaceholderScreen(title: 'Notifications')),
-    // TODO: Replace with t1_recipe.RecipeScreen() when built
-    GoRoute(path: AppRoutes.t1Recipe, name: 't1Recipe', builder: (context, state) => const PlaceholderScreen(title: 'Recipes')),
+    GoRoute(path: AppRoutes.t1Profile, name: 't1Profile', builder: (context, state) => const t1_profile.ProfileScreen()),
+    GoRoute(path: AppRoutes.t1Notifications, name: 't1Notifications', builder: (context, state) => const t1_notifications.NotificationsScreen()),
+    GoRoute(path: AppRoutes.t1Recipe, name: 't1Recipe', builder: (context, state) => const t1_recipe.RecipeScreen()),
+    GoRoute(path: AppRoutes.t1Preferences, name: 't1Preferences', builder: (context, state) => const t1_preferences.PreferencesScreen()),
 
     // T2 Standalone
     GoRoute(path: AppRoutes.t2Splash, name: 't2Splash', builder: (context, state) => const t2_splash.SplashScreen()),

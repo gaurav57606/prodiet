@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/features/achievements/application/achievement_providers.dart';
 import 'package:prodiet_unified/features/achievements/domain/models/achievement.dart';
+import 'package:prodiet_unified/shared/t1/widgets/dm_empty_state.dart';
 
 class AchievementsScreen extends ConsumerWidget {
   const AchievementsScreen({super.key});
@@ -12,22 +14,24 @@ class AchievementsScreen extends ConsumerWidget {
     final achievementsAsync = ref.watch(achievementsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Achievements')),
+      appBar: AppBar(
+        title: const Text('Achievements'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.pop(),
+        ),
+      ),
       body: achievementsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (list) {
           if (list.isEmpty) {
-            return Center(
-              child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('🏆', style: TextStyle(fontSize: 48)),
-                  const SizedBox(height: 16),
-                  Text('No achievements yet', style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  Text('Keep logging meals and hitting your goals!',
-                    style: theme.textTheme.bodySmall, textAlign: TextAlign.center),
-                ]),
+            return const Center(
+              child: DmEmptyState(
+                title: 'No achievements yet',
+                message: 'Keep logging meals and hitting your goals to earn badges!',
+                icon: Icons.emoji_events_rounded,
+              ),
             );
           }
           return ListView.separated(

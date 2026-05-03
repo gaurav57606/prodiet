@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
@@ -191,256 +192,259 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // TAB TOGGLE
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: scheme.surfaceContainerHigh,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => context.go('/t1/login'),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Sign in',
-                                  style: TextStyle(
-                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
-                                    fontWeight: FontWeight.w600,
+              child: AbsorbPointer(
+                absorbing: isLoading,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // TAB TOGGLE
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: scheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => context.goNamed(AppRoutes.loginName),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Sign in',
+                                    style: TextStyle(
+                                      color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _selectedTab = 1),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Create account',
-                                  style: TextStyle(
-                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
-                                    fontWeight: FontWeight.w600,
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => setState(() => _selectedTab = 1),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Create account',
+                                    style: TextStyle(
+                                      color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withValues(alpha: 0.4),
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+  
+                    // FORM FIELDS
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel('FIRST NAME', theme),
+                              const SizedBox(height: 8),
+                              DmTextField(
+                                controller: _firstNameController,
+                                hintText: 'John',
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel('LAST NAME', theme),
+                              const SizedBox(height: 8),
+                              DmTextField(
+                                controller: _lastNameController,
+                                hintText: 'Doe',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+  
+                    _buildLabel('EMAIL ADDRESS', theme),
+                    const SizedBox(height: 8),
+                    DmTextField(
+                      controller: _emailController,
+                      hintText: 'you@example.com',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 24),
+  
+                    _buildLabel('PHONE (OPTIONAL)', theme),
+                    const SizedBox(height: 8),
+                    const DmTextField(
+                      hintText: '+91 98765 43210',
+                      keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 24),
+  
+                    _buildLabel('PASSWORD', theme),
+                    const SizedBox(height: 8),
+                    DmTextField(
+                      controller: _passwordController,
+                      hintText: '••••••••',
+                      obscureText: _obscurePassword,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          color: scheme.onSurface.withValues(alpha: 0.3),
+                          size: 20,
+                        ),
+                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // PASSWORD STRENGTH BAR
+                    Row(
+                      children: List.generate(4, (index) {
+                        return Expanded(
+                          child: Container(
+                            height: 3,
+                            margin: EdgeInsets.only(right: index == 3 ? 0 : 4),
+                            decoration: BoxDecoration(
+                              color: index < _passwordStrength 
+                                ? scheme.primary 
+                                : scheme.outline.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 24),
+  
+                    _buildLabel('CONFIRM PASSWORD', theme),
+                    const SizedBox(height: 8),
+                    DmTextField(
+                      controller: _confirmPasswordController,
+                      hintText: '••••••••',
+                      obscureText: _obscureConfirmPassword,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          color: scheme.onSurface.withValues(alpha: 0.3),
+                          size: 20,
+                        ),
+                        onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+  
+                    // TERMS CHECKBOX ROW
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: Checkbox(
+                            value: _agreedToTerms,
+                            onChanged: (val) => setState(() => _agreedToTerms = val ?? false),
+                            activeColor: scheme.primary,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6), fontSize: 13),
+                              children: [
+                                const TextSpan(text: 'I agree to the '),
+                                TextSpan(
+                                  text: 'Terms of Service',
+                                  style: TextStyle(
+                                    color: scheme.primary,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                const TextSpan(text: ' and '),
+                                TextSpan(
+                                  text: 'Privacy Policy',
+                                  style: TextStyle(
+                                    color: scheme.primary,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 32),
-
-                  // FORM FIELDS
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildLabel('FIRST NAME', theme),
-                            const SizedBox(height: 8),
-                            DmTextField(
-                              controller: _firstNameController,
-                              hintText: 'John',
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildLabel('LAST NAME', theme),
-                            const SizedBox(height: 8),
-                            DmTextField(
-                              controller: _lastNameController,
-                              hintText: 'Doe',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  _buildLabel('EMAIL ADDRESS', theme),
-                  const SizedBox(height: 8),
-                  DmTextField(
-                    controller: _emailController,
-                    hintText: 'you@example.com',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 24),
-
-                  _buildLabel('PHONE (OPTIONAL)', theme),
-                  const SizedBox(height: 8),
-                  const DmTextField(
-                    hintText: '+91 98765 43210',
-                    keyboardType: TextInputType.phone,
-                  ),
-                  const SizedBox(height: 24),
-
-                  _buildLabel('PASSWORD', theme),
-                  const SizedBox(height: 8),
-                  DmTextField(
-                    controller: _passwordController,
-                    hintText: '••••••••',
-                    obscureText: _obscurePassword,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: scheme.onSurface.withValues(alpha: 0.3),
-                        size: 20,
-                      ),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    const SizedBox(height: 32),
+  
+                    // Continue Button
+                    DmButton(
+                      label: 'Continue →',
+                      isLoading: isLoading,
+                      onPressed: isLoading ? null : _signUp,
+                      width: double.infinity,
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  // PASSWORD STRENGTH BAR
-                  Row(
-                    children: List.generate(4, (index) {
-                      return Expanded(
-                        child: Container(
-                          height: 3,
-                          margin: EdgeInsets.only(right: index == 3 ? 0 : 4),
-                          decoration: BoxDecoration(
-                            color: index < _passwordStrength 
-                              ? scheme.primary 
-                              : scheme.outline.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(2),
+                    const SizedBox(height: 24),
+  
+                    // Divider
+                    Center(
+                      child: Text(
+                        'or sign up with',
+                        style: TextStyle(
+                          color: scheme.onSurface.withValues(alpha: 0.3),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+  
+                    // Google + Apple Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DmButton(
+                            label: 'Google',
+                            variant: DmButtonVariant.outline,
+                            icon: Icons.g_mobiledata_rounded,
+                            onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
                           ),
                         ),
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 24),
-
-                  _buildLabel('CONFIRM PASSWORD', theme),
-                  const SizedBox(height: 8),
-                  DmTextField(
-                    controller: _confirmPasswordController,
-                    hintText: '••••••••',
-                    obscureText: _obscureConfirmPassword,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: scheme.onSurface.withValues(alpha: 0.3),
-                        size: 20,
-                      ),
-                      onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // TERMS CHECKBOX ROW
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: Checkbox(
-                          value: _agreedToTerms,
-                          onChanged: (val) => setState(() => _agreedToTerms = val ?? false),
-                          activeColor: scheme.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6), fontSize: 13),
-                            children: [
-                              const TextSpan(text: 'I agree to the '),
-                              TextSpan(
-                                text: 'Terms of Service',
-                                style: TextStyle(
-                                  color: scheme.primary,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              const TextSpan(text: ' and '),
-                              TextSpan(
-                                text: 'Privacy Policy',
-                                style: TextStyle(
-                                  color: scheme.primary,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: DmButton(
+                            label: 'Apple',
+                            variant: DmButtonVariant.outline,
+                            icon: Icons.apple,
+                            onPressed: () {},
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-
-                  // Continue Button
-                  DmButton(
-                    label: 'Continue →',
-                    isLoading: isLoading,
-                    onPressed: isLoading ? null : _signUp,
-                    width: double.infinity,
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Divider
-                  Center(
-                    child: Text(
-                      'or sign up with',
-                      style: TextStyle(
-                        color: scheme.onSurface.withValues(alpha: 0.3),
-                        fontSize: 12,
-                      ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Google + Apple Buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DmButton(
-                          label: 'Google',
-                          variant: DmButtonVariant.outline,
-                          icon: Icons.g_mobiledata_rounded,
-                          onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: DmButton(
-                          label: 'Apple',
-                          variant: DmButtonVariant.outline,
-                          icon: Icons.apple,
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
-                ],
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
             ),
           ),

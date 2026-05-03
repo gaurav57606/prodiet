@@ -19,20 +19,19 @@ import 'package:prodiet_unified/core/widgets/skeletons/dashboard_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/core/utils/date_utils.dart';
+
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
-
-  String _getGreeting(String name) {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning, $name 👋';
-    if (hour < 17) return 'Good afternoon, $name 👋';
-    return 'Good evening, $name 👋';
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final user = ref.watch(authProvider).currentUser;
+    final name = user?.name?.split(' ')[0] ?? 'there';
+    final greeting = '${getTimeGreeting()}, $name 👋';
 
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
@@ -45,7 +44,7 @@ class DashboardScreen extends ConsumerWidget {
             headline: EmptyStateConfigs.dashboard.headline,
             subtext: EmptyStateConfigs.dashboard.subtext,
             buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,
-            onButtonTap: () => context.push(AppRoutes.t2Meals), // T2 uses /meals
+            onButtonTap: () => context.goNamed(AppRoutes.t2Meals),
           ),
           builder: (data) => CustomScrollView(
             slivers: [
@@ -62,7 +61,7 @@ class DashboardScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _getGreeting(data.userName.split(' ')[0]),
+                            greeting,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: T2Colors.textSecondary,
                             ),
@@ -142,7 +141,7 @@ class DashboardScreen extends ConsumerWidget {
               // Water Banner
               SliverToBoxAdapter(
                 child: GestureDetector(
-                  onTap: () => context.go(AppRoutes.t2Water),
+                  onTap: () => context.goNamed(AppRoutes.t2Water),
                   child: WaterBanner(
                     consumed: data.waterMl,
                     target: data.waterGoalMl,
@@ -163,7 +162,7 @@ class DashboardScreen extends ConsumerWidget {
                         style: T2TextStyles.sectionLabel(colorScheme),
                       ),
                       GestureDetector(
-                        onTap: () => context.go(AppRoutes.t2DietPlan),
+                        onTap: () => context.goNamed(AppRoutes.t2DietPlan),
                         child: Text(
                           "Full view",
                           style: theme.textTheme.labelLarge?.copyWith(
@@ -204,7 +203,7 @@ class DashboardScreen extends ConsumerWidget {
                         style: T2TextStyles.sectionLabel(colorScheme),
                       ),
                       GestureDetector(
-                        onTap: () => context.go(AppRoutes.t2Meals),
+                        onTap: () => context.goNamed(AppRoutes.t2Meals),
                         child: Text(
                           "Meal plan ›",
                           style: theme.textTheme.labelLarge?.copyWith(
@@ -233,7 +232,7 @@ class DashboardScreen extends ConsumerWidget {
                         style: T2TextStyles.sectionLabel(colorScheme),
                       ),
                       GestureDetector(
-                        onTap: () => context.go(AppRoutes.t2Fitband),
+                        onTap: () => context.goNamed(AppRoutes.t2Fitband),
                         child: Text(
                           "Details",
                           style: theme.textTheme.labelLarge?.copyWith(
@@ -252,7 +251,7 @@ class DashboardScreen extends ConsumerWidget {
 
               SliverToBoxAdapter(
                 child: GestureDetector(
-                  onTap: () => context.go(AppRoutes.t2Compensation),
+                  onTap: () => context.goNamed(AppRoutes.t2Compensation),
                   child: const AlertStrip(
                     message: "Check AI Insights",
                     subMessage: "Click to see plan adjustments",

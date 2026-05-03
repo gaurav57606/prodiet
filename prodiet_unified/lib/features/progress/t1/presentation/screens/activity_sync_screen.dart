@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
+import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 
-class ActivitySyncScreen extends StatelessWidget {
+class ActivitySyncScreen extends ConsumerWidget {
   const ActivitySyncScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final summaryAsync = ref.watch(dashboardProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,28 +24,32 @@ class ActivitySyncScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(T1Spacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDeviceCard(context),
-            const SizedBox(height: T1Spacing.lg),
-            _buildStatsRow(context),
-            const SizedBox(height: T1Spacing.lg),
-            _buildAdjustmentCard(context),
-            const SizedBox(height: T1Spacing.lg),
-            Text(
-              'WEEK ACTIVITY',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: scheme.onSurface.withOpacity(0.25),
-                letterSpacing: 1.2,
+      body: AsyncValueWidget<DashboardSummary>(
+        value: summaryAsync,
+        builder: (summary) => SingleChildScrollView(
+          padding: const EdgeInsets.all(T1Spacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildDeviceCard(context),
+              const SizedBox(height: T1Spacing.lg),
+              _buildStatsRow(context, summary),
+              const SizedBox(height: T1Spacing.lg),
+              _buildAdjustmentCard(context, summary),
+              const SizedBox(height: T1Spacing.lg),
+              Text(
+                'WEEK ACTIVITY',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: scheme.onSurface.withOpacity(0.25),
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
               ),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            _buildActivityChart(context),
-            const SizedBox(height: 100),
-          ],
+              const SizedBox(height: T1Spacing.md),
+              _buildActivityChart(context, summary),
+              const SizedBox(height: 100),
+            ],
+          ),
         ),
       ),
     );
@@ -60,16 +69,16 @@ class ActivitySyncScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
             ),
-            child: Icon(Icons.watch_rounded, color: theme.colorScheme.primary, size: 22),
+            child: Icon(Icons.fitness_center_rounded, color: theme.colorScheme.primary, size: 22),
           ),
           const SizedBox(width: T1Spacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Mi Band 8', style: theme.textTheme.titleMedium),
+                Text('Google Fit', style: theme.textTheme.titleMedium),
                 Text(
-                  'Last synced: 2 min ago · Battery 78%',
+                  'Connected and syncing calories',
                   style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.4)),
                 ),
               ],
@@ -83,7 +92,7 @@ class ActivitySyncScreen extends StatelessWidget {
               border: Border.all(color: const Color(0xFF40D8B8).withOpacity(0.2)),
             ),
             child: const Text(
-              'Connected',
+              'Active',
               style: TextStyle(color: Color(0xFF40D8B8), fontSize: 10, fontWeight: FontWeight.bold),
             ),
           ),
@@ -92,14 +101,14 @@ class ActivitySyncScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsRow(BuildContext context) {
+  Widget _buildStatsRow(BuildContext context, DashboardSummary summary) {
     return Row(
       children: [
-        _buildStatTile(context, '4,820', 'STEPS', T1ColorSchemes.accentViolet),
+        _buildStatTile(context, summary.stepsToday.toString(), 'STEPS', T1ColorSchemes.accentViolet),
         const SizedBox(width: T1Spacing.sm),
-        _buildStatTile(context, '312', 'BURNED', T1ColorSchemes.accentPink),
+        _buildStatTile(context, summary.caloriesBurned.toString(), 'BURNED', T1ColorSchemes.accentPink),
         const SizedBox(width: T1Spacing.sm),
-        _buildStatTile(context, '48m', 'ACTIVE', T1ColorSchemes.accentTeal),
+        _buildStatTile(context, '0m', 'ACTIVE', T1ColorSchemes.accentTeal), // Active minutes not in summary yet
       ],
     );
   }
@@ -113,10 +122,10 @@ class ActivitySyncScreen extends StatelessWidget {
         borderSide: BorderSide(color: color.withOpacity(0.15)),
         child: Column(
           children: [
-            Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: color, fontSize: 20)),
+            Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: color, fontSize: 20, fontWeight: FontWeight.w900)),
             Text(
               label,
-              style: theme.textTheme.labelSmall?.copyWith(color: color.withOpacity(0.4), letterSpacing: 0.4),
+              style: theme.textTheme.labelSmall?.copyWith(color: color.withOpacity(0.4), letterSpacing: 0.4, fontWeight: FontWeight.w900),
             ),
           ],
         ),
@@ -124,7 +133,7 @@ class ActivitySyncScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAdjustmentCard(BuildContext context) {
+  Widget _buildAdjustmentCard(BuildContext context, DashboardSummary summary) {
     final theme = Theme.of(context);
     final teal = const Color(0xFF40D8B8);
     return DmCard(
@@ -135,19 +144,19 @@ class ActivitySyncScreen extends StatelessWidget {
         children: [
           Text(
             'Diet adjusted for today\'s activity',
-            style: theme.textTheme.titleSmall?.copyWith(color: teal),
+            style: theme.textTheme.titleSmall?.copyWith(color: teal, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: T1Spacing.sm),
-          _buildAdjustmentRow('Extra calories allowed', '+312 kcal', teal),
-          _buildAdjustmentRow('Protein target', '+12g (162g total)', teal),
-          _buildAdjustmentRow('Hydration target', '+500ml (3.0L)', teal),
-          _buildAdjustmentRow('Post-workout window', 'Eat within 45m', teal, isLast: true),
+          _buildAdjustmentRow('Extra calories allowed', '+${summary.caloriesBurned} kcal', teal),
+          _buildAdjustmentRow('Net calories today', '${summary.netCalories} kcal', teal),
+          _buildAdjustmentRow('Activity bonus', 'Step goal reached', teal, isLast: true),
         ],
       ),
     );
   }
 
   Widget _buildAdjustmentRow(String label, String value, Color color, {bool isLast = false}) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
@@ -156,21 +165,44 @@ class ActivitySyncScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 10, color: Colors.white70)),
+          Text(label, style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withOpacity(0.6))),
           Text(value, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
         ],
       ),
     );
   }
 
-  Widget _buildActivityChart(BuildContext context) {
+  Widget _buildActivityChart(BuildContext context, DashboardSummary summary) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    final burned = [32, 42, 28, 46, 38, 48, 30];
-    final consumed = [40, 44, 38, 40, 46, 40, 38];
+    
+    // Simulate some historical data based on current stats for visual variety
+    final burned = [
+      (summary.caloriesBurned * 0.8).toInt(),
+      (summary.caloriesBurned * 1.1).toInt(),
+      (summary.caloriesBurned * 0.7).toInt(),
+      (summary.caloriesBurned * 1.2).toInt(),
+      (summary.caloriesBurned * 0.9).toInt(),
+      (summary.caloriesBurned * 1.3).toInt(),
+      summary.caloriesBurned,
+    ];
+    
+    final consumed = [
+      (summary.caloriesGoal * 0.9).toInt(),
+      (summary.caloriesGoal * 1.0).toInt(),
+      (summary.caloriesGoal * 0.8).toInt(),
+      (summary.caloriesGoal * 1.1).toInt(),
+      (summary.caloriesGoal * 0.9).toInt(),
+      (summary.caloriesGoal * 1.2).toInt(),
+      summary.caloriesConsumed,
+    ];
+
     const double maxH = 100;
-    final maxV = [32, 42, 28, 46, 38, 48, 30, 40, 44, 38, 40, 46, 40, 38].reduce((a, b) => a > b ? a : b).toDouble();
+    // Find max value across all points for scaling
+    final allValues = [...burned, ...consumed];
+    final maxV = allValues.reduce((a, b) => a > b ? a : b).toDouble();
+    final safeMaxV = maxV > 0 ? maxV : 2000.0;
 
     return DmCard(
       child: Column(
@@ -181,6 +213,7 @@ class ActivitySyncScreen extends StatelessWidget {
             style: theme.textTheme.labelSmall?.copyWith(
               color: scheme.onSurface.withOpacity(0.4),
               letterSpacing: 0.8,
+              fontWeight: FontWeight.w900,
             ),
           ),
           const SizedBox(height: T1Spacing.lg),
@@ -199,20 +232,20 @@ class ActivitySyncScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          // Consumed bar (Brown/Gold)
+                          // Consumed bar
                           Container(
                             width: 8,
-                            height: (consumed[i] / maxV) * maxH,
+                            height: (consumed[i] / safeMaxV) * maxH,
                             decoration: BoxDecoration(
                               color: T1ColorSchemes.chartConsumed.withOpacity(0.3),
                               borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                             ),
                           ),
                           const SizedBox(width: 2),
-                          // Burned bar (Teal)
+                          // Burned bar
                           Container(
                             width: 8,
-                            height: (burned[i] / maxV) * maxH,
+                            height: (burned[i] / safeMaxV) * maxH,
                             decoration: BoxDecoration(
                               color: T1ColorSchemes.chartBurned,
                               borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
@@ -237,9 +270,9 @@ class ActivitySyncScreen extends StatelessWidget {
           const SizedBox(height: T1Spacing.md),
           Row(
             children: [
-              _buildLegendItem('Consumed', T1ColorSchemes.chartConsumed.withOpacity(0.4)),
+              _buildLegendItem(context, 'Consumed', T1ColorSchemes.chartConsumed.withOpacity(0.4)),
               const SizedBox(width: T1Spacing.md),
-              _buildLegendItem('Burned', T1ColorSchemes.chartBurned),
+              _buildLegendItem(context, 'Burned', T1ColorSchemes.chartBurned),
             ],
           ),
         ],
@@ -247,7 +280,8 @@ class ActivitySyncScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(String label, Color color) {
+  Widget _buildLegendItem(BuildContext context, String label, Color color) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
@@ -256,7 +290,7 @@ class ActivitySyncScreen extends StatelessWidget {
           decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
         ),
         const SizedBox(width: 4),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.white54)),
+        Text(label, style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withOpacity(0.5))),
       ],
     );
   }

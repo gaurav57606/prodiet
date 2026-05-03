@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/compensation/application/compensation_providers.dart';
@@ -23,7 +24,7 @@ class CompensationScreen extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
       ),
       body: historyAsync.when(
@@ -31,7 +32,24 @@ class CompensationScreen extends ConsumerWidget {
         error: (err, stack) => Center(child: Text("Error: $err")),
         data: (logs) {
           if (logs.isEmpty) {
-            return const Center(child: Text("No compensation plans needed yet", style: TextStyle(color: Colors.white70)));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.check_circle_outline_rounded, color: T2Colors.lime, size: 48),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "ALL ON TRACK",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    "No compensation plans needed yet.",
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                  ),
+                ],
+              ),
+            );
           }
 
           final log = logs.first; // Show most recent

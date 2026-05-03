@@ -22,7 +22,7 @@ class HydrationScreen extends ConsumerWidget {
     final logsAsync = ref.watch(todayWaterLogsProvider);
     final userId = ref.watch(currentUserIdProvider);
     
-    final statusColor = const Color(0xFF40D8B8);
+    final statusColor = T1ColorSchemes.accentTeal;
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +60,7 @@ class HydrationScreen extends ConsumerWidget {
                   Text(
                     'QUICK ADD',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                      color: theme.colorScheme.onSurface.withOpacity(0.3),
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
                     ),
@@ -80,7 +80,7 @@ class HydrationScreen extends ConsumerWidget {
               Text(
                 'TODAY\'S HISTORY',
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                  color: theme.colorScheme.onSurface.withOpacity(0.3),
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
                 ),
@@ -107,10 +107,10 @@ class HydrationScreen extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [color.withValues(alpha: 0.15), color.withValues(alpha: 0.05)],
+          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.withValues(alpha: 0.15)),
+        border: Border.all(color: color.withOpacity(0.15)),
       ),
       child: Column(
         children: [
@@ -131,7 +131,7 @@ class HydrationScreen extends ConsumerWidget {
               Text(
                 'ml',
                 style: theme.textTheme.headlineMedium?.copyWith(
-                  color: color.withValues(alpha: 0.5),
+                  color: color.withOpacity(0.5),
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -140,7 +140,7 @@ class HydrationScreen extends ConsumerWidget {
           Text(
             'OF ${formatter.format(target)} ML TARGET',
             style: theme.textTheme.labelSmall?.copyWith(
-              color: color.withValues(alpha: 0.6),
+              color: color.withOpacity(0.6),
               fontWeight: FontWeight.w900,
               letterSpacing: 1.0,
             ),
@@ -148,7 +148,7 @@ class HydrationScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           LinearProgressIndicator(
             value: progress.clamp(0.0, 1.0),
-            backgroundColor: color.withValues(alpha: 0.1),
+            backgroundColor: color.withOpacity(0.1),
             color: color,
             minHeight: 12,
             borderRadius: BorderRadius.circular(6),
@@ -189,7 +189,7 @@ class HydrationScreen extends ConsumerWidget {
           onTap: () => ref.read(waterRepositoryProvider).logCustomAmount(userId, val),
           borderRadius: BorderRadius.circular(24),
           child: DmCard(
-            color: Colors.white.withValues(alpha: 0.03),
+            color: theme.colorScheme.onSurface.withOpacity(0.03),
             padding: const EdgeInsets.all(12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -217,7 +217,7 @@ class HydrationScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: T1Spacing.xl),
           child: Text('No history for today',
-            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3))
+            style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.3))
           ),
         ),
       );
@@ -232,19 +232,19 @@ class HydrationScreen extends ConsumerWidget {
         final log = logs[index];
         final timeStr = DateFormat('hh:mm a').format(log.loggedAt);
         return DmCard(
-          color: Colors.white.withValues(alpha: 0.02),
+          color: theme.colorScheme.onSurface.withOpacity(0.02),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Icon(Icons.history_rounded, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
+                  Icon(Icons.history_rounded, size: 16, color: theme.colorScheme.onSurface.withOpacity(0.2)),
                   const SizedBox(width: 12),
                   Text(
                     timeStr,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      color: theme.colorScheme.onSurface.withOpacity(0.5),
                       fontWeight: FontWeight.w700,
                     ),
                   ),

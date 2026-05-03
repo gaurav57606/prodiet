@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 
-class DmAppShell extends StatefulWidget {
+class DmAppShell extends ConsumerStatefulWidget {
   final Widget child;
 
   const DmAppShell({super.key, required this.child});
 
   @override
-  State<DmAppShell> createState() => _DmAppShellState();
+  ConsumerState<DmAppShell> createState() => _DmAppShellState();
 }
 
-class _DmAppShellState extends State<DmAppShell> {
+class _DmAppShellState extends ConsumerState<DmAppShell> {
   int get _currentIndex {
-    final location = GoRouterState.of(context).uri.toString();
+    final location = GoRouterState.of(context).matchedLocation;
     if (location.startsWith(AppRoutes.t1Dashboard)) return 0;
-    if (location.startsWith(AppRoutes.t1Progress)) return 0;
-    if (location.startsWith(AppRoutes.t1Nutrition)) return 0;
     if (location.startsWith(AppRoutes.t1MealPlanner)) return 1;
-    if (location.startsWith(AppRoutes.t1Shopping)) return 1;
-    if (location.startsWith(AppRoutes.t1Inventory)) return 2;
-    if (location.startsWith(AppRoutes.t1DietPlan)) return 3;
+    if (location.startsWith(AppRoutes.t1DietPlan)) return 2;
+    if (location.startsWith(AppRoutes.t1Progress)) return 3;
+    if (location.startsWith(AppRoutes.t1Nutrition)) return 4;
     return 0;
   }
 
@@ -33,10 +33,13 @@ class _DmAppShellState extends State<DmAppShell> {
         context.go(AppRoutes.t1MealPlanner);
         break;
       case 2:
-        context.go(AppRoutes.t1Inventory);
+        context.go(AppRoutes.t1DietPlan);
         break;
       case 3:
-        context.go(AppRoutes.t1DietPlan);
+        context.go(AppRoutes.t1Progress);
+        break;
+      case 4:
+        context.go(AppRoutes.t1Nutrition);
         break;
     }
   }
@@ -45,31 +48,21 @@ class _DmAppShellState extends State<DmAppShell> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    
     return Scaffold(
       body: widget.child,
-      extendBody: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.t1Ocr),
-        tooltip: 'Scan food',
-        backgroundColor: scheme.primary,
-        elevation: 6,
-        shape: const CircleBorder(),
-        child: Icon(Icons.mic_rounded, color: scheme.onPrimary, size: 28),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         color: scheme.surface,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8,
+        elevation: 8,
         padding: EdgeInsets.zero,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(context, Icons.home_rounded, Icons.home_outlined, 'Home', 0),
+            _navItem(context, Icons.dashboard_rounded, Icons.dashboard_outlined, 'Home', 0),
             _navItem(context, Icons.restaurant_rounded, Icons.restaurant_outlined, 'Meals', 1),
-            const SizedBox(width: 56), // space for FAB
-            _navItem(context, Icons.inventory_2_rounded, Icons.inventory_2_outlined, 'Pantry', 2),
-            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Program', 3),
+            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Plan', 2),
+            _navItem(context, Icons.bar_chart_rounded, Icons.bar_chart_outlined, 'Progress', 3),
+            _navItem(context, Icons.analytics_rounded, Icons.analytics_outlined, 'Stats', 4),
           ],
         ),
       ),
@@ -83,24 +76,28 @@ class _DmAppShellState extends State<DmAppShell> {
     final scheme = theme.colorScheme;
     final activeColor = scheme.primary;
     final inactiveColor = scheme.onSurface.withValues(alpha: 0.4);
-    return GestureDetector(
-      onTap: () => _onTap(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(isActive ? filled : outlined,
-              color: isActive ? activeColor : inactiveColor,
-              size: 24),
-          const SizedBox(height: 2),
-          Text(label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              fontSize: 9,
-              fontWeight: FontWeight.w700,
-              color: isActive ? activeColor : inactiveColor,
+    
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _onTap(index),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(isActive ? filled : outlined,
+                color: isActive ? activeColor : inactiveColor,
+                size: 24),
+            const SizedBox(height: 4),
+            Text(label,
+              style: theme.textTheme.labelSmall?.copyWith(
+                fontSize: 9,
+                fontWeight: isActive ? FontWeight.w800 : FontWeight.w500,
+                color: isActive ? activeColor : inactiveColor,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
