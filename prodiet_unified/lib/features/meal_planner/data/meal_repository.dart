@@ -1,6 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../domain/meal.dart';
 
+// Supabase schema: column is 'planned_date' (not 'date').
+// Do NOT add 'date' fallbacks — migrate old data via Supabase dashboard if needed.
 class MealRepository {
   final SupabaseClient _supabase;
 

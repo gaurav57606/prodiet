@@ -19,7 +19,7 @@ import 'package:prodiet_unified/features/auth/t1/presentation/screens/login_scre
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/signup_screen.dart' as t1_signup;
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/forgot_password_screen.dart' as t1_forgot_password;
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/health_goals_screen.dart' as t1_health_goals;
-// import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart' as t1_verify_phone; // TODO: re-enable when phone auth is implemented
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart' as t1_verify_phone;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1_dashboard;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/today_meals_screen.dart' as t1_today_meals;
 import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_screen.dart' as t1_diet_plan;
@@ -38,6 +38,7 @@ import 'package:prodiet_unified/features/auth/t2/presentation/screens/onboarding
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/login_screen.dart' as t2_login;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/signup_screen.dart' as t2_signup;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/forgot_password_screen.dart' as t2_forgot_password;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/privacy_policy_screen.dart' as t2_privacy;
 import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2_dashboard;
 import 'package:prodiet_unified/features/meal_planner/t2/presentation/screens/meal_planner_screen.dart' as t2_meal_planner;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_screen.dart' as t2_diet_plan;
@@ -125,6 +126,7 @@ class AppRoutes {
   static const String t2Vendor = '/t2/vendor';
   static const String t2Fitband = '/t2/fitband';
   static const String t2Preferences = '/t2/preferences';
+  static const String t2PrivacyPolicy = '/t2/privacy-policy';
   static const String t2ProfileRetry = '/t2/profile-retry';
 }
 
@@ -132,12 +134,17 @@ final GlobalKey<NavigatorState> appRouterNavigatorKey = GlobalKey<NavigatorState
 final GlobalKey<NavigatorState> _shellT1Key = GlobalKey<NavigatorState>(debugLabel: 'shellT1');
 final GlobalKey<NavigatorState> _shellT2Key = GlobalKey<NavigatorState>(debugLabel: 'shellT2');
 
-/// Bridges Riverpod auth state changes into GoRouter's
+/// Bridges Riverpod auth and theme state changes into GoRouter's
 /// refreshListenable so redirects fire automatically.
-class _AuthStateNotifier extends ChangeNotifier {
-  _AuthStateNotifier(ProviderContainer container) {
+class _AppStateNotifier extends ChangeNotifier {
+  _AppStateNotifier(ProviderContainer container) {
     container.listen<AuthState>(
       authProvider,
+      (_, __) => notifyListeners(),
+      fireImmediately: true,
+    );
+    container.listen<ActiveTheme>(
+      activeThemeProvider,
       (_, __) => notifyListeners(),
       fireImmediately: true,
     );
@@ -151,20 +158,15 @@ final routerProvider = Provider<GoRouter>((ref) {
 GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
   navigatorKey: appRouterNavigatorKey,
   initialLocation: '/',
-  refreshListenable: _AuthStateNotifier(ref),
+  refreshListenable: _AppStateNotifier(ref),
   redirect: (context, state) {
-    // ── EXISTING theme-redirect (keep this block EXACTLY) ──
+    // ── Root redirect — fully theme aware ──
     if (state.matchedLocation == '/') {
-      // Use ref (ProviderContainer) directly — it is always safe
-      try {
-        final active = ref.read(activeThemeProvider);
-        if (active == ActiveTheme.t2Dark ||
-            active == ActiveTheme.t2Light ||
-            active == ActiveTheme.t2Amoled) {
-          return '/t2/splash';
-        }
-      } catch (_) {}
-      return '/t1/splash';
+      final active = ref.read(activeThemeProvider);
+      final isT2 = active == ActiveTheme.t2Dark ||
+                   active == ActiveTheme.t2Light ||
+                   active == ActiveTheme.t2Amoled;
+      return isT2 ? '/t2/splash' : '/t1/splash';
     }
 
     // ── Auth guard ──
@@ -181,7 +183,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
       '/t2/forgot-password',
       '/t1/onboarding', '/t2/onboarding',
       '/t1/health-goals',
-//      '/t1/verify-phone', // TODO: re-enable when phone auth is implemented
+      '/t1/verify-phone',
     };
 
     final isPublic = publicRoutes.contains(loc);
@@ -236,7 +238,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t1Signup, name: 't1Signup', builder: (context, state) => const t1_signup.SignupScreen()),
     GoRoute(path: AppRoutes.t1ForgotPassword, name: 't1ForgotPassword', builder: (context, state) => const t1_forgot_password.ForgotPasswordScreen()),
     GoRoute(path: AppRoutes.t1HealthGoals, name: 't1HealthGoals', builder: (context, state) => const t1_health_goals.HealthGoalsScreen()),
-//    GoRoute(path: AppRoutes.t1VerifyPhone, name: 't1VerifyPhone', builder: (context, state) => const t1_verify_phone.VerifyPhoneScreen()), // TODO: re-enable when phone auth is implemented
+    GoRoute(path: AppRoutes.t1VerifyPhone, name: 't1VerifyPhone', builder: (context, state) => const t1_verify_phone.VerifyPhoneScreen()),
 
     // T1 Shell
     ShellRoute(
@@ -258,8 +260,11 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t1Hydration, name: 't1Hydration', builder: (context, state) => const t1_hydration.HydrationScreen()),
     GoRoute(path: AppRoutes.t1ActivitySync, name: 't1ActivitySync', builder: (context, state) => const t1_activity_sync.ActivitySyncScreen()),
     GoRoute(path: AppRoutes.t1Ocr, name: 't1Ocr', builder: (context, state) => const t1_ocr.OcrScannerScreen()),
+    // TODO: Replace with t1_profile.ProfileScreen() when built
     GoRoute(path: AppRoutes.t1Profile, name: 't1Profile', builder: (context, state) => const PlaceholderScreen(title: 'Profile')),
+    // TODO: Replace with t1_notifications.NotificationsScreen() when built
     GoRoute(path: AppRoutes.t1Notifications, name: 't1Notifications', builder: (context, state) => const PlaceholderScreen(title: 'Notifications')),
+    // TODO: Replace with t1_recipe.RecipeScreen() when built
     GoRoute(path: AppRoutes.t1Recipe, name: 't1Recipe', builder: (context, state) => const PlaceholderScreen(title: 'Recipes')),
 
     // T2 Standalone
@@ -305,6 +310,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t2Vendor, name: 't2Vendor', builder: (context, state) => const t2_vendor.VendorScreen()),
     GoRoute(path: AppRoutes.t2Fitband, name: 't2Fitband', builder: (context, state) => const t2_fitband.FitbandScreen()),
     GoRoute(path: AppRoutes.t2Preferences, name: 't2Preferences', builder: (context, state) => const t2_preferences.PreferencesScreen()),
+    GoRoute(path: AppRoutes.t2PrivacyPolicy, name: 't2PrivacyPolicy', builder: (context, state) => const t2_privacy.PrivacyPolicyScreen()),
     GoRoute(
       path: AppRoutes.t2ProfileRetry,
       builder: (context, state) => const _ProfileRetryScreen(),

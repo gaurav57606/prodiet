@@ -116,7 +116,19 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       debugShowCheckedModeBanner: false,
       theme: resolvedTheme(),
       routerConfig: ref.watch(routerProvider),
-      builder: (context, child) => child!,
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(context);
+        // Allow scaling but cap at 1.3x max to prevent major layout breaks
+        // while still respecting accessibility needs
+        final clamped = mediaQuery.textScaler.clamp(
+          minScaleFactor: 1.0,
+          maxScaleFactor: 1.3,
+        );
+        return MediaQuery(
+          data: mediaQuery.copyWith(textScaler: clamped),
+          child: child!,
+        );
+      },
     );
   }
 }

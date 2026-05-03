@@ -7,6 +7,11 @@ import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 
+// New imports
+import 'package:prodiet_unified/features/preferences/application/preferences_providers.dart';
+import 'package:prodiet_unified/features/preferences/application/preferences_state.dart';
+import 'package:prodiet_unified/features/preferences/domain/user_preferences.dart';
+
 class PreferencesScreen extends ConsumerStatefulWidget {
   const PreferencesScreen({super.key});
 
@@ -16,35 +21,59 @@ class PreferencesScreen extends ConsumerStatefulWidget {
 
 class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
   final Set<String> _allergies = {};
-  bool _mealVariety   = true;
-  bool _onlineOrder   = true;
-  bool _localVendors  = false;
-  bool _fitbandSync   = true;
-  int  _spiceLevel    = 3;
-  String _dietType    = "Non-Vegetarian";
+  bool _mealVariety = true;
+  bool _onlineOrder = true;
+  bool _localVendors = false;
+  bool _fitbandSync = true;
+  int _spiceLevel = 3;
+  String _dietType = "Non-Vegetarian";
   final Set<String> _cuisines = {"North Indian", "Mediterranean", "Asian"};
-  int _mealsCount     = 5;
-  bool _isSaving      = false;
+  int _mealsCount = 5;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = ref.read(currentUserProvider);
-      if (user == null) return;
-      setState(() {
-        final stored = List<String>.from(user.allergies);
-        _allergies.addAll(stored);
-        _dietType = user.dietaryPreferences.isNotEmpty ? user.dietaryPreferences.first : "Non-Vegetarian";
-        // Note: In a real app, you'd map other stored fields here too
-      });
+      if (user != null) {
+        ref.read(preferencesNotifierProvider.notifier).loadPreferences(user.id);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+    final state = ref.watch(preferencesNotifierProvider);
+    final isSaving = state is PreferencesSaving;
+    final isLoading = state is PreferencesLoading;
+
+    ref.listen<PreferencesState>(preferencesNotifierProvider, (previous, next) {
+      if (next is PreferencesLoaded) {
+        setState(() {
+          _allergies.clear();
+          _allergies.addAll(next.prefs.allergies);
+          _dietType = next.prefs.dietType;
+          _spiceLevel = next.prefs.spiceLevel;
+          _mealVariety = next.prefs.mealVariety;
+          _onlineOrder = next.prefs.onlineOrdering;
+          _localVendors = next.prefs.localVendors;
+          _fitbandSync = next.prefs.fitbandSync;
+          _cuisines.clear();
+          _cuisines.addAll(next.prefs.cuisinePrefs);
+          _mealsCount = next.prefs.mealsPerDay;
+        });
+      } else if (next is PreferencesSaved) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Preferences saved ✓')),
+        );
+      } else if (next is PreferencesError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.message), backgroundColor: Colors.red),
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -57,7 +86,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading 
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,34 +158,42 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               padding: const EdgeInsets.all(18),
               child: DmButton(
                 label: "Save Preferences",
-                isLoading: _isSaving,
-                onPressed: _isSaving ? null : () async {
-                  setState(() => _isSaving = true);
+                isLoading: isSaving,
+                onPressed: isSaving ? null : () {
                   final user = ref.read(currentUserProvider);
-                  if (user == null) { setState(() => _isSaving = false); return; }
-                  await ref.read(authProvider.notifier).completeOnboarding(user.id, {
-                    'allergies':           _allergies.toList(),
-                    'spice_level':         _spiceLevel,
-                    'meal_variety':        _mealVariety,
-                    'online_ordering':     _onlineOrder,
-                    'local_vendors':       _localVendors,
-                    'fitband_sync':        _fitbandSync,
-                    'dietary_preferences': [_dietType],
-                    'cuisine_prefs':       _cuisines.toList(),
-                    'meals_per_day':       _mealsCount,
-                  });
-                  setState(() => _isSaving = false);
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Preferences saved ✓')),
-                    );
-                  }
+                  if (user == null) return;
+                  
+                  final prefs = UserPreferences(
+                    allergies: _allergies.toList(),
+                    dietType: _dietType,
+                    spiceLevel: _spiceLevel,
+                    mealVariety: _mealVariety,
+                    onlineOrdering: _onlineOrder,
+                    localVendors: _localVendors,
+                    fitbandSync: _fitbandSync,
+                    cuisinePrefs: _cuisines.toList(),
+                    mealsPerDay: _mealsCount,
+                  );
+                  
+                  ref.read(preferencesNotifierProvider.notifier).savePreferences(user.id, prefs);
                 },
                 backgroundColor: const Color(0xFFB8FF00),
                 textColor: Colors.black,
               ),
             ),
-            const SizedBox(height: 20),
+            Center(
+              child: TextButton(
+                onPressed: () => context.go(AppRoutes.t2PrivacyPolicy),
+                child: Text(
+                  'Privacy Policy',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: T2Colors.textSecondary,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
           ],
         ),
       ),

@@ -36,7 +36,7 @@ class Meal {
       nutritionalValues: NutritionalValues.fromJson(json['nutritional_values'] ?? {}),
       scheduledTime: DateTime.parse(json['scheduled_time']),
       status: json['status'],
-      date: DateTime.parse(json['date']),
+      date: DateTime.parse(json['planned_date'] ?? json['scheduled_time']),
     );
   }
 
@@ -51,7 +51,7 @@ class Meal {
       'nutritional_values': nutritionalValues.toJson(),
       'scheduled_time': scheduledTime.toIso8601String(),
       'status': status,
-      'date': date.toIso8601String().split('T')[0],
+      'planned_date': date.toIso8601String().split('T')[0],
     };
   }
 }
