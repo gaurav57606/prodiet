@@ -15,7 +15,10 @@ class _DmAppShellState extends State<DmAppShell> {
   int get _currentIndex {
     final location = GoRouterState.of(context).uri.toString();
     if (location.startsWith(AppRoutes.t1Dashboard)) return 0;
+    if (location.startsWith(AppRoutes.t1Progress)) return 0;
+    if (location.startsWith(AppRoutes.t1Nutrition)) return 0;
     if (location.startsWith(AppRoutes.t1MealPlanner)) return 1;
+    if (location.startsWith(AppRoutes.t1Shopping)) return 1;
     if (location.startsWith(AppRoutes.t1Inventory)) return 2;
     if (location.startsWith(AppRoutes.t1DietPlan)) return 3;
     return 0;
@@ -46,14 +49,8 @@ class _DmAppShellState extends State<DmAppShell> {
       body: widget.child,
       extendBody: true,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Voice entry coming soon'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        },
+        onPressed: () => context.push(AppRoutes.t1Ocr),
+        tooltip: 'Scan food',
         backgroundColor: scheme.primary,
         elevation: 6,
         shape: const CircleBorder(),
@@ -85,7 +82,7 @@ class _DmAppShellState extends State<DmAppShell> {
     final theme = Theme.of(ctx);
     final scheme = theme.colorScheme;
     final activeColor = scheme.primary;
-    final inactiveColor = scheme.onSurface.withOpacity(0.4);
+    final inactiveColor = scheme.onSurface.withValues(alpha: 0.4);
     return GestureDetector(
       onTap: () => _onTap(index),
       child: Column(
@@ -108,3 +105,4 @@ class _DmAppShellState extends State<DmAppShell> {
     );
   }
 }
+

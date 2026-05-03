@@ -21,6 +21,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
   bool _localVendors  = false;
   bool _fitbandSync   = true;
   int  _spiceLevel    = 3;
+  String _dietType    = "Non-Vegetarian";
+  final Set<String> _cuisines = {"North Indian", "Mediterranean", "Asian"};
+  int _mealsCount     = 5;
   bool _isSaving      = false;
 
   @override
@@ -32,6 +35,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
       setState(() {
         final stored = List<String>.from(user.allergies);
         _allergies.addAll(stored);
+        _dietType = user.dietaryPreferences.isNotEmpty ? user.dietaryPreferences.first : "Non-Vegetarian";
+        // Note: In a real app, you'd map other stored fields here too
       });
     });
   }
@@ -69,11 +74,11 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             ]),
             
             _buildSection(context, "Diet Type", [
-              const DmChip(label: "Non-Vegetarian", isSelected: true, color: Color(0xFFB8FF00)),
-              const DmChip(label: "Vegetarian", isSelected: false),
-              const DmChip(label: "Vegan", isSelected: false),
-              const DmChip(label: "Keto", isSelected: false),
-              const DmChip(label: "Intermittent Fast", isSelected: false),
+              _buildChoiceChip("Non-Vegetarian", _dietType, (v) => setState(() => _dietType = v), color: const Color(0xFFB8FF00)),
+              _buildChoiceChip("Vegetarian", _dietType, (v) => setState(() => _dietType = v)),
+              _buildChoiceChip("Vegan", _dietType, (v) => setState(() => _dietType = v)),
+              _buildChoiceChip("Keto", _dietType, (v) => setState(() => _dietType = v)),
+              _buildChoiceChip("Intermittent Fast", _dietType, (v) => setState(() => _dietType = v)),
             ]),
 
             Padding(
@@ -102,20 +107,20 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             ),
 
             _buildSection(context, "Cuisine Preferences", [
-              const DmChip(label: "North Indian", isSelected: true, color: Color(0xFFB06EFF)),
-              const DmChip(label: "Mediterranean", isSelected: true, color: Color(0xFFB06EFF)),
-              const DmChip(label: "South Indian", isSelected: false),
-              const DmChip(label: "Continental", isSelected: false),
-              const DmChip(label: "Asian", isSelected: true, color: Color(0xFFB06EFF)),
-              const DmChip(label: "Mexican", isSelected: false),
-              const DmChip(label: "Middle Eastern", isSelected: false),
+              _buildMultiChip("North Indian", _cuisines, color: const Color(0xFFB06EFF)),
+              _buildMultiChip("Mediterranean", _cuisines, color: const Color(0xFFB06EFF)),
+              _buildMultiChip("South Indian", _cuisines),
+              _buildMultiChip("Continental", _cuisines),
+              _buildMultiChip("Asian", _cuisines, color: const Color(0xFFB06EFF)),
+              _buildMultiChip("Mexican", _cuisines),
+              _buildMultiChip("Middle Eastern", _cuisines),
             ]),
 
             _buildSection(context, "Meal Frequency", [
-              const DmChip(label: "3 meals", isSelected: false),
-              const DmChip(label: "5 meals", isSelected: true, color: Color(0xFFB8FF00)),
-              const DmChip(label: "6 meals", isSelected: false),
-              const DmChip(label: "Intermittent", isSelected: false),
+              _buildChoiceChip("3 meals", "$_mealsCount meals", (v) => setState(() => _mealsCount = 3)),
+              _buildChoiceChip("5 meals", "$_mealsCount meals", (v) => setState(() => _mealsCount = 5), color: const Color(0xFFB8FF00)),
+              _buildChoiceChip("6 meals", "$_mealsCount meals", (v) => setState(() => _mealsCount = 6)),
+              _buildChoiceChip("Intermittent", "$_mealsCount meals", (v) => setState(() => _mealsCount = 0)),
             ]),
 
             Padding(
@@ -128,12 +133,15 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   final user = ref.read(currentUserProvider);
                   if (user == null) { setState(() => _isSaving = false); return; }
                   await ref.read(authProvider.notifier).completeOnboarding(user.id, {
-                    'allergies':       _allergies.toList(),
-                    'spice_level':     _spiceLevel,
-                    'meal_variety':    _mealVariety,
-                    'online_ordering': _onlineOrder,
-                    'local_vendors':   _localVendors,
-                    'fitband_sync':    _fitbandSync,
+                    'allergies':           _allergies.toList(),
+                    'spice_level':         _spiceLevel,
+                    'meal_variety':        _mealVariety,
+                    'online_ordering':     _onlineOrder,
+                    'local_vendors':       _localVendors,
+                    'fitband_sync':        _fitbandSync,
+                    'dietary_preferences': [_dietType],
+                    'cuisine_prefs':       _cuisines.toList(),
+                    'meals_per_day':       _mealsCount,
                   });
                   setState(() => _isSaving = false);
                   if (mounted) {
@@ -154,12 +162,26 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
   }
 
   Widget _buildAllergyChip(String label) {
-    final sel = _allergies.contains(label);
+    return _buildMultiChip(label, _allergies, color: const Color(0xFFFF5C3A));
+  }
+
+  Widget _buildMultiChip(String label, Set<String> selection, {Color? color}) {
+    final sel = selection.contains(label);
     return DmChip(
       label: label,
       isSelected: sel,
-      color: const Color(0xFFFF5C3A),
-      onTap: () => setState(() => sel ? _allergies.remove(label) : _allergies.add(label)),
+      color: color,
+      onTap: () => setState(() => sel ? selection.remove(label) : selection.add(label)),
+    );
+  }
+
+  Widget _buildChoiceChip(String label, String current, ValueChanged<String> onSelected, {Color? color}) {
+    final sel = label == current;
+    return DmChip(
+      label: label,
+      isSelected: sel,
+      color: color,
+      onTap: () => onSelected(label),
     );
   }
 

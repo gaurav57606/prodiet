@@ -1,80 +1,66 @@
-// T1 TEXT STYLES — exact copy, Outfit font, no google_fonts
+// T1 TEXT STYLES — using google_fonts for runtime fetching
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class T1TextStyles {
-  static const String fontFamily = 'Outfit';
-
   static TextTheme getTextTheme(ColorScheme scheme) {
     return TextTheme(
-      displayLarge: TextStyle(
-        fontFamily: fontFamily,
+      displayLarge: GoogleFonts.outfit(
         fontSize: 50,
         fontWeight: FontWeight.w800,
         letterSpacing: -2.0,
       ),
-      displayMedium: TextStyle(
-        fontFamily: fontFamily,
+      displayMedium: GoogleFonts.outfit(
         fontSize: 44,
         fontWeight: FontWeight.w800,
         letterSpacing: -2.0,
       ),
-      headlineLarge: TextStyle(
-        fontFamily: fontFamily,
+      headlineLarge: GoogleFonts.outfit(
         fontSize: 28,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.3,
       ),
-      headlineMedium: TextStyle(
-        fontFamily: fontFamily,
+      headlineMedium: GoogleFonts.outfit(
         fontSize: 22,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.3,
       ),
-      headlineSmall: TextStyle(
-        fontFamily: fontFamily,
+      headlineSmall: GoogleFonts.outfit(
         fontSize: 20,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.3,
       ),
-      titleLarge: TextStyle(
-        fontFamily: fontFamily,
+      titleLarge: GoogleFonts.outfit(
         fontSize: 18,
         fontWeight: FontWeight.w700,
       ),
-      titleMedium: TextStyle(
-        fontFamily: fontFamily,
+      titleMedium: GoogleFonts.outfit(
         fontSize: 15,
         fontWeight: FontWeight.w800,
       ),
-      titleSmall: TextStyle(
-        fontFamily: fontFamily,
+      titleSmall: GoogleFonts.outfit(
         fontSize: 13,
         fontWeight: FontWeight.w700,
       ),
-      bodyLarge: TextStyle(
-        fontFamily: fontFamily,
+      bodyLarge: GoogleFonts.outfit(
         fontSize: 13,
         fontWeight: FontWeight.w500,
       ),
-      bodyMedium: TextStyle(
-        fontFamily: fontFamily,
+      bodyMedium: GoogleFonts.outfit(
         fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
-      bodySmall: TextStyle(
-        fontFamily: fontFamily,
+      bodySmall: GoogleFonts.outfit(
         fontSize: 11,
         fontWeight: FontWeight.w500,
       ),
-      labelLarge: TextStyle(
-        fontFamily: fontFamily,
+      labelLarge: GoogleFonts.outfit(
         fontSize: 11,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.0,
         textBaseline: TextBaseline.alphabetic,
       ),
-      labelSmall: TextStyle(
-        fontFamily: fontFamily,
+      labelSmall: GoogleFonts.outfit(
         fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.5,
@@ -87,11 +73,11 @@ class T1TextStyles {
 }
 
 class T1TextStyleExtensions {
-  static TextStyle sectionLabel(ColorScheme scheme) => TextStyle(
-    fontFamily: T1TextStyles.fontFamily,
+  static TextStyle sectionLabel(ColorScheme scheme) => GoogleFonts.outfit(
     fontSize: 10,
     fontWeight: FontWeight.w700,
     letterSpacing: 1.4,
-    color: scheme.onSurface.withOpacity(0.45),
+    color: scheme.onSurface.withValues(alpha: 0.45),
   );
 }
+

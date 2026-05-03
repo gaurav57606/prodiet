@@ -18,24 +18,38 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier(this._repo, {FcmService? fcm})
       : _fcm = fcm,
         super(const AuthLoading()) {
+    addListener((state) {
+      logger.i('[$_tag] State changed to: $state');
+    });
     _init();
   }
 
   void _init() {
     _authSubscription?.cancel();
+    logger.i('[$_tag] Initializing AuthNotifier...');
 
-    // Check current session IMMEDIATELY — onAuthStateChange only fires on changes,
-    // not on the current state. Without this, a returning user stays AuthLoading forever.
-    final existingSession = _repo.currentSession();
-    if (existingSession != null) {
-      _handleSession(existingSession.user.id);
-    } else {
-      state = const AuthUnauthenticated();
-    }
+    // Wrap in microtask to ensure listeners are ready
+    Future.microtask(() async {
+      try {
+        logger.d('[$_tag] Checking session...');
+        final existingSession = _repo.currentSession();
+        if (existingSession != null) {
+          logger.i('[$_tag] Existing session found for ${existingSession.user.id}');
+          await _handleSession(existingSession.user.id);
+        } else {
+          logger.i('[$_tag] No existing session found');
+          state = const AuthUnauthenticated();
+        }
+      } catch (e, st) {
+        logger.e('[$_tag] Init error: $e', error: e, stackTrace: st);
+        state = AuthFailure(ErrorHandler.handle(e, context: '$_tag._init'));
+      }
+    });
 
-    // Still subscribe for future changes (sign-in, sign-out, token refresh)
+    // Still subscribe for future changes
     _authSubscription = _repo.authStateChanges().listen((data) async {
       final session = data.session;
+      logger.i('[$_tag] Auth state change detected. Event: ${data.event}, Session: ${session?.user.id}');
       if (session == null) {
         state = const AuthUnauthenticated();
       } else {
@@ -46,13 +60,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> _handleSession(String userId) async {
     try {
-      final profile = await _repo.fetchProfile(userId);
+      logger.d('[$_tag] Fetching profile for $userId...');
+      // Add timeout to prevent hanging in loading state forever
+      final profile = await _repo.fetchProfile(userId).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          logger.e('[$_tag] Profile fetch timed out for $userId');
+          throw TimeoutException('Connection timed out while loading profile');
+        },
+      );
+      
       if (profile == null) {
-        // Profile row not yet created (DB trigger may be delayed).
-        // Emit AuthProfileMissing so the UI can show a retry option.
+        logger.w('[$_tag] Profile not found for $userId');
         state = AuthProfileMissing(userId);
         return;
       }
+      logger.d('[$_tag] Profile loaded: ${profile.email}, onboardingComplete: ${profile.onboardingComplete}');
       _handleProfile(profile);
     } catch (e) {
       logger.e('[$_tag] _handleSession error: $e');

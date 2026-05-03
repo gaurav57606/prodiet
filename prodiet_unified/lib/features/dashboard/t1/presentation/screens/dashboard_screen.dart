@@ -72,7 +72,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 title: Text(
-                  _getGreeting(data.userName.split(' ')[0]),
+                  _getGreeting(data.userName.isNotEmpty ? data.userName.split(' ')[0] : 'there'),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

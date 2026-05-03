@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,14 +8,19 @@ import 'package:prodiet_unified/core/services/notification_service.dart';
 import 'package:logger/logger.dart';
 
 class FcmService {
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   final SupabaseClient _supabase;
   final NotificationService _localNotifications;
   final _logger = Logger();
 
+  FirebaseMessaging get _fcm => FirebaseMessaging.instance;
+
   FcmService(this._supabase, this._localNotifications);
 
   Future<void> initialize(String userId) async {
+    if (kIsWeb) {
+      _logger.i('[FCM] Skipping initialization on Web');
+      return;
+    }
     // 1. Request permissions
     final settings = await _fcm.requestPermission(
       alert: true,
@@ -102,7 +108,8 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
   return NotificationService();
 });
 
-final fcmServiceProvider = Provider<FcmService>((ref) {
+final fcmServiceProvider = Provider<FcmService?>((ref) {
+  if (kIsWeb) return null;
   final supabase = ref.watch(supabaseClientProvider);
   final notifications = ref.watch(notificationServiceProvider);
   return FcmService(supabase, notifications);

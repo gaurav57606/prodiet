@@ -32,38 +32,41 @@ class _FallbackErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF1A1A2E),
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('😵', style: TextStyle(fontSize: 52)),
-                SizedBox(height: 20),
-                Text(
-                  'Something went wrong',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    fontFamily: null,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: const Color(0xFF1A1A2E),
+        body: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('😵', style: TextStyle(fontSize: 52)),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Something went wrong',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      fontFamily: null,
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Please restart the app.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFFAAAAAA),
-                    fontSize: 14,
-                    fontFamily: null,
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Please restart the app.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFFAAAAAA),
+                      fontSize: 14,
+                      fontFamily: null,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -71,3 +74,4 @@ class _FallbackErrorWidget extends StatelessWidget {
     );
   }
 }
+

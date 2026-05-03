@@ -21,7 +21,6 @@ class ProDietApp extends ConsumerStatefulWidget {
 
 class _ProDietAppState extends ConsumerState<ProDietApp> {
   late final AppLifecycleListener _listener;
-  late final GoRouter _router;
 
   @override
   void initState() {
@@ -30,7 +29,6 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       onResume: _onAppResume,
       onPause: _onAppPause,
     );
-    _router = createAppRouter(ProviderScope.containerOf(context));
     // Await theme init so the correct theme is active before first redirect
     ref.read(activeThemeProvider.notifier).init().then((_) {
       // Notify router to re-evaluate redirect after theme is loaded
@@ -117,23 +115,8 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       title: 'ProDiet',
       debugShowCheckedModeBanner: false,
       theme: resolvedTheme(),
-      routerConfig: _router,
-      // Preserves theme1's pixel-perfect layout — no system font scaling
-      builder: (context, child) {
-        final active = ref.watch(activeThemeProvider);
-        final isT1 = active == ActiveTheme.t1Light ||
-                     active == ActiveTheme.t1Dark ||
-                     active == ActiveTheme.t1Amoled;
-        if (isT1) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.noScaling,
-            ),
-            child: child!,
-          );
-        }
-        return child!;
-      },
+      routerConfig: ref.watch(routerProvider),
+      builder: (context, child) => child!,
     );
   }
 }

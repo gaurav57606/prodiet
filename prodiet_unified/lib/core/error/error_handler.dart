@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app_error.dart';
@@ -37,6 +38,7 @@ class ErrorHandler {
     AppError appError, {
     String? context,
   }) {
+    if (kIsWeb) return; // Crashlytics not initialized on Web
     try {
       // Add key-value context tags visible in Crashlytics dashboard
       final crashlytics = FirebaseCrashlytics.instance;

@@ -12,27 +12,32 @@ class AppConfig {
       String.fromEnvironment('OPEN_FOOD_FACTS_BASE_URL',
           defaultValue: 'https://world.openfoodfacts.org/api/v2');
 
-  /// Throws [StateError] in ALL build modes (debug, profile, release)
-  /// if required environment variables are missing.
-  /// assert() is a no-op outside debug+debugger — do NOT use it for config validation.
-  static void assertValid() {
+  /// Returns null if config is valid, or an error message string if not.
+  static String? validate() {
     if (supabaseUrl.isEmpty) {
-      throw StateError(
-        'SUPABASE_URL is not set.\n'
-        'Build with: flutter build apk --dart-define-from-file=.env.json\n'
-        'CI: ensure SUPABASE_URL secret is set in GitHub Actions.',
-      );
+      return 'SUPABASE_URL is not set.\n\n'
+          'Run with:\n'
+          'flutter run --dart-define-from-file=.env.json\n\n'
+          'Build with:\n'
+          'flutter build apk --dart-define-from-file=.env.json';
     }
     if (supabaseAnonKey.isEmpty) {
-      throw StateError(
-        'SUPABASE_ANON_KEY is not set.\n'
-        'Build with: flutter build apk --dart-define-from-file=.env.json\n'
-        'CI: ensure SUPABASE_ANON_KEY secret is set in GitHub Actions.',
-      );
+      return 'SUPABASE_ANON_KEY is not set.\n\n'
+          'Run with:\n'
+          'flutter run --dart-define-from-file=.env.json';
     }
+    return null;
   }
 
-  /// Returns true if all required config values are present.
   static bool get isValid =>
       supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
+
+  /// Legacy: kept for compatibility — no longer throws, just logs.
+  static void assertValid() {
+    final error = validate();
+    if (error != null) {
+      // ignore: avoid_print
+      print('[AppConfig] WARNING: $error');
+    }
+  }
 }

@@ -10,6 +10,7 @@ import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 // Shells
 import 'package:prodiet_unified/shared/t1/widgets/dm_app_shell.dart';
 import 'package:prodiet_unified/shared/t2/layout/scaffold_with_nav_bar.dart';
+import 'package:prodiet_unified/core/widgets/placeholder_screen.dart';
 
 // T1 Screens
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/splash_screen.dart' as t1_splash;
@@ -36,6 +37,7 @@ import 'package:prodiet_unified/features/auth/t2/presentation/screens/splash_scr
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/onboarding_screen.dart' as t2_onboarding;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/login_screen.dart' as t2_login;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/signup_screen.dart' as t2_signup;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/forgot_password_screen.dart' as t2_forgot_password;
 import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2_dashboard;
 import 'package:prodiet_unified/features/meal_planner/t2/presentation/screens/meal_planner_screen.dart' as t2_meal_planner;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_screen.dart' as t2_diet_plan;
@@ -76,6 +78,9 @@ class AppRoutes {
   static const String t1Hydration = '/t1/hydration';
   static const String t1ActivitySync = '/t1/activity-sync';
   static const String t1Ocr = '/t1/ocr';
+  static const String t1Profile = '/t1/profile';
+  static const String t1Notifications = '/t1/notifications';
+  static const String t1Recipe = '/t1/recipe';
 
   // T1 Aliases (to fix undefined getter errors in migrated T1 screens)
   static const String splashName = 't1Splash';
@@ -139,6 +144,10 @@ class _AuthStateNotifier extends ChangeNotifier {
   }
 }
 
+final routerProvider = Provider<GoRouter>((ref) {
+  return createAppRouter(ref.container);
+});
+
 GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
   navigatorKey: appRouterNavigatorKey,
   initialLocation: '/',
@@ -158,9 +167,11 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
       return '/t1/splash';
     }
 
-    // ── NEW: Auth guard ──
+    // ── Auth guard ──
     final authState = ref.read(authProvider);
     final loc = state.matchedLocation;
+    final logState = authState is AuthFailure ? 'AuthFailure(${authState.error.message})' : authState.toString();
+    debugPrint('[AppRouter] Redirect check: loc=$loc, authState=$logState');
 
     const publicRoutes = {
       '/t1/splash', '/t2/splash',
@@ -181,9 +192,18 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
                  activeTheme == ActiveTheme.t2Amoled;
 
     if (authState is AuthLoading) {
+      // If we are already on a public page (login/signup/onboarding), stay there!
+      // This prevents interrupting sign-up/sign-in processes.
+      if (isPublic) return null;
+      
+      // Otherwise, go to/stay on splash during initial loading
       return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
     }
     if (authState is AuthUnauthenticated) {
+      // If we are at splash, we MUST move to login once we know we are unauthenticated
+      if (loc.contains('splash')) {
+        return isT2 ? '/t2/login' : '/t1/login';
+      }
       return isPublic ? null : (isT2 ? '/t2/login' : '/t1/login');
     }
     if (authState is AuthProfileMissing) return AppRoutes.t2ProfileRetry;
@@ -197,9 +217,11 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
       }
       return null;
     }
-    if (authState is AuthProfileMissing) {
-      // Keep user on splash — the splash screen will observe this state and show retry UI
-      return isT2 ? '/t2/splash' : '/t1/splash';
+    if (authState is AuthFailure) {
+      // If we're on a public page (login/signup), stay there to show the error via SnackBar
+      if (isPublic) return null;
+      // Otherwise, go to splash to show the error UI
+      return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
     }
     return null;
 
@@ -236,6 +258,9 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t1Hydration, name: 't1Hydration', builder: (context, state) => const t1_hydration.HydrationScreen()),
     GoRoute(path: AppRoutes.t1ActivitySync, name: 't1ActivitySync', builder: (context, state) => const t1_activity_sync.ActivitySyncScreen()),
     GoRoute(path: AppRoutes.t1Ocr, name: 't1Ocr', builder: (context, state) => const t1_ocr.OcrScannerScreen()),
+    GoRoute(path: AppRoutes.t1Profile, name: 't1Profile', builder: (context, state) => const PlaceholderScreen(title: 'Profile')),
+    GoRoute(path: AppRoutes.t1Notifications, name: 't1Notifications', builder: (context, state) => const PlaceholderScreen(title: 'Notifications')),
+    GoRoute(path: AppRoutes.t1Recipe, name: 't1Recipe', builder: (context, state) => const PlaceholderScreen(title: 'Recipes')),
 
     // T2 Standalone
     GoRoute(path: AppRoutes.t2Splash, name: 't2Splash', builder: (context, state) => const t2_splash.SplashScreen()),
@@ -245,7 +270,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(
       path: AppRoutes.t2ForgotPassword,
       name: 't2ForgotPassword',
-      builder: (context, state) => const t1_forgot_password.ForgotPasswordScreen(),
+      builder: (context, state) => const t2_forgot_password.ForgotPasswordScreen(),
     ),
 
     // T2 Shell

@@ -45,4 +45,5 @@ app.*.map.json
 **/*.keystore
 .env
 .env.json
+*.env.json
 /android/keystore/

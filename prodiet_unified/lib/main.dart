@@ -10,6 +10,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:prodiet_unified/core/config/app_config.dart';
 import 'package:prodiet_unified/core/widgets/error_boundary.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'app.dart';
 
 final logger = Logger(
@@ -33,51 +34,33 @@ void main() {
       FlutterError.presentError(details);
       logger.e('Flutter Error: ${details.exception}',
           error: details.exception, stackTrace: details.stack);
-      try {
-        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
-      } catch (_) {}
+      if (!kIsWeb) {
+        try {
+          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        } catch (_) {}
+      }
     };
 
     PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
       logger.e('Platform Error: $error', error: error, stackTrace: stack);
-      try {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      } catch (_) {}
+      if (!kIsWeb) {
+        try {
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        } catch (_) {}
+      }
       return true;
     };
 
-    // Validate config — show error UI instead of white screen if keys missing
-    try {
-      AppConfig.assertValid();
-    } catch (e) {
-      runApp(
-        MaterialApp(
-          home: Scaffold(
-            backgroundColor: const Color(0xFF0D0D0D),
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Text(
-                  '⚠️ Build Config Error\n\n$e\n\nRun with:\nflutter run --dart-define-from-file=.env.json',
-                  style: const TextStyle(
-                    color: Colors.orangeAccent,
-                    fontSize: 13,
-                    fontFamily: 'monospace',
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-      return; // Stop execution — don't proceed to Supabase.initialize
+    // 2. Validate config before initializing Supabase
+    final configError = AppConfig.validate();
+    if (configError != null) {
+      runApp(_ConfigErrorApp(message: configError));
+      return;
     }
 
     tz.initializeTimeZones();
 
     try {
-
       // Init Supabase
       await Supabase.initialize(
         url: AppConfig.supabaseUrl,
@@ -102,6 +85,12 @@ void main() {
           ),
         ),
       );
+
+      // 4. Background messaging handler (must be a top-level function)
+      // Only relevant for Android/iOS
+      if (!kIsWeb) {
+        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      }
     } catch (e, st) {
       logger.e('Initialization failed: $e', error: e, stackTrace: st);
       // If initialization fails, show a clear error UI instead of a blank screen
@@ -147,4 +136,79 @@ void main() {
   }, (Object error, StackTrace stack) {
     logger.e('Zone Error: $error', error: error, stackTrace: stack);
   });
+}
+
+class _ConfigErrorApp extends StatelessWidget {
+  const _ConfigErrorApp({required this.message});
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
+      home: Scaffold(
+        backgroundColor: const Color(0xFF0D0D0D),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text('⚠️', style: TextStyle(fontSize: 48)),
+                const SizedBox(height: 20),
+                const Text(
+                  'Build Config Error',
+                  style: TextStyle(
+                    color: Color(0xFFF5A623),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFF333333)),
+                  ),
+                  child: SelectableText(
+                    message,
+                    style: const TextStyle(
+                      color: Color(0xFFCCCCCC),
+                      fontSize: 13,
+                      fontFamily: 'monospace',
+                      height: 1.6,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'This screen only appears when the app is run\nwithout the required environment variables.',
+                  style: TextStyle(
+                    color: Color(0xFF666666),
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `Firebase.initializeApp()` before using other Firebase services.
+  await Firebase.initializeApp();
+  logger.i("Handling a background message: ${message.messageId}");
 }
