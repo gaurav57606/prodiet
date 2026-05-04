@@ -23,6 +23,7 @@ class AuthRepository {
           'name': name,
           'onboarding_complete': false,
           'daily_water_goal_ml': 2000,
+          'daily_calorie_goal': 2000,
           'variety_preference': 'balanced',
           'allergies': <String>[],
           'dietary_preferences': <String>[],

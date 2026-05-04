@@ -59,8 +59,8 @@ class AppUser {
       fitnessGoal: json['fitness_goal'] as String?,
       activityLevel: json['activity_level'] as String?,
       onboardingComplete: json['onboarding_complete'] as bool? ?? false,
-      dailyWaterGoalMl: json['daily_water_target_ml'] as int? ?? 2000,
-      dailyCalorieGoal: json['daily_calorie_target'] as int?,
+      dailyWaterGoalMl: json['daily_water_goal_ml'] as int? ?? 2000,
+      dailyCalorieGoal: json['daily_calorie_goal'] as int?,
       fcmToken: json['fcm_token'] as String?,
       varietyPreference: json['variety_preference'] as String? ?? 'balanced',
       createdAt: json['created_at'] != null
@@ -77,7 +77,7 @@ class AppUser {
       'id': id,
       'email': email,
       'onboarding_complete': onboardingComplete,
-      'daily_water_target_ml': dailyWaterGoalMl,
+      'daily_water_goal_ml': dailyWaterGoalMl,
       'variety_preference': varietyPreference,
       'created_at': createdAt.toIso8601String(),
     };
@@ -92,7 +92,7 @@ class AppUser {
     }
     if (fitnessGoal != null) map['fitness_goal'] = fitnessGoal;
     if (activityLevel != null) map['activity_level'] = activityLevel;
-    if (dailyCalorieGoal != null) map['daily_calorie_target'] = dailyCalorieGoal;
+    if (dailyCalorieGoal != null) map['daily_calorie_goal'] = dailyCalorieGoal;
     if (fcmToken != null) map['fcm_token'] = fcmToken;
     if (updatedAt != null) map['updated_at'] = updatedAt!.toIso8601String();
 
