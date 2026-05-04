@@ -21,7 +21,7 @@ class TodayMealsRow extends StatelessWidget {
 
     if (meal == null) {
       return DmCard(
-        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.1),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: T1Spacing.xl),

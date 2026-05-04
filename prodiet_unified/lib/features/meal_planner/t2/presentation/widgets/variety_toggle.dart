@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 
 class VarietyToggle extends StatelessWidget {
   const VarietyToggle({super.key});

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 
 class DmAvatar extends StatelessWidget {
   final String? imageUrl;
@@ -23,7 +22,7 @@ class DmAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.2),
+          color: theme.colorScheme.primary.withValues(alpha: 0.2),
           width: 1.5,
         ),
       ),
@@ -45,7 +44,7 @@ class DmAvatar extends StatelessWidget {
         : '?';
 
     return Container(
-      color: theme.colorScheme.primary.withOpacity(0.1),
+      color: theme.colorScheme.primary.withValues(alpha: 0.1),
       child: Center(
         child: Text(
           initials,

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/core/widgets/loading_widget.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -55,7 +54,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('⚠️', style: TextStyle(fontSize: 48)),
+                  const Icon(Icons.warning_amber_rounded, size: 48, color: Color(0xFFF5A623)),
                   const SizedBox(height: 16),
                   Text(
                     authState is AuthFailure ? 'Authentication Error' : 'Could not connect',

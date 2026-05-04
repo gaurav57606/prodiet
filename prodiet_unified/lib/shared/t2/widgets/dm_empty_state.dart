@@ -30,13 +30,13 @@ class DmEmptyState extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(T2Spacing.lg),
               decoration: BoxDecoration(
-                color: T2Colors.lime.withOpacity(0.05),
+                color: T2Colors.lime.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: 64,
-                color: T2Colors.lime.withOpacity(0.3),
+                color: T2Colors.lime.withValues(alpha: 0.3),
               ),
             ),
             const SizedBox(height: T2Spacing.lg),

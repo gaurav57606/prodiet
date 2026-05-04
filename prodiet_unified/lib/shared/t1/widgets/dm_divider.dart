@@ -22,7 +22,7 @@ class DmDivider extends StatelessWidget {
       thickness: 1,
       indent: indent,
       endIndent: endIndent,
-      color: color ?? theme.colorScheme.outline.withOpacity(0.1),
+      color: color ?? theme.colorScheme.outline.withValues(alpha: 0.1),
     );
   }
 }

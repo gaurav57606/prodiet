@@ -28,7 +28,7 @@ class MealTimelineItem extends StatelessWidget {
         statusIcon = Icons.close_rounded;
         break;
       case MealStatus.pending:
-        statusColor = theme.colorScheme.onSurface.withOpacity(0.2);
+        statusColor = theme.colorScheme.onSurface.withValues(alpha: 0.2);
         statusIcon = null;
         break;
     }
@@ -52,7 +52,7 @@ class MealTimelineItem extends StatelessWidget {
                 Text(
                   data.period,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.3),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                   ),
                 ),
               ],
@@ -67,10 +67,10 @@ class MealTimelineItem extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: data.status == MealStatus.pending ? Colors.transparent : statusColor.withOpacity(0.12),
+                  color: data.status == MealStatus.pending ? Colors.transparent : statusColor.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                   border: data.status == MealStatus.pending 
-                      ? Border.all(color: theme.colorScheme.outline.withOpacity(0.1), width: 1.5)
+                      ? Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.1), width: 1.5)
                       : null,
                 ),
                 child: statusIcon != null 
@@ -81,7 +81,7 @@ class MealTimelineItem extends StatelessWidget {
                 Expanded(
                   child: Container(
                     width: 1,
-                    color: theme.colorScheme.outline.withOpacity(0.1),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.1),
                   ),
                 ),
             ],
@@ -98,7 +98,7 @@ class MealTimelineItem extends StatelessWidget {
                   Text(
                     data.type,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.3),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -111,7 +111,7 @@ class MealTimelineItem extends StatelessWidget {
                   Text(
                     data.calories,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                   ),
                 ],

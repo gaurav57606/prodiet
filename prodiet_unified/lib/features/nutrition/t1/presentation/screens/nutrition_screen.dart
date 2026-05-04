@@ -29,7 +29,7 @@ class NutritionScreen extends ConsumerWidget {
               Text(
                 'MICRONUTRIENTS',
                 style: theme.textTheme.labelLarge?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.25),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.25),
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
                 ),
@@ -44,7 +44,7 @@ class NutritionScreen extends ConsumerWidget {
               Text(
                 'TOP PROTEIN SOURCES',
                 style: theme.textTheme.labelLarge?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.25),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.25),
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
                 ),
@@ -64,7 +64,6 @@ class NutritionScreen extends ConsumerWidget {
   }
 
   Widget _buildMacroSection(BuildContext context, dynamic summary) {
-    final theme = Theme.of(context);
     return DmCard(
       child: Column(
         children: [

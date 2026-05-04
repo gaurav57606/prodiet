@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
-import 'package:prodiet_unified/features/dashboard/t2/presentation/widgets/alert_strip.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VendorScreen extends StatelessWidget {
   const VendorScreen({super.key});
+
+  Future<void> _openPlatform(String query, String platform) async {
+    final String url = platform.toLowerCase() == 'zomato'
+        ? 'https://www.zomato.com/search?q=$query'
+        : 'https://www.swiggy.com/search?query=$query';
+    
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +40,7 @@ class VendorScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AlertStrip(
-              message: 'DEMO MODE — Sample data only',
-              subMessage: 'Live integration coming in next version',
-              isWarning: true,
-            ),
+            // Production ready: removed Demo alert
             Padding(
               padding: const EdgeInsets.all(18),
               child: Container(
@@ -103,7 +110,10 @@ class VendorScreen extends StatelessWidget {
 
             Padding(
               padding: const EdgeInsets.all(18),
-              child: DmButton(label: "Order from Zomato — ₹320", onPressed: () {}),
+              child: DmButton(
+                label: "Order from Zomato — ₹320", 
+                onPressed: () => _openPlatform("Protein Quinoa Bowl", "Zomato"),
+              ),
             ),
           ],
         ),
@@ -134,28 +144,31 @@ class VendorScreen extends StatelessWidget {
                 ],
               ),
             ),
-            ...items.map((item) => Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            ...items.map((item) => InkWell(
+              onTap: () => _openPlatform(item['nm'], platform),
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item['nm'], style: theme.textTheme.titleMedium?.copyWith(fontSize: 12)),
+                          Text(item['rest'], style: theme.textTheme.bodySmall),
+                          Text(item['macros'], style: theme.textTheme.bodySmall?.copyWith(fontSize: 9)),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(item['nm'], style: theme.textTheme.titleMedium?.copyWith(fontSize: 12)),
-                        Text(item['rest'], style: theme.textTheme.bodySmall),
-                        Text(item['macros'], style: theme.textTheme.bodySmall?.copyWith(fontSize: 9)),
+                        Text(item['price'], style: theme.textTheme.displayMedium?.copyWith(fontSize: 16, color: theme.colorScheme.primary)),
+                        if (item['isBest']) Text("Best", style: theme.textTheme.bodySmall?.copyWith(fontSize: 9)),
                       ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(item['price'], style: theme.textTheme.displayMedium?.copyWith(fontSize: 16, color: theme.colorScheme.primary)),
-                      if (item['isBest']) Text("Best", style: theme.textTheme.bodySmall?.copyWith(fontSize: 9)),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             )),
           ],

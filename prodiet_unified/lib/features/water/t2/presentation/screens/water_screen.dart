@@ -60,7 +60,7 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
         skeleton: const ProDietLoader(),
         isEmpty: (s) => s.totalMl == 0,
         emptyState: ProDietEmptyState(
-          emoji: EmptyStateConfigs.water.emoji,
+          icon: EmptyStateConfigs.water.icon,
           headline: EmptyStateConfigs.water.headline,
           subtext: EmptyStateConfigs.water.subtext,
           buttonLabel: EmptyStateConfigs.water.buttonLabel,

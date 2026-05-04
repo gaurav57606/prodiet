@@ -23,7 +23,7 @@ class DmAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: T2Colors.lime.withOpacity(0.2),
+          color: T2Colors.lime.withValues(alpha: 0.2),
           width: 1.5,
         ),
       ),

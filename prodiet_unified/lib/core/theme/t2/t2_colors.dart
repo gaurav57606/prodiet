@@ -53,7 +53,7 @@ class T2Colors {
   static const Color divider = border;
 }
 
-final t2LightScheme = ColorScheme(
+const t2LightScheme = ColorScheme(
   brightness: Brightness.light,
   primary: T2Colors.limeDark,
   onPrimary: Colors.black,
@@ -61,14 +61,14 @@ final t2LightScheme = ColorScheme(
   onSecondary: Colors.white,
   error: T2Colors.coral,
   onError: Colors.white,
-  surface: const Color(0xFFF5F5F0),
+  surface: Color(0xFFF5F5F0),
   onSurface: Colors.black,
-  surfaceContainerHighest: const Color(0xFFFFFFFF), // Using this as the 'background' equivalent
+  surfaceContainerHighest: Color(0xFFFFFFFF), // Using this as the 'background' equivalent
   onSurfaceVariant: T2Colors.textMuted,
-  outline: const Color(0xFFE0E0DA),
+  outline: Color(0xFFE0E0DA),
 );
 
-final t2DarkScheme = ColorScheme(
+const t2DarkScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: T2Colors.lime,
   onPrimary: T2Colors.bgDefault,
@@ -83,7 +83,7 @@ final t2DarkScheme = ColorScheme(
   outline: T2Colors.border,
 );
 
-final t2AmoledScheme = ColorScheme(
+const t2AmoledScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: T2Colors.lime,
   onPrimary: Colors.black,

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
@@ -31,19 +30,22 @@ class ProfileScreen extends ConsumerWidget {
             Center(
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                    child: Text(
-                      user?.name != null && user!.name.isNotEmpty 
-                        ? user.name.substring(0, 1).toUpperCase() 
-                        : 'U',
-                      style: theme.textTheme.displayMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w900,
+                  Builder(builder: (context) {
+                    final userName = user?.name;
+                    return CircleAvatar(
+                      radius: 50,
+                      backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                      child: Text(
+                        (userName != null && userName.isNotEmpty)
+                          ? userName.substring(0, 1).toUpperCase() 
+                          : 'U',
+                        style: theme.textTheme.displayMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                   const SizedBox(height: T1Spacing.md),
                   Text(
                     user?.name ?? 'User',
@@ -51,7 +53,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   Text(
                     user?.email ?? 'email@example.com',
-                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                 ],
               ),
@@ -137,7 +139,7 @@ class ProfileScreen extends ConsumerWidget {
               child: FilledButton(
                 onPressed: () => _handleLogout(context, ref),
                 style: FilledButton.styleFrom(
-                  backgroundColor: theme.colorScheme.error.withOpacity(0.1),
+                  backgroundColor: theme.colorScheme.error.withValues(alpha: 0.1),
                   foregroundColor: theme.colorScheme.error,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
@@ -157,7 +159,7 @@ class ProfileScreen extends ConsumerWidget {
       child: Text(
         title,
         style: theme.textTheme.labelSmall?.copyWith(
-          color: theme.colorScheme.onSurface.withOpacity(0.3),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
           fontWeight: FontWeight.w900,
           letterSpacing: 1.2,
         ),
@@ -175,7 +177,7 @@ class ProfileScreen extends ConsumerWidget {
   ) {
     final theme = Theme.of(context);
     return ListTile(
-      leading: Icon(icon, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.5)),
+      leading: Icon(icon, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.5)),
       title: Text(label, style: theme.textTheme.titleMedium?.copyWith(
         color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
         fontWeight: isSelected ? FontWeight.w900 : FontWeight.normal,
@@ -187,9 +189,9 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildMenuTile(ThemeData theme, String label, IconData icon, {required VoidCallback onTap}) {
     return ListTile(
-      leading: Icon(icon, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+      leading: Icon(icon, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
       title: Text(label, style: theme.textTheme.titleMedium),
-      trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.2)),
+      trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
       onTap: onTap,
     );
   }

@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
 import '../domain/diet_meal.dart';
-import '../domain/diet_day.dart';
 import '../domain/diet_plan.dart';
 
 class DietPlanRepository {

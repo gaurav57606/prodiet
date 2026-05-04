@@ -74,7 +74,7 @@ class DietPlanDetailScreen extends StatelessWidget {
             Text(
               'INGREDIENTS',
               style: theme.textTheme.labelSmall?.copyWith(
-                color: scheme.onSurface.withOpacity(0.3),
+                color: scheme.onSurface.withValues(alpha: 0.3),
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
               ),
@@ -91,7 +91,7 @@ class DietPlanDetailScreen extends StatelessWidget {
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: scheme.primary.withOpacity(0.3),
+                            color: scheme.primary.withValues(alpha: 0.3),
                             shape: BoxShape.circle,
                           ),
                         ),

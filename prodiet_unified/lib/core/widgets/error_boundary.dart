@@ -32,20 +32,20 @@ class _FallbackErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: Color(0xFF1A1A2E),
         body: SafeArea(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.all(32),
+              padding: EdgeInsets.all(32),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('😵', style: TextStyle(fontSize: 52)),
-                  const SizedBox(height: 20),
-                  const Text(
+                  Text('😵', style: TextStyle(fontSize: 52)),
+                  SizedBox(height: 20),
+                  Text(
                     'Something went wrong',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -55,8 +55,8 @@ class _FallbackErrorWidget extends StatelessWidget {
                       fontFamily: null,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Please restart the app.',
                     textAlign: TextAlign.center,
                     style: TextStyle(

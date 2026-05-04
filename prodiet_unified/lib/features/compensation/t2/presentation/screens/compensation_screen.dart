@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/compensation/application/compensation_providers.dart';
-import 'package:prodiet_unified/features/compensation/domain/models/compensation_log.dart';
 
 class CompensationScreen extends ConsumerWidget {
   const CompensationScreen({super.key});
@@ -32,18 +31,18 @@ class CompensationScreen extends ConsumerWidget {
         error: (err, stack) => Center(child: Text("Error: $err")),
         data: (logs) {
           if (logs.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.check_circle_outline_rounded, color: T2Colors.lime, size: 48),
-                  const SizedBox(height: 16),
-                  const Text(
+                  Icon(Icons.check_circle_outline_rounded, color: T2Colors.lime, size: 48),
+                  SizedBox(height: 16),
+                  Text(
                     "ALL ON TRACK",
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, letterSpacing: 1.2),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: 8),
+                  Text(
                     "No compensation plans needed yet.",
                     style: TextStyle(color: Colors.white70, fontSize: 13),
                   ),
@@ -74,7 +73,7 @@ class CompensationScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      const Text(
                         'You missed a meal — here is the fix',
                         style: TextStyle(
                           color: T2Colors.textSecondary,
@@ -100,7 +99,7 @@ class CompensationScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'MISSED MEAL',
                           style: TextStyle(
                             fontSize: 10,
@@ -122,7 +121,7 @@ class CompensationScreen extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           'Logged on ${log.createdAt.toString().split('.')[0]}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             color: T2Colors.textSecondary,
                             fontWeight: FontWeight.w500,
@@ -133,9 +132,9 @@ class CompensationScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Text(
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
                     'IMPACT ANALYSIS',
                     style: TextStyle(
                       fontSize: 10,
@@ -172,9 +171,9 @@ class CompensationScreen extends ConsumerWidget {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: T2Colors.lime.withValues(alpha: 0.05),
-                            border: Border(left: BorderSide(color: T2Colors.lime, width: 3)),
+                            border: const Border(left: BorderSide(color: T2Colors.lime, width: 3)),
                           ),
-                          child: Row(
+                          child: const Row(
                             children: [
                               Expanded(
                                 child: Column(
@@ -329,7 +328,7 @@ class CompensationScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: isLast ? null : Border(bottom: BorderSide(color: T2Colors.border)),
+        border: isLast ? null : const Border(bottom: BorderSide(color: T2Colors.border)),
       ),
       child: Row(
         children: [
@@ -344,7 +343,7 @@ class CompensationScreen extends ConsumerWidget {
                 const SizedBox(height: 2),
                 Text(
                   sub,
-                  style: TextStyle(color: T2Colors.textMuted, fontSize: 11),
+                  style: const TextStyle(color: T2Colors.textMuted, fontSize: 11),
                 ),
               ],
             ),

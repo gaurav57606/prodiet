@@ -50,14 +50,14 @@ class _AchievementTile extends StatelessWidget {
   final Achievement a;
   const _AchievementTile({required this.a});
 
-  String _emoji(String type) {
+  IconData _icon(String type) {
     switch (type) {
-      case 'streak_7':     return '🔥';
-      case 'streak_30':    return '⚡';
-      case 'protein_goal': return '💪';
-      case 'hydration':    return '💧';
-      case 'weight_loss':  return '⚖️';
-      default:             return '🏆';
+      case 'streak_7':     return Icons.local_fire_department_rounded;
+      case 'streak_30':    return Icons.bolt_rounded;
+      case 'protein_goal': return Icons.fitness_center_rounded;
+      case 'hydration':    return Icons.water_drop_rounded;
+      case 'weight_loss':  return Icons.monitor_weight_rounded;
+      default:             return Icons.emoji_events_rounded;
     }
   }
 
@@ -77,8 +77,7 @@ class _AchievementTile extends StatelessWidget {
             decoration: BoxDecoration(
               color: scheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle),
-            child: Center(child: Text(_emoji(a.type),
-              style: const TextStyle(fontSize: 24))),
+            child: Center(child: Icon(_icon(a.type), size: 24, color: scheme.primary)),
           ),
           const SizedBox(width: 12),
           Expanded(child: Column(
@@ -90,9 +89,14 @@ class _AchievementTile extends StatelessWidget {
               Text(a.description, style: theme.textTheme.bodySmall?.copyWith(
                 color: scheme.onSurface.withValues(alpha: 0.5))),
               if (a.streakCount > 0)
-                Text('${a.streakCount} day streak 🔥',
-                  style: const TextStyle(fontSize: 10,
-                    color: Colors.orangeAccent, fontWeight: FontWeight.w700)),
+                Row(
+                  children: [
+                    Text('${a.streakCount} day streak ',
+                      style: const TextStyle(fontSize: 10,
+                        color: Colors.orangeAccent, fontWeight: FontWeight.w700)),
+                    const Icon(Icons.local_fire_department_rounded, size: 10, color: Colors.orangeAccent),
+                  ],
+                ),
             ],
           )),
           Text(a.earnedAt.length >= 10 ? a.earnedAt.substring(0, 10) : a.earnedAt,

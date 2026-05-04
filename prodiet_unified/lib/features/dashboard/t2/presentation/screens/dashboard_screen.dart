@@ -19,7 +19,6 @@ import 'package:prodiet_unified/core/widgets/skeletons/dashboard_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/utils/date_utils.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -40,7 +39,7 @@ class DashboardScreen extends ConsumerWidget {
           skeleton: const DashboardSkeleton(),
           isEmpty: (data) => data.mealsToday == 0 && data.waterMl == 0,
           emptyState: ProDietEmptyState(
-            emoji: EmptyStateConfigs.dashboard.emoji,
+            icon: EmptyStateConfigs.dashboard.icon,
             headline: EmptyStateConfigs.dashboard.headline,
             subtext: EmptyStateConfigs.dashboard.subtext,
             buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,

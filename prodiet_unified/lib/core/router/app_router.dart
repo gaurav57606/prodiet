@@ -5,12 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 
 // Shells
 import 'package:prodiet_unified/shared/t1/widgets/dm_app_shell.dart';
 import 'package:prodiet_unified/shared/t2/layout/scaffold_with_nav_bar.dart';
-import 'package:prodiet_unified/core/widgets/placeholder_screen.dart';
 
 // T1 Screens
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/splash_screen.dart' as t1_splash;
@@ -36,6 +34,7 @@ import 'package:prodiet_unified/features/auth/t1/presentation/screens/profile_sc
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/preferences_screen.dart' as t1_preferences;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/notifications_screen.dart' as t1_notifications;
 import 'package:prodiet_unified/features/recipe/t1/presentation/screens/recipe_screen.dart' as t1_recipe;
+import 'package:prodiet_unified/features/achievements/presentation/screens/achievements_screen.dart' as achievements;
 
 // T2 Screens
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/splash_screen.dart' as t2_splash;
@@ -43,12 +42,15 @@ import 'package:prodiet_unified/features/auth/t2/presentation/screens/onboarding
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/login_screen.dart' as t2_login;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/signup_screen.dart' as t2_signup;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/forgot_password_screen.dart' as t2_forgot_password;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/verify_phone_screen.dart' as t2_verify_phone;
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/privacy_policy_screen.dart' as t2_privacy;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/terms_of_service_screen.dart' as t2_terms;
 import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2_dashboard;
 import 'package:prodiet_unified/features/meal_planner/t2/presentation/screens/meal_planner_screen.dart' as t2_meal_planner;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_screen.dart' as t2_diet_plan;
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
 import 'package:prodiet_unified/features/inventory/t2/presentation/screens/inventory_screen.dart' as t2_inventory;
 import 'package:prodiet_unified/features/voice/t2/presentation/screens/voice_screen.dart' as t2_voice;
 import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_detail_screen.dart' as t2_diet_plan_detail;
@@ -90,6 +92,7 @@ class AppRoutes {
   static const String t1Notifications = '/t1/notifications';
   static const String t1Recipe = '/t1/recipe';
   static const String t1Preferences = '/t1/preferences';
+  static const String t1Achievements = '/t1/achievements';
 
   // T1 Aliases (to fix undefined getter errors in migrated T1 screens)
   static const String splashName = 't1Splash';
@@ -110,6 +113,7 @@ class AppRoutes {
   static const String profileName = 't1Profile';
   static const String notificationsName = 't1Notifications';
   static const String preferencesName = 't1Preferences';
+  static const String achievementsName = 't1Achievements';
 
   // T2 Standalone
   static const String t2Splash = '/t2/splash';
@@ -135,6 +139,8 @@ class AppRoutes {
   static const String t2Fitband = '/t2/fitband';
   static const String t2Preferences = '/t2/preferences';
   static const String t2PrivacyPolicy = '/t2/privacy-policy';
+  static const String t2TermsOfService = '/t2/terms-of-service';
+  static const String t2VerifyPhone = '/t2/verify-phone';
   static const String t2ProfileRetry = '/t2/profile-retry';
 }
 
@@ -170,79 +176,7 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
   navigatorKey: appRouterNavigatorKey,
   initialLocation: '/',
   refreshListenable: _AppStateNotifier(ref),
-  redirect: (context, state) {
-    // ── Guard: Wait for theme initialization ──
-    final isInitialized = ref.read(activeThemeInitializedProvider);
-    if (!isInitialized) return '/';
-
-    // ── Root redirect — fully theme aware ──
-    if (state.matchedLocation == '/') {
-      final active = ref.read(activeThemeProvider);
-      final isT2 = active == ActiveTheme.t2Dark ||
-                   active == ActiveTheme.t2Light ||
-                   active == ActiveTheme.t2Amoled;
-      return isT2 ? '/t2/splash' : '/t1/splash';
-    }
-
-    // ── Auth guard ──
-    final authState = ref.read(authProvider);
-    final loc = state.matchedLocation;
-    final logState = authState is AuthFailure ? 'AuthFailure(${authState.error.message})' : authState.toString();
-    debugPrint('[AppRouter] Redirect check: loc=$loc, authState=$logState');
-
-    const publicRoutes = {
-      '/t1/splash', '/t2/splash',
-      '/t1/login',  '/t2/login',
-      '/t1/signup', '/t2/signup',
-      '/t1/forgot-password',
-      '/t2/forgot-password',
-      '/t1/onboarding', '/t2/onboarding',
-      '/t1/health-goals',
-      '/t1/verify-phone',
-    };
-
-    final isPublic = publicRoutes.contains(loc);
-
-    final activeTheme = ref.read(activeThemeProvider);
-    final isT2 = activeTheme == ActiveTheme.t2Dark ||
-                 activeTheme == ActiveTheme.t2Light ||
-                 activeTheme == ActiveTheme.t2Amoled;
-
-    if (authState is AuthLoading) {
-      // If we are already on a public page (login/signup/onboarding), stay there!
-      // This prevents interrupting sign-up/sign-in processes.
-      if (isPublic) return null;
-      
-      // Otherwise, go to/stay on splash during initial loading
-      return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
-    }
-    if (authState is AuthUnauthenticated) {
-      // If we are at splash, we MUST move to login once we know we are unauthenticated
-      if (loc.contains('splash')) {
-        return isT2 ? '/t2/login' : '/t1/login';
-      }
-      return isPublic ? null : (isT2 ? '/t2/login' : '/t1/login');
-    }
-    if (authState is AuthProfileMissing) return AppRoutes.t2ProfileRetry;
-    if (authState is AuthNeedsOnboarding) {
-      if (isT2) return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
-      return (loc == '/t1/health-goals') ? null : '/t1/health-goals';
-    }
-    if (authState is AuthAuthenticated) {
-      if (isPublic && !loc.contains('splash')) {
-        return isT2 ? '/t2/dashboard' : '/t1/dashboard';
-      }
-      return null;
-    }
-    if (authState is AuthFailure) {
-      // If we're on a public page (login/signup), stay there to show the error via SnackBar
-      if (isPublic) return null;
-      // Otherwise, go to splash to show the error UI
-      return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
-    }
-    return null;
-
-  },
+  redirect: (context, state) => redirectLogic(context, state, ref),
   routes: [
     // Safe loading fallback for root path
     GoRoute(
@@ -295,12 +229,21 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t1Notifications, name: 't1Notifications', builder: (context, state) => const t1_notifications.NotificationsScreen()),
     GoRoute(path: AppRoutes.t1Recipe, name: 't1Recipe', builder: (context, state) => const t1_recipe.RecipeScreen()),
     GoRoute(path: AppRoutes.t1Preferences, name: 't1Preferences', builder: (context, state) => const t1_preferences.PreferencesScreen()),
+    GoRoute(path: AppRoutes.t1Achievements, name: 't1Achievements', builder: (context, state) => const achievements.AchievementsScreen()),
 
     // T2 Standalone
     GoRoute(path: AppRoutes.t2Splash, name: 't2Splash', builder: (context, state) => const t2_splash.SplashScreen()),
     GoRoute(path: AppRoutes.t2Onboarding, name: 't2Onboarding', builder: (context, state) => const t2_onboarding.OnboardingScreen()),
     GoRoute(path: AppRoutes.t2Login, name: 't2Login', builder: (context, state) => const t2_login.LoginScreen()),
     GoRoute(path: AppRoutes.t2Signup, name: 't2Signup', builder: (context, state) => const t2_signup.SignupScreen()),
+    GoRoute(
+      path: AppRoutes.t2VerifyPhone,
+      name: 't2VerifyPhone',
+      builder: (context, state) {
+        final phone = state.uri.queryParameters['phone'] ?? '';
+        return t2_verify_phone.VerifyPhoneScreen(phone: phone);
+      },
+    ),
     GoRoute(
       path: AppRoutes.t2ForgotPassword,
       name: 't2ForgotPassword',
@@ -340,12 +283,78 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t2Fitband, name: 't2Fitband', builder: (context, state) => const t2_fitband.FitbandScreen()),
     GoRoute(path: AppRoutes.t2Preferences, name: 't2Preferences', builder: (context, state) => const t2_preferences.PreferencesScreen()),
     GoRoute(path: AppRoutes.t2PrivacyPolicy, name: 't2PrivacyPolicy', builder: (context, state) => const t2_privacy.PrivacyPolicyScreen()),
+    GoRoute(path: AppRoutes.t2TermsOfService, name: 't2TermsOfService', builder: (context, state) => const t2_terms.TermsOfServiceScreen()),
     GoRoute(
       path: AppRoutes.t2ProfileRetry,
       builder: (context, state) => const _ProfileRetryScreen(),
     ),
   ],
 );
+
+String? redirectLogic(BuildContext context, GoRouterState state, ProviderContainer ref) {
+  // ── Guard: Wait for theme initialization ──
+  final isInitialized = ref.read(activeThemeInitializedProvider);
+  if (!isInitialized) return '/';
+
+  // ── Root redirect — fully theme aware ──
+  if (state.matchedLocation == '/') {
+    final active = ref.read(activeThemeProvider);
+    final isT2 = active == ActiveTheme.t2Dark ||
+                 active == ActiveTheme.t2Light ||
+                 active == ActiveTheme.t2Amoled;
+    return isT2 ? '/t2/splash' : '/t1/splash';
+  }
+
+  // ── Auth guard ──
+  final authState = ref.read(authProvider);
+  final loc = state.matchedLocation;
+  
+  const publicRoutes = {
+    '/t1/splash', '/t2/splash',
+    '/t1/login',  '/t2/login',
+    '/t1/signup', '/t2/signup',
+    '/t1/forgot-password',
+    '/t2/forgot-password',
+    '/t1/onboarding', '/t2/onboarding',
+    '/t1/health-goals',
+    '/t1/verify-phone',
+    '/t2/verify-phone',
+  };
+
+  final isPublic = publicRoutes.contains(loc);
+
+  final activeTheme = ref.read(activeThemeProvider);
+  final isT2 = activeTheme == ActiveTheme.t2Dark ||
+               activeTheme == ActiveTheme.t2Light ||
+               activeTheme == ActiveTheme.t2Amoled;
+
+  if (authState is AuthLoading) {
+    if (isPublic) return null;
+    return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
+  }
+  if (authState is AuthUnauthenticated) {
+    if (loc.contains('splash')) {
+      return isT2 ? '/t2/login' : '/t1/login';
+    }
+    return isPublic ? null : (isT2 ? '/t2/login' : '/t1/login');
+  }
+  if (authState is AuthProfileMissing) return AppRoutes.t2ProfileRetry;
+  if (authState is AuthNeedsOnboarding) {
+    if (isT2) return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
+    return (loc == '/t1/health-goals') ? null : '/t1/health-goals';
+  }
+  if (authState is AuthAuthenticated) {
+    if (isPublic && !loc.contains('splash')) {
+      return isT2 ? '/t2/dashboard' : '/t1/dashboard';
+    }
+    return null;
+  }
+  if (authState is AuthFailure) {
+    if (isPublic) return null;
+    return loc.contains('splash') ? null : (isT2 ? '/t2/splash' : '/t1/splash');
+  }
+  return null;
+}
 
 class _ProfileRetryScreen extends ConsumerWidget {
   const _ProfileRetryScreen();

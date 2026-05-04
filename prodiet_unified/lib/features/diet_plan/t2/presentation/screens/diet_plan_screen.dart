@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 import 'package:prodiet_unified/features/diet_plan/application/diet_plan_providers.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
@@ -18,7 +17,6 @@ class DietPlanScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(dietPlanProvider);
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
 
     if (state is DietPlanInitial) {
       return Scaffold(
@@ -29,7 +27,7 @@ class DietPlanScreen extends ConsumerWidget {
           title: Text('DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
         ),
         body: ProDietEmptyState(
-          emoji: '🥗',
+          icon: EmptyStateConfigs.dietPlan.icon,
           headline: 'NO DIET PLAN YET',
           subtext: 'Let AI build your personalised 7-day plan based on your goals.',
           buttonLabel: '✨ CREATE MY PLAN',
@@ -77,7 +75,7 @@ class DietPlanScreen extends ConsumerWidget {
           title: Text('DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
         ),
         body: ProDietEmptyState(
-          emoji: '⚠️',
+          icon: Icons.error_outline_rounded,
           headline: 'SOMETHING WENT WRONG',
           subtext: state.message,
           buttonLabel: 'TRY AGAIN',

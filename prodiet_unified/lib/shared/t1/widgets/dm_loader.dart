@@ -44,8 +44,8 @@ class DmLoader extends StatelessWidget {
     }
 
     return Shimmer.fromColors(
-      baseColor: isDark ? theme.colorScheme.onSurface.withOpacity(0.05) : theme.colorScheme.onSurface.withOpacity(0.05),
-      highlightColor: isDark ? theme.colorScheme.onSurface.withOpacity(0.1) : theme.colorScheme.onSurface.withOpacity(0.02),
+      baseColor: isDark ? theme.colorScheme.onSurface.withValues(alpha: 0.05) : theme.colorScheme.onSurface.withValues(alpha: 0.05),
+      highlightColor: isDark ? theme.colorScheme.onSurface.withValues(alpha: 0.1) : theme.colorScheme.onSurface.withValues(alpha: 0.02),
       child: Container(
         width: width ?? double.infinity,
         height: height ?? 20,

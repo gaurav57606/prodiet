@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
@@ -11,7 +13,6 @@ import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 import 'package:prodiet_unified/features/achievements/application/achievement_providers.dart';
-import 'package:prodiet_unified/features/achievements/presentation/screens/achievements_screen.dart';
 
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
@@ -37,7 +38,7 @@ class ProgressScreen extends ConsumerWidget {
         value: summaryAsync,
         isEmpty: (s) => s.entries.isEmpty,
         emptyState: ProDietEmptyState(
-          emoji: EmptyStateConfigs.progress.emoji,
+          icon: EmptyStateConfigs.progress.icon,
           headline: 'No progress logged yet',
           subtext: 'Log your first weight to start tracking your journey.',
           buttonLabel: 'Log Weight',
@@ -61,7 +62,7 @@ class ProgressScreen extends ConsumerWidget {
                       letterSpacing: 1.2,
                     ),
                   ),
-                  _buildRangeSelector(ref, selectedRange),
+                  _buildRangeSelector(context, ref, selectedRange),
                 ],
               ),
               const SizedBox(height: T1Spacing.md),
@@ -93,7 +94,7 @@ class ProgressScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRangeSelector(WidgetRef ref, int selected) {
+  Widget _buildRangeSelector(BuildContext context, WidgetRef ref, int selected) {
     final theme = Theme.of(context);
     return Row(
       children: [7, 14, 30].map((days) => Padding(
@@ -103,7 +104,7 @@ class ProgressScreen extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: selected == days ? theme.colorScheme.onSurface.withOpacity(0.1) : Colors.transparent,
+              color: selected == days ? theme.colorScheme.onSurface.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -111,7 +112,7 @@ class ProgressScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 10, 
                 fontWeight: FontWeight.w900, 
-                color: selected == days ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withOpacity(0.3)
+                color: selected == days ? theme.colorScheme.onSurface : theme.colorScheme.onSurface.withValues(alpha: 0.3)
               ),
             ),
           ),
@@ -127,20 +128,20 @@ class ProgressScreen extends ConsumerWidget {
         const SizedBox(width: 12),
         Expanded(child: _buildMetricCard(theme, 'CHANGE', (summary.totalChange > 0 ? '+' : '') + summary.totalChange.toStringAsFixed(1), 'kg', summary.isGoingRight ? const Color(0xFF40D8B8) : theme.colorScheme.secondary)),
         const SizedBox(width: 12),
-        Expanded(child: _buildMetricCard(theme, 'GOAL', summary.remainingToGoal.abs().toStringAsFixed(1), 'to go', theme.colorScheme.onSurface.withOpacity(0.5))),
+        Expanded(child: _buildMetricCard(theme, 'GOAL', summary.remainingToGoal.abs().toStringAsFixed(1), 'to go', theme.colorScheme.onSurface.withValues(alpha: 0.5))),
       ],
     );
   }
 
   Widget _buildMetricCard(ThemeData theme, String label, String value, String unit, Color color) {
     return DmCard(
-      color: color.withOpacity(0.08),
-      borderSide: BorderSide(color: color.withOpacity(0.15)),
+      color: color.withValues(alpha: 0.08),
+      borderSide: BorderSide(color: color.withValues(alpha: 0.15)),
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: color.withOpacity(0.6))),
+          Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: color.withValues(alpha: 0.6))),
           const SizedBox(height: 4),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -148,7 +149,7 @@ class ProgressScreen extends ConsumerWidget {
             children: [
               Text(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900, color: color)),
               const SizedBox(width: 2),
-              Text(unit, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: color.withOpacity(0.3))),
+              Text(unit, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: color.withValues(alpha: 0.3))),
             ],
           ),
         ],
@@ -160,9 +161,9 @@ class ProgressScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [theme.colorScheme.secondary.withOpacity(0.1), theme.colorScheme.tertiary.withOpacity(0.1)]),
+        gradient: LinearGradient(colors: [theme.colorScheme.secondary.withValues(alpha: 0.1), theme.colorScheme.tertiary.withValues(alpha: 0.1)]),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.secondary.withOpacity(0.2)),
+        border: Border.all(color: theme.colorScheme.secondary.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -172,7 +173,7 @@ class ProgressScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('$days DAY STREAK', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: theme.colorScheme.secondary)),
-              Text('You are consistently tracking your progress!', style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withOpacity(0.5))),
+              Text('You are consistently tracking your progress!', style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
             ],
           ),
         ],
@@ -209,7 +210,7 @@ class ProgressScreen extends ConsumerWidget {
                     final date = summary.entries[index].loggedAt;
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(DateFormat('dd/MM').format(date), style: TextStyle(fontSize: 8, color: theme.colorScheme.onSurface.withOpacity(0.3), fontWeight: FontWeight.bold)),
+                      child: Text(DateFormat('dd/MM').format(date), style: TextStyle(fontSize: 8, color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.bold)),
                     );
                   },
                 ),
@@ -218,7 +219,7 @@ class ProgressScreen extends ConsumerWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 30,
-                  getTitlesWidget: (val, meta) => Text(val.toInt().toString(), style: TextStyle(fontSize: 8, color: theme.colorScheme.onSurface.withOpacity(0.3), fontWeight: FontWeight.bold)),
+                  getTitlesWidget: (val, meta) => Text(val.toInt().toString(), style: TextStyle(fontSize: 8, color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.bold)),
                 ),
               ),
               topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -238,7 +239,7 @@ class ProgressScreen extends ConsumerWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [theme.colorScheme.primary.withOpacity(0.3), Colors.transparent],
+                    colors: [theme.colorScheme.primary.withValues(alpha: 0.3), Colors.transparent],
                   ),
                 ),
               ),
@@ -247,14 +248,14 @@ class ProgressScreen extends ConsumerWidget {
               horizontalLines: [
                 HorizontalLine(
                   y: summary.targetWeightKg,
-                  color: theme.colorScheme.onSurface.withOpacity(0.1),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                   strokeWidth: 2,
                   dashArray: [5, 5],
                   label: HorizontalLineLabel(
                     show: true,
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 10, bottom: 10),
-                    style: TextStyle(fontSize: 8, color: theme.colorScheme.onSurface.withOpacity(0.3), fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 8, color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.bold),
                     labelResolver: (_) => 'GOAL ${summary.targetWeightKg}kg',
                   ),
                 ),
@@ -285,7 +286,7 @@ class ProgressScreen extends ConsumerWidget {
                   Expanded(child: Text(
                     'Complete your first goal to earn achievements!',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5)))),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5)))),
                 ]),
               ),
             )
@@ -325,7 +326,7 @@ class ProgressScreen extends ConsumerWidget {
           children: [
             Text('LOG YOUR WEIGHT', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
             const SizedBox(height: 8),
-            Text('Step on the scale and enter your current weight.', style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3))),
+            Text('Step on the scale and enter your current weight.', style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.3))),
             const SizedBox(height: 24),
             TextField(
               controller: weightController,
@@ -335,9 +336,9 @@ class ProgressScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 suffixText: 'kg',
-                suffixStyle: TextStyle(fontSize: 16, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                suffixStyle: TextStyle(fontSize: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                 filled: true,
-                fillColor: theme.colorScheme.onSurface.withOpacity(0.05),
+                fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
               ),
             ),

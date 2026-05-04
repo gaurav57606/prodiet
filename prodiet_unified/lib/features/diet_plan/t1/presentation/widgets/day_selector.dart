@@ -35,13 +35,13 @@ class _DaySelectorState extends State<DaySelector> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected 
-                    ? (isDark ? const Color(0xFFC090FF).withOpacity(0.2) : const Color(0xFF6020A0).withOpacity(0.15))
-                    : (isDark ? Colors.white.withOpacity(0.04) : Colors.white.withOpacity(0.5)),
+                    ? (isDark ? const Color(0xFFC090FF).withValues(alpha: 0.2) : const Color(0xFF6020A0).withValues(alpha: 0.15))
+                    : (isDark ? Colors.white.withValues(alpha: 0.04) : Colors.white.withValues(alpha: 0.5)),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected 
                       ? (isDark ? const Color(0xFFC090FF) : const Color(0xFF6020A0))
-                      : theme.colorScheme.outline.withOpacity(0.1),
+                      : theme.colorScheme.outline.withValues(alpha: 0.1),
                 ),
               ),
               child: Column(
@@ -50,7 +50,7 @@ class _DaySelectorState extends State<DaySelector> {
                   Text(
                     day.name,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: isSelected ? (isDark ? const Color(0xFFC090FF) : const Color(0xFF6020A0)) : theme.colorScheme.onSurface.withOpacity(0.3),
+                      color: isSelected ? (isDark ? const Color(0xFFC090FF) : const Color(0xFF6020A0)) : theme.colorScheme.onSurface.withValues(alpha: 0.3),
                       fontSize: 8,
                     ),
                   ),

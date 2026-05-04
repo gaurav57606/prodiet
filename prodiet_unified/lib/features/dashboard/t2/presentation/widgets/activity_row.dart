@@ -45,7 +45,7 @@ class ActivityRow extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 8,
                     letterSpacing: 1.2,
                     color: T2Colors.textMuted,

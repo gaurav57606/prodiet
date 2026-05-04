@@ -45,7 +45,7 @@ class MealPlannerScreen extends ConsumerWidget {
         skeleton: const Center(child: CircularProgressIndicator()),
         isEmpty: (meals) => meals.isEmpty,
         emptyState: ProDietEmptyState(
-          emoji: EmptyStateConfigs.mealPlanner.emoji,
+          icon: EmptyStateConfigs.mealPlanner.icon,
           headline: EmptyStateConfigs.mealPlanner.headline,
           subtext: EmptyStateConfigs.mealPlanner.subtext,
           buttonLabel: 'Generate AI Plan',

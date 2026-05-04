@@ -11,6 +11,11 @@ class T1ColorSchemes {
   static const Color accentBrown    = Color(0xFF8B6914);
   static const Color accentViolet   = Color(0xFFC080FF);
   
+  // Macro tokens
+  static const Color macroProtein   = Color(0xFFFF6B9D);
+  static const Color macroCarbs     = Color(0xFFFF9650);
+  static const Color macroFat       = Color(0xFF40D9B0);
+  
   // Chart tokens
   static const Color chartBurned    = Color(0xFF40D9B0);  // teal
   static const Color chartConsumed  = Color(0xFF8B6914);  // brown/gold

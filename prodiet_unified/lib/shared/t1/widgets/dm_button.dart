@@ -49,9 +49,9 @@ class DmButton extends StatelessWidget {
         foregroundColor = colorScheme.primary;
         break;
       case DmButtonVariant.danger:
-        backgroundColor = colorScheme.error.withOpacity(0.1);
+        backgroundColor = colorScheme.error.withValues(alpha: 0.1);
         foregroundColor = colorScheme.error;
-        borderSide = BorderSide(color: colorScheme.error.withOpacity(0.2));
+        borderSide = BorderSide(color: colorScheme.error.withValues(alpha: 0.2));
         break;
     }
 
@@ -64,7 +64,7 @@ class DmButton extends StatelessWidget {
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           elevation: variant == DmButtonVariant.ghost || variant == DmButtonVariant.outline ? 0 : 2,
-          shadowColor: backgroundColor.withOpacity(0.4),
+          shadowColor: backgroundColor.withValues(alpha: 0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(T1Spacing.radiusMd),
             side: borderSide,

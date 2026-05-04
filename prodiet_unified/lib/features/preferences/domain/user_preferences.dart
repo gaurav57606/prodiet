@@ -6,6 +6,7 @@ class UserPreferences {
   final bool onlineOrdering;
   final bool localVendors;
   final bool fitbandSync;
+  final bool notifications;
   final List<String> cuisinePrefs;
   final int mealsPerDay;
 
@@ -17,6 +18,7 @@ class UserPreferences {
     required this.onlineOrdering,
     required this.localVendors,
     required this.fitbandSync,
+    required this.notifications,
     required this.cuisinePrefs,
     required this.mealsPerDay,
   });
@@ -29,6 +31,7 @@ class UserPreferences {
     bool? onlineOrdering,
     bool? localVendors,
     bool? fitbandSync,
+    bool? notifications,
     List<String>? cuisinePrefs,
     int? mealsPerDay,
   }) {
@@ -40,6 +43,7 @@ class UserPreferences {
       onlineOrdering: onlineOrdering ?? this.onlineOrdering,
       localVendors: localVendors ?? this.localVendors,
       fitbandSync: fitbandSync ?? this.fitbandSync,
+      notifications: notifications ?? this.notifications,
       cuisinePrefs: cuisinePrefs ?? this.cuisinePrefs,
       mealsPerDay: mealsPerDay ?? this.mealsPerDay,
     );
@@ -56,6 +60,7 @@ class UserPreferences {
       onlineOrdering: map['online_ordering'] as bool? ?? true,
       localVendors: map['local_vendors'] as bool? ?? false,
       fitbandSync: map['fitband_sync'] as bool? ?? true,
+      notifications: map['notifications'] as bool? ?? true,
       cuisinePrefs: List<String>.from(map['cuisine_prefs'] ?? []),
       mealsPerDay: map['meals_per_day'] as int? ?? 5,
     );
@@ -70,6 +75,7 @@ class UserPreferences {
       'online_ordering': onlineOrdering,
       'local_vendors': localVendors,
       'fitband_sync': fitbandSync,
+      'notifications': notifications,
       'cuisine_prefs': cuisinePrefs,
       'meals_per_day': mealsPerDay,
     };
@@ -83,6 +89,7 @@ class UserPreferences {
         onlineOrdering: true,
         localVendors: false,
         fitbandSync: true,
+        notifications: true,
         cuisinePrefs: [],
         mealsPerDay: 5,
       );

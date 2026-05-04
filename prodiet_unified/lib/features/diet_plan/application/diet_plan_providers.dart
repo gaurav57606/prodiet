@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import '../data/diet_plan_repository.dart';
-import '../domain/diet_plan.dart';
 import '../domain/diet_plan_state.dart';
 
 final dietPlanRepositoryProvider = Provider<DietPlanRepository>((ref) {

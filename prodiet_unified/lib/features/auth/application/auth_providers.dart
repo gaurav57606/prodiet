@@ -5,6 +5,7 @@ import '../data/auth_repository.dart';
 import '../domain/models/app_user.dart';
 import 'auth_notifier.dart';
 import 'auth_state.dart';
+export 'auth_state.dart';
 
 // Supabase client — single instance for entire app
 final supabaseClientProvider = Provider<SupabaseClient>((ref) {

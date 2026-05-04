@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
 import 'package:prodiet_unified/features/inventory/application/inventory_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
@@ -17,7 +16,7 @@ class VoiceScreen extends ConsumerStatefulWidget {
 }
 
 class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProviderStateMixin {
-  bool _isListening = false;
+  final bool _isListening = false;
   String _detectedText = '"150g chicken breast"';
   final TextEditingController _typeController = TextEditingController();
   late final AnimationController _waveCtrl;
@@ -148,7 +147,7 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                           final userId = ref.read(currentUserIdProvider);
                           await ref.read(inventoryRepositoryProvider).addItem(
                             userId, name: "Chicken Breast", quantity: 150, unit: 'g', category: 'Protein');
-                          if (mounted) {
+                          if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Item added to pantry ✓')),
                             );
@@ -196,7 +195,7 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                         setState(() => _detectedText = '"$text"');
                         _typeController.clear();
                         FocusScope.of(context).unfocus();
-                        if (mounted) {
+                        if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('$text added to pantry ✓'),
@@ -235,10 +234,10 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                       data: (items) {
                         final recent = items.take(5).toList();
                         if (recent.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
                             child: Text('No items yet — add some above',
-                              style: const TextStyle(color: T2Colors.textMuted, fontSize: 12)),
+                              style: TextStyle(color: T2Colors.textMuted, fontSize: 12)),
                           );
                         }
                         return Column(

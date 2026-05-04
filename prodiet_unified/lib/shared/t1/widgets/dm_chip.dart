@@ -26,11 +26,11 @@ class DmChip extends StatelessWidget {
 
     final bgColor = isSelected 
         ? (backgroundColor ?? colorScheme.primary)
-        : (backgroundColor ?? (theme.brightness == Brightness.dark ? colorScheme.onSurface.withOpacity(0.05) : colorScheme.onSurface.withOpacity(0.08)));
+        : (backgroundColor ?? (theme.brightness == Brightness.dark ? colorScheme.onSurface.withValues(alpha: 0.05) : colorScheme.onSurface.withValues(alpha: 0.08)));
     
     final txtColor = isSelected
         ? (textColor ?? colorScheme.onPrimary)
-        : (textColor ?? colorScheme.onSurface.withOpacity(0.5));
+        : (textColor ?? colorScheme.onSurface.withValues(alpha: 0.5));
 
     return GestureDetector(
       onTap: () {
@@ -43,7 +43,7 @@ class DmChip extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Colors.transparent : colorScheme.outline.withOpacity(0.2),
+            color: isSelected ? Colors.transparent : colorScheme.outline.withValues(alpha: 0.2),
           ),
         ),
         child: Text(

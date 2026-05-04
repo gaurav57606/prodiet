@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_card.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
@@ -12,7 +11,7 @@ class MealCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final skyColor = const Color(0xFF38BFFF);
+    const skyColor = Color(0xFF38BFFF);
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
@@ -31,7 +30,7 @@ class MealCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                   decoration: BoxDecoration(
-                    color: skyColor.withOpacity(0.12),
+                    color: skyColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(

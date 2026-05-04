@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_text_styles.dart';
-import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
-import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
+import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 import 'package:prodiet_unified/features/diet_plan/application/diet_plan_providers.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
@@ -25,7 +27,7 @@ class DietPlanScreen extends ConsumerWidget {
       return Scaffold(
         appBar: AppBar(title: const Text('Diet Plan')),
         body: ProDietEmptyState(
-          emoji: '🥗',
+          icon: EmptyStateConfigs.dietPlan.icon,
           headline: 'No Diet Plan Yet',
           subtext: 'Let AI build your personalised 7-day plan based on your goals.',
           buttonLabel: '✨ Create My Plan',
@@ -47,7 +49,7 @@ class DietPlanScreen extends ConsumerWidget {
               Text(
                 'Analysing your goals & preferences',
                 style: textTheme.bodyMedium?.copyWith(
-                  color: scheme.onSurface.withOpacity(0.5),
+                  color: scheme.onSurface.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -60,7 +62,7 @@ class DietPlanScreen extends ConsumerWidget {
       return Scaffold(
         appBar: AppBar(title: const Text('Diet Plan')),
         body: ProDietEmptyState(
-          emoji: '⚠️',
+          icon: Icons.error_outline_rounded,
           headline: 'Something went wrong',
           subtext: state.message,
           buttonLabel: 'Try Again',
@@ -129,7 +131,7 @@ class DietPlanScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: scheme.primary.withOpacity(0.3),
+            color: scheme.primary.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -176,7 +178,7 @@ class DietPlanScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: theme.colorScheme.onPrimary.withOpacity(0.2),
+        color: theme.colorScheme.onPrimary.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -246,43 +248,9 @@ class DietPlanScreen extends ConsumerWidget {
           title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.w900)),
           subtitle: Text(
             '${meal.calories.toInt()} kcal  •  P${meal.proteinG.toInt()}g C${meal.carbsG.toInt()}g F${meal.fatG.toInt()}g',
-            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
           ),
-          trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.2)),
-        ),
-      ),
-    );
-  }
-
-  void _showIngredients(BuildContext context, DietMeal meal) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(T1Spacing.lg),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Ingredients for ${meal.name}',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: T1Spacing.md),
-            ...meal.ingredients.map((ing) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.circle, size: 8, color: Colors.grey),
-                      const SizedBox(width: 12),
-                      Expanded(child: Text(ing)),
-                    ],
-                  ),
-                )),
-            const SizedBox(height: T1Spacing.lg),
-          ],
+          trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
         ),
       ),
     );

@@ -13,18 +13,18 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
   int _currentStep = 0;
   late Timer _timer;
 
-  final Map<String, List<({String icon, String text})>> _steps = {
+  final Map<String, List<({IconData icon, String text})>> _steps = {
     'diet': [
-      (icon: '🥗', text: "Reading your fitness goals..."),
-      (icon: '🧠', text: "Calculating your calorie targets..."),
-      (icon: '📅', text: "Building your 7-day plan..."),
-      (icon: '✨', text: "Almost done — adding variety..."),
+      (icon: Icons.restaurant_rounded, text: "Reading your fitness goals..."),
+      (icon: Icons.psychology_rounded, text: "Calculating your calorie targets..."),
+      (icon: Icons.calendar_today_rounded, text: "Building your 7-day plan..."),
+      (icon: Icons.auto_awesome_rounded, text: "Almost done — adding variety..."),
     ],
     'ocr': [
-      (icon: '📸', text: "Reading your grocery bill..."),
-      (icon: '🔍', text: "Identifying ingredients..."),
-      (icon: '🏷️', text: "Looking up nutritional data..."),
-      (icon: '📦', text: "Adding items to your pantry..."),
+      (icon: Icons.camera_alt_rounded, text: "Reading your grocery bill..."),
+      (icon: Icons.search_rounded, text: "Identifying ingredients..."),
+      (icon: Icons.label_important_rounded, text: "Looking up nutritional data..."),
+      (icon: Icons.inventory_2_rounded, text: "Adding items to your pantry..."),
     ],
   };
 
@@ -63,10 +63,11 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
             children: [
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 500),
-                child: Text(
+                child: Icon(
                   stepData.icon,
                   key: ValueKey('icon_$_currentStep'),
-                  style: const TextStyle(fontSize: 80),
+                  size: 80,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               const SizedBox(height: 24),

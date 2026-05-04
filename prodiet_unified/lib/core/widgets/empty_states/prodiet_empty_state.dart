@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProDietEmptyState extends StatelessWidget {
-  final String emoji;
+  final IconData icon;
   final String headline;
   final String subtext;
   final String? buttonLabel;
   final VoidCallback? onButtonTap;
   const ProDietEmptyState({
-    required this.emoji,
+    required this.icon,
     required this.headline,
     required this.subtext,
     this.buttonLabel,
@@ -23,7 +23,7 @@ class ProDietEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 64)),
+            Icon(icon, size: 64, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
             const SizedBox(height: 16),
             Text(
               headline,

@@ -59,7 +59,7 @@ class DmButton extends StatelessWidget {
     }
 
     if (this.backgroundColor != null) backgroundColor = this.backgroundColor!;
-    if (this.textColor != null) foregroundColor = this.textColor!;
+    if (textColor != null) foregroundColor = textColor!;
 
     final buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: backgroundColor,

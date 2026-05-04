@@ -6,11 +6,11 @@ import 'package:prodiet_unified/shared/t2/widgets/dm_chip.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_text_styles.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-
-// New imports
 import 'package:prodiet_unified/features/preferences/application/preferences_providers.dart';
 import 'package:prodiet_unified/features/preferences/application/preferences_state.dart';
 import 'package:prodiet_unified/features/preferences/domain/user_preferences.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 class PreferencesScreen extends ConsumerStatefulWidget {
   const PreferencesScreen({super.key});
@@ -25,6 +25,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
   bool _onlineOrder = true;
   bool _localVendors = false;
   bool _fitbandSync = true;
+  bool _notifications = true;
   int _spiceLevel = 3;
   String _dietType = "Non-Vegetarian";
   final Set<String> _cuisines = {"North Indian", "Mediterranean", "Asian"};
@@ -59,6 +60,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
           _onlineOrder = next.prefs.onlineOrdering;
           _localVendors = next.prefs.localVendors;
           _fitbandSync = next.prefs.fitbandSync;
+          _notifications = next.prefs.notifications;
           _cuisines.clear();
           _cuisines.addAll(next.prefs.cuisinePrefs);
           _mealsCount = next.prefs.mealsPerDay;
@@ -112,9 +114,10 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               _buildChoiceChip("Intermittent Fast", _dietType, (v) => setState(() => _dietType = v)),
             ]),
 
+            // FIX 3: Preferences Section Label
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text("General Settings", style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
+              child: Text("PREFERENCES", style: T2TextStyles.sectionLabel(theme.colorScheme)),
             ),
 
             Padding(
@@ -132,11 +135,15 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                       onToggle: (v) => setState(() => _localVendors = v)),
                     _buildPrefRow(context, "Fitband sync", hasToggle: true, toggleValue: _fitbandSync, 
                       onToggle: (v) => setState(() => _fitbandSync = v)),
+                    // FIX 1: Notifications Toggle (Last item, no border)
+                    _buildPrefRow(context, "Notifications", hasToggle: true, toggleValue: _notifications, 
+                      onToggle: (v) => setState(() => _notifications = v), showBorder: false),
                   ],
                 ),
               ),
             ),
 
+            // FIX 2: South Indian as 3rd chip
             _buildSection(context, "Cuisine Preferences", [
               _buildMultiChip("North Indian", _cuisines, color: const Color(0xFFB06EFF)),
               _buildMultiChip("Mediterranean", _cuisines, color: const Color(0xFFB06EFF)),
@@ -171,6 +178,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                     onlineOrdering: _onlineOrder,
                     localVendors: _localVendors,
                     fitbandSync: _fitbandSync,
+                    notifications: _notifications,
                     cuisinePrefs: _cuisines.toList(),
                     mealsPerDay: _mealsCount,
                   );
@@ -183,7 +191,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             ),
             Center(
               child: TextButton(
-                onPressed: () => context.go(AppRoutes.t2PrivacyPolicy),
+                onPressed: () => context.push(AppRoutes.t2PrivacyPolicy),
                 child: Text(
                   'Privacy Policy',
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -239,11 +247,15 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
     );
   }
 
-  Widget _buildPrefRow(BuildContext context, String lbl, {Widget? trailing, bool hasToggle = false, bool toggleValue = false, ValueChanged<bool>? onToggle}) {
+  Widget _buildPrefRow(BuildContext context, String lbl, {Widget? trailing, bool hasToggle = false, bool toggleValue = false, ValueChanged<bool>? onToggle, bool showBorder = true}) {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: theme.colorScheme.outline))),
+      decoration: BoxDecoration(
+        border: showBorder 
+          ? Border(bottom: BorderSide(color: theme.colorScheme.outline))
+          : null,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

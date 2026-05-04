@@ -198,9 +198,9 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           Expanded(
             child: TextField(
               onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search pantry...',
-                hintStyle: const TextStyle(color: T2Colors.textMuted, fontSize: 14),
+                hintStyle: TextStyle(color: T2Colors.textMuted, fontSize: 14),
                 border: InputBorder.none,
               ),
               style: const TextStyle(color: Colors.white),

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 

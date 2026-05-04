@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_empty_state.dart';
 
 class PreferencesScreen extends StatelessWidget {

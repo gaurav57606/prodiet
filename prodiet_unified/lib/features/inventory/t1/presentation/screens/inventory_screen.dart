@@ -47,7 +47,7 @@ class InventoryScreen extends ConsumerWidget {
               skeleton: const MealListSkeleton(),
               isEmpty: (items) => items.isEmpty,
               emptyState: ProDietEmptyState(
-                emoji: EmptyStateConfigs.inventory.emoji,
+                icon: EmptyStateConfigs.inventory.icon,
                 headline: EmptyStateConfigs.inventory.headline,
                 subtext: EmptyStateConfigs.inventory.subtext,
                 buttonLabel: EmptyStateConfigs.inventory.buttonLabel,
@@ -197,7 +197,7 @@ class InventoryScreen extends ConsumerWidget {
           children: [
             Text('EDIT QUANTITY', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
             const SizedBox(height: 8),
-            Text(item.ingredientName.toUpperCase(), style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3))),
+            Text(item.ingredientName.toUpperCase(), style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.3))),
             const SizedBox(height: 24),
             TextField(
               controller: controller,
@@ -321,7 +321,7 @@ class InventoryScreen extends ConsumerWidget {
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.3), fontSize: 12),
+        labelStyle: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontSize: 12),
         filled: true,
         fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),

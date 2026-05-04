@@ -40,7 +40,7 @@ class OcrScannerScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const ProDietEmptyState(
-                  emoji: '📷',
+                  icon: Icons.camera_alt_rounded,
                   headline: 'Scan Your Groceries',
                   subtext: 'Take a photo or upload from gallery to auto-detect ingredients.',
                 ),
@@ -83,7 +83,7 @@ class OcrScannerScreen extends ConsumerWidget {
                 Text(
                   ocrState is OcrSaving ? 'Almost done' : 'AI is identifying ingredients',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: scheme.onSurface.withOpacity(0.5),
+                    color: scheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ],
@@ -132,7 +132,7 @@ class OcrScannerScreen extends ConsumerWidget {
                     color: scheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 10,
                         offset: const Offset(0, -4),
                       ),
@@ -144,7 +144,7 @@ class OcrScannerScreen extends ConsumerWidget {
                         child: Text(
                           '$selectedCount selected',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurface.withOpacity(0.6),
+                            color: scheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ),
@@ -166,7 +166,7 @@ class OcrScannerScreen extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(title: const Text('Scan Failed')),
           body: ProDietEmptyState(
-            emoji: '⚠️',
+            icon: Icons.error_outline_rounded,
             headline: 'Scan Failed',
             subtext: msg,
             buttonLabel: 'Try Again',

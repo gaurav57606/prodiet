@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/services/analytics_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_text_styles.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
@@ -57,7 +55,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           skeleton: const DashboardSkeleton(),
           isEmpty: (data) => data.mealsToday == 0 && data.waterMl == 0,
           emptyState: ProDietEmptyState(
-            emoji: EmptyStateConfigs.dashboard.emoji,
+            icon: EmptyStateConfigs.dashboard.icon,
             headline: EmptyStateConfigs.dashboard.headline,
             subtext: EmptyStateConfigs.dashboard.subtext,
             buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,

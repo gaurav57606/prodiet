@@ -84,9 +84,10 @@ class _ProDietAuthLoaderState extends State<ProDietAuthLoader>
           children: [
             ScaleTransition(
               scale: _scale,
-              child: const Text(
-                '🥗',
-                style: TextStyle(fontSize: 72),
+              child: Icon(
+                Icons.restaurant_rounded,
+                size: 72,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 24),

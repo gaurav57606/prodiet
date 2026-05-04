@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
@@ -113,7 +112,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   scheme.surface,
-                  scheme.surfaceVariant,
+                  scheme.surfaceContainerHighest,
                 ],
               ),
             ),
@@ -201,10 +200,10 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                       crossAxisSpacing: 12,
                       childAspectRatio: 1.3,
                       children: [
-                        _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
-                        _buildGoalCard(1, '💪', 'Build muscle', 'High protein', theme),
-                        _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', theme),
-                        _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', theme),
+                        _buildGoalCard(0, Icons.scale_rounded, 'Lose weight', 'Calorie deficit', theme),
+                        _buildGoalCard(1, Icons.fitness_center_rounded, 'Build muscle', 'High protein', theme),
+                        _buildGoalCard(2, Icons.restaurant_rounded, 'Eat healthier', 'Balanced macros', theme),
+                        _buildGoalCard(3, Icons.bolt_rounded, 'More energy', 'Optimised meals', theme),
                       ],
                     ),
                     const SizedBox(height: 32),
@@ -324,7 +323,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildGoalCard(int index, String emoji, String title, String subtitle, ThemeData theme) {
+  Widget _buildGoalCard(int index, IconData icon, String title, String subtitle, ThemeData theme) {
     final scheme = theme.colorScheme;
     final isSelected = _selectedGoal == index;
     return GestureDetector(
@@ -345,7 +344,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 20)),
+                Icon(icon, color: isSelected ? scheme.primary : scheme.onSurface.withValues(alpha: 0.5), size: 24),
                 const SizedBox(height: 8),
                 Text(
                   title,

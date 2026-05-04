@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
@@ -10,6 +12,7 @@ import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/skeletons/meal_list_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
+import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class TodayMealsScreen extends ConsumerWidget {
   const TodayMealsScreen({super.key});
@@ -31,7 +34,7 @@ class TodayMealsScreen extends ConsumerWidget {
         skeleton: const MealListSkeleton(),
         isEmpty: (s) => s.meals.isEmpty,
         emptyState: ProDietEmptyState(
-          emoji: '🍽️',
+          icon: EmptyStateConfigs.mealPlanner.icon,
           headline: 'Nothing logged today',
           subtext: 'Tap + to log your first meal.',
           buttonLabel: 'Log a Meal',
@@ -49,7 +52,7 @@ class TodayMealsScreen extends ConsumerWidget {
             Text(
               'LOGGED MEALS',
               style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.3),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
               ),
@@ -62,7 +65,8 @@ class TodayMealsScreen extends ConsumerWidget {
             const SizedBox(height: 100),
           ],
         ),
-          floatingActionButton: Column(
+      ),
+      floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton.extended(
@@ -88,7 +92,7 @@ class TodayMealsScreen extends ConsumerWidget {
   Widget _buildSummaryHeader(ThemeData theme, DailyMealSummary summary, int calorieGoal) {
     final remaining = (calorieGoal - summary.totalCalories).toInt().clamp(0, 9999);
     return DmCard(
-      color: theme.colorScheme.primary.withOpacity(0.1),
+      color: theme.colorScheme.primary.withValues(alpha: 0.1),
       child: Column(
         children: [
           Row(
@@ -96,7 +100,7 @@ class TodayMealsScreen extends ConsumerWidget {
             children: [
               _buildSummaryStat(theme, 'TOTAL KCAL', '${summary.totalCalories.toInt()}', theme.colorScheme.primary),
               _buildSummaryStat(theme, 'REMAINING', '$remaining', const Color(0xFF40D8B8)),
-              _buildSummaryStat(theme, 'MEALS', '${summary.eatenCount}/${summary.meals.length}', theme.colorScheme.onSurface.withOpacity(0.5)),
+              _buildSummaryStat(theme, 'MEALS', '${summary.eatenCount}/${summary.meals.length}', theme.colorScheme.onSurface.withValues(alpha: 0.5)),
             ],
           ),
           const SizedBox(height: 20),
@@ -146,7 +150,7 @@ class TodayMealsScreen extends ConsumerWidget {
       children: [
         Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 6),
-        Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withOpacity(0.3))),
+        Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withValues(alpha: 0.3))),
         const SizedBox(width: 4),
         Text(value, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface)),
       ],
@@ -156,7 +160,7 @@ class TodayMealsScreen extends ConsumerWidget {
   Widget _buildSummaryStat(ThemeData theme, String label, String value, Color color) {
     return Column(
       children: [
-        Text(label, style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, color: theme.colorScheme.onSurface.withOpacity(0.3), fontWeight: FontWeight.w900)),
+        Text(label, style: theme.textTheme.labelSmall?.copyWith(fontSize: 8, color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.w900)),
         const SizedBox(height: 4),
         Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: color, fontWeight: FontWeight.w900, fontSize: 20)),
       ],
@@ -179,12 +183,12 @@ class TodayMealsScreen extends ConsumerWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(color: const Color(0xFF40D8B8), borderRadius: BorderRadius.circular(16)),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Text('Mark Eaten', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-            const SizedBox(width: 8),
-            const Icon(Icons.check_circle_outline_rounded, color: Colors.black),
+            Text('Mark Eaten', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            SizedBox(width: 8),
+            Icon(Icons.check_circle_outline_rounded, color: Colors.black),
           ],
         ),
       ),
@@ -207,17 +211,19 @@ class TodayMealsScreen extends ConsumerWidget {
           }
         } else if (direction == DismissDirection.endToStart) {
           await ref.read(mealRepositoryProvider).markEaten(meal.id);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Meal marked as eaten'), duration: Duration(seconds: 1)),
-          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Meal marked as eaten'), duration: Duration(seconds: 1)),
+            );
+          }
           return false; // Don't remove the card, the StreamProvider will update the state
         }
         return false;
       },
       child: DmCard(
         padding: EdgeInsets.zero,
-        color: accentColor.withOpacity(0.06),
-        borderSide: BorderSide(color: accentColor.withOpacity(0.15)),
+        color: accentColor.withValues(alpha: 0.06),
+        borderSide: BorderSide(color: accentColor.withValues(alpha: 0.15)),
         child: InkWell(
           onTap: () => _showMealDetailSheet(context, theme, meal),
           borderRadius: BorderRadius.circular(16),
@@ -237,7 +243,7 @@ class TodayMealsScreen extends ConsumerWidget {
                             Text(
                               meal.mealType.name.toUpperCase(),
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: accentColor.withOpacity(0.6),
+                                color: accentColor.withValues(alpha: 0.6),
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 0.8,
                               ),
@@ -266,7 +272,7 @@ class TodayMealsScreen extends ConsumerWidget {
     final label = status == MealStatus.eaten ? 'Eaten' : (status == MealStatus.skipped ? 'Skipped' : 'Pending');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(4), border: Border.all(color: color.withOpacity(0.2))),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4), border: Border.all(color: color.withValues(alpha: 0.2))),
       child: Text(label.toUpperCase(), style: TextStyle(color: color, fontSize: 8, fontWeight: FontWeight.w900)),
     );
   }
@@ -293,7 +299,7 @@ class TodayMealsScreen extends ConsumerWidget {
           children: [
             Text(meal.name, style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900)),
             const SizedBox(height: 8),
-            Text(meal.mealType.name.toUpperCase(), style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5), fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+            Text(meal.mealType.name.toUpperCase(), style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontWeight: FontWeight.w900, letterSpacing: 1.2)),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,17 +311,17 @@ class TodayMealsScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 24),
-            Text('INGREDIENTS', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withOpacity(0.3), letterSpacing: 1.5)),
+            Text('INGREDIENTS', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withValues(alpha: 0.3), letterSpacing: 1.5)),
             const SizedBox(height: 12),
             if (meal.ingredients.isEmpty)
-              Text('No ingredients listed', style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3)))
+              Text('No ingredients listed', style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.3)))
             else
               Wrap(
                 spacing: 8, 
                 runSpacing: 8, 
                 children: meal.ingredients.map((i) => Chip(
                   label: Text(i, style: TextStyle(color: theme.colorScheme.onSurface)), 
-                  backgroundColor: theme.colorScheme.onSurface.withOpacity(0.05),
+                  backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
                   side: BorderSide.none,
                 )).toList()
               ),
@@ -329,7 +335,7 @@ class TodayMealsScreen extends ConsumerWidget {
   Widget _buildMacroDetail(ThemeData theme, String label, String value, Color color) {
     return Column(
       children: [
-        Text(label, style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withOpacity(0.3))),
+        Text(label, style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withValues(alpha: 0.3))),
         const SizedBox(height: 4),
         Text(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900, color: color)),
       ],
@@ -392,7 +398,7 @@ class TodayMealsScreen extends ConsumerWidget {
                   Theme(
                     data: theme.copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
-                      title: Text('Macros (optional)', style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.5), fontSize: 14)),
+                      title: Text('Macros (optional)', style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 14)),
                       tilePadding: EdgeInsets.zero,
                       children: [
                         Row(
@@ -449,9 +455,9 @@ class TodayMealsScreen extends ConsumerWidget {
   InputDecoration _inputDecoration(ThemeData theme, String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.3), fontSize: 12),
+      labelStyle: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontSize: 12),
       filled: true,
-      fillColor: theme.colorScheme.onSurface.withOpacity(0.05),
+      fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
     );
   }

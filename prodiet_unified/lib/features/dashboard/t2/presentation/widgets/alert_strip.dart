@@ -56,7 +56,7 @@ class AlertStrip extends StatelessWidget {
                 ),
                 Text(
                   subMessage,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: T2Colors.textSecondary,
                     fontSize: 11,
                   ),

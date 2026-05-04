@@ -105,7 +105,7 @@ void main() {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('⚙️', style: TextStyle(fontSize: 64)),
+                    const Icon(Icons.settings_suggest_rounded, size: 64, color: Colors.white60),
                     const SizedBox(height: 24),
                     const Text('Configuration Error',
                         style: TextStyle(
@@ -156,7 +156,7 @@ class _ConfigErrorApp extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text('⚠️', style: TextStyle(fontSize: 48)),
+                const Icon(Icons.warning_amber_rounded, size: 48, color: Color(0xFFF5A623)),
                 const SizedBox(height: 20),
                 const Text(
                   'Build Config Error',

@@ -23,10 +23,10 @@ class InventoryItem {
 
   bool get isLowStock => quantity <= reorderThreshold;
 
-  int get daysUntilExpiry {
+  int daysUntilExpiry([DateTime? now]) {
     final restockedDate = DateTime.parse(lastRestocked);
     final expiryDate = restockedDate.add(Duration(days: shelfLifeDays));
-    return expiryDate.difference(DateTime.now()).inDays;
+    return expiryDate.difference(now ?? DateTime.now()).inDays;
   }
 
   factory InventoryItem.fromJson(Map<String, dynamic> json) {

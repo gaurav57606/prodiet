@@ -45,7 +45,7 @@ class DmMacroChip extends StatelessWidget {
           style: TextStyle(
             fontSize: 8,
             fontWeight: FontWeight.w700,
-            color: scheme.onSurface.withOpacity(0.45),
+            color: scheme.onSurface.withValues(alpha: 0.45),
             letterSpacing: 0.8,
             fontFamily: 'Outfit',
           ),

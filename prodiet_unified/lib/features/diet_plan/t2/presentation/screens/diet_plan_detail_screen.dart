@@ -32,7 +32,7 @@ class DietPlanDetailScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Center(child: Text('🍽️', style: TextStyle(fontSize: 40))),
+                const Center(child: Icon(Icons.restaurant_rounded, size: 40, color: T2Colors.lime)),
                 const SizedBox(height: 12),
                 Text('No meals planned for this day',
                   textAlign: TextAlign.center,
