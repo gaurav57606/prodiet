@@ -15,6 +15,16 @@ class ProgressSummary {
     required this.streakDays,
   });
 
+  factory ProgressSummary.empty() {
+    return const ProgressSummary(
+      entries: [],
+      targetWeightKg: 0,
+      currentWeightKg: 0,
+      startWeightKg: 0,
+      streakDays: 0,
+    );
+  }
+
   double get totalChange => currentWeightKg - startWeightKg;
   double get remainingToGoal => currentWeightKg - targetWeightKg;
 

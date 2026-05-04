@@ -282,12 +282,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Expanded(
-                            child: DmButton(
-                              label: 'Apple',
-                              variant: DmButtonVariant.outline,
-                              icon: Icons.apple,
-                              onPressed: () {},
+                          // TODO: Implement Apple Sign-In before iOS App Store submission
+                          Visibility(
+                            visible: false,
+                            child: Expanded(
+                              child: DmButton(
+                                label: 'Apple',
+                                variant: DmButtonVariant.outline,
+                                icon: Icons.apple,
+                                onPressed: () {},
+                              ),
                             ),
                           ),
                         ],

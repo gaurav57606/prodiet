@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/gestures.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
@@ -94,6 +95,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       password,
       '$firstName $lastName'.trim(),
     );
+    if (context.mounted) {
+      context.push(AppRoutes.t1VerifyEmail, extra: email);
+    }
   }
 
   void _showError(String message) {
@@ -406,6 +410,30 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       isLoading: isLoading,
                       onPressed: isLoading ? null : _signUp,
                       width: double.infinity,
+                    ),
+                    const SizedBox(height: 16),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
+                        children: [
+                          const TextSpan(text: 'By signing up, you agree to our '),
+                          TextSpan(
+                            text: 'Terms of Service',
+                            style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => context.push(AppRoutes.t1Terms),
+                          ),
+                          const TextSpan(text: ' and '),
+                          TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => context.push(AppRoutes.t1PrivacyPolicy),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 24),
   

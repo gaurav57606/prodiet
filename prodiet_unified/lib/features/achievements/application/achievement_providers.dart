@@ -1,8 +1,37 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import '../domain/models/achievement.dart';
 import '../data/achievement_repository.dart';
+
+final streakAchievementProvider = FutureProvider.autoDispose<void>((ref) async {
+  final dashboardAsync = ref.watch(dashboardProvider);
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId.isEmpty) return;
+
+  final dashboardData = dashboardAsync.valueOrNull;
+  if (dashboardData == null) return;
+
+  final streak = dashboardData.streakDays;
+  final milestones = [3, 7, 14, 30];
+
+  if (streak > 0 && milestones.contains(streak)) {
+    final supabase = Supabase.instance.client;
+    await supabase.from('achievements').upsert({
+      'user_id': userId,
+      'title': '$streak Day Streak 🔥',
+      'description': 'Logged meals for $streak days in a row!',
+      'type': 'streak',
+      'milestone': streak,
+      'earned_at': DateTime.now().toIso8601String(),
+    }, onConflict: 'user_id,type,milestone');
+    
+    // Invalidate achievements so they refresh
+    ref.invalidate(achievementsProvider);
+    ref.invalidate(recentAchievementsProvider(5)); // Assuming default limit is 5 in UI
+  }
+});
 
 final achievementRepositoryProvider = Provider<AchievementRepository>((ref) {
   return AchievementRepository(Supabase.instance.client);

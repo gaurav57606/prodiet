@@ -46,7 +46,7 @@ class _HydrationCardState extends State<HydrationCard> {
     }
 
     return GestureDetector(
-      onTap: () => context.push('/hydration'),
+      onTap: () => context.push('/t1/hydration'),
       child: DmCard(
         color: statusColor.withValues(alpha: 0.06),
         borderSide: BorderSide(color: statusColor.withValues(alpha: 0.15)),

@@ -11,6 +11,7 @@ class DashboardRepository {
   Future<DashboardSummary> getTodaySummary(String userId) async {
     try {
       final today = DateTime.now().toIso8601String().split('T')[0];
+      final ninetyDaysAgo = DateTime.now().subtract(const Duration(days: 90)).toIso8601String().split('T')[0];
 
       final results = await Future.wait<dynamic>([
         _supabase
@@ -18,10 +19,9 @@ class DashboardRepository {
             .select()
             .eq('user_id', userId)
             .eq('planned_date', today),
-        _supabase.from('water_logs').select()
+        _supabase.from('water_logs').select('amount_ml')
             .eq('user_id', userId)
-            .gte('created_at', '${today}T00:00:00.000Z')
-            .lte('created_at', '${today}T23:59:59.999Z'),
+            .eq('date', today),
         _supabase
             .from('users')
             .select('name, daily_calorie_goal, daily_water_goal_ml')
@@ -32,6 +32,10 @@ class DashboardRepository {
             .order('scheduled_time').limit(1),
         _supabase.from('diet_plans').select('name')
             .eq('user_id', userId).eq('is_active', true).maybeSingle(),
+        _supabase.from('meals').select('planned_date,status')
+            .eq('user_id', userId)
+            .gte('planned_date', ninetyDaysAgo)
+            .order('planned_date', ascending: false),
       ]);
 
       final mealsData = results[0] as List<dynamic>;
@@ -39,6 +43,7 @@ class DashboardRepository {
       final userData = results[2] as Map<String, dynamic>;
       final nextMealList = results[3] as List<dynamic>;
       final planData = results[4] as Map<String, dynamic>?;
+      final streakData = results[5] as List<dynamic>;
 
       Meal? nextMeal;
       if (nextMealList.isNotEmpty) {
@@ -70,6 +75,7 @@ class DashboardRepository {
       final proteinGoal = ((calorieGoal * 0.3) / 4).toInt();
       final carbsGoal = ((calorieGoal * 0.4) / 4).toInt();
       final fatGoal = ((calorieGoal * 0.3) / 9).toInt();
+      final streakDays = _calculateStreak(streakData);
 
       return DashboardSummary(
         userName: userData['name'] ?? 'User',
@@ -85,7 +91,7 @@ class DashboardRepository {
         waterGoalMl: (userData['daily_water_goal_ml'] as num? ?? 2000).toInt(),
         mealsToday: mealsLogged,
         mealsScheduled: mealsData.length,
-        streakDays: 0,
+        streakDays: streakDays,
         stepsToday: 0,
         caloriesBurned: 0,
         nextMeal: nextMeal,
@@ -93,6 +99,45 @@ class DashboardRepository {
       );
     } catch (e) {
       throw ErrorHandler.handle(e, context: 'DashboardRepository.getTodaySummary');
+    }
+  }
+
+  int _calculateStreak(List<dynamic> mealRows) {
+    try {
+      if (mealRows.isEmpty) return 0;
+
+      final Map<String, bool> eatenByDay = {};
+      for (var row in mealRows) {
+        final date = row['planned_date'] as String;
+        final status = row['status'] as String;
+        if (status == 'eaten') {
+          eatenByDay[date] = true;
+        }
+      }
+
+      int streak = 0;
+      DateTime checkDate = DateTime.now();
+      String dateStr = checkDate.toIso8601String().split('T')[0];
+
+      // Check today first
+      if (eatenByDay[dateStr] == true) {
+        streak++;
+      }
+      
+      // Go back from yesterday
+      checkDate = checkDate.subtract(const Duration(days: 1));
+      while (true) {
+        dateStr = checkDate.toIso8601String().split('T')[0];
+        if (eatenByDay[dateStr] == true) {
+          streak++;
+          checkDate = checkDate.subtract(const Duration(days: 1));
+        } else {
+          break;
+        }
+      }
+      return streak;
+    } catch (_) {
+      return 0;
     }
   }
 }

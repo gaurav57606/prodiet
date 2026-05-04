@@ -9,6 +9,7 @@ import 'core/router/app_router.dart';
 import 'core/theme/active_theme_provider.dart';
 import 'core/theme/t1/t1_theme.dart';
 import 'core/theme/t2/t2_theme.dart';
+import 'core/services/connectivity_service.dart';
 
 class ProDietApp extends ConsumerStatefulWidget {
   const ProDietApp({super.key});
@@ -124,9 +125,43 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
         );
         return MediaQuery(
           data: mediaQuery.copyWith(textScaler: clamped),
-          child: child!,
+          child: Column(
+            children: [
+              const _ConnectivityBanner(),
+              Expanded(child: child ?? const SizedBox.shrink()),
+            ],
+          ),
         );
       },
+    );
+  }
+}
+
+class _ConnectivityBanner extends ConsumerWidget {
+  const _ConnectivityBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final status = ref.watch(connectivityProvider);
+    final isOffline = status.valueOrNull == ConnectivityStatus.offline;
+    
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      height: isOffline ? 32 + MediaQuery.of(context).padding.top : 0,
+      color: const Color(0xFFFF6B35),
+      padding: EdgeInsets.only(top: isOffline ? MediaQuery.of(context).padding.top : 0),
+      child: isOffline
+          ? const Center(
+              child: Text(
+                '📵  No internet — working offline',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }

@@ -198,27 +198,33 @@ class ProfileScreen extends ConsumerWidget {
   }
 
 
-  void _handleLogout(BuildContext context, WidgetRef ref) {
-    showDialog(
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to log out?'),
+      builder: (ctx) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('CANCEL'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ref.read(authProvider.notifier).signOut();
-            },
-            child: Text('LOGOUT', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Sign Out', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
+    if (confirmed != true || !context.mounted) return;
+    
+    // Show loading overlay
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+    
+    await ref.read(authProvider.notifier).signOut();
+    // Router redirect handles navigation — no need to pop manually
   }
 
   void _showEditProfileSheet(BuildContext context, WidgetRef ref, AppUser? user) {

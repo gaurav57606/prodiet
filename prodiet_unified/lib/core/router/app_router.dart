@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 
@@ -18,6 +17,7 @@ import 'package:prodiet_unified/features/auth/t1/presentation/screens/signup_scr
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/forgot_password_screen.dart' as t1_forgot_password;
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/health_goals_screen.dart' as t1_health_goals;
 import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart' as t1_verify_phone;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_email_screen.dart' as t1_verify_email;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1_dashboard;
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/today_meals_screen.dart' as t1_today_meals;
 import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_screen.dart' as t1_diet_plan;
@@ -35,6 +35,8 @@ import 'package:prodiet_unified/features/auth/t1/presentation/screens/preference
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/notifications_screen.dart' as t1_notifications;
 import 'package:prodiet_unified/features/recipe/t1/presentation/screens/recipe_screen.dart' as t1_recipe;
 import 'package:prodiet_unified/features/achievements/presentation/screens/achievements_screen.dart' as achievements;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/privacy_policy_screen.dart' as t1_privacy_v2;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/terms_screen.dart' as t1_terms_v2;
 
 // T2 Screens
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/splash_screen.dart' as t2_splash;
@@ -72,6 +74,9 @@ class AppRoutes {
   static const String t1ForgotPassword = '/t1/forgot-password';
   static const String t1HealthGoals = '/t1/health-goals';
   static const String t1VerifyPhone = '/t1/verify-phone';
+  static const String t1VerifyEmail = '/t1/verify-email';
+  static const String t1PrivacyPolicy = '/t1/privacy-policy';
+  static const String t1Terms = '/t1/terms';
 
   // T1 Shell
   static const String t1Dashboard = '/t1/dashboard';
@@ -114,6 +119,7 @@ class AppRoutes {
   static const String notificationsName = 't1Notifications';
   static const String preferencesName = 't1Preferences';
   static const String achievementsName = 't1Achievements';
+  static const String verifyEmailName = 't1VerifyEmail';
 
   // T2 Standalone
   static const String t2Splash = '/t2/splash';
@@ -196,6 +202,16 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
     GoRoute(path: AppRoutes.t1ForgotPassword, name: 't1ForgotPassword', builder: (context, state) => const t1_forgot_password.ForgotPasswordScreen()),
     GoRoute(path: AppRoutes.t1HealthGoals, name: 't1HealthGoals', builder: (context, state) => const t1_health_goals.HealthGoalsScreen()),
     GoRoute(path: AppRoutes.t1VerifyPhone, name: 't1VerifyPhone', builder: (context, state) => const t1_verify_phone.VerifyPhoneScreen()),
+    GoRoute(
+      path: AppRoutes.t1VerifyEmail,
+      name: 't1VerifyEmail',
+      builder: (context, state) {
+        final email = state.extra as String? ?? '';
+        return t1_verify_email.VerifyEmailScreen(email: email);
+      },
+    ),
+    GoRoute(path: AppRoutes.t1PrivacyPolicy, name: 't1PrivacyPolicy', builder: (context, state) => const t1_privacy_v2.PrivacyPolicyScreen()),
+    GoRoute(path: AppRoutes.t1Terms, name: 't1Terms', builder: (context, state) => const t1_terms_v2.TermsScreen()),
 
     // T1 Shell
     ShellRoute(
@@ -380,14 +396,9 @@ class _ProfileRetryScreen extends ConsumerWidget {
 
     final activeTheme = ref.read(activeThemeProvider);
     final isT2 = activeTheme.name.contains('t2');
-    
-    final bgColor = isT2 ? const Color(0xFF0A0A0A) : theme.scaffoldBackgroundColor;
-    final accentColor = isT2 ? const Color(0xFFD7FF5F) : scheme.primary;
-    final textColor = isT2 ? Colors.white : scheme.onSurface;
-    final secondaryTextColor = isT2 ? Colors.white54 : scheme.onSurface.withValues(alpha: 0.6);
 
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -399,22 +410,22 @@ class _ProfileRetryScreen extends ConsumerWidget {
               Text('Setting up your account',
                 textAlign: TextAlign.center,
                 style: isT2 
-                  ? GoogleFonts.barlowCondensed(fontSize: 32, fontWeight: FontWeight.w900, color: textColor)
-                  : theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900, color: textColor)),
+                  ? GoogleFonts.barlowCondensed(fontSize: 32, fontWeight: FontWeight.w900, color: scheme.onSurface)
+                  : theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900, color: scheme.onSurface)),
               const SizedBox(height: 12),
               Text('This usually takes just a second.\nTap below if it\'s taking too long.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: secondaryTextColor, fontSize: 14)),
+                style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6), fontSize: 14)),
               const SizedBox(height: 40),
               if (isLoading)
-                CircularProgressIndicator(color: accentColor)
+                CircularProgressIndicator(color: scheme.primary)
               else
                 ElevatedButton(
                   onPressed: () =>
                     ref.read(authProvider.notifier).retryProfileLoad(userId),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: accentColor,
-                    foregroundColor: isT2 ? Colors.black : Colors.white,
+                    backgroundColor: scheme.primary,
+                    foregroundColor: scheme.onPrimary,
                     minimumSize: const Size(220, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14))),
@@ -427,7 +438,7 @@ class _ProfileRetryScreen extends ConsumerWidget {
                 onPressed: () =>
                   ref.read(authProvider.notifier).signOut(),
                 child: Text('Sign out and try again',
-                  style: TextStyle(color: secondaryTextColor)),
+                  style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6))),
               ),
             ],
           ),

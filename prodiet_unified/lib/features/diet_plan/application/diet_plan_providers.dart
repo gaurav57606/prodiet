@@ -3,6 +3,7 @@ import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import '../data/diet_plan_repository.dart';
 import '../domain/diet_plan_state.dart';
+import '../domain/diet_plan_exceptions.dart';
 
 final dietPlanRepositoryProvider = Provider<DietPlanRepository>((ref) {
   return DietPlanRepository(ref.watch(supabaseClientProvider));
@@ -34,12 +35,20 @@ class DietPlanNotifier extends StateNotifier<DietPlanState> {
 
   Future<void> generate() async {
     if (_userId.isEmpty) return;
+    
+    // Save current state to restore if rate limited
+    final prevState = state;
     state = const DietPlanLoading();
+    
     try {
       final plan = await _repo.generatePlan(_userId);
       state = DietPlanLoaded(plan);
     } catch (e) {
       state = DietPlanError(e.toString());
+      if (e is PlanRateLimitException) {
+        state = prevState; // Restore previous state instead of error screen
+        rethrow;
+      }
     }
   }
 
