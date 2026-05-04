@@ -129,6 +129,18 @@ class CalorieSummaryCard extends ConsumerWidget {
                           letterSpacing: 1.0,
                         ),
                       ),
+                      if (streakDays > 0)
+                        Container(
+                          margin: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                          ),
+                          child: Text('🔥 $streakDays day streak',
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.orange)),
+                        ),
                     ],
                   ),
                   Container(

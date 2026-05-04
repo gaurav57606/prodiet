@@ -19,6 +19,7 @@ class AppUser {
   // Valid values: 'same' | 'balanced' | 'variety'
   final DateTime createdAt;
   final DateTime? updatedAt;
+  final double? targetWeightKg;
 
   const AppUser({
     required this.id,
@@ -38,6 +39,7 @@ class AppUser {
     this.varietyPreference = 'balanced',
     required this.createdAt,
     this.updatedAt,
+    this.targetWeightKg,
   });
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
@@ -69,6 +71,7 @@ class AppUser {
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'] as String)
           : null,
+      targetWeightKg: (json['target_weight_kg'] as num?)?.toDouble(),
     );
   }
 
@@ -95,6 +98,7 @@ class AppUser {
     if (dailyCalorieGoal != null) map['daily_calorie_goal'] = dailyCalorieGoal;
     if (fcmToken != null) map['fcm_token'] = fcmToken;
     if (updatedAt != null) map['updated_at'] = updatedAt!.toIso8601String();
+    if (targetWeightKg != null) map['target_weight_kg'] = targetWeightKg;
 
     return map;
   }
@@ -117,6 +121,7 @@ class AppUser {
     String? varietyPreference,
     DateTime? createdAt,
     DateTime? updatedAt,
+    double? targetWeightKg,
   }) {
     return AppUser(
       id: id ?? this.id,
@@ -136,6 +141,7 @@ class AppUser {
       varietyPreference: varietyPreference ?? this.varietyPreference,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      targetWeightKg: targetWeightKg ?? this.targetWeightKg,
     );
   }
 

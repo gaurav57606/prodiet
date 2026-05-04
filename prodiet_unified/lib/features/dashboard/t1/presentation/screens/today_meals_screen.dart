@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
@@ -15,17 +16,23 @@ import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.da
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class TodayMealsScreen extends ConsumerWidget {
-  const TodayMealsScreen({super.key});
+  final DateTime? date;
+  const TodayMealsScreen({super.key, this.date});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final summaryAsync = ref.watch(todayMealsProvider);
+    final selectedDate = date ?? DateTime.now();
+    final isToday = DateUtils.isSameDay(selectedDate, DateTime.now());
+    
+    final summaryAsync = ref.watch(mealsForDateProvider(selectedDate));
     final dashboardAsync = ref.watch(dashboardProvider);
+
+    final title = isToday ? 'Today\'s Meals' : DateFormat('EEEE, d MMM').format(selectedDate);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Today\'s Meals'),
+        title: Text(title),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -35,10 +42,10 @@ class TodayMealsScreen extends ConsumerWidget {
         isEmpty: (s) => s.meals.isEmpty,
         emptyState: ProDietEmptyState(
           icon: EmptyStateConfigs.mealPlanner.icon,
-          headline: 'Nothing logged today',
-          subtext: 'Tap + to log your first meal.',
-          buttonLabel: 'Log a Meal',
-          onButtonTap: () => _showLogMealSheet(context, ref),
+          headline: isToday ? 'Nothing logged today' : 'No meals for this day',
+          subtext: isToday ? 'Tap + to log your first meal.' : 'Planned meals will appear here.',
+          buttonLabel: isToday ? 'Log a Meal' : 'Return to Planner',
+          onButtonTap: () => isToday ? _showLogMealSheet(context, ref) : context.pop(),
         ),
         builder: (summary) => ListView(
           padding: const EdgeInsets.all(T1Spacing.lg),

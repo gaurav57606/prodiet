@@ -90,7 +90,7 @@ class DietPlanRepository {
           'meal_type': type.name,
           'ingredients': item.ingredients,
           'status': 'pending',
-          'planned_date': today.toIso8601String(),
+          'planned_date': today.toIso8601String().split('T')[0],
         });
       }
     }

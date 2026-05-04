@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 
@@ -113,19 +114,19 @@ class ProfileScreen extends ConsumerWidget {
                     theme, 
                     'Edit Profile', 
                     Icons.person_outline_rounded,
-                    onTap: () {},
+                    onTap: () => _showEditProfileSheet(context, ref, user),
                   ),
                   _buildMenuTile(
                     theme, 
                     'Health Goals', 
                     Icons.track_changes_rounded,
-                    onTap: () {},
+                    onTap: () => context.pushNamed(AppRoutes.healthGoalsName),
                   ),
                   _buildMenuTile(
                     theme, 
                     'Notifications', 
                     Icons.notifications_none_rounded,
-                    onTap: () {},
+                    onTap: () => context.pushNamed(AppRoutes.notificationsName),
                   ),
                 ],
               ),
@@ -196,6 +197,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
+
   void _handleLogout(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
@@ -215,6 +217,58 @@ class ProfileScreen extends ConsumerWidget {
             child: Text('LOGOUT', style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showEditProfileSheet(BuildContext context, WidgetRef ref, AppUser? user) {
+    final nameCtrl = TextEditingController(text: user?.name ?? '');
+    final theme = Theme.of(context);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.colorScheme.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          left: 24, right: 24, top: 24,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('EDIT PROFILE', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
+            const SizedBox(height: 20),
+            TextField(
+              controller: nameCtrl,
+              decoration: InputDecoration(
+                labelText: 'Display Name',
+                filled: true,
+                fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton(
+                onPressed: () async {
+                  final name = nameCtrl.text.trim();
+                  if (name.isEmpty) return;
+                  if (user != null) {
+                    await ref.read(authRepositoryProvider).updateProfile(user.id, {'name': name});
+                    ref.invalidate(authProvider); // Refresh user
+                  }
+                  if (ctx.mounted) Navigator.pop(ctx);
+                },
+                style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+                child: const Text('SAVE CHANGES', style: TextStyle(fontWeight: FontWeight.w900)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -225,11 +225,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         controller: _passwordController,
                         hintText: '••••••••',
                         obscureText: _obscurePassword,
+                        keyboardType: TextInputType.visiblePassword,
                         validator: (v) => (v == null || v.length < 6) ? 'Min 6 characters' : null,
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                            color: scheme.onSurface.withValues(alpha: 0.3),
+                            _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                            color: scheme.onSurface.withValues(alpha: 0.4),
                             size: 20,
                           ),
                           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),

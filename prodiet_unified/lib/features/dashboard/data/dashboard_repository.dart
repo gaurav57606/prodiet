@@ -52,7 +52,7 @@ class DashboardRepository {
       int mealsLogged = 0;
 
       for (var meal in mealsData) {
-        if (meal['status'] == 'completed') {
+        if (meal['status'] == 'eaten') {
           mealsLogged++;
           caloriesConsumed += (meal['calories'] as num? ?? 0).toInt();
           proteinConsumed += (meal['protein_g'] as num? ?? 0).toInt();

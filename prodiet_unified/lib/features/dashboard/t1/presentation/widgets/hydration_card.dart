@@ -13,7 +13,10 @@ class HydrationCard extends StatefulWidget {
     required this.consumed,
     required this.target,
     required this.progress,
+    this.onAddGlass,
   });
+
+  final VoidCallback? onAddGlass;
 
   @override
   State<HydrationCard> createState() => _HydrationCardState();
@@ -172,6 +175,19 @@ class _HydrationCardState extends State<HydrationCard> {
                 ],
               ),
             ),
+            if (widget.onAddGlass != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: TextButton.icon(
+                  onPressed: widget.onAddGlass,
+                  icon: const Icon(Icons.add_circle_outline_rounded, size: 18),
+                  label: const Text('+ 250ml'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: theme.colorScheme.primary,
+                    textStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

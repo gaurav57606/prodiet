@@ -9,18 +9,21 @@ class MealRepository {
   MealRepository(this._supabase);
 
   Stream<List<Meal>> watchTodayMeals(String userId) {
-    final today = DateTime.now().toIso8601String().split('T')[0];
+    return watchMealsForDate(userId, DateTime.now());
+  }
+
+  Stream<List<Meal>> watchMealsForDate(String userId, DateTime date) {
+    final dateStr = date.toIso8601String().split('T')[0];
     
     return _supabase
         .from('meals')
         .stream(primaryKey: ['id'])
-        .eq('planned_date', today) // Server-side date filtering
-        .map((data) {
-          return data
-            .where((row) => row['user_id'] == userId) // Client-side user filtering
-            .map((row) => Meal.fromJson(row)).toList()
-            ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
-        });
+        .eq('user_id', userId)
+        .map((data) => data
+            .where((row) => row['planned_date'] == dateStr)
+            .map((row) => Meal.fromJson(row))
+            .toList()
+            ..sort((a, b) => a.createdAt.compareTo(b.createdAt)));
   }
 
   Future<void> logMeal(String userId, {

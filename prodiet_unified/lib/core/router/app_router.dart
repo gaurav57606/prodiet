@@ -203,7 +203,14 @@ GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
       builder: (context, state, child) => DmAppShell(child: child),
       routes: [
         GoRoute(path: AppRoutes.t1Dashboard, name: 't1Dashboard', builder: (context, state) => const t1_dashboard.DashboardScreen()),
-        GoRoute(path: AppRoutes.t1TodayMeals, name: 't1TodayMeals', builder: (context, state) => const t1_today_meals.TodayMealsScreen()),
+        GoRoute(
+          path: AppRoutes.t1TodayMeals,
+          name: 't1TodayMeals',
+          builder: (context, state) {
+            final date = state.extra as DateTime?;
+            return t1_today_meals.TodayMealsScreen(date: date);
+          },
+        ),
         GoRoute(path: AppRoutes.t1DietPlan, name: 't1DietPlan', builder: (context, state) => const t1_diet_plan.DietPlanScreen()),
         GoRoute(path: AppRoutes.t1MealPlanner, name: 't1MealPlanner', builder: (context, state) => const t1_meal_planner.MealPlannerScreen()),
         GoRoute(path: AppRoutes.t1Inventory, name: 't1Inventory', builder: (context, state) => const t1_inventory.InventoryScreen()),
@@ -340,8 +347,12 @@ String? redirectLogic(BuildContext context, GoRouterState state, ProviderContain
   }
   if (authState is AuthProfileMissing) return AppRoutes.t2ProfileRetry;
   if (authState is AuthNeedsOnboarding) {
-    if (isT2) return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
-    return (loc == '/t1/health-goals') ? null : '/t1/health-goals';
+    if (isT2) {
+      return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
+    }
+    // Allow both onboarding and health-goals for T1 to prevent loop
+    if (loc == '/t1/onboarding' || loc == '/t1/health-goals') return null;
+    return '/t1/health-goals';
   }
   if (authState is AuthAuthenticated) {
     if (isPublic && !loc.contains('splash')) {
@@ -361,12 +372,22 @@ class _ProfileRetryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final authState = ref.watch(authProvider);
     final userId = authState is AuthProfileMissing ? authState.userId : '';
     final isLoading = authState is AuthLoading;
 
+    final activeTheme = ref.read(activeThemeProvider);
+    final isT2 = activeTheme.name.contains('t2');
+    
+    final bgColor = isT2 ? const Color(0xFF0A0A0A) : theme.scaffoldBackgroundColor;
+    final accentColor = isT2 ? const Color(0xFFD7FF5F) : scheme.primary;
+    final textColor = isT2 ? Colors.white : scheme.onSurface;
+    final secondaryTextColor = isT2 ? Colors.white54 : scheme.onSurface.withValues(alpha: 0.6);
+
     return Scaffold(
-      backgroundColor: T2Colors.bgDefault,
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -377,34 +398,36 @@ class _ProfileRetryScreen extends ConsumerWidget {
               const SizedBox(height: 24),
               Text('Setting up your account',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.barlowCondensed(fontSize: 32,
-                  fontWeight: FontWeight.w900, color: Colors.white)),
+                style: isT2 
+                  ? GoogleFonts.barlowCondensed(fontSize: 32, fontWeight: FontWeight.w900, color: textColor)
+                  : theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900, color: textColor)),
               const SizedBox(height: 12),
-              const Text('This usually takes just a second.\nTap below if it\'s taking too long.',
+              Text('This usually takes just a second.\nTap below if it\'s taking too long.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: T2Colors.textSecondary, fontSize: 14)),
+                style: TextStyle(color: secondaryTextColor, fontSize: 14)),
               const SizedBox(height: 40),
               if (isLoading)
-                const CircularProgressIndicator(color: T2Colors.lime)
+                CircularProgressIndicator(color: accentColor)
               else
                 ElevatedButton(
                   onPressed: () =>
                     ref.read(authProvider.notifier).retryProfileLoad(userId),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: T2Colors.lime,
+                    backgroundColor: accentColor,
+                    foregroundColor: isT2 ? Colors.black : Colors.white,
                     minimumSize: const Size(220, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14))),
                   child: const Text('RETRY',
-                    style: TextStyle(color: Colors.black,
+                    style: TextStyle(
                       fontWeight: FontWeight.w900, fontSize: 16)),
                 ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () =>
                   ref.read(authProvider.notifier).signOut(),
-                child: const Text('Sign out and try again',
-                  style: TextStyle(color: T2Colors.textMuted)),
+                child: Text('Sign out and try again',
+                  style: TextStyle(color: secondaryTextColor)),
               ),
             ],
           ),

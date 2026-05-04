@@ -309,10 +309,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       controller: _passwordController,
                       hintText: '••••••••',
                       obscureText: _obscurePassword,
+                      keyboardType: TextInputType.visiblePassword,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: scheme.onSurface.withValues(alpha: 0.3),
+                          _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                          color: scheme.onSurface.withValues(alpha: 0.4),
                           size: 20,
                         ),
                         onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -344,10 +345,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       controller: _confirmPasswordController,
                       hintText: '••••••••',
                       obscureText: _obscureConfirmPassword,
+                      keyboardType: TextInputType.visiblePassword,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: scheme.onSurface.withValues(alpha: 0.3),
+                          _obscureConfirmPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                          color: scheme.onSurface.withValues(alpha: 0.4),
                           size: 20,
                         ),
                         onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
