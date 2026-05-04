@@ -21,13 +21,6 @@
 //     ),
 //     builder: (items) => InventoryList(items: items),
 //   )
-//
-// AI LONG WAIT → replace loading state:
-//   if (isGenerating) return AiThinkingLoader(mode: 'diet');
-//
-// AUTH TRANSITION → replace splash hold:
-//   if (authState is AuthLoading) return ProDietAuthLoader();
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
@@ -37,10 +30,10 @@ import 'error_widget.dart';
 class AsyncValueWidget<T> extends StatelessWidget {
   final AsyncValue<T> value;
   final Widget Function(T data) builder;
-  final Widget? skeleton;          // custom skeleton for loading state
-  final Widget? emptyState;        // shown when data is empty list/null
+  final Widget? skeleton; // custom skeleton for loading state
+  final Widget? emptyState; // shown when data is empty list/null
   final bool Function(T)? isEmpty; // optional check for "is data empty?"
-  final VoidCallback? onRetry;     // callback for retry button
+  final VoidCallback? onRetry; // callback for retry button
 
   const AsyncValueWidget({
     required this.value,
@@ -57,11 +50,10 @@ class AsyncValueWidget<T> extends StatelessWidget {
     return value.when(
       loading: () => skeleton ?? const ProDietLoader(),
       error: (e, st) {
-        final appError = e is AppError ? e : UnknownError(message: e.toString());
-        return ProDietErrorWidget(
-          error: appError,
-          onRetry: onRetry,
-        );
+        final appError = e is AppError
+            ? e
+            : UnknownError(message: e.toString());
+        return ProDietErrorWidget(error: appError, onRetry: onRetry);
       },
       data: (data) {
         if (isEmpty != null && isEmpty!(data) && emptyState != null) {
