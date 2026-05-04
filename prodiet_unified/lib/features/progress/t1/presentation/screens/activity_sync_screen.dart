@@ -58,9 +58,11 @@ class ActivitySyncScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
+              border:
+                  Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
             ),
-            child: Icon(Icons.watch_rounded, color: theme.colorScheme.primary, size: 22),
+            child: Icon(Icons.watch_rounded,
+                color: theme.colorScheme.primary, size: 22),
           ),
           const SizedBox(width: T1Spacing.md),
           Expanded(
@@ -70,7 +72,8 @@ class ActivitySyncScreen extends StatelessWidget {
                 Text('Mi Band 8', style: theme.textTheme.titleMedium),
                 Text(
                   'Last synced: 2 min ago · Battery 78%',
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.4)),
                 ),
               ],
             ),
@@ -80,11 +83,15 @@ class ActivitySyncScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF40D8B8).withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF40D8B8).withOpacity(0.2)),
+              border:
+                  Border.all(color: const Color(0xFF40D8B8).withOpacity(0.2)),
             ),
             child: const Text(
               'Connected',
-              style: TextStyle(color: Color(0xFF40D8B8), fontSize: 10, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color(0xFF40D8B8),
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -104,7 +111,8 @@ class ActivitySyncScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatTile(BuildContext context, String value, String label, Color color) {
+  Widget _buildStatTile(
+      BuildContext context, String value, String label, Color color) {
     final theme = Theme.of(context);
     return Expanded(
       child: DmCard(
@@ -113,10 +121,13 @@ class ActivitySyncScreen extends StatelessWidget {
         borderSide: BorderSide(color: color.withOpacity(0.15)),
         child: Column(
           children: [
-            Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: color, fontSize: 20)),
+            Text(value,
+                style: theme.textTheme.headlineSmall
+                    ?.copyWith(color: color, fontSize: 20)),
             Text(
               label,
-              style: theme.textTheme.labelSmall?.copyWith(color: color.withOpacity(0.4), letterSpacing: 0.4),
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: color.withOpacity(0.4), letterSpacing: 0.4),
             ),
           ],
         ),
@@ -141,23 +152,30 @@ class ActivitySyncScreen extends StatelessWidget {
           _buildAdjustmentRow('Extra calories allowed', '+312 kcal', teal),
           _buildAdjustmentRow('Protein target', '+12g (162g total)', teal),
           _buildAdjustmentRow('Hydration target', '+500ml (3.0L)', teal),
-          _buildAdjustmentRow('Post-workout window', 'Eat within 45m', teal, isLast: true),
+          _buildAdjustmentRow('Post-workout window', 'Eat within 45m', teal,
+              isLast: true),
         ],
       ),
     );
   }
 
-  Widget _buildAdjustmentRow(String label, String value, Color color, {bool isLast = false}) {
+  Widget _buildAdjustmentRow(String label, String value, Color color,
+      {bool isLast = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-        border: isLast ? null : Border(bottom: BorderSide(color: color.withOpacity(0.1))),
+        border: isLast
+            ? null
+            : Border(bottom: BorderSide(color: color.withOpacity(0.1))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 10, color: Colors.white70)),
-          Text(value, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+          Text(label,
+              style: const TextStyle(fontSize: 10, color: Colors.white70)),
+          Text(value,
+              style: TextStyle(
+                  fontSize: 11, fontWeight: FontWeight.bold, color: color)),
         ],
       ),
     );
@@ -170,7 +188,9 @@ class ActivitySyncScreen extends StatelessWidget {
     final burned = [32, 42, 28, 46, 38, 48, 30];
     final consumed = [40, 44, 38, 40, 46, 40, 38];
     const double maxH = 100;
-    final maxV = [32, 42, 28, 46, 38, 48, 30, 40, 44, 38, 40, 46, 40, 38].reduce((a, b) => a > b ? a : b).toDouble();
+    final maxV = [32, 42, 28, 46, 38, 48, 30, 40, 44, 38, 40, 46, 40, 38]
+        .reduce((a, b) => a > b ? a : b)
+        .toDouble();
 
     return DmCard(
       child: Column(
@@ -204,8 +224,10 @@ class ActivitySyncScreen extends StatelessWidget {
                             width: 8,
                             height: (consumed[i] / maxV) * maxH,
                             decoration: BoxDecoration(
-                              color: T1ColorSchemes.chartConsumed.withOpacity(0.3),
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                              color:
+                                  T1ColorSchemes.chartConsumed.withOpacity(0.3),
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(4)),
                             ),
                           ),
                           const SizedBox(width: 2),
@@ -215,7 +237,8 @@ class ActivitySyncScreen extends StatelessWidget {
                             height: (burned[i] / maxV) * maxH,
                             decoration: BoxDecoration(
                               color: T1ColorSchemes.chartBurned,
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(4)),
                             ),
                           ),
                         ],
@@ -224,7 +247,9 @@ class ActivitySyncScreen extends StatelessWidget {
                       Text(
                         days[i],
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: isToday ? scheme.primary : scheme.onSurface.withOpacity(0.3),
+                          color: isToday
+                              ? scheme.primary
+                              : scheme.onSurface.withOpacity(0.3),
                           fontWeight: isToday ? FontWeight.bold : null,
                         ),
                       ),
@@ -237,7 +262,8 @@ class ActivitySyncScreen extends StatelessWidget {
           const SizedBox(height: T1Spacing.md),
           Row(
             children: [
-              _buildLegendItem('Consumed', T1ColorSchemes.chartConsumed.withOpacity(0.4)),
+              _buildLegendItem(
+                  'Consumed', T1ColorSchemes.chartConsumed.withOpacity(0.4)),
               const SizedBox(width: T1Spacing.md),
               _buildLegendItem('Burned', T1ColorSchemes.chartBurned),
             ],
@@ -253,10 +279,12 @@ class ActivitySyncScreen extends StatelessWidget {
         Container(
           width: 12,
           height: 12,
-          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
+          decoration: BoxDecoration(
+              color: color, borderRadius: BorderRadius.circular(3)),
         ),
         const SizedBox(width: 4),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.white54)),
+        Text(label,
+            style: const TextStyle(fontSize: 10, color: Colors.white54)),
       ],
     );
   }

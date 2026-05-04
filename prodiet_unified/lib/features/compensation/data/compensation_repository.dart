@@ -62,15 +62,17 @@ class CompensationRepository {
     }
   }
 
-  Future<Either<AppError, List<CompensationLog>>> getHistory(String userId) async {
+  Future<Either<AppError, List<CompensationLog>>> getHistory(
+      String userId) async {
     try {
       final response = await _client
           .from('compensation_logs')
           .select()
           .eq('user_id', userId)
           .order('created_at', ascending: false);
-      
-      final logs = (response as List).map((l) => CompensationLog.fromJson(l)).toList();
+
+      final logs =
+          (response as List).map((l) => CompensationLog.fromJson(l)).toList();
       return Right(logs);
     } catch (e) {
       return Left(UnknownError(message: e.toString()));

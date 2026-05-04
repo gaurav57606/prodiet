@@ -56,7 +56,8 @@ class EmptyStateConfigs {
   static const ocr = (
     emoji: '📸',
     headline: 'Point at any grocery bill',
-    subtext: 'Your camera will read the items and add them to your pantry automatically.',
+    subtext:
+        'Your camera will read the items and add them to your pantry automatically.',
     buttonLabel: null,
   );
 }

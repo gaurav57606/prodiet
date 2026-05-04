@@ -24,21 +24,23 @@ class DmCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor ?? theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(borderRadius ?? T2Spacing.radiusLarge),
-        border: borderSide != null 
-          ? Border.fromBorderSide(borderSide!) 
-          : Border.all(color: theme.colorScheme.outline, width: 1),
+        borderRadius:
+            BorderRadius.circular(borderRadius ?? T2Spacing.radiusLarge),
+        border: borderSide != null
+            ? Border.fromBorderSide(borderSide!)
+            : Border.all(color: theme.colorScheme.outline, width: 1),
         boxShadow: boxShadow,
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(borderRadius ?? T2Spacing.radiusLarge),
+          borderRadius:
+              BorderRadius.circular(borderRadius ?? T2Spacing.radiusLarge),
           child: Padding(
             padding: padding ?? const EdgeInsets.all(T2Spacing.md),
             child: child,

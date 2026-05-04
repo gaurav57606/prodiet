@@ -21,7 +21,7 @@ class HydrationScreen extends ConsumerWidget {
     final summaryAsync = ref.watch(waterSummaryProvider);
     final logsAsync = ref.watch(todayWaterLogsProvider);
     final userId = ref.watch(currentUserIdProvider);
-    
+
     final statusColor = const Color(0xFF40D8B8);
 
     return Scaffold(
@@ -32,7 +32,8 @@ class HydrationScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.undo_rounded),
-            onPressed: () => ref.read(waterRepositoryProvider).deleteLastLog(userId),
+            onPressed: () =>
+                ref.read(waterRepositoryProvider).deleteLastLog(userId),
           ),
         ],
       ),
@@ -52,7 +53,8 @@ class HydrationScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHero(theme, statusColor, summary.totalMl, summary.targetMl, summary.percentFilled),
+              _buildHero(theme, statusColor, summary.totalMl, summary.targetMl,
+                  summary.percentFilled),
               const SizedBox(height: T1Spacing.xl),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +100,8 @@ class HydrationScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHero(ThemeData theme, Color color, int consumed, int target, double progress) {
+  Widget _buildHero(
+      ThemeData theme, Color color, int consumed, int target, double progress) {
     final formatter = NumberFormat('#,###');
     return Container(
       width: double.infinity,
@@ -107,7 +110,10 @@ class HydrationScreen extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [color.withValues(alpha: 0.15), color.withValues(alpha: 0.05)],
+          colors: [
+            color.withValues(alpha: 0.15),
+            color.withValues(alpha: 0.05)
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: color.withValues(alpha: 0.15)),
@@ -168,7 +174,8 @@ class HydrationScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickAddGrid(ThemeData theme, Color color, WidgetRef ref, String userId) {
+  Widget _buildQuickAddGrid(
+      ThemeData theme, Color color, WidgetRef ref, String userId) {
     final amounts = [
       {'val': 250, 'icon': Icons.local_drink_rounded},
       {'val': 500, 'icon': Icons.water_drop_rounded},
@@ -186,7 +193,8 @@ class HydrationScreen extends ConsumerWidget {
       children: amounts.map((a) {
         final val = a['val'] as int;
         return InkWell(
-          onTap: () => ref.read(waterRepositoryProvider).logCustomAmount(userId, val),
+          onTap: () =>
+              ref.read(waterRepositoryProvider).logCustomAmount(userId, val),
           borderRadius: BorderRadius.circular(24),
           child: DmCard(
             color: Colors.white.withValues(alpha: 0.03),
@@ -217,8 +225,8 @@ class HydrationScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: T1Spacing.xl),
           child: Text('No history for today',
-            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3))
-          ),
+              style: TextStyle(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3))),
         ),
       );
     }
@@ -239,7 +247,10 @@ class HydrationScreen extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  Icon(Icons.history_rounded, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
+                  Icon(Icons.history_rounded,
+                      size: 16,
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.2)),
                   const SizedBox(width: 12),
                   Text(
                     timeStr,

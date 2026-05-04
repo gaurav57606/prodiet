@@ -10,22 +10,20 @@ class InventoryDao extends DatabaseAccessor<AppDatabase>
   InventoryDao(super.db);
 
   Future<List<LocalInventoryData>> getAll(String userId) =>
-    (select(localInventory)
-      ..where((i) => i.userId.equals(userId)))
-      .get();
+      (select(localInventory)..where((i) => i.userId.equals(userId))).get();
 
   Future<void> upsertItem(LocalInventoryCompanion entry) =>
-    into(localInventory).insertOnConflictUpdate(entry);
+      into(localInventory).insertOnConflictUpdate(entry);
 
   Future<void> deleteItem(String id) =>
-    (delete(localInventory)..where((i) => i.id.equals(id))).go();
+      (delete(localInventory)..where((i) => i.id.equals(id))).go();
 
   Future<List<LocalInventoryData>> getUnsynced(String userId) =>
-    (select(localInventory)
-      ..where((i) => i.userId.equals(userId) & i.isSynced.equals(false)))
-      .get();
+      (select(localInventory)
+            ..where((i) => i.userId.equals(userId) & i.isSynced.equals(false)))
+          .get();
 
   Future<void> markSynced(List<String> ids) =>
-    (update(localInventory)..where((i) => i.id.isIn(ids)))
-      .write(const LocalInventoryCompanion(isSynced: Value(true)));
+      (update(localInventory)..where((i) => i.id.isIn(ids)))
+          .write(const LocalInventoryCompanion(isSynced: Value(true)));
 }

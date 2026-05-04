@@ -19,7 +19,7 @@ class DmChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     final chipColor = color ?? colorScheme.primary;
 
     return GestureDetector(

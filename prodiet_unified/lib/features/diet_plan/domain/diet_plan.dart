@@ -18,5 +18,6 @@ class DietPlan with _$DietPlan {
     required bool isActive,
   }) = _DietPlan;
 
-  factory DietPlan.fromJson(Map<String, dynamic> json) => _$DietPlanFromJson(json);
+  factory DietPlan.fromJson(Map<String, dynamic> json) =>
+      _$DietPlanFromJson(json);
 }

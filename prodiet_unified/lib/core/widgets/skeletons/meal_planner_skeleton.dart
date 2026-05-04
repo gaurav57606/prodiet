@@ -15,24 +15,28 @@ class _MealPlannerSkeletonState extends State<MealPlannerSkeleton>
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this,
-      duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1200))
+      ..repeat(reverse: true);
     _anim = Tween(begin: 0.3, end: 0.7).animate(_ctrl);
   }
 
   @override
-  void dispose() { _ctrl.dispose(); super.dispose(); }
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
-  Widget _box(double w, double h, {double radius = 8}) =>
-    AnimatedBuilder(
-      animation: _anim,
-      builder: (_, __) => Container(
-        width: w, height: h,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: _anim.value),
-          borderRadius: BorderRadius.circular(radius)),
-      ),
-    );
+  Widget _box(double w, double h, {double radius = 8}) => AnimatedBuilder(
+        animation: _anim,
+        builder: (_, __) => Container(
+          width: w,
+          height: h,
+          decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: _anim.value),
+              borderRadius: BorderRadius.circular(radius)),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,8 @@ class _MealPlannerSkeletonState extends State<MealPlannerSkeleton>
         ),
         const Divider(color: T2Colors.border, height: 1),
         // Day card skeletons
-        Expanded(child: ListView.builder(
+        Expanded(
+            child: ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: 4,
           itemBuilder: (_, __) => Container(
@@ -67,8 +72,10 @@ class _MealPlannerSkeletonState extends State<MealPlannerSkeleton>
                 _box(200, 16),
                 const SizedBox(height: 8),
                 Row(children: [
-                  _box(60, 10), const SizedBox(width: 8),
-                  _box(60, 10), const SizedBox(width: 8),
+                  _box(60, 10),
+                  const SizedBox(width: 8),
+                  _box(60, 10),
+                  const SizedBox(width: 8),
                   _box(60, 10),
                 ]),
               ],

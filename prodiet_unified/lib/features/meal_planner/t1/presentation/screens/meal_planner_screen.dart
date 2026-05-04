@@ -23,7 +23,9 @@ class MealPlannerScreen extends ConsumerWidget {
       return todayAsync.maybeWhen(
         data: (todaySummary) {
           // Remove any entries from history that match "today" to avoid duplicates
-          final otherDays = weeklyMeals.where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now())).toList();
+          final otherDays = weeklyMeals
+              .where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now()))
+              .toList();
           return [...otherDays, ...todaySummary.meals];
         },
         orElse: () => weeklyMeals,
@@ -36,7 +38,8 @@ class MealPlannerScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () => context.push('/t1/diet-plan'),
-            icon: const Icon(Icons.auto_awesome_rounded, color: Colors.orangeAccent),
+            icon: const Icon(Icons.auto_awesome_rounded,
+                color: Colors.orangeAccent),
           ),
         ],
       ),
@@ -84,16 +87,22 @@ class MealPlannerScreen extends ConsumerWidget {
     return grouped;
   }
 
-  Widget _buildDayCard(BuildContext context, ThemeData theme, DateTime date, List<Meal> meals) {
+  Widget _buildDayCard(
+      BuildContext context, ThemeData theme, DateTime date, List<Meal> meals) {
     final isToday = DateUtils.isSameDay(date, DateTime.now());
     final totalCals = meals.fold(0.0, (sum, m) => sum + m.calories);
-    
+
     return DmCard(
       padding: EdgeInsets.zero,
-      color: isToday ? theme.colorScheme.primary.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.02),
-      borderSide: isToday ? BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.3)) : null,
+      color: isToday
+          ? theme.colorScheme.primary.withValues(alpha: 0.1)
+          : Colors.white.withValues(alpha: 0.02),
+      borderSide: isToday
+          ? BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.3))
+          : null,
       child: InkWell(
-        onTap: () => context.push('/t1/today-meals'), // For simplicity, go to daily view
+        onTap: () =>
+            context.push('/t1/today-meals'), // For simplicity, go to daily view
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -103,15 +112,23 @@ class MealPlannerScreen extends ConsumerWidget {
                 width: 50,
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
-                  color: isToday ? theme.colorScheme.primary : Colors.white.withValues(alpha: 0.05),
+                  color: isToday
+                      ? theme.colorScheme.primary
+                      : Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   children: [
-                    Text(DateFormat('E').format(date).toUpperCase(), 
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: isToday ? Colors.black : Colors.white54)),
-                    Text(DateFormat('dd').format(date), 
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: isToday ? Colors.black : Colors.white)),
+                    Text(DateFormat('E').format(date).toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            color: isToday ? Colors.black : Colors.white54)),
+                    Text(DateFormat('dd').format(date),
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            color: isToday ? Colors.black : Colors.white)),
                   ],
                 ),
               ),
@@ -121,18 +138,26 @@ class MealPlannerScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      meals.isEmpty ? 'No meals planned' : '${meals.length} meals scheduled',
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900, fontSize: 16),
+                      meals.isEmpty
+                          ? 'No meals planned'
+                          : '${meals.length} meals scheduled',
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w900, fontSize: 16),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${totalCals.toInt()} kcal total',
-                      style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 12, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.5),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
+              Icon(Icons.chevron_right_rounded,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
             ],
           ),
         ),

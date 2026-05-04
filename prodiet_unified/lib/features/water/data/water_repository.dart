@@ -9,7 +9,7 @@ class WaterRepository {
 
   Future<WaterSummary> getTodaySummary(String userId) async {
     final today = DateTime.now().toIso8601String().split('T')[0];
-    
+
     final results = await Future.wait<dynamic>([
       _supabase
           .from('water_logs')
@@ -47,20 +47,20 @@ class WaterRepository {
   Future<void> logCustomAmount(String userId, int ml) async {
     final now = DateTime.now();
     final date = DateTime(now.year, now.month, now.day);
-    
+
     final data = {
       'user_id': userId,
       'amount_ml': ml,
       'logged_at': now.toIso8601String(),
       'date': date.toIso8601String().split('T')[0],
     };
-    
+
     await _supabase.from('water_logs').insert(data);
   }
 
   Future<void> deleteLastLog(String userId) async {
     final today = DateTime.now().toIso8601String().split('T')[0];
-    
+
     final lastLog = await _supabase
         .from('water_logs')
         .select('id')
@@ -69,7 +69,7 @@ class WaterRepository {
         .order('logged_at', ascending: false)
         .limit(1)
         .maybeSingle();
-    
+
     if (lastLog != null) {
       await _supabase.from('water_logs').delete().eq('id', lastLog['id']);
     }
@@ -81,11 +81,11 @@ class WaterRepository {
     return _supabase
         .from('water_logs')
         .stream(primaryKey: ['id'])
-        .eq('date', today)                    // Server-side date filter
+        .eq('date', today) // Server-side date filter
         .map((data) => data
             .where((row) => row['user_id'] == userId) // Client-side user filter
             .map((row) => WaterLog.fromJson(row))
             .toList()
-            ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt)));
+          ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt)));
   }
 }

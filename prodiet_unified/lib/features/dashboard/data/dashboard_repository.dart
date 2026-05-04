@@ -77,7 +77,8 @@ class DashboardRepository {
         caloriesBurned: 0,
       );
     } catch (e) {
-      throw ErrorHandler.handle(e, context: 'DashboardRepository.getTodaySummary');
+      throw ErrorHandler.handle(e,
+          context: 'DashboardRepository.getTodaySummary');
     }
   }
 }

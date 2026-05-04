@@ -17,15 +17,17 @@ class AchievementRepository {
           .select()
           .eq('user_id', userId)
           .order('earned_at', ascending: false);
-      
-      final achievements = (response as List).map((a) => Achievement.fromJson(a)).toList();
+
+      final achievements =
+          (response as List).map((a) => Achievement.fromJson(a)).toList();
       return Right(achievements);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.getAll'));
     }
   }
 
-  Future<Either<AppError, List<Achievement>>> getRecent(String userId, int limit) async {
+  Future<Either<AppError, List<Achievement>>> getRecent(
+      String userId, int limit) async {
     try {
       final response = await _supabase
           .from('achievements')
@@ -33,8 +35,9 @@ class AchievementRepository {
           .eq('user_id', userId)
           .order('earned_at', ascending: false)
           .limit(limit);
-      
-      final achievements = (response as List).map((a) => Achievement.fromJson(a)).toList();
+
+      final achievements =
+          (response as List).map((a) => Achievement.fromJson(a)).toList();
       return Right(achievements);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.getRecent'));
@@ -59,15 +62,17 @@ class AchievementRepository {
         'streak_count': streakCount,
         'badge_image_path': badgeImagePath,
       };
-      
-      final response = await _supabase.from('achievements').insert(data).select().single();
+
+      final response =
+          await _supabase.from('achievements').insert(data).select().single();
       return Right(Achievement.fromJson(response));
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.award'));
     }
   }
 
-  Future<Either<AppError, bool>> hasAchievement(String userId, String type) async {
+  Future<Either<AppError, bool>> hasAchievement(
+      String userId, String type) async {
     try {
       final response = await _supabase
           .from('achievements')
@@ -75,7 +80,7 @@ class AchievementRepository {
           .eq('user_id', userId)
           .eq('type', type)
           .maybeSingle();
-      
+
       return Right(response != null);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.hasAchievement'));

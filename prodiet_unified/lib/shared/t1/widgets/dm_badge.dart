@@ -15,7 +15,7 @@ class DmBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -29,7 +29,8 @@ class DmBadge extends StatelessWidget {
               decoration: BoxDecoration(
                 color: color ?? theme.colorScheme.error,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: theme.scaffoldBackgroundColor, width: 1.5),
+                border: Border.all(
+                    color: theme.scaffoldBackgroundColor, width: 1.5),
               ),
               constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
               child: Center(

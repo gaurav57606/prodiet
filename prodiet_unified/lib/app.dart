@@ -65,11 +65,11 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       _getDeviceInfo().then((info) {
         if (mounted) {
           ref.read(analyticsServiceProvider).startSession(
-            userId,
-            deviceModel: info['deviceModel'] ?? 'Unknown',
-            osVersion: Platform.operatingSystemVersion,
-            appVersion: info['appVersion'] ?? '1.0.0',
-          );
+                userId,
+                deviceModel: info['deviceModel'] ?? 'Unknown',
+                osVersion: Platform.operatingSystemVersion,
+                appVersion: info['appVersion'] ?? '1.0.0',
+              );
         }
       });
     }
@@ -112,8 +112,8 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       builder: (context, child) {
         final active = ref.watch(activeThemeProvider);
         final isT1 = active == ActiveTheme.t1Light ||
-                     active == ActiveTheme.t1Dark ||
-                     active == ActiveTheme.t1Amoled;
+            active == ActiveTheme.t1Dark ||
+            active == ActiveTheme.t1Amoled;
         if (isT1) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(

@@ -4,6 +4,7 @@ part 'meal.freezed.dart';
 part 'meal.g.dart';
 
 enum MealType { breakfast, lunch, dinner, snack }
+
 enum MealStatus { pending, eaten, skipped }
 
 @freezed

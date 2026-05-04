@@ -8,8 +8,8 @@ final dashboardRepositoryProvider = Provider<DashboardRepository>((ref) {
   return DashboardRepository(ref.watch(supabaseClientProvider));
 });
 
-
-final dashboardProvider = FutureProvider.autoDispose<DashboardSummary>((ref) async {
+final dashboardProvider =
+    FutureProvider.autoDispose<DashboardSummary>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) {
     return DashboardSummary.empty();

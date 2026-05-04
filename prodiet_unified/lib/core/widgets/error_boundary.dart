@@ -43,24 +43,27 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                 const Text('😵', style: TextStyle(fontSize: 52)),
                 const SizedBox(height: 20),
                 const Text('Something went wrong',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900,
-                    color: Colors.white)),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white)),
                 const SizedBox(height: 10),
-                const Text('The app hit an unexpected error.\nTap below to restart.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF888888), fontSize: 14)),
+                const Text(
+                    'The app hit an unexpected error.\nTap below to restart.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Color(0xFF888888), fontSize: 14)),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () => setState(() => _error = null),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD4F263),
-                    minimumSize: const Size(180, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14))),
+                      backgroundColor: const Color(0xFFD4F263),
+                      minimumSize: const Size(180, 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14))),
                   child: const Text('TRY AGAIN',
-                    style: TextStyle(color: Colors.black,
-                      fontWeight: FontWeight.w900)),
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w900)),
                 ),
               ],
             ),

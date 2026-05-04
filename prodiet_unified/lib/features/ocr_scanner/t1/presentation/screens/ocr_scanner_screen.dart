@@ -32,7 +32,8 @@ class OcrScannerScreen extends ConsumerWidget {
                   const ProDietEmptyState(
                     emoji: '📷',
                     headline: 'Scan Your Groceries',
-                    subtext: 'Take a photo or upload from gallery to auto-detect ingredients.',
+                    subtext:
+                        'Take a photo or upload from gallery to auto-detect ingredients.',
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -47,7 +48,9 @@ class OcrScannerScreen extends ConsumerWidget {
                             imageQuality: 80,
                           );
                           if (picked != null) {
-                            ref.read(ocrStateProvider.notifier).scan(File(picked.path));
+                            ref
+                                .read(ocrStateProvider.notifier)
+                                .scan(File(picked.path));
                           }
                         },
                       ),
@@ -61,7 +64,9 @@ class OcrScannerScreen extends ConsumerWidget {
                             imageQuality: 80,
                           );
                           if (picked != null) {
-                            ref.read(ocrStateProvider.notifier).scan(File(picked.path));
+                            ref
+                                .read(ocrStateProvider.notifier)
+                                .scan(File(picked.path));
                           }
                         },
                       ),
@@ -92,8 +97,11 @@ class OcrScannerScreen extends ConsumerWidget {
                     final item = result.items[index];
                     return CheckboxListTile(
                       value: item.isSelected,
-                      onChanged: (_) => ref.read(ocrStateProvider.notifier).toggleItemSelection(index),
-                      title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      onChanged: (_) => ref
+                          .read(ocrStateProvider.notifier)
+                          .toggleItemSelection(index),
+                      title: Text(item.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text('${item.quantity} ${item.unit}'),
                       secondary: Chip(
                         label: Text(
@@ -133,19 +141,24 @@ class OcrScannerScreen extends ConsumerWidget {
                             ? null
                             : () async {
                                 final userId = ref.read(currentUserIdProvider);
-                                final repo = ref.read(inventoryRepositoryProvider);
-                                for (final item in result.selectedItems) {
-                                  await repo.addItem(
-                                    userId,
-                                    name: item.name,
-                                    quantity: item.quantity,
-                                    unit: item.unit,
-                                    category: item.category,
-                                  );
-                                }
+                                final repo =
+                                    ref.read(inventoryRepositoryProvider);
+                                await repo.addItemsFromOcr(
+                                  userId,
+                                  result.selectedItems
+                                      .map((item) => {
+                                            "name": item.name,
+                                            "quantity": item.quantity,
+                                            "unit": item.unit,
+                                            "category": item.category,
+                                          })
+                                      .toList(),
+                                );
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('${result.selectedCount} items added ✅')),
+                                    SnackBar(
+                                        content: Text(
+                                            '${result.selectedCount} items added ✅')),
                                   );
                                   context.pop();
                                 }
@@ -167,7 +180,8 @@ class OcrScannerScreen extends ConsumerWidget {
             children: [
               CircularProgressIndicator(color: scheme.primary),
               const SizedBox(height: 24),
-              const Text('Reading your groceries...', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Reading your groceries...',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Text(
                 'AI is identifying ingredients',

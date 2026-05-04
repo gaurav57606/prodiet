@@ -66,7 +66,8 @@ class DmButton extends StatelessWidget {
       foregroundColor: foregroundColor,
       side: borderSide,
       elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: T2Spacing.md, horizontal: T2Spacing.lg),
+      padding: const EdgeInsets.symmetric(
+          vertical: T2Spacing.md, horizontal: T2Spacing.lg),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(T2Spacing.radiusMedium),
       ),
@@ -90,7 +91,9 @@ class DmButton extends StatelessWidget {
             ),
           )
         else
-          Text(label, style: theme.textTheme.titleMedium?.copyWith(color: foregroundColor)),
+          Text(label,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: foregroundColor)),
       ],
     );
 

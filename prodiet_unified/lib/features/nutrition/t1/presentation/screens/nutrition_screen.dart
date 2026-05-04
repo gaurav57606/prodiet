@@ -57,16 +57,24 @@ class NutritionScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              DmMacroChip(value: '${summary.proteinConsumed}g', label: 'Protein', type: MacroType.protein),
-              DmMacroChip(value: '${summary.carbsConsumed}g', label: 'Carbs', type: MacroType.carbs),
-              DmMacroChip(value: '${summary.fatConsumed}g', label: 'Fats', type: MacroType.fat),
+              DmMacroChip(
+                  value: '${summary.proteinConsumed}g',
+                  label: 'Protein',
+                  type: MacroType.protein),
+              DmMacroChip(
+                  value: '${summary.carbsConsumed}g',
+                  label: 'Carbs',
+                  type: MacroType.carbs),
+              DmMacroChip(
+                  value: '${summary.fatConsumed}g',
+                  label: 'Fats',
+                  type: MacroType.fat),
             ],
           ),
         ],
       ),
     );
   }
-
 
   Widget _buildMicronutrientList(BuildContext context) {
     return DmCard(
@@ -82,10 +90,13 @@ class NutritionScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMicroBar(BuildContext context, String name, double value, String total) {
+  Widget _buildMicroBar(
+      BuildContext context, String name, double value, String total) {
     final theme = Theme.of(context);
-    final color = value >= 1.0 ? const Color(0xFF40D8B8) : (value < 0.5 ? const Color(0xFFFF6080) : const Color(0xFFC090FF));
-    
+    final color = value >= 1.0
+        ? const Color(0xFF40D8B8)
+        : (value < 0.5 ? const Color(0xFFFF6080) : const Color(0xFFC090FF));
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -94,7 +105,9 @@ class NutritionScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(name, style: theme.textTheme.bodyMedium),
-              Text(total, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.4))),
+              Text(total,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.4))),
             ],
           ),
           const SizedBox(height: 4),
@@ -119,7 +132,8 @@ class NutritionScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFoodTile(BuildContext context, String name, String amount, String meal) {
+  Widget _buildFoodTile(
+      BuildContext context, String name, String amount, String meal) {
     final theme = Theme.of(context);
     return DmCard(
       margin: const EdgeInsets.only(bottom: 8),
@@ -131,10 +145,15 @@ class NutritionScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(name, style: theme.textTheme.titleSmall),
-              Text(meal, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.3))),
+              Text(meal,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.3))),
             ],
           ),
-          Text(amount, style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.bold)),
+          Text(amount,
+              style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );

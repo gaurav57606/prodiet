@@ -18,7 +18,8 @@ class InventoryItem with _$InventoryItem {
     required DateTime updatedAt,
   }) = _InventoryItem;
 
-  factory InventoryItem.fromJson(Map<String, dynamic> json) => _$InventoryItemFromJson(json);
+  factory InventoryItem.fromJson(Map<String, dynamic> json) =>
+      _$InventoryItemFromJson(json);
 
   bool get isLowStock => quantity <= reorderThreshold;
   bool get isOutOfStock => quantity <= 0;

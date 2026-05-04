@@ -88,10 +88,10 @@ class T1TextStyles {
 
 class T1TextStyleExtensions {
   static TextStyle sectionLabel(ColorScheme scheme) => TextStyle(
-    fontFamily: T1TextStyles.fontFamily,
-    fontSize: 10,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 1.4,
-    color: scheme.onSurface.withOpacity(0.45),
-  );
+        fontFamily: T1TextStyles.fontFamily,
+        fontSize: 10,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.4,
+        color: scheme.onSurface.withOpacity(0.45),
+      );
 }

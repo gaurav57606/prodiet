@@ -45,20 +45,21 @@ class DashboardSummary {
 
   // Computed
   double get calorieProgress => caloriesGoal > 0
-    ? (caloriesConsumed / caloriesGoal).clamp(0.0, 1.0) : 0.0;
-    
-  double get proteinProgress => proteinGoal > 0
-    ? (proteinConsumed / proteinGoal).clamp(0.0, 1.0) : 0.0;
+      ? (caloriesConsumed / caloriesGoal).clamp(0.0, 1.0)
+      : 0.0;
 
-  double get carbsProgress => carbsGoal > 0
-    ? (carbsConsumed / carbsGoal).clamp(0.0, 1.0) : 0.0;
+  double get proteinProgress =>
+      proteinGoal > 0 ? (proteinConsumed / proteinGoal).clamp(0.0, 1.0) : 0.0;
 
-  double get fatProgress => fatGoal > 0
-    ? (fatConsumed / fatGoal).clamp(0.0, 1.0) : 0.0;
+  double get carbsProgress =>
+      carbsGoal > 0 ? (carbsConsumed / carbsGoal).clamp(0.0, 1.0) : 0.0;
 
-  double get waterProgress => waterGoalMl > 0
-    ? (waterMl / waterGoalMl).clamp(0.0, 1.0) : 0.0;
-    
+  double get fatProgress =>
+      fatGoal > 0 ? (fatConsumed / fatGoal).clamp(0.0, 1.0) : 0.0;
+
+  double get waterProgress =>
+      waterGoalMl > 0 ? (waterMl / waterGoalMl).clamp(0.0, 1.0) : 0.0;
+
   int get netCalories => caloriesConsumed - caloriesBurned;
 
   static DashboardSummary empty({

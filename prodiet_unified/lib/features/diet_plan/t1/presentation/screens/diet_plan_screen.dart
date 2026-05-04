@@ -27,7 +27,8 @@ class DietPlanScreen extends ConsumerWidget {
         body: ProDietEmptyState(
           emoji: '🥗',
           headline: 'No Diet Plan Yet',
-          subtext: 'Let AI build your personalised 7-day plan based on your goals.',
+          subtext:
+              'Let AI build your personalised 7-day plan based on your goals.',
           buttonLabel: '✨ Create My Plan',
           onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
         ),
@@ -101,7 +102,9 @@ class DietPlanScreen extends ConsumerWidget {
               _buildSummaryCard(context, ref, plan),
               Expanded(
                 child: TabBarView(
-                  children: plan.days.map((day) => _buildDayTab(context, day)).toList(),
+                  children: plan.days
+                      .map((day) => _buildDayTab(context, day))
+                      .toList(),
                 ),
               ),
             ],
@@ -180,7 +183,8 @@ class DietPlanScreen extends ConsumerWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+        style: const TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
       ),
     );
   }
@@ -197,7 +201,8 @@ class DietPlanScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMealSection(BuildContext context, String title, List<DietMeal> meals) {
+  Widget _buildMealSection(
+      BuildContext context, String title, List<DietMeal> meals) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final totalCals = meals.fold(0.0, (sum, m) => sum + m.calories);
@@ -235,7 +240,8 @@ class DietPlanScreen extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(meal.name,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
           '${meal.calories.toInt()} kcal  •  P${meal.proteinG.toInt()} C${meal.carbsG.toInt()} F${meal.fatG.toInt()}',
         ),
@@ -263,7 +269,10 @@ class DietPlanScreen extends ConsumerWidget {
           children: [
             Text(
               'Ingredients for ${meal.name}',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: T1Spacing.md),
             ...meal.ingredients.map((ing) => Padding(

@@ -47,7 +47,7 @@ class AlertsList extends StatelessWidget {
     Color bgColor,
   ) {
     final theme = Theme.of(context);
-    
+
     return DmCard(
       padding: const EdgeInsets.all(12),
       color: bgColor,

@@ -34,4 +34,3 @@ class AuthProfileMissing extends AuthState {
   final String userId;
   const AuthProfileMissing(this.userId);
 }
-

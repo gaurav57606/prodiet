@@ -76,8 +76,8 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
                   stepData.text,
                   key: ValueKey('text_$_currentStep'),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                        fontWeight: FontWeight.w600,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -86,7 +86,8 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
                 width: 200,
                 child: LinearProgressIndicator(
                   value: (_currentStep + 1) / 4,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -94,9 +95,12 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
               Text(
                 "This usually takes 5–10 seconds",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
+                      fontStyle: FontStyle.italic,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.5),
+                    ),
               ),
             ],
           ),

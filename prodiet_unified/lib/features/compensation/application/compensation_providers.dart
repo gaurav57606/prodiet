@@ -22,7 +22,9 @@ final compensationRepositoryProvider = Provider<CompensationRepository>((ref) {
   );
 });
 
-final compensationHistoryProvider = FutureProvider.family<List<CompensationLog>, String>((ref, userId) async {
-  final result = await ref.watch(compensationRepositoryProvider).getHistory(userId);
+final compensationHistoryProvider =
+    FutureProvider.family<List<CompensationLog>, String>((ref, userId) async {
+  final result =
+      await ref.watch(compensationRepositoryProvider).getHistory(userId);
   return result.fold((e) => [], (logs) => logs);
 });

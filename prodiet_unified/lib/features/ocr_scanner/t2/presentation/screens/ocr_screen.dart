@@ -49,7 +49,8 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
         elevation: 0,
         title: Text(
           "BILL SCANNER",
-          style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, letterSpacing: 1.2),
+          style: GoogleFonts.barlowCondensed(
+              fontWeight: FontWeight.w900, letterSpacing: 1.2),
         ),
         leading: IconButton(
           icon: const Icon(Icons.close_rounded, color: Colors.white),
@@ -57,8 +58,11 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
         ),
       ),
       body: ocrAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: T2Colors.lime)),
-        error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.white))),
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: T2Colors.lime)),
+        error: (err, stack) => Center(
+            child: Text('Error: $err',
+                style: const TextStyle(color: Colors.white))),
         data: (result) {
           if (result == null) {
             return _buildEmptyState(context);
@@ -85,13 +89,15 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: _buildActionBtn(context, "CAMERA", Icons.camera_alt_rounded, 
-                    onTap: () => _pickImage(ImageSource.camera)),
+                  child: _buildActionBtn(
+                      context, "CAMERA", Icons.camera_alt_rounded,
+                      onTap: () => _pickImage(ImageSource.camera)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionBtn(context, "GALLERY", Icons.photo_library_rounded, 
-                    onTap: () => _pickImage(ImageSource.gallery)),
+                  child: _buildActionBtn(
+                      context, "GALLERY", Icons.photo_library_rounded,
+                      onTap: () => _pickImage(ImageSource.gallery)),
                 ),
               ],
             ),
@@ -101,7 +107,8 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
     );
   }
 
-  Widget _buildActionBtn(BuildContext context, String label, IconData icon, {VoidCallback? onTap}) {
+  Widget _buildActionBtn(BuildContext context, String label, IconData icon,
+      {VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -115,14 +122,19 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
           children: [
             Icon(icon, color: T2Colors.lime, size: 32),
             const SizedBox(height: 12),
-            Text(label, style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, fontSize: 16, color: Colors.white)),
+            Text(label,
+                style: GoogleFonts.barlowCondensed(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                    color: Colors.white)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildResultsView(BuildContext context, ThemeData theme, OcrResult result) {
+  Widget _buildResultsView(
+      BuildContext context, ThemeData theme, OcrResult result) {
     final userId = ref.watch(currentUserIdProvider);
 
     return Column(
@@ -132,7 +144,10 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
             'FOUND ${result.itemCount} ITEMS 🎉',
-            style: GoogleFonts.barlowCondensed(fontSize: 40, fontWeight: FontWeight.w900, color: T2Colors.lime),
+            style: GoogleFonts.barlowCondensed(
+                fontSize: 40,
+                fontWeight: FontWeight.w900,
+                color: T2Colors.lime),
           ),
         ),
         Expanded(
@@ -143,15 +158,20 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
             itemBuilder: (context, index) {
               final item = result.items[index];
               return DmCard(
-                onTap: () => ref.read(ocrStateProvider.notifier).toggleItemSelection(index),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                onTap: () => ref
+                    .read(ocrStateProvider.notifier)
+                    .toggleItemSelection(index),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: [
                     Theme(
                       data: ThemeData(unselectedWidgetColor: T2Colors.border),
                       child: Checkbox(
                         value: item.isSelected,
-                        onChanged: (_) => ref.read(ocrStateProvider.notifier).toggleItemSelection(index),
+                        onChanged: (_) => ref
+                            .read(ocrStateProvider.notifier)
+                            .toggleItemSelection(index),
                         activeColor: T2Colors.lime,
                         checkColor: Colors.black,
                       ),
@@ -161,15 +181,30 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.name.toUpperCase(), style: GoogleFonts.barlowCondensed(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-                          Text('${item.quantity} ${item.unit}', style: const TextStyle(fontSize: 11, color: T2Colors.textSecondary, fontWeight: FontWeight.w600)),
+                          Text(item.name.toUpperCase(),
+                              style: GoogleFonts.barlowCondensed(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white)),
+                          Text('${item.quantity} ${item.unit}',
+                              style: const TextStyle(
+                                  fontSize: 11,
+                                  color: T2Colors.textSecondary,
+                                  fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: T2Colors.lime.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4)),
-                      child: Text(item.category.toUpperCase(), style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: T2Colors.lime)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                          color: T2Colors.lime.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Text(item.category.toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              color: T2Colors.lime)),
                     ),
                   ],
                 ),
@@ -182,7 +217,8 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
     );
   }
 
-  Widget _buildBottomActions(BuildContext context, OcrResult result, String userId) {
+  Widget _buildBottomActions(
+      BuildContext context, OcrResult result, String userId) {
     final selectedItems = result.selectedItems;
     final selectedCount = selectedItems.length;
 
@@ -198,49 +234,65 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
           DmButton(
             label: "ADD $selectedCount TO PANTRY",
             isLoading: _isSaving,
-            onPressed: selectedCount > 0 ? () async {
-              setState(() => _isSaving = true);
-              try {
-                final itemsToAdd = selectedItems.map((i) => {
-                  'name': i.name,
-                  'quantity': i.quantity,
-                  'unit': i.unit,
-                  'category': i.category,
-                }).toList();
-                
-                await ref.read(inventoryRepositoryProvider).addItemsFromOcr(userId, itemsToAdd);
-                
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("$selectedCount ITEMS ADDED ✅", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
-                      backgroundColor: T2Colors.lime,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                  Navigator.pop(context);
-                }
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("FAILED TO SAVE: $e", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
-                      backgroundColor: T2Colors.coral,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              } finally {
-                if (mounted) setState(() => _isSaving = false);
-              }
-            } : null,
+            onPressed: selectedCount > 0
+                ? () async {
+                    setState(() => _isSaving = true);
+                    try {
+                      final itemsToAdd = selectedItems
+                          .map((i) => {
+                                'name': i.name,
+                                'quantity': i.quantity,
+                                'unit': i.unit,
+                                'category': i.category,
+                              })
+                          .toList();
+
+                      await ref
+                          .read(inventoryRepositoryProvider)
+                          .addItemsFromOcr(userId, itemsToAdd);
+
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("$selectedCount ITEMS ADDED ✅",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.black)),
+                            backgroundColor: T2Colors.lime,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("FAILED TO SAVE: $e",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white)),
+                            backgroundColor: T2Colors.coral,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    } finally {
+                      if (mounted) setState(() => _isSaving = false);
+                    }
+                  }
+                : null,
           ),
           const SizedBox(height: 12),
           TextButton(
             onPressed: () => ref.read(ocrStateProvider.notifier).reset(),
             child: const Text(
               'SCAN AGAIN',
-              style: TextStyle(color: T2Colors.textMuted, fontWeight: FontWeight.w900, letterSpacing: 1.2, fontSize: 12),
+              style: TextStyle(
+                  color: T2Colors.textMuted,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                  fontSize: 12),
             ),
           ),
         ],

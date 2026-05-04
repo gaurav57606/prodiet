@@ -13,5 +13,6 @@ class ScannedItem with _$ScannedItem {
     @Default(true) bool isSelected,
   }) = _ScannedItem;
 
-  factory ScannedItem.fromJson(Map<String, dynamic> json) => _$ScannedItemFromJson(json);
+  factory ScannedItem.fromJson(Map<String, dynamic> json) =>
+      _$ScannedItemFromJson(json);
 }

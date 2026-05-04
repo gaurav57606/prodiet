@@ -18,16 +18,18 @@ class ProgressRepository {
 
   ProgressRepository(this._supabase);
 
-  Future<List<WeightEntry>> getWeightHistory(String userId, {int days = 30}) async {
-    final startDate = DateTime.now().subtract(Duration(days: days)).toIso8601String();
-    
+  Future<List<WeightEntry>> getWeightHistory(String userId,
+      {int days = 30}) async {
+    final startDate =
+        DateTime.now().subtract(Duration(days: days)).toIso8601String();
+
     final response = await _supabase
         .from('weight_logs')
         .select()
         .eq('user_id', userId)
         .gte('logged_at', startDate)
         .order('logged_at', ascending: true);
-    
+
     return (response as List).map((row) => WeightEntry.fromJson(row)).toList();
   }
 
@@ -42,20 +44,25 @@ class ProgressRepository {
     // 2. Update current weight in users table
     await _supabase
         .from('users')
-        .update({'weight_kg': weightKg})
-        .eq('id', userId);
+        .update({'weight_kg': weightKg}).eq('id', userId);
   }
 
-  Future<ProgressSummary> getProgressSummary(String userId, {int days = 30}) async {
+  Future<ProgressSummary> getProgressSummary(String userId,
+      {int days = 30}) async {
     final results = await Future.wait<dynamic>([
       getWeightHistory(userId, days: days),
-      _supabase.from('users').select('target_weight_kg, weight_kg').eq('id', userId).single(),
+      _supabase
+          .from('users')
+          .select('target_weight_kg, weight_kg')
+          .eq('id', userId)
+          .single(),
     ]);
 
     final entries = results[0] as List<WeightEntry>;
     final userProfile = results[1] as Map<String, dynamic>;
-    
-    final targetWeight = (userProfile['target_weight_kg'] as num? ?? 70.0).toDouble();
+
+    final targetWeight =
+        (userProfile['target_weight_kg'] as num? ?? 70.0).toDouble();
     final initialWeight = (userProfile['weight_kg'] as num? ?? 70.0).toDouble();
 
     return ProgressSummary.calculate(entries, targetWeight, initialWeight);

@@ -33,7 +33,8 @@ class Meal {
       ingredients: (json['ingredients'] as List? ?? [])
           .map((i) => Ingredient.fromJson(i))
           .toList(),
-      nutritionalValues: NutritionalValues.fromJson(json['nutritional_values'] ?? {}),
+      nutritionalValues:
+          NutritionalValues.fromJson(json['nutritional_values'] ?? {}),
       scheduledTime: DateTime.parse(json['scheduled_time']),
       status: json['status'],
       date: DateTime.parse(json['date']),

@@ -40,7 +40,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ));
       }
     });
-    
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -81,10 +81,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               prefixIcon: const Icon(Icons.lock_outline, size: 20),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  _obscurePassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   size: 20,
                 ),
-                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
               ),
             ),
             Align(
@@ -106,9 +109,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               onPressed: () {
                 if (isLoading) return;
                 ref.read(authProvider.notifier).signIn(
-                  _emailController.text.trim(),
-                  _passwordController.text.trim(),
-                );
+                      _emailController.text.trim(),
+                      _passwordController.text.trim(),
+                    );
               },
             ),
             const SizedBox(height: T2Spacing.xl),
@@ -130,7 +133,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               label: "Continue with Google",
               variant: DmButtonVariant.outline,
               icon: Icons.g_mobiledata,
-              onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
+              onPressed: () =>
+                  ref.read(authProvider.notifier).signInWithGoogle(),
             ),
             const SizedBox(height: T2Spacing.lg),
             Center(
@@ -161,4 +165,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
-

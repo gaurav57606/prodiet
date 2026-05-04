@@ -15,7 +15,8 @@ class AnalyticsService {
   AnalyticsService(this._client);
 
   // ── SESSION ──────────────────────────────────────────
-  Future<void> startSession(String userId, {
+  Future<void> startSession(
+    String userId, {
     required String deviceModel,
     required String osVersion,
     required String appVersion,
@@ -36,10 +37,8 @@ class AnalyticsService {
   Future<void> endSession(String userId) async {
     if (_currentSessionId == null) return;
     final now = DateTime.now();
-    await _client
-      .from('user_sessions')
-      .update({'session_end': now.toIso8601String()})
-      .eq('id', _currentSessionId!);
+    await _client.from('user_sessions').update(
+        {'session_end': now.toIso8601String()}).eq('id', _currentSessionId!);
     _currentSessionId = null;
   }
 
@@ -89,18 +88,18 @@ class AnalyticsService {
   }
 
   // ── PREDEFINED EVENT CONSTANTS ─────────────────────────
-  static const String kMealLogged       = 'meal_logged';
-  static const String kMealSkipped      = 'meal_skipped';
-  static const String kWaterLogged      = 'water_logged';
-  static const String kOcrScanStarted   = 'ocr_scan_started';
-  static const String kOcrScanSuccess   = 'ocr_scan_success';
-  static const String kOcrScanFailed    = 'ocr_scan_failed';
-  static const String kAiPlanGenerated  = 'ai_plan_generated';
-  static const String kAiCacheHit       = 'ai_cache_hit';
+  static const String kMealLogged = 'meal_logged';
+  static const String kMealSkipped = 'meal_skipped';
+  static const String kWaterLogged = 'water_logged';
+  static const String kOcrScanStarted = 'ocr_scan_started';
+  static const String kOcrScanSuccess = 'ocr_scan_success';
+  static const String kOcrScanFailed = 'ocr_scan_failed';
+  static const String kAiPlanGenerated = 'ai_plan_generated';
+  static const String kAiCacheHit = 'ai_cache_hit';
   static const String kCompensationUsed = 'compensation_used';
-  static const String kVendorRedirect   = 'vendor_redirect';
-  static const String kProgressLogged   = 'progress_logged';
-  static const String kAchievementEarned= 'achievement_earned';
+  static const String kVendorRedirect = 'vendor_redirect';
+  static const String kProgressLogged = 'progress_logged';
+  static const String kAchievementEarned = 'achievement_earned';
   static const String kInventoryUpdated = 'inventory_updated';
-  static const String kSyncCompleted    = 'sync_completed';
+  static const String kSyncCompleted = 'sync_completed';
 }

@@ -11,19 +11,21 @@ final nutritionRepositoryProvider = Provider<NutritionRepository>((ref) {
   );
 });
 
-final nutritionSearchProvider =
-    FutureProvider.family.autoDispose<List<NutritionItem>, String>((ref, query) async {
+final nutritionSearchProvider = FutureProvider.family
+    .autoDispose<List<NutritionItem>, String>((ref, query) async {
   if (query.trim().length < 2) return [];
-  
+
   final userId = ref.watch(currentUserProvider)?.id;
   if (userId == null) return [];
 
-  final result = await ref.watch(nutritionRepositoryProvider).searchByName(userId, query);
+  final result =
+      await ref.watch(nutritionRepositoryProvider).searchByName(userId, query);
   return result.fold((e) => [], (items) => items);
 });
 
-final barcodeLookupProvider =
-    FutureProvider.family.autoDispose<NutritionItem?, String>((ref, barcode) async {
-  final result = await ref.watch(nutritionRepositoryProvider).lookupByBarcode(barcode);
+final barcodeLookupProvider = FutureProvider.family
+    .autoDispose<NutritionItem?, String>((ref, barcode) async {
+  final result =
+      await ref.watch(nutritionRepositoryProvider).lookupByBarcode(barcode);
   return result.fold((e) => null, (item) => item);
 });

@@ -44,14 +44,19 @@ class DmLoader extends StatelessWidget {
     }
 
     return Shimmer.fromColors(
-      baseColor: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05),
-      highlightColor: isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.02),
+      baseColor: isDark
+          ? Colors.white.withOpacity(0.05)
+          : Colors.black.withOpacity(0.05),
+      highlightColor: isDark
+          ? Colors.white.withOpacity(0.1)
+          : Colors.black.withOpacity(0.02),
       child: Container(
         width: width ?? double.infinity,
         height: height ?? 20,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(borderRadius ?? T1Spacing.radiusMd),
+          borderRadius:
+              BorderRadius.circular(borderRadius ?? T1Spacing.radiusMd),
         ),
       ),
     );

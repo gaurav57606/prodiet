@@ -9,7 +9,7 @@ class RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     final accentColor = meal.mealType == 'breakfast'
         ? const Color(0xFFFFB870)
         : meal.mealType == 'lunch'
@@ -43,7 +43,9 @@ class RecipeCard extends StatelessWidget {
                   ),
                   child: Center(
                     child: Icon(
-                      meal.mealType == 'breakfast' ? Icons.wb_sunny_rounded : Icons.restaurant_rounded,
+                      meal.mealType == 'breakfast'
+                          ? Icons.wb_sunny_rounded
+                          : Icons.restaurant_rounded,
                       size: 48,
                       color: accentColor.withValues(alpha: 0.3),
                     ),
@@ -59,7 +61,8 @@ class RecipeCard extends StatelessWidget {
                         color: Color(0xFF40D8B8),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.check, size: 12, color: Colors.white),
+                      child: const Icon(Icons.check,
+                          size: 12, color: Colors.white),
                     ),
                   ),
               ],
@@ -96,9 +99,18 @@ class RecipeCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildMacro(theme, 'P', '${meal.nutritionalValues.proteinG}g', const Color(0xFFFF3060)),
-                      _buildMacro(theme, 'C', '${meal.nutritionalValues.carbsG}g', const Color(0xFFFFB870)),
-                      _buildMacro(theme, 'F', '${meal.nutritionalValues.fatG}g', const Color(0xFF40D8B8)),
+                      _buildMacro(
+                          theme,
+                          'P',
+                          '${meal.nutritionalValues.proteinG}g',
+                          const Color(0xFFFF3060)),
+                      _buildMacro(
+                          theme,
+                          'C',
+                          '${meal.nutritionalValues.carbsG}g',
+                          const Color(0xFFFFB870)),
+                      _buildMacro(theme, 'F', '${meal.nutritionalValues.fatG}g',
+                          const Color(0xFF40D8B8)),
                     ],
                   ),
                 ],

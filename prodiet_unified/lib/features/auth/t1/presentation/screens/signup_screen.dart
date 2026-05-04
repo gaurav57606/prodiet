@@ -24,7 +24,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     if (pass.length > 6) strength = 2;
     if (pass.length > 8 && pass.contains(RegExp(r'[0-9]'))) strength = 3;
     if (pass.length > 10 && pass.contains(RegExp(r'[!@#\$&*~]'))) strength = 4;
-    
+
     if (strength != _passwordStrength) {
       setState(() => _passwordStrength = strength);
     }
@@ -58,7 +59,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Future<void> _signUp() async {
     if (!_agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please agree to the Terms and Privacy Policy')),
+        const SnackBar(
+            content: Text('Please agree to the Terms and Privacy Policy')),
       );
       return;
     }
@@ -90,15 +92,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     }
 
     await ref.read(authProvider.notifier).signUp(
-      email,
-      password,
-      '$firstName $lastName'.trim(),
-    );
+          email,
+          password,
+          '$firstName $lastName'.trim(),
+        );
   }
 
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Theme.of(context).colorScheme.error),
+      SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).colorScheme.error),
     );
   }
 
@@ -209,14 +213,18 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
+                                color: _selectedTab == 0
+                                    ? scheme.primary
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 0
+                                        ? scheme.onSurface
+                                        : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -230,14 +238,18 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
+                                color: _selectedTab == 1
+                                    ? scheme.primary
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 1
+                                        ? scheme.onSurface
+                                        : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -309,11 +321,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
                         color: scheme.onSurface.withOpacity(0.3),
                         size: 20,
                       ),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -325,9 +340,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           height: 3,
                           margin: EdgeInsets.only(right: index == 3 ? 0 : 4),
                           decoration: BoxDecoration(
-                            color: index < _passwordStrength 
-                              ? scheme.primary 
-                              : scheme.outline.withOpacity(0.2),
+                            color: index < _passwordStrength
+                                ? scheme.primary
+                                : scheme.outline.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -344,11 +359,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     obscureText: _obscureConfirmPassword,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        _obscureConfirmPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
                         color: scheme.onSurface.withOpacity(0.3),
                         size: 20,
                       ),
-                      onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                      onPressed: () => setState(() =>
+                          _obscureConfirmPassword = !_obscureConfirmPassword),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -361,16 +379,20 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         height: 24,
                         child: Checkbox(
                           value: _agreedToTerms,
-                          onChanged: (val) => setState(() => _agreedToTerms = val ?? false),
+                          onChanged: (val) =>
+                              setState(() => _agreedToTerms = val ?? false),
                           activeColor: scheme.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(color: scheme.onSurface.withOpacity(0.6), fontSize: 13),
+                            style: TextStyle(
+                                color: scheme.onSurface.withOpacity(0.6),
+                                fontSize: 13),
                             children: [
                               const TextSpan(text: 'I agree to the '),
                               TextSpan(
@@ -425,7 +447,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           label: 'Google',
                           variant: DmButtonVariant.outline,
                           icon: Icons.g_mobiledata_rounded,
-                          onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
+                          onPressed: () => ref
+                              .read(authProvider.notifier)
+                              .signInWithGoogle(),
                         ),
                       ),
                       const SizedBox(width: 16),

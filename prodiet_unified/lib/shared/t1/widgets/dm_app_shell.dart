@@ -68,19 +68,23 @@ class _DmAppShellState extends State<DmAppShell> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(context, Icons.home_rounded, Icons.home_outlined, 'Home', 0),
-            _navItem(context, Icons.restaurant_rounded, Icons.restaurant_outlined, 'Meals', 1),
+            _navItem(
+                context, Icons.home_rounded, Icons.home_outlined, 'Home', 0),
+            _navItem(context, Icons.restaurant_rounded,
+                Icons.restaurant_outlined, 'Meals', 1),
             const SizedBox(width: 56), // space for FAB
-            _navItem(context, Icons.inventory_2_rounded, Icons.inventory_2_outlined, 'Pantry', 2),
-            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Program', 3),
+            _navItem(context, Icons.inventory_2_rounded,
+                Icons.inventory_2_outlined, 'Pantry', 2),
+            _navItem(context, Icons.calendar_month_rounded,
+                Icons.calendar_month_outlined, 'Program', 3),
           ],
         ),
       ),
     );
   }
 
-  Widget _navItem(BuildContext ctx, IconData filled, IconData outlined, 
-                  String label, int index) {
+  Widget _navItem(BuildContext ctx, IconData filled, IconData outlined,
+      String label, int index) {
     final isActive = _currentIndex == index;
     final theme = Theme.of(ctx);
     final scheme = theme.colorScheme;
@@ -93,10 +97,10 @@ class _DmAppShellState extends State<DmAppShell> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(isActive ? filled : outlined,
-              color: isActive ? activeColor : inactiveColor,
-              size: 24),
+              color: isActive ? activeColor : inactiveColor, size: 24),
           const SizedBox(height: 2),
-          Text(label,
+          Text(
+            label,
             style: theme.textTheme.labelSmall?.copyWith(
               fontSize: 9,
               fontWeight: FontWeight.w700,

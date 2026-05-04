@@ -11,7 +11,8 @@ class WaterSummary {
     required this.targetGlasses,
   });
 
-  double get percentFilled => targetMl > 0 ? (totalMl / targetMl).clamp(0.0, 1.0) : 0.0;
+  double get percentFilled =>
+      targetMl > 0 ? (totalMl / targetMl).clamp(0.0, 1.0) : 0.0;
   bool get isGoalReached => totalMl >= targetMl;
 
   factory WaterSummary.calculate(List<dynamic> logs, int targetMl) {

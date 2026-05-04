@@ -36,9 +36,9 @@ class T2Colors {
   static const Color bgDeep = Color(0xFF272720);
 
   // Amoled
-  static const Color amoledSurface    = Color(0xFF000000);
-  static const Color amoledElevated   = Color(0xFF0A0A0A);
-  static const Color amoledDeep       = Color(0xFF111110);
+  static const Color amoledSurface = Color(0xFF000000);
+  static const Color amoledElevated = Color(0xFF0A0A0A);
+  static const Color amoledDeep = Color(0xFF111110);
 
   // Text
   static const Color textPrimary = Color(0xFFF2F2EC);
@@ -63,7 +63,8 @@ final t2LightScheme = ColorScheme(
   onError: Colors.white,
   surface: const Color(0xFFF5F5F0),
   onSurface: Colors.black,
-  surfaceContainerHighest: const Color(0xFFFFFFFF), // Using this as the 'background' equivalent
+  surfaceContainerHighest:
+      const Color(0xFFFFFFFF), // Using this as the 'background' equivalent
   onSurfaceVariant: T2Colors.textMuted,
   outline: const Color(0xFFE0E0DA),
 );

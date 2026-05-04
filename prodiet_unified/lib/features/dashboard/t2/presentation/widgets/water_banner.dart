@@ -17,7 +17,7 @@ class WaterBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const skyColor = T2Colors.sky;
-    
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

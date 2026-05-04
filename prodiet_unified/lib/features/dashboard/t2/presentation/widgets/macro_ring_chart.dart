@@ -27,18 +27,23 @@ class MacroRingChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _buildMacroItem(context, "${(calorieProgress * 100).toInt()}%", "$calories kcal", "Cals", T2Colors.lime, calorieProgress),
+        _buildMacroItem(context, "${(calorieProgress * 100).toInt()}%",
+            "$calories kcal", "Cals", T2Colors.lime, calorieProgress),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "${(proteinProgress * 100).toInt()}%", "${protein}g", "Protein", T2Colors.coral, proteinProgress),
+        _buildMacroItem(context, "${(proteinProgress * 100).toInt()}%",
+            "${protein}g", "Protein", T2Colors.coral, proteinProgress),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "${(carbsProgress * 100).toInt()}%", "${carbs}g", "Carbs", T2Colors.amber, carbsProgress),
+        _buildMacroItem(context, "${(carbsProgress * 100).toInt()}%",
+            "${carbs}g", "Carbs", T2Colors.amber, carbsProgress),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "${(fatProgress * 100).toInt()}%", "${fat}g", "Fat", T2Colors.purple, fatProgress),
+        _buildMacroItem(context, "${(fatProgress * 100).toInt()}%", "${fat}g",
+            "Fat", T2Colors.purple, fatProgress),
       ],
     );
   }
 
-  Widget _buildMacroItem(BuildContext context, String percentStr, String gramStr, String label, Color color, double percent) {
+  Widget _buildMacroItem(BuildContext context, String percentStr,
+      String gramStr, String label, Color color, double percent) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
