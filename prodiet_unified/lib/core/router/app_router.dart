@@ -11,56 +11,101 @@ import 'package:prodiet_unified/shared/t1/widgets/dm_app_shell.dart';
 import 'package:prodiet_unified/shared/t2/layout/scaffold_with_nav_bar.dart';
 
 // T1 Screens
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/splash_screen.dart' as t1_splash;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/onboarding_screen.dart' as t1_onboarding;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/login_screen.dart' as t1_login;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/signup_screen.dart' as t1_signup;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/forgot_password_screen.dart' as t1_forgot_password;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/health_goals_screen.dart' as t1_health_goals;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart' as t1_verify_phone;
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1_dashboard;
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/today_meals_screen.dart' as t1_today_meals;
-import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_screen.dart' as t1_diet_plan;
-import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_detail_screen.dart' as t1_diet_plan_detail;
-import 'package:prodiet_unified/features/meal_planner/t1/presentation/screens/meal_planner_screen.dart' as t1_meal_planner;
-import 'package:prodiet_unified/features/inventory/t1/presentation/screens/inventory_screen.dart' as t1_inventory;
-import 'package:prodiet_unified/features/progress/t1/presentation/screens/progress_screen.dart' as t1_progress;
-import 'package:prodiet_unified/features/nutrition/t1/presentation/screens/nutrition_screen.dart' as t1_nutrition;
-import 'package:prodiet_unified/features/shopping_list/t1/presentation/screens/shopping_list_screen.dart' as t1_shopping;
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/hydration_screen.dart' as t1_hydration;
-import 'package:prodiet_unified/features/progress/t1/presentation/screens/activity_sync_screen.dart' as t1_activity_sync;
-import 'package:prodiet_unified/features/ocr_scanner/t1/presentation/screens/ocr_scanner_screen.dart' as t1_ocr;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/profile_screen.dart' as t1_profile;
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/preferences_screen.dart' as t1_preferences;
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/notifications_screen.dart' as t1_notifications;
-import 'package:prodiet_unified/features/recipe/t1/presentation/screens/recipe_screen.dart' as t1_recipe;
-import 'package:prodiet_unified/features/achievements/presentation/screens/achievements_screen.dart' as achievements;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/splash_screen.dart'
+    as t1_splash;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/onboarding_screen.dart'
+    as t1_onboarding;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/login_screen.dart'
+    as t1_login;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/signup_screen.dart'
+    as t1_signup;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/forgot_password_screen.dart'
+    as t1_forgot_password;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/health_goals_screen.dart'
+    as t1_health_goals;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/verify_phone_screen.dart'
+    as t1_verify_phone;
+import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart'
+    as t1_dashboard;
+import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/today_meals_screen.dart'
+    as t1_today_meals;
+import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_screen.dart'
+    as t1_diet_plan;
+import 'package:prodiet_unified/features/diet_plan/t1/presentation/screens/diet_plan_detail_screen.dart'
+    as t1_diet_plan_detail;
+import 'package:prodiet_unified/features/meal_planner/t1/presentation/screens/meal_planner_screen.dart'
+    as t1_meal_planner;
+import 'package:prodiet_unified/features/inventory/t1/presentation/screens/inventory_screen.dart'
+    as t1_inventory;
+import 'package:prodiet_unified/features/progress/t1/presentation/screens/progress_screen.dart'
+    as t1_progress;
+import 'package:prodiet_unified/features/nutrition/t1/presentation/screens/nutrition_screen.dart'
+    as t1_nutrition;
+import 'package:prodiet_unified/features/shopping_list/t1/presentation/screens/shopping_list_screen.dart'
+    as t1_shopping;
+import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/hydration_screen.dart'
+    as t1_hydration;
+import 'package:prodiet_unified/features/progress/t1/presentation/screens/activity_sync_screen.dart'
+    as t1_activity_sync;
+import 'package:prodiet_unified/features/ocr_scanner/t1/presentation/screens/ocr_scanner_screen.dart'
+    as t1_ocr;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/profile_screen.dart'
+    as t1_profile;
+import 'package:prodiet_unified/features/auth/t1/presentation/screens/preferences_screen.dart'
+    as t1_preferences;
+import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/notifications_screen.dart'
+    as t1_notifications;
+import 'package:prodiet_unified/features/recipe/t1/presentation/screens/recipe_screen.dart'
+    as t1_recipe;
+import 'package:prodiet_unified/features/achievements/presentation/screens/achievements_screen.dart'
+    as achievements;
 
 // T2 Screens
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/splash_screen.dart' as t2_splash;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/onboarding_screen.dart' as t2_onboarding;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/login_screen.dart' as t2_login;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/signup_screen.dart' as t2_signup;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/forgot_password_screen.dart' as t2_forgot_password;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/verify_phone_screen.dart' as t2_verify_phone;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/privacy_policy_screen.dart' as t2_privacy;
-import 'package:prodiet_unified/features/auth/t2/presentation/screens/terms_of_service_screen.dart' as t2_terms;
-import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2_dashboard;
-import 'package:prodiet_unified/features/meal_planner/t2/presentation/screens/meal_planner_screen.dart' as t2_meal_planner;
-import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_screen.dart' as t2_diet_plan;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/splash_screen.dart'
+    as t2_splash;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/onboarding_screen.dart'
+    as t2_onboarding;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/login_screen.dart'
+    as t2_login;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/signup_screen.dart'
+    as t2_signup;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/forgot_password_screen.dart'
+    as t2_forgot_password;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/verify_phone_screen.dart'
+    as t2_verify_phone;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/privacy_policy_screen.dart'
+    as t2_privacy;
+import 'package:prodiet_unified/features/auth/t2/presentation/screens/terms_of_service_screen.dart'
+    as t2_terms;
+import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart'
+    as t2_dashboard;
+import 'package:prodiet_unified/features/meal_planner/t2/presentation/screens/meal_planner_screen.dart'
+    as t2_meal_planner;
+import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_screen.dart'
+    as t2_diet_plan;
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
-import 'package:prodiet_unified/features/inventory/t2/presentation/screens/inventory_screen.dart' as t2_inventory;
-import 'package:prodiet_unified/features/voice/t2/presentation/screens/voice_screen.dart' as t2_voice;
-import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_detail_screen.dart' as t2_diet_plan_detail;
-import 'package:prodiet_unified/features/water/t2/presentation/screens/water_screen.dart' as t2_water;
-import 'package:prodiet_unified/features/ocr_scanner/t2/presentation/screens/ocr_screen.dart' as t2_ocr;
-import 'package:prodiet_unified/features/recipe/t2/presentation/screens/recipe_screen.dart' as t2_recipe;
-import 'package:prodiet_unified/features/compensation/t2/presentation/screens/compensation_screen.dart' as t2_compensation;
-import 'package:prodiet_unified/features/vendor/t2/presentation/screens/vendor_screen.dart' as t2_vendor;
-import 'package:prodiet_unified/features/fitband/t2/presentation/screens/fitband_screen.dart' as t2_fitband;
-import 'package:prodiet_unified/features/preferences/t2/presentation/screens/preferences_screen.dart' as t2_preferences;
+import 'package:prodiet_unified/features/inventory/t2/presentation/screens/inventory_screen.dart'
+    as t2_inventory;
+import 'package:prodiet_unified/features/voice/t2/presentation/screens/voice_screen.dart'
+    as t2_voice;
+import 'package:prodiet_unified/features/diet_plan/t2/presentation/screens/diet_plan_detail_screen.dart'
+    as t2_diet_plan_detail;
+import 'package:prodiet_unified/features/water/t2/presentation/screens/water_screen.dart'
+    as t2_water;
+import 'package:prodiet_unified/features/ocr_scanner/t2/presentation/screens/ocr_screen.dart'
+    as t2_ocr;
+import 'package:prodiet_unified/features/recipe/t2/presentation/screens/recipe_screen.dart'
+    as t2_recipe;
+import 'package:prodiet_unified/features/compensation/t2/presentation/screens/compensation_screen.dart'
+    as t2_compensation;
+import 'package:prodiet_unified/features/vendor/t2/presentation/screens/vendor_screen.dart'
+    as t2_vendor;
+import 'package:prodiet_unified/features/fitband/t2/presentation/screens/fitband_screen.dart'
+    as t2_fitband;
+import 'package:prodiet_unified/features/preferences/t2/presentation/screens/preferences_screen.dart'
+    as t2_preferences;
 import 'package:prodiet_unified/core/services/fcm_service.dart';
 
 class AppRoutes {
@@ -144,9 +189,12 @@ class AppRoutes {
   static const String t2ProfileRetry = '/t2/profile-retry';
 }
 
-final GlobalKey<NavigatorState> appRouterNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellT1Key = GlobalKey<NavigatorState>(debugLabel: 'shellT1');
-final GlobalKey<NavigatorState> _shellT2Key = GlobalKey<NavigatorState>(debugLabel: 'shellT2');
+final GlobalKey<NavigatorState> appRouterNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellT1Key =
+    GlobalKey<NavigatorState>(debugLabel: 'shellT1');
+final GlobalKey<NavigatorState> _shellT2Key =
+    GlobalKey<NavigatorState>(debugLabel: 'shellT2');
 
 /// Bridges Riverpod auth and theme state changes into GoRouter's
 /// refreshListenable so redirects fire automatically.
@@ -173,125 +221,274 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 GoRouter createAppRouter(ProviderContainer ref) => GoRouter(
-  navigatorKey: appRouterNavigatorKey,
-  initialLocation: '/',
-  refreshListenable: _AppStateNotifier(ref),
-  redirect: (context, state) => redirectLogic(context, state, ref),
-  routes: [
-    // Safe loading fallback for root path
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator(color: Colors.white)),
-      ),
-    ),
-    // Standalone T1/T2 screens
-
-    // T1 Standalone
-    GoRoute(path: AppRoutes.t1Splash, name: 't1Splash', builder: (context, state) => const t1_splash.SplashScreen()),
-    GoRoute(path: AppRoutes.t1Onboarding, name: 't1Onboarding', builder: (context, state) => const t1_onboarding.OnboardingScreen()),
-    GoRoute(path: AppRoutes.t1Login, name: 't1Login', builder: (context, state) => const t1_login.LoginScreen()),
-    GoRoute(path: AppRoutes.t1Signup, name: 't1Signup', builder: (context, state) => const t1_signup.SignupScreen()),
-    GoRoute(path: AppRoutes.t1ForgotPassword, name: 't1ForgotPassword', builder: (context, state) => const t1_forgot_password.ForgotPasswordScreen()),
-    GoRoute(path: AppRoutes.t1HealthGoals, name: 't1HealthGoals', builder: (context, state) => const t1_health_goals.HealthGoalsScreen()),
-    GoRoute(path: AppRoutes.t1VerifyPhone, name: 't1VerifyPhone', builder: (context, state) => const t1_verify_phone.VerifyPhoneScreen()),
-
-    // T1 Shell
-    ShellRoute(
-      navigatorKey: _shellT1Key,
-      builder: (context, state, child) => DmAppShell(child: child),
+      navigatorKey: appRouterNavigatorKey,
+      initialLocation: '/',
+      refreshListenable: _AppStateNotifier(ref),
+      redirect: (context, state) => redirectLogic(context, state, ref),
       routes: [
-        GoRoute(path: AppRoutes.t1Dashboard, name: 't1Dashboard', builder: (context, state) => const t1_dashboard.DashboardScreen()),
-        GoRoute(path: AppRoutes.t1TodayMeals, name: 't1TodayMeals', builder: (context, state) => const t1_today_meals.TodayMealsScreen()),
-        GoRoute(path: AppRoutes.t1DietPlan, name: 't1DietPlan', builder: (context, state) => const t1_diet_plan.DietPlanScreen()),
-        GoRoute(path: AppRoutes.t1MealPlanner, name: 't1MealPlanner', builder: (context, state) => const t1_meal_planner.MealPlannerScreen()),
-        GoRoute(path: AppRoutes.t1Inventory, name: 't1Inventory', builder: (context, state) => const t1_inventory.InventoryScreen()),
-        GoRoute(path: AppRoutes.t1Progress, name: 't1Progress', builder: (context, state) => const t1_progress.ProgressScreen()),
-        GoRoute(path: AppRoutes.t1Nutrition, name: 't1Nutrition', builder: (context, state) => const t1_nutrition.NutritionScreen()),
-        GoRoute(path: AppRoutes.t1Shopping, name: 't1Shopping', builder: (context, state) => const t1_shopping.ShoppingListScreen()),
+        // Safe loading fallback for root path
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const Scaffold(
+            backgroundColor: Colors.black,
+            body: Center(child: CircularProgressIndicator(color: Colors.white)),
+          ),
+        ),
+        // Standalone T1/T2 screens
+
+        // T1 Standalone
+        GoRoute(
+            path: AppRoutes.t1Splash,
+            name: 't1Splash',
+            builder: (context, state) => const t1_splash.SplashScreen()),
+        GoRoute(
+            path: AppRoutes.t1Onboarding,
+            name: 't1Onboarding',
+            builder: (context, state) =>
+                const t1_onboarding.OnboardingScreen()),
+        GoRoute(
+            path: AppRoutes.t1Login,
+            name: 't1Login',
+            builder: (context, state) => const t1_login.LoginScreen()),
+        GoRoute(
+            path: AppRoutes.t1Signup,
+            name: 't1Signup',
+            builder: (context, state) => const t1_signup.SignupScreen()),
+        GoRoute(
+            path: AppRoutes.t1ForgotPassword,
+            name: 't1ForgotPassword',
+            builder: (context, state) =>
+                const t1_forgot_password.ForgotPasswordScreen()),
+        GoRoute(
+            path: AppRoutes.t1HealthGoals,
+            name: 't1HealthGoals',
+            builder: (context, state) =>
+                const t1_health_goals.HealthGoalsScreen()),
+        GoRoute(
+            path: AppRoutes.t1VerifyPhone,
+            name: 't1VerifyPhone',
+            builder: (context, state) =>
+                const t1_verify_phone.VerifyPhoneScreen()),
+
+        // T1 Shell
+        ShellRoute(
+          navigatorKey: _shellT1Key,
+          builder: (context, state, child) => DmAppShell(child: child),
+          routes: [
+            GoRoute(
+                path: AppRoutes.t1Dashboard,
+                name: 't1Dashboard',
+                builder: (context, state) =>
+                    const t1_dashboard.DashboardScreen()),
+            GoRoute(
+                path: AppRoutes.t1TodayMeals,
+                name: 't1TodayMeals',
+                builder: (context, state) =>
+                    const t1_today_meals.TodayMealsScreen()),
+            GoRoute(
+                path: AppRoutes.t1DietPlan,
+                name: 't1DietPlan',
+                builder: (context, state) =>
+                    const t1_diet_plan.DietPlanScreen()),
+            GoRoute(
+                path: AppRoutes.t1MealPlanner,
+                name: 't1MealPlanner',
+                builder: (context, state) =>
+                    const t1_meal_planner.MealPlannerScreen()),
+            GoRoute(
+                path: AppRoutes.t1Inventory,
+                name: 't1Inventory',
+                builder: (context, state) =>
+                    const t1_inventory.InventoryScreen()),
+            GoRoute(
+                path: AppRoutes.t1Progress,
+                name: 't1Progress',
+                builder: (context, state) =>
+                    const t1_progress.ProgressScreen()),
+            GoRoute(
+                path: AppRoutes.t1Nutrition,
+                name: 't1Nutrition',
+                builder: (context, state) =>
+                    const t1_nutrition.NutritionScreen()),
+            GoRoute(
+                path: AppRoutes.t1Shopping,
+                name: 't1Shopping',
+                builder: (context, state) =>
+                    const t1_shopping.ShoppingListScreen()),
+          ],
+        ),
+
+        // T1 Standalone Features
+        GoRoute(
+            path: AppRoutes.t1Hydration,
+            name: 't1Hydration',
+            builder: (context, state) => const t1_hydration.HydrationScreen()),
+        GoRoute(
+          path: AppRoutes.t1DietPlanDetail,
+          name: 't1DietPlanDetail',
+          builder: (context, state) {
+            final meal = state.extra as DietMeal;
+            return t1_diet_plan_detail.DietPlanDetailScreen(meal: meal);
+          },
+        ),
+        GoRoute(
+            path: AppRoutes.t1ActivitySync,
+            name: 't1ActivitySync',
+            builder: (context, state) =>
+                const t1_activity_sync.ActivitySyncScreen()),
+        GoRoute(
+            path: AppRoutes.t1Ocr,
+            name: 't1Ocr',
+            builder: (context, state) => const t1_ocr.OcrScannerScreen()),
+        GoRoute(
+            path: AppRoutes.t1Profile,
+            name: 't1Profile',
+            builder: (context, state) => const t1_profile.ProfileScreen()),
+        GoRoute(
+            path: AppRoutes.t1Notifications,
+            name: 't1Notifications',
+            builder: (context, state) =>
+                const t1_notifications.NotificationsScreen()),
+        GoRoute(
+            path: AppRoutes.t1Recipe,
+            name: 't1Recipe',
+            builder: (context, state) => const t1_recipe.RecipeScreen()),
+        GoRoute(
+            path: AppRoutes.t1Preferences,
+            name: 't1Preferences',
+            builder: (context, state) =>
+                const t1_preferences.PreferencesScreen()),
+        GoRoute(
+            path: AppRoutes.t1Achievements,
+            name: 't1Achievements',
+            builder: (context, state) =>
+                const achievements.AchievementsScreen()),
+
+        // T2 Standalone
+        GoRoute(
+            path: AppRoutes.t2Splash,
+            name: 't2Splash',
+            builder: (context, state) => const t2_splash.SplashScreen()),
+        GoRoute(
+            path: AppRoutes.t2Onboarding,
+            name: 't2Onboarding',
+            builder: (context, state) =>
+                const t2_onboarding.OnboardingScreen()),
+        GoRoute(
+            path: AppRoutes.t2Login,
+            name: 't2Login',
+            builder: (context, state) => const t2_login.LoginScreen()),
+        GoRoute(
+            path: AppRoutes.t2Signup,
+            name: 't2Signup',
+            builder: (context, state) => const t2_signup.SignupScreen()),
+        GoRoute(
+          path: AppRoutes.t2VerifyPhone,
+          name: 't2VerifyPhone',
+          builder: (context, state) {
+            final phone = state.uri.queryParameters['phone'] ?? '';
+            return t2_verify_phone.VerifyPhoneScreen(phone: phone);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.t2ForgotPassword,
+          name: 't2ForgotPassword',
+          builder: (context, state) =>
+              const t2_forgot_password.ForgotPasswordScreen(),
+        ),
+
+        // T2 Shell
+        ShellRoute(
+          navigatorKey: _shellT2Key,
+          builder: (context, state, child) => ScaffoldWithNavBar(child: child),
+          routes: [
+            GoRoute(
+                path: AppRoutes.t2Dashboard,
+                name: 't2Dashboard',
+                builder: (context, state) =>
+                    const t2_dashboard.DashboardScreen()),
+            GoRoute(
+                path: AppRoutes.t2Meals,
+                name: 't2Meals',
+                builder: (context, state) =>
+                    const t2_meal_planner.MealPlannerScreen()),
+            GoRoute(
+                path: AppRoutes.t2DietPlan,
+                name: 't2DietPlan',
+                builder: (context, state) =>
+                    const t2_diet_plan.DietPlanScreen()),
+            GoRoute(
+                path: AppRoutes.t2Inventory,
+                name: 't2Inventory',
+                builder: (context, state) =>
+                    const t2_inventory.InventoryScreen()),
+            GoRoute(
+                path: AppRoutes.t2Voice,
+                name: 't2Voice',
+                builder: (context, state) => const t2_voice.VoiceScreen()),
+          ],
+        ),
+
+        // T2 Standalone Features
+        GoRoute(
+          path: AppRoutes.t2DietPlanDetail,
+          name: 't2DietPlanDetail',
+          builder: (context, state) {
+            final extras = state.extra as Map<String, dynamic>;
+            return t2_diet_plan_detail.DietPlanDetailScreen(
+              plan: extras['plan'] as DietPlan,
+              day: extras['day'] as DietDay,
+            );
+          },
+        ),
+        GoRoute(
+            path: AppRoutes.t2Water,
+            name: 't2Water',
+            builder: (context, state) => const t2_water.WaterScreen()),
+        GoRoute(
+            path: AppRoutes.t2Ocr,
+            name: 't2Ocr',
+            builder: (context, state) => const t2_ocr.OcrScreen()),
+        GoRoute(
+            path: AppRoutes.t2Recipe,
+            name: 't2Recipe',
+            builder: (context, state) => const t2_recipe.RecipeScreen()),
+        GoRoute(
+            path: AppRoutes.t2Compensation,
+            name: 't2Compensation',
+            builder: (context, state) =>
+                const t2_compensation.CompensationScreen()),
+        GoRoute(
+            path: AppRoutes.t2Vendor,
+            name: 't2Vendor',
+            builder: (context, state) => const t2_vendor.VendorScreen()),
+        GoRoute(
+            path: AppRoutes.t2Fitband,
+            name: 't2Fitband',
+            builder: (context, state) => const t2_fitband.FitbandScreen()),
+        GoRoute(
+            path: AppRoutes.t2Preferences,
+            name: 't2Preferences',
+            builder: (context, state) =>
+                const t2_preferences.PreferencesScreen()),
+        GoRoute(
+            path: AppRoutes.t2PrivacyPolicy,
+            name: 't2PrivacyPolicy',
+            builder: (context, state) =>
+                const t2_privacy.PrivacyPolicyScreen()),
+        GoRoute(
+            path: AppRoutes.t2TermsOfService,
+            name: 't2TermsOfService',
+            builder: (context, state) => const t2_terms.TermsOfServiceScreen()),
+        GoRoute(
+          path: AppRoutes.t2ProfileRetry,
+          builder: (context, state) => const _ProfileRetryScreen(),
+        ),
       ],
-    ),
+    );
 
-    // T1 Standalone Features
-    GoRoute(path: AppRoutes.t1Hydration, name: 't1Hydration', builder: (context, state) => const t1_hydration.HydrationScreen()),
-    GoRoute(
-      path: AppRoutes.t1DietPlanDetail,
-      name: 't1DietPlanDetail',
-      builder: (context, state) {
-        final meal = state.extra as DietMeal;
-        return t1_diet_plan_detail.DietPlanDetailScreen(meal: meal);
-      },
-    ),
-    GoRoute(path: AppRoutes.t1ActivitySync, name: 't1ActivitySync', builder: (context, state) => const t1_activity_sync.ActivitySyncScreen()),
-    GoRoute(path: AppRoutes.t1Ocr, name: 't1Ocr', builder: (context, state) => const t1_ocr.OcrScannerScreen()),
-    GoRoute(path: AppRoutes.t1Profile, name: 't1Profile', builder: (context, state) => const t1_profile.ProfileScreen()),
-    GoRoute(path: AppRoutes.t1Notifications, name: 't1Notifications', builder: (context, state) => const t1_notifications.NotificationsScreen()),
-    GoRoute(path: AppRoutes.t1Recipe, name: 't1Recipe', builder: (context, state) => const t1_recipe.RecipeScreen()),
-    GoRoute(path: AppRoutes.t1Preferences, name: 't1Preferences', builder: (context, state) => const t1_preferences.PreferencesScreen()),
-    GoRoute(path: AppRoutes.t1Achievements, name: 't1Achievements', builder: (context, state) => const achievements.AchievementsScreen()),
-
-    // T2 Standalone
-    GoRoute(path: AppRoutes.t2Splash, name: 't2Splash', builder: (context, state) => const t2_splash.SplashScreen()),
-    GoRoute(path: AppRoutes.t2Onboarding, name: 't2Onboarding', builder: (context, state) => const t2_onboarding.OnboardingScreen()),
-    GoRoute(path: AppRoutes.t2Login, name: 't2Login', builder: (context, state) => const t2_login.LoginScreen()),
-    GoRoute(path: AppRoutes.t2Signup, name: 't2Signup', builder: (context, state) => const t2_signup.SignupScreen()),
-    GoRoute(
-      path: AppRoutes.t2VerifyPhone,
-      name: 't2VerifyPhone',
-      builder: (context, state) {
-        final phone = state.uri.queryParameters['phone'] ?? '';
-        return t2_verify_phone.VerifyPhoneScreen(phone: phone);
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.t2ForgotPassword,
-      name: 't2ForgotPassword',
-      builder: (context, state) => const t2_forgot_password.ForgotPasswordScreen(),
-    ),
-
-    // T2 Shell
-    ShellRoute(
-      navigatorKey: _shellT2Key,
-      builder: (context, state, child) => ScaffoldWithNavBar(child: child),
-      routes: [
-        GoRoute(path: AppRoutes.t2Dashboard, name: 't2Dashboard', builder: (context, state) => const t2_dashboard.DashboardScreen()),
-        GoRoute(path: AppRoutes.t2Meals, name: 't2Meals', builder: (context, state) => const t2_meal_planner.MealPlannerScreen()),
-        GoRoute(path: AppRoutes.t2DietPlan, name: 't2DietPlan', builder: (context, state) => const t2_diet_plan.DietPlanScreen()),
-        GoRoute(path: AppRoutes.t2Inventory, name: 't2Inventory', builder: (context, state) => const t2_inventory.InventoryScreen()),
-        GoRoute(path: AppRoutes.t2Voice, name: 't2Voice', builder: (context, state) => const t2_voice.VoiceScreen()),
-      ],
-    ),
-
-    // T2 Standalone Features
-    GoRoute(
-      path: AppRoutes.t2DietPlanDetail, 
-      name: 't2DietPlanDetail', 
-      builder: (context, state) {
-        final extras = state.extra as Map<String, dynamic>;
-        return t2_diet_plan_detail.DietPlanDetailScreen(
-          plan: extras['plan'] as DietPlan,
-          day: extras['day'] as DietDay,
-        );
-      },
-    ),
-    GoRoute(path: AppRoutes.t2Water, name: 't2Water', builder: (context, state) => const t2_water.WaterScreen()),
-    GoRoute(path: AppRoutes.t2Ocr, name: 't2Ocr', builder: (context, state) => const t2_ocr.OcrScreen()),
-    GoRoute(path: AppRoutes.t2Recipe, name: 't2Recipe', builder: (context, state) => const t2_recipe.RecipeScreen()),
-    GoRoute(path: AppRoutes.t2Compensation, name: 't2Compensation', builder: (context, state) => const t2_compensation.CompensationScreen()),
-    GoRoute(path: AppRoutes.t2Vendor, name: 't2Vendor', builder: (context, state) => const t2_vendor.VendorScreen()),
-    GoRoute(path: AppRoutes.t2Fitband, name: 't2Fitband', builder: (context, state) => const t2_fitband.FitbandScreen()),
-    GoRoute(path: AppRoutes.t2Preferences, name: 't2Preferences', builder: (context, state) => const t2_preferences.PreferencesScreen()),
-    GoRoute(path: AppRoutes.t2PrivacyPolicy, name: 't2PrivacyPolicy', builder: (context, state) => const t2_privacy.PrivacyPolicyScreen()),
-    GoRoute(path: AppRoutes.t2TermsOfService, name: 't2TermsOfService', builder: (context, state) => const t2_terms.TermsOfServiceScreen()),
-    GoRoute(
-      path: AppRoutes.t2ProfileRetry,
-      builder: (context, state) => const _ProfileRetryScreen(),
-    ),
-  ],
-);
-
-String? redirectLogic(BuildContext context, GoRouterState state, ProviderContainer ref) {
+String? redirectLogic(
+    BuildContext context, GoRouterState state, ProviderContainer ref) {
   // ── Guard: Wait for theme initialization ──
   final isInitialized = ref.read(activeThemeInitializedProvider);
   if (!isInitialized) return '/';
@@ -300,22 +497,26 @@ String? redirectLogic(BuildContext context, GoRouterState state, ProviderContain
   if (state.matchedLocation == '/') {
     final active = ref.read(activeThemeProvider);
     final isT2 = active == ActiveTheme.t2Dark ||
-                 active == ActiveTheme.t2Light ||
-                 active == ActiveTheme.t2Amoled;
+        active == ActiveTheme.t2Light ||
+        active == ActiveTheme.t2Amoled;
     return isT2 ? '/t2/splash' : '/t1/splash';
   }
 
   // ── Auth guard ──
   final authState = ref.read(authProvider);
   final loc = state.matchedLocation;
-  
+
   const publicRoutes = {
-    '/t1/splash', '/t2/splash',
-    '/t1/login',  '/t2/login',
-    '/t1/signup', '/t2/signup',
+    '/t1/splash',
+    '/t2/splash',
+    '/t1/login',
+    '/t2/login',
+    '/t1/signup',
+    '/t2/signup',
     '/t1/forgot-password',
     '/t2/forgot-password',
-    '/t1/onboarding', '/t2/onboarding',
+    '/t1/onboarding',
+    '/t2/onboarding',
     '/t1/health-goals',
     '/t1/verify-phone',
     '/t2/verify-phone',
@@ -325,8 +526,8 @@ String? redirectLogic(BuildContext context, GoRouterState state, ProviderContain
 
   final activeTheme = ref.read(activeThemeProvider);
   final isT2 = activeTheme == ActiveTheme.t2Dark ||
-               activeTheme == ActiveTheme.t2Light ||
-               activeTheme == ActiveTheme.t2Amoled;
+      activeTheme == ActiveTheme.t2Light ||
+      activeTheme == ActiveTheme.t2Amoled;
 
   if (authState is AuthLoading) {
     if (isPublic) return null;
@@ -376,35 +577,40 @@ class _ProfileRetryScreen extends ConsumerWidget {
               const Text('⏳', style: TextStyle(fontSize: 52)),
               const SizedBox(height: 24),
               Text('Setting up your account',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.barlowCondensed(fontSize: 32,
-                  fontWeight: FontWeight.w900, color: Colors.white)),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.barlowCondensed(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white)),
               const SizedBox(height: 12),
-              const Text('This usually takes just a second.\nTap below if it\'s taking too long.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: T2Colors.textSecondary, fontSize: 14)),
+              const Text(
+                  'This usually takes just a second.\nTap below if it\'s taking too long.',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(color: T2Colors.textSecondary, fontSize: 14)),
               const SizedBox(height: 40),
               if (isLoading)
                 const CircularProgressIndicator(color: T2Colors.lime)
               else
                 ElevatedButton(
                   onPressed: () =>
-                    ref.read(authProvider.notifier).retryProfileLoad(userId),
+                      ref.read(authProvider.notifier).retryProfileLoad(userId),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: T2Colors.lime,
-                    minimumSize: const Size(220, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14))),
+                      backgroundColor: T2Colors.lime,
+                      minimumSize: const Size(220, 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14))),
                   child: const Text('RETRY',
-                    style: TextStyle(color: Colors.black,
-                      fontWeight: FontWeight.w900, fontSize: 16)),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16)),
                 ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () =>
-                  ref.read(authProvider.notifier).signOut(),
+                onPressed: () => ref.read(authProvider.notifier).signOut(),
                 child: const Text('Sign out and try again',
-                  style: TextStyle(color: T2Colors.textMuted)),
+                    style: TextStyle(color: T2Colors.textMuted)),
               ),
             ],
           ),

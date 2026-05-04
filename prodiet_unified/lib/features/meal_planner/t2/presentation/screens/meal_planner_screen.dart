@@ -25,7 +25,9 @@ class MealPlannerScreen extends ConsumerWidget {
       return todayAsync.maybeWhen(
         data: (todaySummary) {
           // Remove any entries from history that match "today" to avoid duplicates
-          final otherDays = weeklyMeals.where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now())).toList();
+          final otherDays = weeklyMeals
+              .where((m) => !DateUtils.isSameDay(m.plannedDate, DateTime.now()))
+              .toList();
           return [...otherDays, ...todaySummary.meals];
         },
         orElse: () => weeklyMeals,
@@ -59,7 +61,8 @@ class MealPlannerScreen extends ConsumerWidget {
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(
                     'WEEKLY PLAN',
                     style: GoogleFonts.barlowCondensed(
@@ -77,7 +80,8 @@ class MealPlannerScreen extends ConsumerWidget {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       // Show last 6 days + today
-                      final date = DateTime.now().subtract(Duration(days: 6 - index));
+                      final date =
+                          DateTime.now().subtract(Duration(days: 6 - index));
                       final dateKey = DateFormat('yyyy-MM-dd').format(date);
                       final dayMeals = groupedMeals[dateKey] ?? [];
                       return Padding(
@@ -105,13 +109,16 @@ class MealPlannerScreen extends ConsumerWidget {
     return grouped;
   }
 
-  Widget _buildWeeklyDayCard(BuildContext context, DateTime date, List<Meal> meals) {
+  Widget _buildWeeklyDayCard(
+      BuildContext context, DateTime date, List<Meal> meals) {
     final isToday = DateUtils.isSameDay(date, DateTime.now());
     final totalCals = meals.fold(0.0, (sum, m) => sum + m.calories);
-    
+
     return Container(
       decoration: BoxDecoration(
-        color: isToday ? T2Colors.lime.withValues(alpha: 0.1) : T2Colors.bgElevated,
+        color: isToday
+            ? T2Colors.lime.withValues(alpha: 0.1)
+            : T2Colors.bgElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isToday ? T2Colors.lime : T2Colors.border),
       ),
@@ -155,7 +162,8 @@ class MealPlannerScreen extends ConsumerWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, color: T2Colors.border, size: 16),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded,
+            color: T2Colors.border, size: 16),
       ),
     );
   }

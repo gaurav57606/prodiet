@@ -42,7 +42,8 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
         elevation: 0,
         title: Text(
           "BILL SCANNER",
-          style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, letterSpacing: 1.2),
+          style: GoogleFonts.barlowCondensed(
+              fontWeight: FontWeight.w900, letterSpacing: 1.2),
         ),
         leading: IconButton(
           icon: const Icon(Icons.close_rounded, color: Colors.white),
@@ -63,20 +64,24 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Error: ${state.message}', style: const TextStyle(color: Colors.white)),
+            Text('Error: ${state.message}',
+                style: const TextStyle(color: Colors.white)),
             const SizedBox(height: 20),
             DmButton(
               label: "TRY AGAIN",
-              onPressed: () => ref.read(ocrNotifierProvider.notifier).clearResults(),
+              onPressed: () =>
+                  ref.read(ocrNotifierProvider.notifier).clearResults(),
             ),
           ],
         ),
       );
     } else if (state is OcrSaving) {
-      return const Center(child: CircularProgressIndicator(color: T2Colors.lime));
+      return const Center(
+          child: CircularProgressIndicator(color: T2Colors.lime));
     } else if (state is OcrSaved) {
       // In reality, it pops on success in the save logic, but as fallback:
-      return const Center(child: Text("SAVED ✅", style: TextStyle(color: T2Colors.lime)));
+      return const Center(
+          child: Text("SAVED ✅", style: TextStyle(color: T2Colors.lime)));
     }
     return _buildEmptyState(context);
   }
@@ -97,13 +102,15 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: _buildActionBtn(context, "CAMERA", Icons.camera_alt_rounded, 
-                    onTap: () => _pickImage(ImageSource.camera)),
+                  child: _buildActionBtn(
+                      context, "CAMERA", Icons.camera_alt_rounded,
+                      onTap: () => _pickImage(ImageSource.camera)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionBtn(context, "GALLERY", Icons.photo_library_rounded, 
-                    onTap: () => _pickImage(ImageSource.gallery)),
+                  child: _buildActionBtn(
+                      context, "GALLERY", Icons.photo_library_rounded,
+                      onTap: () => _pickImage(ImageSource.gallery)),
                 ),
               ],
             ),
@@ -113,7 +120,8 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
     );
   }
 
-  Widget _buildActionBtn(BuildContext context, String label, IconData icon, {VoidCallback? onTap}) {
+  Widget _buildActionBtn(BuildContext context, String label, IconData icon,
+      {VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -127,14 +135,19 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
           children: [
             Icon(icon, color: T2Colors.lime, size: 32),
             const SizedBox(height: 12),
-            Text(label, style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, fontSize: 16, color: Colors.white)),
+            Text(label,
+                style: GoogleFonts.barlowCondensed(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                    color: Colors.white)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildResultsView(BuildContext context, ThemeData theme, OcrResults result) {
+  Widget _buildResultsView(
+      BuildContext context, ThemeData theme, OcrResults result) {
     final userId = ref.watch(currentUserIdProvider);
 
     return Column(
@@ -144,7 +157,10 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
             'FOUND ${result.items.length} ITEMS 🎉',
-            style: GoogleFonts.barlowCondensed(fontSize: 40, fontWeight: FontWeight.w900, color: T2Colors.lime),
+            style: GoogleFonts.barlowCondensed(
+                fontSize: 40,
+                fontWeight: FontWeight.w900,
+                color: T2Colors.lime),
           ),
         ),
         Expanded(
@@ -155,15 +171,20 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
             itemBuilder: (context, index) {
               final item = result.items[index];
               return DmCard(
-                onTap: () => ref.read(ocrNotifierProvider.notifier).toggleItemSelection(index),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                onTap: () => ref
+                    .read(ocrNotifierProvider.notifier)
+                    .toggleItemSelection(index),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: [
                     Theme(
                       data: ThemeData(unselectedWidgetColor: T2Colors.border),
                       child: Checkbox(
                         value: item.isSelected,
-                        onChanged: (_) => ref.read(ocrNotifierProvider.notifier).toggleItemSelection(index),
+                        onChanged: (_) => ref
+                            .read(ocrNotifierProvider.notifier)
+                            .toggleItemSelection(index),
                         activeColor: T2Colors.lime,
                         checkColor: Colors.black,
                       ),
@@ -173,15 +194,30 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.name.toUpperCase(), style: GoogleFonts.barlowCondensed(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-                          Text('${item.quantity} ${item.unit}', style: const TextStyle(fontSize: 11, color: T2Colors.textSecondary, fontWeight: FontWeight.w600)),
+                          Text(item.name.toUpperCase(),
+                              style: GoogleFonts.barlowCondensed(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white)),
+                          Text('${item.quantity} ${item.unit}',
+                              style: const TextStyle(
+                                  fontSize: 11,
+                                  color: T2Colors.textSecondary,
+                                  fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: T2Colors.lime.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4)),
-                      child: Text(item.category.toUpperCase(), style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: T2Colors.lime)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                          color: T2Colors.lime.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Text(item.category.toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              color: T2Colors.lime)),
                     ),
                   ],
                 ),
@@ -194,7 +230,8 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
     );
   }
 
-  Widget _buildBottomActions(BuildContext context, OcrResults result, String userId) {
+  Widget _buildBottomActions(
+      BuildContext context, OcrResults result, String userId) {
     final selectedCount = result.selectedCount;
 
     return Container(
@@ -209,39 +246,52 @@ class _OcrScreenState extends ConsumerState<OcrScreen> {
           DmButton(
             label: "ADD $selectedCount TO PANTRY",
             isLoading: _isSaving,
-            onPressed: selectedCount > 0 ? () async {
-              setState(() => _isSaving = true);
-              try {
-                await ref.read(ocrNotifierProvider.notifier).saveItems();
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("$selectedCount ITEMS ADDED ✅", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
-                    backgroundColor: T2Colors.lime,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-                Navigator.pop(context);
-              } catch (e) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("FAILED TO SAVE: $e", style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
-                    backgroundColor: T2Colors.coral,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              } finally {
-                if (mounted) setState(() => _isSaving = false);
-              }
-            } : null,
+            onPressed: selectedCount > 0
+                ? () async {
+                    setState(() => _isSaving = true);
+                    try {
+                      await ref.read(ocrNotifierProvider.notifier).saveItems();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("$selectedCount ITEMS ADDED ✅",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.black)),
+                          backgroundColor: T2Colors.lime,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      Navigator.pop(context);
+                    } catch (e) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("FAILED TO SAVE: $e",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white)),
+                          backgroundColor: T2Colors.coral,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    } finally {
+                      if (mounted) setState(() => _isSaving = false);
+                    }
+                  }
+                : null,
           ),
           const SizedBox(height: 12),
           TextButton(
-            onPressed: () => ref.read(ocrNotifierProvider.notifier).clearResults(),
+            onPressed: () =>
+                ref.read(ocrNotifierProvider.notifier).clearResults(),
             child: const Text(
               'SCAN AGAIN',
-              style: TextStyle(color: T2Colors.textMuted, fontWeight: FontWeight.w900, letterSpacing: 1.2, fontSize: 12),
+              style: TextStyle(
+                  color: T2Colors.textMuted,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                  fontSize: 12),
             ),
           ),
         ],

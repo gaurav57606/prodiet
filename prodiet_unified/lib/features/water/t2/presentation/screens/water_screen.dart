@@ -47,7 +47,9 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
           IconButton(
             icon: Icon(
               Icons.undo_rounded,
-              color: (_lastSummary?.totalMl ?? 0) > 0 ? Colors.white : T2Colors.textMuted,
+              color: (_lastSummary?.totalMl ?? 0) > 0
+                  ? Colors.white
+                  : T2Colors.textMuted,
             ),
             onPressed: (_lastSummary?.totalMl ?? 0) > 0
                 ? () => ref.read(waterRepositoryProvider).deleteLastLog(userId)
@@ -101,7 +103,8 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
                               ),
                             ),
                             TextSpan(
-                              text: ' ml / ${formatter.format(summary.targetMl)} ml',
+                              text:
+                                  ' ml / ${formatter.format(summary.targetMl)} ml',
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: T2Colors.textSecondary,
@@ -201,14 +204,16 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
                                 controller: _customController,
                                 decoration: InputDecoration(
                                   hintText: 'Enter amount',
-                                  hintStyle: const TextStyle(color: T2Colors.textMuted),
+                                  hintStyle: const TextStyle(
+                                      color: T2Colors.textMuted),
                                   filled: true,
                                   fillColor: T2Colors.bgDeep,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                 ),
                                 keyboardType: TextInputType.number,
                                 style: const TextStyle(color: Colors.white),
@@ -217,15 +222,19 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
                             const SizedBox(width: 12),
                             GestureDetector(
                               onTap: () {
-                                final amount = int.tryParse(_customController.text);
+                                final amount =
+                                    int.tryParse(_customController.text);
                                 if (amount != null && amount > 0) {
-                                  ref.read(waterRepositoryProvider).logCustomAmount(userId, amount);
+                                  ref
+                                      .read(waterRepositoryProvider)
+                                      .logCustomAmount(userId, amount);
                                   _customController.clear();
                                   FocusScope.of(context).unfocus();
                                 }
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
                                 decoration: BoxDecoration(
                                   color: T2Colors.sky,
                                   borderRadius: BorderRadius.circular(8),
@@ -259,7 +268,9 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
     return Container(
       width: 45,
       decoration: BoxDecoration(
-        color: isFilled ? T2Colors.sky.withValues(alpha: 0.2) : T2Colors.bgElevated,
+        color: isFilled
+            ? T2Colors.sky.withValues(alpha: 0.2)
+            : T2Colors.bgElevated,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isFilled ? T2Colors.sky : T2Colors.border,
@@ -276,9 +287,11 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
     );
   }
 
-  Widget _buildAddButton(WidgetRef ref, String userId, String label, int amount) {
+  Widget _buildAddButton(
+      WidgetRef ref, String userId, String label, int amount) {
     return GestureDetector(
-      onTap: () => ref.read(waterRepositoryProvider).logCustomAmount(userId, amount),
+      onTap: () =>
+          ref.read(waterRepositoryProvider).logCustomAmount(userId, amount),
       child: Container(
         decoration: BoxDecoration(
           color: T2Colors.bgElevated,

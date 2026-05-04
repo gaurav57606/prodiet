@@ -14,7 +14,7 @@ class HealthService {
 
   Future<bool> requestPermissions() async {
     if (kIsWeb || (!Platform.isAndroid && !Platform.isIOS)) return false;
-    
+
     try {
       return await _health.requestAuthorization(_types);
     } catch (e) {
@@ -74,7 +74,7 @@ class HealthService {
         types: [HealthDataType.HEART_RATE],
       );
       if (data.isEmpty) return null;
-      
+
       // Sort by date to get the latest
       data.sort((a, b) => b.dateTo.compareTo(a.dateTo));
       return int.tryParse(data.first.value.toString());

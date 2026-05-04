@@ -10,10 +10,13 @@ final progressRepositoryProvider = Provider<ProgressRepository>((ref) {
 
 final selectedRangeProvider = StateProvider<int>((ref) => 30);
 
-final progressSummaryProvider = FutureProvider.autoDispose<ProgressSummary>((ref) async {
+final progressSummaryProvider =
+    FutureProvider.autoDispose<ProgressSummary>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return ProgressSummary.calculate([], 70, 70);
-  
+
   final range = ref.watch(selectedRangeProvider);
-  return ref.watch(progressRepositoryProvider).getProgressSummary(userId, days: range);
+  return ref
+      .watch(progressRepositoryProvider)
+      .getProgressSummary(userId, days: range);
 });

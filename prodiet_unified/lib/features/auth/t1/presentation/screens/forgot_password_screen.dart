@@ -10,7 +10,8 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
@@ -104,10 +105,15 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   const SizedBox(height: 16),
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w800),
                       children: [
-                        TextSpan(text: 'Reset ', style: TextStyle(color: scheme.primaryContainer)),
-                        TextSpan(text: 'password', style: TextStyle(color: scheme.onSurface)),
+                        TextSpan(
+                            text: 'Reset ',
+                            style: TextStyle(color: scheme.primaryContainer)),
+                        TextSpan(
+                            text: 'password',
+                            style: TextStyle(color: scheme.onSurface)),
                       ],
                     ),
                   ),
@@ -135,9 +141,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   children: [
                     TextButton.icon(
                       onPressed: () => context.goNamed(AppRoutes.loginName),
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 14),
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                          size: 14),
                       label: const Text('Back to sign in'),
-                      style: TextButton.styleFrom(foregroundColor: scheme.primary),
+                      style:
+                          TextButton.styleFrom(foregroundColor: scheme.primary),
                     ),
                     const SizedBox(height: 40),
                     _buildLabel('EMAIL ADDRESS', theme),
@@ -162,7 +170,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       decoration: BoxDecoration(
                         color: scheme.surfaceContainerHigh,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: scheme.outline.withValues(alpha: 0.1)),
+                        border: Border.all(
+                            color: scheme.outline.withValues(alpha: 0.1)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,9 +180,14 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                           const SizedBox(height: 8),
                           RichText(
                             text: TextSpan(
-                              style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.5), fontSize: 13),
+                              style: TextStyle(
+                                  color:
+                                      scheme.onSurface.withValues(alpha: 0.5),
+                                  fontSize: 13),
                               children: [
-                                const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
+                                const TextSpan(
+                                    text:
+                                        'Check spam folder · Wait 2 minutes · '),
                                 TextSpan(
                                   text: 'Resend email',
                                   style: TextStyle(

@@ -24,7 +24,7 @@ class RecipeCardWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final primary = colorScheme.primary;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
       child: DmCard(
@@ -36,13 +36,14 @@ class RecipeCardWidget extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: isExotic 
-                    ? [const Color(0xFF1a0d06), const Color(0xFF2d1408)]
-                    : [const Color(0xFF060d1a), const Color(0xFF081428)],
+                  colors: isExotic
+                      ? [const Color(0xFF1a0d06), const Color(0xFF2d1408)]
+                      : [const Color(0xFF060d1a), const Color(0xFF081428)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(T2Spacing.radiusLarge)),
+                borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(T2Spacing.radiusLarge)),
               ),
               child: Stack(
                 children: [
@@ -54,12 +55,13 @@ class RecipeCardWidget extends StatelessWidget {
                       children: [
                         Text(
                           type,
-                          style: T2TextStyles.sectionLabel(colorScheme).copyWith(color: Colors.white70),
+                          style: T2TextStyles.sectionLabel(colorScheme)
+                              .copyWith(color: Colors.white70),
                         ),
                         Text(
                           title,
                           style: theme.textTheme.headlineMedium?.copyWith(
-                            fontSize: 22, 
+                            fontSize: 22,
                             height: 1.1,
                             color: Colors.white,
                           ),
@@ -71,14 +73,16 @@ class RecipeCardWidget extends StatelessWidget {
                     top: 0,
                     right: 0,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 9, vertical: 3),
                       decoration: BoxDecoration(
                         color: primary.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         "$match match",
-                        style: theme.textTheme.labelLarge?.copyWith(color: primary, fontSize: 10),
+                        style: theme.textTheme.labelLarge
+                            ?.copyWith(color: primary, fontSize: 10),
                       ),
                     ),
                   ),
@@ -161,7 +165,9 @@ class RecipeCardWidget extends StatelessWidget {
         label,
         style: theme.textTheme.labelLarge?.copyWith(
           fontSize: 9,
-          color: isGood ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+          color: isGood
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurfaceVariant,
         ),
       ),
     );

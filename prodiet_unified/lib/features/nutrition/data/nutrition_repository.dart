@@ -17,7 +17,8 @@ class NutritionRepository {
   NutritionRepository(this._client, this._cache, [http.Client? httpClient])
       : _httpClient = httpClient ?? http.Client();
 
-  Future<Either<AppError, NutritionItem>> lookupByBarcode(String barcode) async {
+  Future<Either<AppError, NutritionItem>> lookupByBarcode(
+      String barcode) async {
     try {
       // 1. Check local Supabase nutrition table (exact barcode)
       final localResult = await _client
@@ -39,7 +40,7 @@ class NutritionRepository {
         if (data['status'] == 1) {
           final product = data['product'];
           final item = _mapOFFToNutritionItem(product, barcode);
-          
+
           // Store result in local nutrition table
           await _saveToLocal(item);
           return Right(item);
@@ -64,10 +65,12 @@ class NutritionRepository {
     }
   }
 
-  Future<Either<AppError, List<NutritionItem>>> searchByName(String userId, String query) async {
+  Future<Either<AppError, List<NutritionItem>>> searchByName(
+      String userId, String query) async {
     try {
       // 1. Check SemanticCache
-      final cached = await _cache.get(CacheNamespace.nutrition, query, userId: userId);
+      final cached =
+          await _cache.get(CacheNamespace.nutrition, query, userId: userId);
       if (cached != null) {
         final items = (cached['items'] as List)
             .map((i) => NutritionItem.fromJson(i))
@@ -83,14 +86,14 @@ class NutritionRepository {
           .limit(10);
 
       if (localResults.isNotEmpty) {
-        final items = localResults
-            .map((i) => NutritionItem.fromJson(i))
-            .toList();
+        final items =
+            localResults.map((i) => NutritionItem.fromJson(i)).toList();
         return Right(items);
       }
 
       // 3. Search Open Food Facts
-      final offUrl = Uri.parse('$_offBaseUrl/cgi/search.pl?search_terms=$query&json=1');
+      final offUrl =
+          Uri.parse('$_offBaseUrl/cgi/search.pl?search_terms=$query&json=1');
       final response = await _httpClient.get(offUrl);
 
       if (response.statusCode == 200) {
@@ -100,7 +103,7 @@ class NutritionRepository {
           final items = products
               .map((p) => _mapOFFToNutritionItem(p, p['code'] as String?))
               .toList();
-          
+
           // Cache and save (limit to top results)
           final topItems = items.take(5).toList();
           await _cache.put(CacheNamespace.nutrition, query, {
@@ -109,7 +112,7 @@ class NutritionRepository {
           for (var item in topItems) {
             await _saveToLocal(item);
           }
-          
+
           return Right(items);
         }
       }
@@ -124,7 +127,8 @@ class NutritionRepository {
         // Edge function might return a single item or a list
         final List<NutritionItem> items = [];
         if (edgeResult.data is List) {
-          items.addAll((edgeResult.data as List).map((i) => NutritionItem.fromJson(i)));
+          items.addAll(
+              (edgeResult.data as List).map((i) => NutritionItem.fromJson(i)));
         } else {
           items.add(NutritionItem.fromJson(edgeResult.data));
         }
@@ -150,10 +154,13 @@ class NutritionRepository {
     return item.calculatePortion(grams);
   }
 
-  NutritionItem _mapOFFToNutritionItem(Map<String, dynamic> product, [String? barcode]) {
+  NutritionItem _mapOFFToNutritionItem(Map<String, dynamic> product,
+      [String? barcode]) {
     final nutriments = product['nutriments'] ?? {};
     return NutritionItem(
-      id: product['_id'] ?? product['id'] ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      id: product['_id'] ??
+          product['id'] ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
       productName: product['product_name'] ?? 'Unknown Product',
       brand: product['brands'],
       barcode: barcode ?? product['code'],

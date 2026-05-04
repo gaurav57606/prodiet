@@ -48,7 +48,7 @@ class VendorRepository {
       });
 
       _analytics.logEvent(
-        userId, 
+        userId,
         AnalyticsService.kVendorRedirect,
         data: {'platform': platform, 'ingredient': ingredient},
         screen: 'shopping_list',
@@ -62,7 +62,8 @@ class VendorRepository {
         return Left(UnknownError(message: 'Could not launch $platform'));
       }
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: 'VendorRepository.searchIngredient'));
+      return Left(
+          ErrorHandler.handle(e, context: 'VendorRepository.searchIngredient'));
     }
   }
 
@@ -96,7 +97,7 @@ class VendorRepository {
       });
 
       _analytics.logEvent(
-        userId, 
+        userId,
         AnalyticsService.kVendorRedirect,
         data: {'platform': platform, 'dish': dishQuery, 'type': 'food_order'},
         screen: 'food_order_screen',
@@ -110,7 +111,8 @@ class VendorRepository {
         return Left(UnknownError(message: 'Could not launch $platform'));
       }
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: 'VendorRepository.orderFood'));
+      return Left(
+          ErrorHandler.handle(e, context: 'VendorRepository.orderFood'));
     }
   }
 }

@@ -11,7 +11,8 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
@@ -124,7 +125,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ),
               ),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -134,7 +136,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.arrow_back, size: 16, color: Color(0xFFB06EFF)),
+                          Icon(Icons.arrow_back,
+                              size: 16, color: Color(0xFFB06EFF)),
                           SizedBox(width: 4),
                           Text(
                             "Back to sign in",
@@ -184,33 +187,34 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     ),
                     const SizedBox(height: 28),
 
-                      // Email Field
-                      const Text(
-                        "EMAIL ADDRESS",
-                        style: TextStyle(
-                          fontSize: 10,
-                          letterSpacing: 1.5,
-                          color: Color(0xFF888888),
-                          fontWeight: FontWeight.w700,
-                        ),
+                    // Email Field
+                    const Text(
+                      "EMAIL ADDRESS",
+                      style: TextStyle(
+                        fontSize: 10,
+                        letterSpacing: 1.5,
+                        color: Color(0xFF888888),
+                        fontWeight: FontWeight.w700,
                       ),
-                      const SizedBox(height: 8),
-                      DmTextField(
-                        controller: _emailController,
-                        hint: "name@example.com",
-                        keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.email_outlined, size: 20, color: Color(0xFF666666)),
-                      ),
-                      const SizedBox(height: 20),
+                    ),
+                    const SizedBox(height: 8),
+                    DmTextField(
+                      controller: _emailController,
+                      hint: "name@example.com",
+                      keyboardType: TextInputType.emailAddress,
+                      prefixIcon: const Icon(Icons.email_outlined,
+                          size: 20, color: Color(0xFF666666)),
+                    ),
+                    const SizedBox(height: 20),
 
-                      // Submit Button
-                      DmButton(
-                        label: "Send Reset Link",
-                        isLoading: isLoading,
-                        backgroundColor: const Color(0xFF1A1A2E),
-                        textColor: Colors.white,
-                        onPressed: _onSubmit,
-                      ),
+                    // Submit Button
+                    DmButton(
+                      label: "Send Reset Link",
+                      isLoading: isLoading,
+                      backgroundColor: const Color(0xFF1A1A2E),
+                      textColor: Colors.white,
+                      onPressed: _onSubmit,
+                    ),
 
                     const SizedBox(height: 24),
 
@@ -221,7 +225,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               ),
             ),
           ),
-          
+
           if (isLoading)
             const Positioned.fill(
               child: AbsorbPointer(child: SizedBox.shrink()),
@@ -270,15 +274,19 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       final email = _emailController.text.trim();
                       if (email.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Enter your email first")),
+                          const SnackBar(
+                              content: Text("Enter your email first")),
                         );
                         return;
                       }
-                      await ref.read(authProvider.notifier).sendPasswordReset(email);
+                      await ref
+                          .read(authProvider.notifier)
+                          .sendPasswordReset(email);
                       if (!context.mounted) return;
                       if (ref.read(authProvider) is! AuthFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Reset email sent again ✓")),
+                          const SnackBar(
+                              content: Text("Reset email sent again ✓")),
                         );
                       }
                     },

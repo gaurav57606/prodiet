@@ -8,7 +8,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
       appBar: AppBar(
@@ -27,37 +27,40 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _buildHeader('ProDiet Privacy Policy'),
             _buildSubHeader('Effective Date: April 30, 2026'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('Data We Collect'),
             _buildBulletPoint('Email address and name (for account creation)'),
-            _buildBulletPoint('Health and fitness data: weight, height, age, fitness goals, dietary preferences'),
+            _buildBulletPoint(
+                'Health and fitness data: weight, height, age, fitness goals, dietary preferences'),
             _buildBulletPoint('Food and nutrition logs you enter'),
             _buildBulletPoint('Water intake logs'),
-            _buildBulletPoint('Device information and app usage analytics (anonymized)'),
+            _buildBulletPoint(
+                'Device information and app usage analytics (anonymized)'),
             _buildBulletPoint('Crash reports via Firebase Crashlytics'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('How We Use Your Data'),
-            _buildBulletPoint('To provide personalized meal plans and nutrition tracking'),
+            _buildBulletPoint(
+                'To provide personalized meal plans and nutrition tracking'),
             _buildBulletPoint('To improve app performance and fix bugs'),
             _buildBulletPoint('We do NOT sell your data to third parties'),
             _buildBulletPoint('We do NOT use your data for advertising'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('Data Storage'),
-            _buildBulletPoint('Your data is stored securely on Supabase (PostgreSQL) servers'),
-            _buildBulletPoint('Crash data is processed by Google Firebase Crashlytics'),
+            _buildBulletPoint(
+                'Your data is stored securely on Supabase (PostgreSQL) servers'),
+            _buildBulletPoint(
+                'Crash data is processed by Google Firebase Crashlytics'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('Data Deletion'),
-            _buildBulletPoint('You can delete your account and all associated data from the app Settings screen'),
-            _buildBulletPoint('To request manual deletion, email: support@prodiet.com'),
+            _buildBulletPoint(
+                'You can delete your account and all associated data from the app Settings screen'),
+            _buildBulletPoint(
+                'To request manual deletion, email: support@prodiet.com'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('Contact'),
             const Text(
               'support@prodiet.com',
-              style: TextStyle(color: T2Colors.lime, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: T2Colors.lime, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 40),
           ],
@@ -111,7 +114,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(color: T2Colors.lime, fontSize: 18)),
+          const Text('• ',
+              style: TextStyle(color: T2Colors.lime, fontSize: 18)),
           Expanded(
             child: Text(
               text,

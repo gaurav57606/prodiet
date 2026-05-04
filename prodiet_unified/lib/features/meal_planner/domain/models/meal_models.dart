@@ -34,9 +34,14 @@ class Meal {
           .map((i) => Ingredient.fromJson(i))
           .toList(),
       nutritionalValues: NutritionalValues.fromJson(json),
-      scheduledTime: DateTime.tryParse(json['scheduled_time']?.toString() ?? '') ?? DateTime.now(),
+      scheduledTime:
+          DateTime.tryParse(json['scheduled_time']?.toString() ?? '') ??
+              DateTime.now(),
       status: json['status'],
-      date: DateTime.tryParse(json['planned_date']?.toString() ?? json['scheduled_time']?.toString() ?? '') ?? DateTime.now(),
+      date: DateTime.tryParse(json['planned_date']?.toString() ??
+              json['scheduled_time']?.toString() ??
+              '') ??
+          DateTime.now(),
     );
   }
 

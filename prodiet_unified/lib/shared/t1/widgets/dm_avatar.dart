@@ -15,7 +15,7 @@ class DmAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       width: size,
       height: size,
@@ -31,7 +31,8 @@ class DmAvatar extends StatelessWidget {
             ? Image.network(
                 imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => _buildPlaceholder(theme),
+                errorBuilder: (context, error, stackTrace) =>
+                    _buildPlaceholder(theme),
               )
             : _buildPlaceholder(theme),
       ),
@@ -39,7 +40,7 @@ class DmAvatar extends StatelessWidget {
   }
 
   Widget _buildPlaceholder(ThemeData theme) {
-    final initials = name != null && name!.isNotEmpty 
+    final initials = name != null && name!.isNotEmpty
         ? name!.trim().split(' ').map((e) => e[0]).take(2).join().toUpperCase()
         : '?';
 

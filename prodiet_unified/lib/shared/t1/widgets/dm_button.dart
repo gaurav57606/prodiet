@@ -1,3 +1,4 @@
+import "package:flutter/services.dart";
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 
@@ -51,7 +52,8 @@ class DmButton extends StatelessWidget {
       case DmButtonVariant.danger:
         backgroundColor = colorScheme.error.withValues(alpha: 0.1);
         foregroundColor = colorScheme.error;
-        borderSide = BorderSide(color: colorScheme.error.withValues(alpha: 0.2));
+        borderSide =
+            BorderSide(color: colorScheme.error.withValues(alpha: 0.2));
         break;
     }
 
@@ -59,11 +61,19 @@ class DmButton extends StatelessWidget {
       width: width,
       height: 48,
       child: ElevatedButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading
+            ? null
+            : () {
+                HapticFeedback.lightImpact();
+                onPressed?.call();
+              },
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
-          elevation: variant == DmButtonVariant.ghost || variant == DmButtonVariant.outline ? 0 : 2,
+          elevation: variant == DmButtonVariant.ghost ||
+                  variant == DmButtonVariant.outline
+              ? 0
+              : 2,
           shadowColor: backgroundColor.withValues(alpha: 0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(T1Spacing.radiusMd),

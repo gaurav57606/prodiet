@@ -42,7 +42,8 @@ class OcrScannerScreen extends ConsumerWidget {
                 const ProDietEmptyState(
                   icon: Icons.camera_alt_rounded,
                   headline: 'Scan Your Groceries',
-                  subtext: 'Take a photo or upload from gallery to auto-detect ingredients.',
+                  subtext:
+                      'Take a photo or upload from gallery to auto-detect ingredients.',
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -51,13 +52,17 @@ class OcrScannerScreen extends ConsumerWidget {
                     ElevatedButton.icon(
                       icon: const Icon(Icons.camera_alt_rounded),
                       label: const Text('Camera'),
-                      onPressed: () => ref.read(ocrNotifierProvider.notifier).pickImage(ImageSource.camera),
+                      onPressed: () => ref
+                          .read(ocrNotifierProvider.notifier)
+                          .pickImage(ImageSource.camera),
                     ),
                     const SizedBox(width: 16),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.photo_library_rounded),
                       label: const Text('Gallery'),
-                      onPressed: () => ref.read(ocrNotifierProvider.notifier).pickImage(ImageSource.gallery),
+                      onPressed: () => ref
+                          .read(ocrNotifierProvider.notifier)
+                          .pickImage(ImageSource.gallery),
                     ),
                   ],
                 ),
@@ -76,12 +81,17 @@ class OcrScannerScreen extends ConsumerWidget {
                 CircularProgressIndicator(color: scheme.primary),
                 const SizedBox(height: 24),
                 Text(
-                  ocrState is OcrSaving ? 'Saving to pantry...' : 'Reading your groceries...',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ocrState is OcrSaving
+                      ? 'Saving to pantry...'
+                      : 'Reading your groceries...',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  ocrState is OcrSaving ? 'Almost done' : 'AI is identifying ingredients',
+                  ocrState is OcrSaving
+                      ? 'Almost done'
+                      : 'AI is identifying ingredients',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: scheme.onSurface.withValues(alpha: 0.5),
                   ),
@@ -98,7 +108,8 @@ class OcrScannerScreen extends ConsumerWidget {
             title: Text('Found ${items.length} items'),
             actions: [
               TextButton(
-                onPressed: () => ref.read(ocrNotifierProvider.notifier).clearResults(),
+                onPressed: () =>
+                    ref.read(ocrNotifierProvider.notifier).clearResults(),
                 child: const Text('Scan Again'),
               ),
             ],
@@ -112,8 +123,11 @@ class OcrScannerScreen extends ConsumerWidget {
                     final item = items[index];
                     return CheckboxListTile(
                       value: item.isSelected,
-                      onChanged: (_) => ref.read(ocrNotifierProvider.notifier).toggleItemSelection(index),
-                      title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      onChanged: (_) => ref
+                          .read(ocrNotifierProvider.notifier)
+                          .toggleItemSelection(index),
+                      title: Text(item.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text('${item.quantity} ${item.unit}'),
                       secondary: Chip(
                         label: Text(
@@ -151,7 +165,9 @@ class OcrScannerScreen extends ConsumerWidget {
                       FilledButton(
                         onPressed: selectedCount == 0
                             ? null
-                            : () => ref.read(ocrNotifierProvider.notifier).saveItems(),
+                            : () => ref
+                                .read(ocrNotifierProvider.notifier)
+                                .saveItems(),
                         child: const Text('Add to Pantry'),
                       ),
                     ],
@@ -170,10 +186,11 @@ class OcrScannerScreen extends ConsumerWidget {
             headline: 'Scan Failed',
             subtext: msg,
             buttonLabel: 'Try Again',
-            onButtonTap: () => ref.read(ocrNotifierProvider.notifier).clearResults(),
+            onButtonTap: () =>
+                ref.read(ocrNotifierProvider.notifier).clearResults(),
           ),
         );
-      
+
       case OcrSaved():
         // Handled by ref.listen
         return const Scaffold(body: Center(child: CircularProgressIndicator()));

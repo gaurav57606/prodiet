@@ -86,7 +86,7 @@ class MacroGrid extends StatelessWidget {
     IconData icon,
   ) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(T1Spacing.md),
       decoration: BoxDecoration(

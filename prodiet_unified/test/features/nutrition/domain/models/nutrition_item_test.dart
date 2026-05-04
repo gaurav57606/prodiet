@@ -25,7 +25,8 @@ void main() {
       final portion = tNutritionItem.calculatePortion(200.0); // 2x base (100g)
 
       expect(portion.calories, 104);
-      expect(portion.proteinG, 1); // 0.3 * 2 = 0.6 -> round to 1 (as per implementation .round())
+      expect(portion.proteinG,
+          1); // 0.3 * 2 = 0.6 -> round to 1 (as per implementation .round())
       expect(portion.carbsG, 28); // 13.8 * 2 = 27.6 -> round to 28
       expect(portion.fatG, 0); // 0.2 * 2 = 0.4 -> round to 0
     });

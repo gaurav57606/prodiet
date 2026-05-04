@@ -46,7 +46,7 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
-      
+
       if (!kIsWeb) {
         final deviceInfo = DeviceInfoPlugin();
         // Use defaultTargetPlatform instead of Platform.isXXX to avoid dart:io dependency
@@ -71,11 +71,13 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       _getDeviceInfo().then((info) {
         if (mounted) {
           ref.read(analyticsServiceProvider).startSession(
-            userId,
-            deviceModel: info['deviceModel'] ?? 'Unknown',
-            osVersion: kIsWeb ? 'Web' : 'Mobile', // Simple fallback, or use device_info_plus more extensively
-            appVersion: info['appVersion'] ?? '1.0.0',
-          );
+                userId,
+                deviceModel: info['deviceModel'] ?? 'Unknown',
+                osVersion: kIsWeb
+                    ? 'Web'
+                    : 'Mobile', // Simple fallback, or use device_info_plus more extensively
+                appVersion: info['appVersion'] ?? '1.0.0',
+              );
         }
       });
     }

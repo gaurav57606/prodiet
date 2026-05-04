@@ -18,17 +18,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingData> _pages = [
     OnboardingData(
       title: 'Precision Nutrition',
-      description: 'Track your macros with clinical accuracy and AI-powered suggestions.',
+      description:
+          'Track your macros with clinical accuracy and AI-powered suggestions.',
       icon: Icons.track_changes_rounded,
     ),
     OnboardingData(
       title: 'Smart Meal Planning',
-      description: 'Personalized meal plans that adapt to your taste and inventory.',
+      description:
+          'Personalized meal plans that adapt to your taste and inventory.',
       icon: Icons.auto_awesome_rounded,
     ),
     OnboardingData(
       title: 'Real-time Sync',
-      description: 'Sync your activity data from fitbands and get instant adjustments.',
+      description:
+          'Sync your activity data from fitbands and get instant adjustments.',
       icon: Icons.sync_rounded,
     ),
   ];
@@ -62,7 +65,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Container(
                           padding: const EdgeInsets.all(T1Spacing.xxl),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withValues(alpha: 0.05),
+                            color: theme.colorScheme.primary
+                                .withValues(alpha: 0.05),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -84,7 +88,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           data.description,
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -110,7 +115,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         decoration: BoxDecoration(
                           color: _currentPage == index
                               ? theme.colorScheme.primary
-                              : theme.colorScheme.primary.withValues(alpha: 0.2),
+                              : theme.colorScheme.primary
+                                  .withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -118,7 +124,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   const SizedBox(height: T1Spacing.xxl),
                   DmButton(
-                    label: _currentPage == _pages.length - 1 ? 'Get Started' : 'Next',
+                    label: _currentPage == _pages.length - 1
+                        ? 'Get Started'
+                        : 'Next',
                     onPressed: () {
                       if (_currentPage < _pages.length - 1) {
                         _pageController.nextPage(

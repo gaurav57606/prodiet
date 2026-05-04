@@ -47,7 +47,7 @@ class _DmAppShellState extends ConsumerState<DmAppShell> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    
+
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomAppBar(
@@ -57,25 +57,30 @@ class _DmAppShellState extends ConsumerState<DmAppShell> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(context, Icons.dashboard_rounded, Icons.dashboard_outlined, 'Home', 0),
-            _navItem(context, Icons.restaurant_rounded, Icons.restaurant_outlined, 'Meals', 1),
-            _navItem(context, Icons.calendar_month_rounded, Icons.calendar_month_outlined, 'Plan', 2),
-            _navItem(context, Icons.bar_chart_rounded, Icons.bar_chart_outlined, 'Progress', 3),
-            _navItem(context, Icons.analytics_rounded, Icons.analytics_outlined, 'Stats', 4),
+            _navItem(context, Icons.dashboard_rounded, Icons.dashboard_outlined,
+                'Home', 0),
+            _navItem(context, Icons.restaurant_rounded,
+                Icons.restaurant_outlined, 'Meals', 1),
+            _navItem(context, Icons.calendar_month_rounded,
+                Icons.calendar_month_outlined, 'Plan', 2),
+            _navItem(context, Icons.bar_chart_rounded, Icons.bar_chart_outlined,
+                'Progress', 3),
+            _navItem(context, Icons.analytics_rounded, Icons.analytics_outlined,
+                'Stats', 4),
           ],
         ),
       ),
     );
   }
 
-  Widget _navItem(BuildContext ctx, IconData filled, IconData outlined, 
-                  String label, int index) {
+  Widget _navItem(BuildContext ctx, IconData filled, IconData outlined,
+      String label, int index) {
     final isActive = _currentIndex == index;
     final theme = Theme.of(ctx);
     final scheme = theme.colorScheme;
     final activeColor = scheme.primary;
     final inactiveColor = scheme.onSurface.withValues(alpha: 0.4);
-    
+
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -85,10 +90,10 @@ class _DmAppShellState extends ConsumerState<DmAppShell> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(isActive ? filled : outlined,
-                color: isActive ? activeColor : inactiveColor,
-                size: 24),
+                color: isActive ? activeColor : inactiveColor, size: 24),
             const SizedBox(height: 4),
-            Text(label,
+            Text(
+              label,
               style: theme.textTheme.labelSmall?.copyWith(
                 fontSize: 9,
                 fontWeight: isActive ? FontWeight.w800 : FontWeight.w500,
@@ -101,4 +106,3 @@ class _DmAppShellState extends ConsumerState<DmAppShell> {
     );
   }
 }
-

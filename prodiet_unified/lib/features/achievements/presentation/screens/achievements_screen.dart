@@ -29,7 +29,8 @@ class AchievementsScreen extends ConsumerWidget {
             return const Center(
               child: DmEmptyState(
                 title: 'No achievements yet',
-                message: 'Keep logging meals and hitting your goals to earn badges!',
+                message:
+                    'Keep logging meals and hitting your goals to earn badges!',
                 icon: Icons.emoji_events_rounded,
               ),
             );
@@ -52,12 +53,18 @@ class _AchievementTile extends StatelessWidget {
 
   IconData _icon(String type) {
     switch (type) {
-      case 'streak_7':     return Icons.local_fire_department_rounded;
-      case 'streak_30':    return Icons.bolt_rounded;
-      case 'protein_goal': return Icons.fitness_center_rounded;
-      case 'hydration':    return Icons.water_drop_rounded;
-      case 'weight_loss':  return Icons.monitor_weight_rounded;
-      default:             return Icons.emoji_events_rounded;
+      case 'streak_7':
+        return Icons.local_fire_department_rounded;
+      case 'streak_30':
+        return Icons.bolt_rounded;
+      case 'protein_goal':
+        return Icons.fitness_center_rounded;
+      case 'hydration':
+        return Icons.water_drop_rounded;
+      case 'weight_loss':
+        return Icons.monitor_weight_rounded;
+      default:
+        return Icons.emoji_events_rounded;
     }
   }
 
@@ -73,35 +80,46 @@ class _AchievementTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         child: Row(children: [
           Container(
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: scheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle),
-            child: Center(child: Icon(_icon(a.type), size: 24, color: scheme.primary)),
+                color: scheme.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle),
+            child: Center(
+                child: Icon(_icon(a.type), size: 24, color: scheme.primary)),
           ),
           const SizedBox(width: 12),
-          Expanded(child: Column(
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(a.title, style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w900)),
+              Text(a.title,
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w900)),
               const SizedBox(height: 2),
-              Text(a.description, style: theme.textTheme.bodySmall?.copyWith(
-                color: scheme.onSurface.withValues(alpha: 0.5))),
+              Text(a.description,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurface.withValues(alpha: 0.5))),
               if (a.streakCount > 0)
                 Row(
                   children: [
                     Text('${a.streakCount} day streak ',
-                      style: const TextStyle(fontSize: 10,
-                        color: Colors.orangeAccent, fontWeight: FontWeight.w700)),
-                    const Icon(Icons.local_fire_department_rounded, size: 10, color: Colors.orangeAccent),
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.orangeAccent,
+                            fontWeight: FontWeight.w700)),
+                    const Icon(Icons.local_fire_department_rounded,
+                        size: 10, color: Colors.orangeAccent),
                   ],
                 ),
             ],
           )),
-          Text(a.earnedAt.length >= 10 ? a.earnedAt.substring(0, 10) : a.earnedAt,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: scheme.onSurface.withValues(alpha: 0.35))),
+          Text(
+              a.earnedAt.length >= 10
+                  ? a.earnedAt.substring(0, 10)
+                  : a.earnedAt,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: scheme.onSurface.withValues(alpha: 0.35))),
         ]),
       ),
     );

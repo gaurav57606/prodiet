@@ -10,7 +10,8 @@ sealed class AuthState {
     return null;
   }
 
-  bool get isAuthenticated => this is AuthAuthenticated || this is AuthNeedsOnboarding;
+  bool get isAuthenticated =>
+      this is AuthAuthenticated || this is AuthNeedsOnboarding;
 }
 
 class AuthLoading extends AuthState {
@@ -42,4 +43,3 @@ class AuthProfileMissing extends AuthState {
   final String userId;
   const AuthProfileMissing(this.userId);
 }
-

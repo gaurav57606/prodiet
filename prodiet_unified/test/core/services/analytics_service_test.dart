@@ -5,9 +5,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/core/services/analytics_service.dart';
 
 class MockSupabaseClient extends Mock implements SupabaseClient {}
+
 class MockSupabaseQueryBuilder extends Mock implements SupabaseQueryBuilder {}
 
-class FakePostgrestFilterBuilder extends Fake 
+class FakePostgrestFilterBuilder extends Fake
     implements PostgrestFilterBuilder<List<Map<String, dynamic>>> {
   @override
   Future<U> then<U>(
@@ -32,9 +33,12 @@ void main() {
     registerFallbackValue(<String, dynamic>{});
 
     when(() => mockSupabase.from(any())).thenAnswer((_) => mockQueryBuilder);
-    when(() => mockQueryBuilder.insert(any())).thenAnswer((_) => FakePostgrestFilterBuilder());
-    when(() => mockQueryBuilder.update(any())).thenAnswer((_) => FakePostgrestFilterBuilder());
-    when(() => mockQueryBuilder.upsert(any(), onConflict: any(named: 'onConflict')))
+    when(() => mockQueryBuilder.insert(any()))
+        .thenAnswer((_) => FakePostgrestFilterBuilder());
+    when(() => mockQueryBuilder.update(any()))
+        .thenAnswer((_) => FakePostgrestFilterBuilder());
+    when(() => mockQueryBuilder.upsert(any(),
+            onConflict: any(named: 'onConflict')))
         .thenAnswer((_) => FakePostgrestFilterBuilder());
   });
 

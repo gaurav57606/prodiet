@@ -25,36 +25,39 @@ class TermsOfServiceScreen extends StatelessWidget {
             _buildHeader('ProDiet Terms & Conditions'),
             _buildSubHeader('Last Updated: May 4, 2026'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('1. Acceptance of Terms'),
-            _buildText('By accessing or using ProDiet, you agree to be bound by these Terms of Service. If you do not agree, please do not use the application.'),
+            _buildText(
+                'By accessing or using ProDiet, you agree to be bound by these Terms of Service. If you do not agree, please do not use the application.'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('2. Not Medical Advice'),
-            _buildText('ProDiet provides nutritional information and meal planning for informational purposes only. We are NOT medical professionals. Always consult with a doctor or nutritionist before starting a new diet or exercise program.'),
+            _buildText(
+                'ProDiet provides nutritional information and meal planning for informational purposes only. We are NOT medical professionals. Always consult with a doctor or nutritionist before starting a new diet or exercise program.'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('3. User Accounts'),
-            _buildBulletPoint('You are responsible for maintaining the confidentiality of your account.'),
-            _buildBulletPoint('You must provide accurate and complete information.'),
-            _buildBulletPoint('We reserve the right to terminate accounts that violate our community guidelines.'),
+            _buildBulletPoint(
+                'You are responsible for maintaining the confidentiality of your account.'),
+            _buildBulletPoint(
+                'You must provide accurate and complete information.'),
+            _buildBulletPoint(
+                'We reserve the right to terminate accounts that violate our community guidelines.'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('4. Prohibited Conduct'),
             _buildText('You agree not to:'),
             _buildBulletPoint('Use the app for any illegal purposes.'),
-            _buildBulletPoint('Attempt to reverse engineer or scrape the application.'),
-            _buildBulletPoint('Post harmful or offensive content in community sections.'),
+            _buildBulletPoint(
+                'Attempt to reverse engineer or scrape the application.'),
+            _buildBulletPoint(
+                'Post harmful or offensive content in community sections.'),
             const SizedBox(height: 24),
-            
             _buildSectionTitle('5. Limitation of Liability'),
-            _buildText('ProDiet and its creators are not liable for any health issues, data loss, or damages resulting from the use of the app.'),
+            _buildText(
+                'ProDiet and its creators are not liable for any health issues, data loss, or damages resulting from the use of the app.'),
             const SizedBox(height: 40),
-            
             _buildSectionTitle('Contact Us'),
             const Text(
               'legal@prodiet.com',
-              style: TextStyle(color: T2Colors.lime, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: T2Colors.lime, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 40),
           ],
@@ -122,7 +125,8 @@ class TermsOfServiceScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(color: T2Colors.lime, fontSize: 18)),
+          const Text('• ',
+              style: TextStyle(color: T2Colors.lime, fontSize: 18)),
           Expanded(
             child: Text(
               text,

@@ -18,12 +18,12 @@ class DmMacroChip extends StatelessWidget {
   });
 
   Color _colorFor(MacroType t, ColorScheme s) => switch (t) {
-    MacroType.calories => T1ColorSchemes.accentViolet,
-    MacroType.protein  => T1ColorSchemes.accentPink,
-    MacroType.carbs    => T1ColorSchemes.accentOrange,
-    MacroType.fat      => s.secondary,
-    MacroType.fibre    => T1ColorSchemes.accentTeal,
-  };
+        MacroType.calories => T1ColorSchemes.accentViolet,
+        MacroType.protein => T1ColorSchemes.accentPink,
+        MacroType.carbs => T1ColorSchemes.accentOrange,
+        MacroType.fat => s.secondary,
+        MacroType.fibre => T1ColorSchemes.accentTeal,
+      };
 
   @override
   Widget build(BuildContext context) {

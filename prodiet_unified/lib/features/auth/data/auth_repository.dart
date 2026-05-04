@@ -6,7 +6,8 @@ class AuthRepository {
 
   AuthRepository(this._supabase);
 
-  Future<void> signUpWithEmail(String email, String password, String name) async {
+  Future<void> signUpWithEmail(
+      String email, String password, String name) async {
     try {
       final response = await _supabase.auth.signUp(
         email: email,
@@ -85,11 +86,8 @@ class AuthRepository {
 
   Future<AppUser?> fetchProfile(String userId) async {
     try {
-      final data = await _supabase
-          .from('users')
-          .select()
-          .eq('id', userId)
-          .maybeSingle();
+      final data =
+          await _supabase.from('users').select().eq('id', userId).maybeSingle();
       if (data == null) return null;
       return AppUser.fromJson(data);
     } catch (e) {

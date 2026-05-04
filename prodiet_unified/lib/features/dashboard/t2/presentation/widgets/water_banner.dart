@@ -17,14 +17,15 @@ class WaterBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const skyColor = T2Colors.sky;
-    
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         color: skyColor.withValues(alpha: 0.10),
         border: Border.symmetric(
-          horizontal: BorderSide(color: skyColor.withValues(alpha: 0.18), width: 1),
+          horizontal:
+              BorderSide(color: skyColor.withValues(alpha: 0.18), width: 1),
         ),
       ),
       child: Row(

@@ -89,7 +89,8 @@ void main() {
       // 4. Background messaging handler (must be a top-level function)
       // Only relevant for Android/iOS
       if (!kIsWeb) {
-        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+        FirebaseMessaging.onBackgroundMessage(
+            _firebaseMessagingBackgroundHandler);
       }
     } catch (e, st) {
       logger.e('Initialization failed: $e', error: e, stackTrace: st);
@@ -105,7 +106,8 @@ void main() {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.settings_suggest_rounded, size: 64, color: Colors.white60),
+                    const Icon(Icons.settings_suggest_rounded,
+                        size: 64, color: Colors.white60),
                     const SizedBox(height: 24),
                     const Text('Configuration Error',
                         style: TextStyle(
@@ -156,7 +158,8 @@ class _ConfigErrorApp extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Icon(Icons.warning_amber_rounded, size: 48, color: Color(0xFFF5A623)),
+                const Icon(Icons.warning_amber_rounded,
+                    size: 48, color: Color(0xFFF5A623)),
                 const SizedBox(height: 20),
                 const Text(
                   'Build Config Error',

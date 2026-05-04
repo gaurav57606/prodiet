@@ -2,15 +2,12 @@
 class AppConfig {
   AppConfig._();
 
-  static const supabaseUrl =
-      String.fromEnvironment('SUPABASE_URL');
-  static const supabaseAnonKey =
-      String.fromEnvironment('SUPABASE_ANON_KEY');
-  static const geminiApiKey =
-      String.fromEnvironment('GEMINI_API_KEY');
-  static const openFoodFactsUrl =
-      String.fromEnvironment('OPEN_FOOD_FACTS_BASE_URL',
-          defaultValue: 'https://world.openfoodfacts.org/api/v2');
+  static const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+  static const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+  static const geminiApiKey = String.fromEnvironment('GEMINI_API_KEY');
+  static const openFoodFactsUrl = String.fromEnvironment(
+      'OPEN_FOOD_FACTS_BASE_URL',
+      defaultValue: 'https://world.openfoodfacts.org/api/v2');
 
   /// Returns null if config is valid, or an error message string if not.
   static String? validate() {

@@ -29,7 +29,8 @@ class DietPlanScreen extends ConsumerWidget {
         body: ProDietEmptyState(
           icon: EmptyStateConfigs.dietPlan.icon,
           headline: 'No Diet Plan Yet',
-          subtext: 'Let AI build your personalised 7-day plan based on your goals.',
+          subtext:
+              'Let AI build your personalised 7-day plan based on your goals.',
           buttonLabel: '✨ Create My Plan',
           onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
         ),
@@ -103,7 +104,9 @@ class DietPlanScreen extends ConsumerWidget {
               _buildSummaryCard(context, ref, plan),
               Expanded(
                 child: TabBarView(
-                  children: plan.days.map((day) => _buildDayTab(context, day)).toList(),
+                  children: plan.days
+                      .map((day) => _buildDayTab(context, day))
+                      .toList(),
                 ),
               ),
             ],
@@ -204,7 +207,8 @@ class DietPlanScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMealSection(BuildContext context, String title, List<DietMeal> meals) {
+  Widget _buildMealSection(
+      BuildContext context, String title, List<DietMeal> meals) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final totalCals = meals.fold(0.0, (sum, m) => sum + m.calories);
@@ -245,12 +249,15 @@ class DietPlanScreen extends ConsumerWidget {
         padding: EdgeInsets.zero,
         child: ListTile(
           onTap: () => context.goNamed(AppRoutes.t1DietPlanDetail, extra: meal),
-          title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.w900)),
+          title: Text(meal.name,
+              style: const TextStyle(fontWeight: FontWeight.w900)),
           subtitle: Text(
             '${meal.calories.toInt()} kcal  •  P${meal.proteinG.toInt()}g C${meal.carbsG.toInt()}g F${meal.fatG.toInt()}g',
-            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+            style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
           ),
-          trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
+          trailing: Icon(Icons.chevron_right_rounded,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
         ),
       ),
     );

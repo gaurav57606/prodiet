@@ -8,7 +8,6 @@ import '../domain/models/app_user.dart';
 import 'auth_state.dart';
 import '../../../core/error/app_error.dart';
 
-
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
   final FcmService? _fcm;
@@ -34,7 +33,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         logger.d('[$_tag] Checking session...');
         final existingSession = _repo.currentSession();
         if (existingSession != null) {
-          logger.i('[$_tag] Existing session found for ${existingSession.user.id}');
+          logger.i(
+              '[$_tag] Existing session found for ${existingSession.user.id}');
           await _handleSession(existingSession.user.id);
           if (!mounted) return;
         } else {
@@ -51,7 +51,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     // Still subscribe for future changes
     _authSubscription = _repo.authStateChanges().listen((data) async {
       final session = data.session;
-      logger.i('[$_tag] Auth state change detected. Event: ${data.event}, Session: ${session?.user.id}');
+      logger.i(
+          '[$_tag] Auth state change detected. Event: ${data.event}, Session: ${session?.user.id}');
       if (session == null) {
         state = const AuthUnauthenticated();
       } else {
@@ -73,9 +74,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         },
       );
       if (!mounted) return;
-      
+
       if (profile == null) {
-        logger.w('[$_tag] Profile null for $userId, retrying once after 800ms...');
+        logger.w(
+            '[$_tag] Profile null for $userId, retrying once after 800ms...');
         await Future.delayed(const Duration(milliseconds: 800));
         if (!mounted) return;
         profile = await _repo.fetchProfile(userId);
@@ -87,12 +89,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = AuthProfileMissing(userId);
         return;
       }
-      logger.d('[$_tag] Profile loaded: ${profile.email}, onboardingComplete: ${profile.onboardingComplete}');
+      logger.d(
+          '[$_tag] Profile loaded: ${profile.email}, onboardingComplete: ${profile.onboardingComplete}');
       _handleProfile(profile);
     } catch (e) {
       if (!mounted) return;
       logger.e('[$_tag] _handleSession error: $e');
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag._handleSession'));
+      state =
+          AuthFailure(ErrorHandler.handle(e, context: '$_tag._handleSession'));
     }
   }
 
@@ -136,7 +140,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (!mounted) return;
     } catch (e) {
       if (!mounted) return;
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.signInWithGoogle'));
+      state = AuthFailure(
+          ErrorHandler.handle(e, context: '$_tag.signInWithGoogle'));
     }
   }
 
@@ -155,29 +160,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> retryProfileLoad(String userId) async {
     state = const AuthLoading();
     final backoff = [500, 1000, 2000, 4000, 8000];
-    
+
     for (int i = 0; i < backoff.length; i++) {
       await Future.delayed(Duration(milliseconds: backoff[i]));
       if (!mounted) return;
-      
+
       try {
         final profile = await _repo.fetchProfile(userId);
         if (!mounted) return;
-        
+
         if (profile != null) {
           _handleProfile(profile);
           return;
         }
-        logger.w('[$_tag] retryProfileLoad attempt ${i + 1} — profile still null');
+        logger.w(
+            '[$_tag] retryProfileLoad attempt ${i + 1} — profile still null');
       } catch (e) {
         if (!mounted) return;
         logger.e('[$_tag] retryProfileLoad error on attempt ${i + 1}: $e');
       }
     }
-    
+
     // Exhausted all retries — emit a descriptive failure
     state = const AuthFailure(UnknownError(
-      message: 'Could not load your profile. Please check your connection and try again.',
+      message:
+          'Could not load your profile. Please check your connection and try again.',
     ));
   }
 
@@ -187,11 +194,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // Do NOT set state here. Screen shows success message locally.
     } catch (e) {
       if (!mounted) return;
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.sendPasswordReset'));
+      state = AuthFailure(
+          ErrorHandler.handle(e, context: '$_tag.sendPasswordReset'));
     }
   }
 
-  Future<void> completeOnboarding(String userId, Map<String, dynamic> profileData) async {
+  Future<void> completeOnboarding(
+      String userId, Map<String, dynamic> profileData) async {
     try {
       state = const AuthLoading();
       await _repo.updateProfile(userId, {
@@ -207,12 +216,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = AuthAuthenticated(updatedProfile);
       } else {
         state = AuthFailure(const UnknownError(
-          message: 'Could not load your profile after setup. Please restart the app.',
+          message:
+              'Could not load your profile after setup. Please restart the app.',
         ));
       }
     } catch (e) {
       if (!mounted) return;
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.completeOnboarding'));
+      state = AuthFailure(
+          ErrorHandler.handle(e, context: '$_tag.completeOnboarding'));
     }
   }
 

@@ -20,9 +20,10 @@ class OcrScanning extends OcrState {
 class OcrResults extends OcrState {
   final List<ScannedItem> items;
   const OcrResults(this.items);
-  
+
   int get selectedCount => items.where((i) => i.isSelected).length;
-  List<ScannedItem> get selectedItems => items.where((i) => i.isSelected).toList();
+  List<ScannedItem> get selectedItems =>
+      items.where((i) => i.isSelected).toList();
 }
 
 class OcrSaving extends OcrState {
@@ -58,11 +59,11 @@ class OcrNotifier extends StateNotifier<OcrState> {
         source: source,
         imageQuality: 80,
       );
-      
+
       if (picked == null) return;
-      
+
       state = const OcrScanning();
-      
+
       final result = await _ocrRepo.scanImage(File(picked.path));
       state = OcrResults(result.items);
     } catch (e) {
@@ -73,31 +74,32 @@ class OcrNotifier extends StateNotifier<OcrState> {
   void toggleItemSelection(int index) {
     final current = state;
     if (current is! OcrResults) return;
-    
+
     final updatedItems = current.items.toList();
-    updatedItems[index] = updatedItems[index].copyWith(
-      isSelected: !updatedItems[index].isSelected
-    );
-    
+    updatedItems[index] = updatedItems[index]
+        .copyWith(isSelected: !updatedItems[index].isSelected);
+
     state = OcrResults(updatedItems);
   }
 
   Future<void> saveItems() async {
     final current = state;
     if (current is! OcrResults) return;
-    
+
     final selectedItems = current.selectedItems;
     if (selectedItems.isEmpty) return;
 
     state = const OcrSaving();
-    
+
     try {
-      final itemsData = selectedItems.map((item) => {
-        'name': item.name,
-        'quantity': item.quantity,
-        'unit': item.unit,
-        'category': item.category,
-      }).toList();
+      final itemsData = selectedItems
+          .map((item) => {
+                'name': item.name,
+                'quantity': item.quantity,
+                'unit': item.unit,
+                'category': item.category,
+              })
+          .toList();
 
       await _inventoryRepo.addItemsFromOcr(_userId, itemsData);
       state = const OcrSaved();

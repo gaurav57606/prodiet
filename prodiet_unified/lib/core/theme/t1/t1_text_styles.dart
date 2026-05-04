@@ -74,10 +74,9 @@ class T1TextStyles {
 
 class T1TextStyleExtensions {
   static TextStyle sectionLabel(ColorScheme scheme) => GoogleFonts.outfit(
-    fontSize: 10,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 1.4,
-    color: scheme.onSurface.withValues(alpha: 0.45),
-  );
+        fontSize: 10,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.4,
+        color: scheme.onSurface.withValues(alpha: 0.45),
+      );
 }
-

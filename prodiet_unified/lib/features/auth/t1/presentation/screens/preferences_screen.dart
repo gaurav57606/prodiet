@@ -18,7 +18,8 @@ class PreferencesScreen extends StatelessWidget {
       body: const Center(
         child: DmEmptyState(
           title: 'Settings Coming Soon',
-          message: 'Advanced personalization and app preferences are being polished for the next update.',
+          message:
+              'Advanced personalization and app preferences are being polished for the next update.',
           icon: Icons.tune_rounded,
         ),
       ),

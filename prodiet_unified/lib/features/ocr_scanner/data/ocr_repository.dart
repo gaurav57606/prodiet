@@ -13,7 +13,7 @@ class OcrRepository {
     try {
       final bytes = await imageFile.readAsBytes();
       final base64Image = base64Encode(bytes);
-      
+
       final response = await _supabase.functions.invoke(
         'ocr-pipeline',
         body: {'image': base64Image},
@@ -37,9 +37,24 @@ class OcrRepository {
       // Mock fallback
       return OcrResult(
         items: [
-          const ScannedItem(name: 'Rice', quantity: 500, unit: 'g', category: 'Grains', isSelected: true),
-          const ScannedItem(name: 'Chicken', quantity: 200, unit: 'g', category: 'Protein', isSelected: true),
-          const ScannedItem(name: 'Milk', quantity: 1, unit: 'L', category: 'Dairy', isSelected: true),
+          const ScannedItem(
+              name: 'Rice',
+              quantity: 500,
+              unit: 'g',
+              category: 'Grains',
+              isSelected: true),
+          const ScannedItem(
+              name: 'Chicken',
+              quantity: 200,
+              unit: 'g',
+              category: 'Protein',
+              isSelected: true),
+          const ScannedItem(
+              name: 'Milk',
+              quantity: 1,
+              unit: 'L',
+              category: 'Dairy',
+              isSelected: true),
         ],
         rawText: 'MOCK OCR OUTPUT (Function not deployed)',
       );

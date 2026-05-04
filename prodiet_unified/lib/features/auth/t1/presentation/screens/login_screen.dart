@@ -1,3 +1,4 @@
+import "package:flutter/services.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -93,8 +94,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontFamily: null,
                       ),
                       children: [
-                        TextSpan(text: 'Pro', style: TextStyle(color: scheme.onSurface)),
-                        TextSpan(text: 'Diet', style: TextStyle(color: scheme.primary)),
+                        TextSpan(
+                            text: 'Pro',
+                            style: TextStyle(color: scheme.onSurface)),
+                        TextSpan(
+                            text: 'Diet',
+                            style: TextStyle(color: scheme.primary)),
                       ],
                     ),
                   ),
@@ -137,16 +142,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               child: GestureDetector(
                                 onTap: () => setState(() => _selectedTab = 0),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
+                                    color: _selectedTab == 0
+                                        ? scheme.primary
+                                        : Colors.transparent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Center(
                                     child: Text(
                                       'Sign in',
                                       style: TextStyle(
-                                        color: _selectedTab == 0 ? scheme.onPrimary : scheme.onSurface.withValues(alpha: 0.4),
+                                        color: _selectedTab == 0
+                                            ? scheme.onPrimary
+                                            : scheme.onSurface
+                                                .withValues(alpha: 0.4),
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -158,16 +169,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               child: GestureDetector(
                                 onTap: () => setState(() => _selectedTab = 1),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
+                                    color: _selectedTab == 1
+                                        ? scheme.primary
+                                        : Colors.transparent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Center(
                                     child: Text(
                                       'Create account',
                                       style: TextStyle(
-                                        color: _selectedTab == 1 ? scheme.onPrimary : scheme.onSurface.withValues(alpha: 0.4),
+                                        color: _selectedTab == 1
+                                            ? scheme.onPrimary
+                                            : scheme.onSurface
+                                                .withValues(alpha: 0.4),
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -178,20 +195,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ],
                         ),
                       ),
-                      
+
                       if (_selectedTab == 1)
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Center(
                             child: TextButton(
-                              onPressed: () => context.goNamed(AppRoutes.signupName),
+                              onPressed: () =>
+                                  context.goNamed(AppRoutes.signupName),
                               child: const Text('Go to full signup →'),
                             ),
                           ),
                         ),
-                      
+
                       const SizedBox(height: 32),
-  
+
                       // FORM SECTION
                       _buildLabel('EMAIL ADDRESS', theme),
                       const SizedBox(height: 8),
@@ -199,16 +217,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         controller: _emailController,
                         hintText: 'you@example.com',
                         keyboardType: TextInputType.emailAddress,
-                        validator: (v) => (v == null || v.isEmpty) ? 'Email required' : null,
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Email required' : null,
                       ),
                       const SizedBox(height: 24),
-  
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildLabel('PASSWORD', theme),
                           GestureDetector(
-                            onTap: () => context.goNamed(AppRoutes.forgotPasswordName),
+                            onTap: () =>
+                                context.goNamed(AppRoutes.forgotPasswordName),
                             child: Text(
                               'Forgot?',
                               style: TextStyle(
@@ -225,18 +245,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         controller: _passwordController,
                         hintText: '••••••••',
                         obscureText: _obscurePassword,
-                        validator: (v) => (v == null || v.length < 6) ? 'Min 6 characters' : null,
+                        validator: (v) => (v == null || v.length < 6)
+                            ? 'Min 6 characters'
+                            : null,
                         suffixIcon: IconButton(
+                          tooltip: _obscurePassword
+                              ? "Show password"
+                              : "Hide password",
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                            _obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
                             color: scheme.onSurface.withValues(alpha: 0.3),
                             size: 20,
                           ),
-                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                          onPressed: () {
+                            HapticFeedback.lightImpact();
+                            setState(
+                                () => _obscurePassword = !_obscurePassword);
+                          },
                         ),
                       ),
                       const SizedBox(height: 32),
-  
+
                       // Action Button
                       DmButton(
                         label: _selectedTab == 0 ? 'Sign In' : 'Continue →',
@@ -247,16 +278,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             context.goNamed(AppRoutes.signupName);
                             return;
                           }
-                          if (!(_formKey.currentState?.validate() ?? false)) return;
+                          if (!(_formKey.currentState?.validate() ?? false))
+                            return;
                           await ref.read(authProvider.notifier).signIn(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                          );
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                              );
                         },
                         width: double.infinity,
                       ),
                       const SizedBox(height: 24),
-  
+
                       // Divider
                       Center(
                         child: Text(
@@ -268,7 +300,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-  
+
                       // Google + Apple Buttons
                       Row(
                         children: [
@@ -277,7 +309,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               label: 'Google',
                               variant: DmButtonVariant.outline,
                               icon: Icons.g_mobiledata_rounded,
-                              onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
+                              onPressed: () => ref
+                                  .read(authProvider.notifier)
+                                  .signInWithGoogle(),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -292,14 +326,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ],
                       ),
                       const SizedBox(height: 40),
-  
+
                       // Bottom Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Don't have an account? ",
-                            style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.5)),
+                            style: TextStyle(
+                                color: scheme.onSurface.withValues(alpha: 0.5)),
                           ),
                           GestureDetector(
                             onTap: () => context.goNamed(AppRoutes.signupName),

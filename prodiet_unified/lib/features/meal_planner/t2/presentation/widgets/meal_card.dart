@@ -12,7 +12,7 @@ class MealCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     const skyColor = Color(0xFF38BFFF);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: DmCard(
@@ -28,7 +28,8 @@ class MealCard extends StatelessWidget {
                   style: T2TextStyles.sectionLabel(colorScheme),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                   decoration: BoxDecoration(
                     color: skyColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),

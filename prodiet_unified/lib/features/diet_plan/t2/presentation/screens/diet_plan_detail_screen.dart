@@ -8,7 +8,8 @@ import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 class DietPlanDetailScreen extends StatelessWidget {
   final DietPlan plan;
   final DietDay day;
-  const DietPlanDetailScreen({required this.plan, required this.day, super.key});
+  const DietPlanDetailScreen(
+      {required this.plan, required this.day, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,8 @@ class DietPlanDetailScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           day.dayNumber == 1 ? 'MONDAY PLAN' : 'DAY ${day.dayNumber} DETAILS',
-          style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, letterSpacing: 1.2),
+          style: GoogleFonts.barlowCondensed(
+              fontWeight: FontWeight.w900, letterSpacing: 1.2),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -27,24 +29,28 @@ class DietPlanDetailScreen extends StatelessWidget {
         ),
       ),
       body: day.meals.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Center(child: Icon(Icons.restaurant_rounded, size: 40, color: T2Colors.lime)),
-                const SizedBox(height: 12),
-                Text('No meals planned for this day',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: T2Colors.textSecondary)),
-              ],
+          ? Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Center(
+                      child: Icon(Icons.restaurant_rounded,
+                          size: 40, color: T2Colors.lime)),
+                  const SizedBox(height: 12),
+                  Text('No meals planned for this day',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: T2Colors.textSecondary)),
+                ],
+              ),
+            )
+          : ListView(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              children: day.meals.map((meal) => _MealCard(meal: meal)).toList(),
             ),
-          )
-        : ListView(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            children: day.meals.map((meal) => _MealCard(meal: meal)).toList(),
-          ),
     );
   }
 }
@@ -72,8 +78,11 @@ class _MealCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(name.toUpperCase(), style: const TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
+          Text(name.toUpperCase(),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 15)),
           const SizedBox(height: 8),
           Row(children: [
             _macro('${kcal.toInt()} kcal', T2Colors.lime),
@@ -88,7 +97,8 @@ class _MealCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               meal.ingredients.join(', ').toUpperCase(),
-              style: const TextStyle(fontSize: 10, color: T2Colors.textMuted, height: 1.4),
+              style: const TextStyle(
+                  fontSize: 10, color: T2Colors.textMuted, height: 1.4),
             ),
           ],
         ],
@@ -97,6 +107,6 @@ class _MealCard extends StatelessWidget {
   }
 
   Widget _macro(String label, Color color) => Text(label,
-    style: TextStyle(fontSize: 12, color: color,
-      fontWeight: FontWeight.w600));
+      style:
+          TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600));
 }

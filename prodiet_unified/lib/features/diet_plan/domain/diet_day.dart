@@ -19,5 +19,6 @@ class DietDay with _$DietDay {
 
   List<DietMeal> get meals => [...breakfast, ...lunch, ...dinner, ...snacks];
 
-  factory DietDay.fromJson(Map<String, dynamic> json) => _$DietDayFromJson(json);
+  factory DietDay.fromJson(Map<String, dynamic> json) =>
+      _$DietDayFromJson(json);
 }

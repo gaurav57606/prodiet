@@ -16,14 +16,17 @@ class NextMealCard extends StatelessWidget {
     if (meal == null) {
       return const Padding(
         padding: EdgeInsets.all(20),
-        child: Center(child: Text("No more meals today!", style: TextStyle(color: Colors.white70))),
+        child: Center(
+            child: Text("No more meals today!",
+                style: TextStyle(color: Colors.white70))),
       );
     }
 
     final timeStr = DateFormat('HH:mm').format(meal!.scheduledTime);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),
+      padding: const EdgeInsets.symmetric(
+          horizontal: T2Spacing.lg, vertical: T2Spacing.md),
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
@@ -58,7 +61,8 @@ class NextMealCard extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 6),
                       child: Text(
                         meal!.name,
                         style: GoogleFonts.barlowCondensed(
@@ -77,7 +81,8 @@ class NextMealCard extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: meal!.nutritionalValues.calories.toString(),
+                                  text: meal!.nutritionalValues.calories
+                                      .toString(),
                                   style: GoogleFonts.barlowCondensed(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w900,

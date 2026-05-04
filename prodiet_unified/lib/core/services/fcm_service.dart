@@ -80,7 +80,7 @@ class FcmService {
   void _handleMessageDisplay(RemoteMessage message) {
     if (message.notification == null) return;
     final route = message.data['route'] as String?;
-    
+
     _localNotifications.showNotification(
       id: message.hashCode,
       title: message.notification!.title ?? 'ProDiet Alert',

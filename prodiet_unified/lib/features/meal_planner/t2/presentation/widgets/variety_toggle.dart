@@ -6,7 +6,7 @@ class VarietyToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
       child: Container(
@@ -39,7 +39,9 @@ class VarietyToggle extends StatelessWidget {
           child: Text(
             label,
             style: theme.textTheme.labelLarge?.copyWith(
-              color: isSelected ? Colors.black : theme.colorScheme.onSurfaceVariant,
+              color: isSelected
+                  ? Colors.black
+                  : theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
             ),
           ),

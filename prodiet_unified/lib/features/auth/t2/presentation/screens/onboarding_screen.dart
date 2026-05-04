@@ -32,8 +32,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ('MODERATELY ACTIVE', '3–5 days exercise/week'),
     ('VERY ACTIVE', 'Hard exercise 6–7 days'),
   ];
-  static const _goalKeys = ['lose_weight', 'gain_muscle', 'eat_healthy', 'maintain'];
-  static const _activityKeys = ['sedentary', 'light', 'moderate', 'very_active'];
+  static const _goalKeys = [
+    'lose_weight',
+    'gain_muscle',
+    'eat_healthy',
+    'maintain'
+  ];
+  static const _activityKeys = [
+    'sedentary',
+    'light',
+    'moderate',
+    'very_active'
+  ];
 
   @override
   void dispose() {
@@ -119,7 +129,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         TextSpan(text: "Your health "),
                         TextSpan(
                           text: "goals",
-                          style: TextStyle(color: Colors.white), // Color handled by ShaderMask
+                          style: TextStyle(
+                              color:
+                                  Colors.white), // Color handled by ShaderMask
                         ),
                       ],
                     ),
@@ -175,33 +187,41 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: sel ? const Color(0xFFB06EFF).withValues(alpha: 0.08) : T2Colors.bgElevated,
+                              color: sel
+                                  ? const Color(0xFFB06EFF)
+                                      .withValues(alpha: 0.08)
+                                  : T2Colors.bgElevated,
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
-                                color: sel ? const Color(0xFFB06EFF) : T2Colors.border,
+                                color: sel
+                                    ? const Color(0xFFB06EFF)
+                                    : T2Colors.border,
                                 width: sel ? 1.5 : 1,
                               ),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  g.$1, 
-                                  size: 24, 
-                                  color: sel ? const Color(0xFFB06EFF) : const Color(0xFF666666)
-                                ),
+                                Icon(g.$1,
+                                    size: 24,
+                                    color: sel
+                                        ? const Color(0xFFB06EFF)
+                                        : const Color(0xFF666666)),
                                 const Spacer(),
                                 Text(
                                   g.$2,
                                   style: GoogleFonts.barlowCondensed(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w900,
-                                    color: sel ? const Color(0xFFB06EFF) : Colors.white,
+                                    color: sel
+                                        ? const Color(0xFFB06EFF)
+                                        : Colors.white,
                                   ),
                                 ),
                                 Text(
                                   g.$3,
-                                  style: const TextStyle(fontSize: 10, color: T2Colors.textMuted),
+                                  style: const TextStyle(
+                                      fontSize: 10, color: T2Colors.textMuted),
                                 ),
                               ],
                             ),
@@ -217,7 +237,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   color: Color(0xFFB06EFF),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.check, size: 12, color: Colors.white),
+                                child: const Icon(Icons.check,
+                                    size: 12, color: Colors.white),
                               ),
                             ),
                         ],
@@ -251,12 +272,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child: GestureDetector(
                       onTap: () => setState(() => _activity = i),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
                         decoration: BoxDecoration(
-                          color: sel ? const Color(0xFFB06EFF).withValues(alpha: 0.06) : T2Colors.bgElevated,
+                          color: sel
+                              ? const Color(0xFFB06EFF).withValues(alpha: 0.06)
+                              : T2Colors.bgElevated,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: sel ? const Color(0xFFB06EFF) : T2Colors.border,
+                            color:
+                                sel ? const Color(0xFFB06EFF) : T2Colors.border,
                             width: sel ? 1.5 : 1,
                           ),
                         ),
@@ -268,14 +293,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: sel ? const Color(0xFFB06EFF) : T2Colors.border,
+                                  color: sel
+                                      ? const Color(0xFFB06EFF)
+                                      : T2Colors.border,
                                   width: 2,
                                 ),
-                                color: sel ? const Color(0xFFB06EFF) : Colors.transparent,
+                                color: sel
+                                    ? const Color(0xFFB06EFF)
+                                    : Colors.transparent,
                               ),
                               child: sel
                                   ? const Center(
-                                      child: Icon(Icons.check, size: 10, color: Colors.white),
+                                      child: Icon(Icons.check,
+                                          size: 10, color: Colors.white),
                                     )
                                   : null,
                             ),
@@ -288,12 +318,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   style: GoogleFonts.barlowCondensed(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w800,
-                                    color: sel ? const Color(0xFFB06EFF) : Colors.white,
+                                    color: sel
+                                        ? const Color(0xFFB06EFF)
+                                        : Colors.white,
                                   ),
                                 ),
                                 Text(
                                   a.$2,
-                                  style: const TextStyle(fontSize: 11, color: T2Colors.textMuted),
+                                  style: const TextStyle(
+                                      fontSize: 11, color: T2Colors.textMuted),
                                 ),
                               ],
                             ),
@@ -354,7 +387,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 Center(
                   child: TextButton.icon(
                     onPressed: () => context.pop(),
-                    icon: const Icon(Icons.chevron_left, size: 16, color: Color(0xFFB06EFF)),
+                    icon: const Icon(Icons.chevron_left,
+                        size: 16, color: Color(0xFFB06EFF)),
                     label: const Text(
                       'Back to details',
                       style: TextStyle(color: Color(0xFFB06EFF), fontSize: 13),

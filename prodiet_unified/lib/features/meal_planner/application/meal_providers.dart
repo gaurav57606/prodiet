@@ -11,8 +11,14 @@ final mealRepositoryProvider = Provider<MealRepository>((ref) {
 
 final todayMealsProvider = StreamProvider.autoDispose<DailyMealSummary>((ref) {
   final userId = ref.watch(currentUserIdProvider);
-  if (userId.isEmpty) return Stream.value(const DailyMealSummary(meals: [], totalCalories: 0, totalProteinG: 0, totalCarbsG: 0, totalFatG: 0));
-  
+  if (userId.isEmpty)
+    return Stream.value(const DailyMealSummary(
+        meals: [],
+        totalCalories: 0,
+        totalProteinG: 0,
+        totalCarbsG: 0,
+        totalFatG: 0));
+
   return ref.watch(mealRepositoryProvider).watchTodayMeals(userId).map((meals) {
     return DailyMealSummary.calculate(meals);
   });
@@ -23,6 +29,6 @@ final isLoggingMealProvider = StateProvider<bool>((ref) => false);
 final weeklyMealsProvider = FutureProvider.autoDispose<List<Meal>>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return [];
-  
+
   return ref.read(mealRepositoryProvider).getMealHistory(userId, days: 7);
 });

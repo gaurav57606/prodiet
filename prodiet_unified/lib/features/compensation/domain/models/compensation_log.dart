@@ -31,7 +31,8 @@ class CompensationLog {
       compensationType: json['compensation_type'] ?? 'skipped',
       appliedToDate: json['applied_to_date'],
       aiAdjustmentJson: json['ai_adjustment_json'],
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+          json['created_at'] ?? DateTime.now().toIso8601String()),
     );
   }
 

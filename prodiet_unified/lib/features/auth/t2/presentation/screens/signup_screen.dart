@@ -1,3 +1,4 @@
+import "package:flutter/services.dart";
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -157,7 +158,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       child: DmTextField(
                         controller: _firstNameCtrl,
                         hint: "Rohan",
-                        prefixIcon: const Icon(Icons.person_outline, size: 20, color: Color(0xFF666666)),
+                        prefixIcon: const Icon(Icons.person_outline,
+                            size: 20, color: Color(0xFF666666)),
                       ),
                     ),
                   ),
@@ -168,7 +170,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       child: DmTextField(
                         controller: _lastNameCtrl,
                         hint: "Sharma",
-                        prefixIcon: const Icon(Icons.person_outline, size: 20, color: Color(0xFF666666)),
+                        prefixIcon: const Icon(Icons.person_outline,
+                            size: 20, color: Color(0xFF666666)),
                       ),
                     ),
                   ),
@@ -182,7 +185,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   controller: _emailCtrl,
                   hint: "you@example.com",
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.email_outlined, size: 20, color: Color(0xFF666666)),
+                  prefixIcon: const Icon(Icons.email_outlined,
+                      size: 20, color: Color(0xFF666666)),
                 ),
               ),
               const SizedBox(height: 14),
@@ -193,7 +197,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   controller: _phoneCtrl,
                   hint: "+91 98765 43210",
                   keyboardType: TextInputType.phone,
-                  prefixIcon: const Icon(Icons.phone_outlined, size: 20, color: Color(0xFF666666)),
+                  prefixIcon: const Icon(Icons.phone_outlined,
+                      size: 20, color: Color(0xFF666666)),
                 ),
               ),
               const SizedBox(height: 14),
@@ -204,14 +209,22 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   controller: _passwordCtrl,
                   hint: "Min. 8 characters",
                   obscureText: _obscurePassword,
-                  prefixIcon: const Icon(Icons.lock_outline, size: 20, color: Color(0xFF666666)),
+                  prefixIcon: const Icon(Icons.lock_outline,
+                      size: 20, color: Color(0xFF666666)),
                   suffixIcon: IconButton(
+                    tooltip:
+                        _obscurePassword ? "Show password" : "Hide password",
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      _obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
                       size: 20,
                       color: const Color(0xFF666666),
                     ),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      setState(() => _obscurePassword = !_obscurePassword);
+                    },
                   ),
                 ),
               ),
@@ -223,14 +236,24 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   controller: _confirmPasswordCtrl,
                   hint: "Re-enter password",
                   obscureText: _obscureConfirmPassword,
-                  prefixIcon: const Icon(Icons.lock_outline, size: 20, color: Color(0xFF666666)),
+                  prefixIcon: const Icon(Icons.lock_outline,
+                      size: 20, color: Color(0xFF666666)),
                   suffixIcon: IconButton(
+                    tooltip: _obscureConfirmPassword
+                        ? "Show password"
+                        : "Hide password",
                     icon: Icon(
-                      _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
                       size: 20,
                       color: const Color(0xFF666666),
                     ),
-                    onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      setState(() =>
+                          _obscureConfirmPassword = !_obscureConfirmPassword);
+                    },
                   ),
                 ),
               ),
@@ -247,19 +270,27 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       height: 18,
                       margin: const EdgeInsets.only(top: 2),
                       decoration: BoxDecoration(
-                        color: _termsAccepted ? const Color(0xFFB06EFF) : const Color(0xFF1E1E24),
+                        color: _termsAccepted
+                            ? const Color(0xFFB06EFF)
+                            : const Color(0xFF1E1E24),
                         borderRadius: BorderRadius.circular(4),
-                        border: _termsAccepted ? null : Border.all(color: const Color(0xFF444444)),
+                        border: _termsAccepted
+                            ? null
+                            : Border.all(color: const Color(0xFF444444)),
                       ),
-                      child: _termsAccepted 
-                        ? const Icon(Icons.check, color: Colors.white, size: 14)
-                        : null,
+                      child: _termsAccepted
+                          ? const Icon(Icons.check,
+                              color: Colors.white, size: 14)
+                          : null,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(color: Color(0xFFAAAAAA), fontSize: 13, height: 1.4),
+                          style: const TextStyle(
+                              color: Color(0xFFAAAAAA),
+                              fontSize: 13,
+                              height: 1.4),
                           children: [
                             const TextSpan(text: "I agree to the "),
                             TextSpan(
@@ -271,7 +302,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("Terms coming soon")),
+                                    const SnackBar(
+                                        content: Text("Terms coming soon")),
                                   );
                                 },
                             ),
@@ -283,7 +315,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 decoration: TextDecoration.underline,
                               ),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => context.push(AppRoutes.t2PrivacyPolicy),
+                                ..onTap = () =>
+                                    context.push(AppRoutes.t2PrivacyPolicy),
                             ),
                           ],
                         ),
@@ -307,7 +340,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               // Divider
               const Row(
                 children: [
-                  Expanded(child: Divider(color: Color(0xFF2A2A2E), thickness: 1)),
+                  Expanded(
+                      child: Divider(color: Color(0xFF2A2A2E), thickness: 1)),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
@@ -318,7 +352,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                     ),
                   ),
-                  Expanded(child: Divider(color: Color(0xFF2A2A2E), thickness: 1)),
+                  Expanded(
+                      child: Divider(color: Color(0xFF2A2A2E), thickness: 1)),
                 ],
               ),
               const SizedBox(height: 24),
@@ -337,17 +372,20 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           fontSize: 18,
                         ),
                       ),
-                      onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
+                      onPressed: () =>
+                          ref.read(authProvider.notifier).signInWithGoogle(),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildSocialButton(
                       label: "Apple",
-                      icon: const Icon(Icons.apple, color: Colors.white, size: 20),
+                      icon: const Icon(Icons.apple,
+                          color: Colors.white, size: 20),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Apple Sign-In coming soon")),
+                          const SnackBar(
+                              content: Text("Apple Sign-In coming soon")),
                         );
                       },
                     ),
@@ -365,7 +403,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       children: [
                         TextSpan(
                           text: "Already have an account? ",
-                          style: TextStyle(color: Color(0xFF888888), fontSize: 13),
+                          style:
+                              TextStyle(color: Color(0xFF888888), fontSize: 13),
                         ),
                         TextSpan(
                           text: "Sign in",

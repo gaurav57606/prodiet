@@ -18,9 +18,10 @@ class VerifyPhoneScreen extends ConsumerStatefulWidget {
 
 class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   final _phoneController = TextEditingController();
-  final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _otpControllers =
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _otpFocusNodes = List.generate(6, (_) => FocusNode());
-  
+
   bool _otpSent = false;
   bool _isLoading = false;
   int _countdown = 45;
@@ -42,10 +43,14 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
 
   String _friendlyError(dynamic e) {
     final msg = e.toString().toLowerCase();
-    if (msg.contains('invalid') && msg.contains('token')) return 'Invalid OTP code. Please check and try again.';
-    if (msg.contains('expired')) return 'OTP has expired. Please request a new one.';
-    if (msg.contains('too many')) return 'Too many attempts. Please wait a few minutes.';
-    if (msg.contains('network')) return 'Connection error. Check your internet.';
+    if (msg.contains('invalid') && msg.contains('token'))
+      return 'Invalid OTP code. Please check and try again.';
+    if (msg.contains('expired'))
+      return 'OTP has expired. Please request a new one.';
+    if (msg.contains('too many'))
+      return 'Too many attempts. Please wait a few minutes.';
+    if (msg.contains('network'))
+      return 'Connection error. Check your internet.';
     return 'Something went wrong. Please try again.';
   }
 
@@ -80,7 +85,7 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
     try {
       final repo = ref.read(authRepositoryProvider);
       await repo.sendPhoneOtp('$_indiaCountryCode$phone');
-      
+
       if (mounted) {
         setState(() {
           _otpSent = true;
@@ -101,7 +106,7 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   Future<void> _verifyOtp() async {
     final phone = _phoneController.text.trim();
     final otp = _otpControllers.map((c) => c.text).join();
-    
+
     if (otp.length != 6) {
       setState(() => _errorMessage = 'Please enter the 6-digit OTP');
       return;
@@ -129,7 +134,11 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   void _handleOtpInput(String value, int index) {
     // Paste logic
     if (value.length > 1) {
-      final digits = value.trim().split('').where((char) => int.tryParse(char) != null).toList();
+      final digits = value
+          .trim()
+          .split('')
+          .where((char) => int.tryParse(char) != null)
+          .toList();
       for (int i = 0; i < 6 && i < digits.length; i++) {
         _otpControllers[i].text = digits[i];
       }
@@ -180,16 +189,15 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              _otpSent 
-                ? 'Enter the 6-digit code sent to $_indiaCountryCode ${_phoneController.text}' 
-                : 'Enter your mobile number to receive a verification code',
+              _otpSent
+                  ? 'Enter the 6-digit code sent to $_indiaCountryCode ${_phoneController.text}'
+                  : 'Enter your mobile number to receive a verification code',
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.5),
                 fontSize: 16,
               ),
             ),
             const SizedBox(height: 48),
-            
             if (!_otpSent) ...[
               _buildLabel('MOBILE NUMBER', theme),
               const SizedBox(height: 8),
@@ -220,24 +228,24 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
               ),
               const SizedBox(height: 24),
               Center(
-                child: _countdown > 0 
-                  ? Text(
-                      'Resend in 0:${_countdown.toString().padLeft(2, '0')}',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
-                    )
-                  : TextButton(
-                      onPressed: _isLoading ? null : _sendOtp,
-                      child: Text(
-                        'Resend OTP',
+                child: _countdown > 0
+                    ? Text(
+                        'Resend in 0:${_countdown.toString().padLeft(2, '0')}',
                         style: TextStyle(
-                          color: scheme.primary,
-                          fontWeight: FontWeight.w700,
+                            color: Colors.white.withValues(alpha: 0.4)),
+                      )
+                    : TextButton(
+                        onPressed: _isLoading ? null : _sendOtp,
+                        child: Text(
+                          'Resend OTP',
+                          style: TextStyle(
+                            color: scheme.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                    ),
               ),
             ],
-            
             if (_errorMessage != null) ...[
               const SizedBox(height: 16),
               Text(
@@ -245,7 +253,6 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
                 style: TextStyle(color: scheme.error, fontSize: 13),
               ),
             ],
-            
             const SizedBox(height: 32),
             DmButton(
               label: _otpSent ? 'Verify & Continue' : 'Send OTP',
@@ -253,7 +260,6 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
               onPressed: _isLoading ? null : (_otpSent ? _verifyOtp : _sendOtp),
               width: double.infinity,
             ),
-            
             if (_otpSent) ...[
               const SizedBox(height: 16),
               Center(
@@ -261,7 +267,8 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
                   onPressed: () => setState(() => _otpSent = false),
                   child: Text(
                     'Change Phone Number',
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
+                    style:
+                        TextStyle(color: Colors.white.withValues(alpha: 0.4)),
                   ),
                 ),
               ),
@@ -281,7 +288,8 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
         focusNode: _otpFocusNodes[index],
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
-        maxLength: index == 0 ? 10 : 1, // Allow paste catch on first box if needed
+        maxLength:
+            index == 0 ? 10 : 1, // Allow paste catch on first box if needed
         style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -298,7 +306,8 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.primary),
           ),
           fillColor: Colors.white.withValues(alpha: 0.05),
           filled: true,

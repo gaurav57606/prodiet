@@ -54,7 +54,8 @@ class DashboardRepository {
         waterMl += (log['amount_ml'] as num? ?? 0).toInt();
       }
 
-      final calorieGoal = (userData['daily_calorie_target'] as num? ?? 2000).toInt();
+      final calorieGoal =
+          (userData['daily_calorie_target'] as num? ?? 2000).toInt();
       final proteinGoal = ((calorieGoal * 0.3) / 4).toInt();
       final carbsGoal = ((calorieGoal * 0.4) / 4).toInt();
       final fatGoal = ((calorieGoal * 0.3) / 9).toInt();
@@ -78,7 +79,8 @@ class DashboardRepository {
         caloriesBurned: 0,
       );
     } catch (e) {
-      throw ErrorHandler.handle(e, context: 'DashboardRepository.getTodaySummary');
+      throw ErrorHandler.handle(e,
+          context: 'DashboardRepository.getTodaySummary');
     }
   }
 }

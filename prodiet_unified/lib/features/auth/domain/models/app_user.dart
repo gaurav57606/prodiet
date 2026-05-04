@@ -92,7 +92,8 @@ class AppUser {
     }
     if (fitnessGoal != null) map['fitness_goal'] = fitnessGoal;
     if (activityLevel != null) map['activity_level'] = activityLevel;
-    if (dailyCalorieGoal != null) map['daily_calorie_target'] = dailyCalorieGoal;
+    if (dailyCalorieGoal != null)
+      map['daily_calorie_target'] = dailyCalorieGoal;
     if (fcmToken != null) map['fcm_token'] = fcmToken;
     if (updatedAt != null) map['updated_at'] = updatedAt!.toIso8601String();
 

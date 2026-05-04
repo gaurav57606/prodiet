@@ -41,7 +41,8 @@ class ActivityGrid extends StatelessWidget {
             'BURNED',
             const Color(0xFFFF5082).withValues(alpha: 0.08),
             const Color(0xFFFF90B0),
-            border: Border.all(color: const Color(0xFFFF5082).withValues(alpha: 0.15)),
+            border: Border.all(
+                color: const Color(0xFFFF5082).withValues(alpha: 0.15)),
           ),
           const SizedBox(width: T1Spacing.sm),
           _buildActivityTile(
@@ -50,7 +51,8 @@ class ActivityGrid extends StatelessWidget {
             'NET KCAL',
             const Color(0xFF00C8B4).withValues(alpha: 0.07),
             const Color(0xFF40D8C0),
-            border: Border.all(color: const Color(0xFF00C8B4).withValues(alpha: 0.13)),
+            border: Border.all(
+                color: const Color(0xFF00C8B4).withValues(alpha: 0.13)),
           ),
         ],
       ),
@@ -67,7 +69,7 @@ class ActivityGrid extends StatelessWidget {
     Gradient? gradient,
   }) {
     final theme = Theme.of(context);
-    
+
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: T1Spacing.md),

@@ -28,14 +28,15 @@ class AiRepository {
       );
 
       if (response.status != 200) {
-        return Left(ServerError(message: 'AI Meal Plan generation failed: ${response.status}'));
+        return Left(ServerError(
+            message: 'AI Meal Plan generation failed: ${response.status}'));
       }
 
       final data = response.data as Map<String, dynamic>;
       final isCacheHit = data['cached'] == true;
 
       _analytics.logEvent(
-        user.id, 
+        user.id,
         AnalyticsService.kAiPlanGenerated,
         data: {'cached': isCacheHit, 'days': days},
         screen: 'ai_meal_plan',
@@ -63,10 +64,12 @@ class AiRepository {
       );
 
       if (response.status != 200) {
-        return Left(ServerError(message: 'Kitchen Assistant failed: ${response.status}'));
+        return Left(ServerError(
+            message: 'Kitchen Assistant failed: ${response.status}'));
       }
 
-      return Right(response.data['answer'] ?? 'I couldn\'t find an answer for that.');
+      return Right(
+          response.data['answer'] ?? 'I couldn\'t find an answer for that.');
     } catch (e) {
       return Left(UnknownError(message: e.toString()));
     }
@@ -88,7 +91,8 @@ class AiRepository {
       );
 
       if (response.status != 200) {
-        return Left(ServerError(message: 'AI Compensation failed: ${response.status}'));
+        return Left(
+            ServerError(message: 'AI Compensation failed: ${response.status}'));
       }
 
       return Right(response.data as Map<String, dynamic>);

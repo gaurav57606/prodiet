@@ -23,21 +23,29 @@ class ProDietEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 64, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
+            Icon(icon,
+                size: 64,
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.5)),
             const SizedBox(height: 16),
             Text(
               headline,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+                    fontWeight: FontWeight.w700,
+                  ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               subtext,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-              ),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.6),
+                  ),
               textAlign: TextAlign.center,
             ),
             if (buttonLabel != null && onButtonTap != null) ...[

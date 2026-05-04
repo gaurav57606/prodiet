@@ -3,13 +3,15 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:logger/logger.dart';
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _notifications =
+      FlutterLocalNotificationsPlugin();
   final _logger = Logger();
 
   Future<void> initialize() async {
     // Initialized in main.dart
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -31,16 +33,18 @@ class NotificationService {
     // Create Android channels
     final androidPlugin = FlutterLocalNotificationsPlugin();
     await androidPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(const AndroidNotificationChannel(
           'prodiet_reminders',
           'ProDiet Reminders',
           description: 'General reminders for meals and water',
           importance: Importance.max,
         ));
-        
+
     await androidPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(const AndroidNotificationChannel(
           'meal_reminders',
           'Meal Reminders',
@@ -49,7 +53,8 @@ class NotificationService {
         ));
   }
 
-  Future<void> scheduleMealReminder(String mealName, DateTime scheduledTime) async {
+  Future<void> scheduleMealReminder(
+      String mealName, DateTime scheduledTime) async {
     final reminderTime = scheduledTime.subtract(const Duration(minutes: 10));
     if (reminderTime.isBefore(DateTime.now())) return;
 
@@ -68,7 +73,8 @@ class NotificationService {
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       payload: 'meal|$mealName',
     );
   }
@@ -77,7 +83,8 @@ class NotificationService {
     // Cancel any existing water reminder first
     await _notifications.cancel(999);
 
-    final scheduledTime = tz.TZDateTime.now(tz.local).add(Duration(hours: intervalHours));
+    final scheduledTime =
+        tz.TZDateTime.now(tz.local).add(Duration(hours: intervalHours));
 
     await _notifications.zonedSchedule(
       999,
@@ -129,7 +136,8 @@ class NotificationService {
     await showNotification(
       id: ingredientName.hashCode,
       title: 'Low stock: $ingredientName',
-      body: 'You are running low on $ingredientName. Consider adding it to your shopping list.',
+      body:
+          'You are running low on $ingredientName. Consider adding it to your shopping list.',
       importance: Importance.high,
     );
   }
@@ -141,6 +149,7 @@ class NotificationService {
   Future<void> cancelMealReminders() async {
     // TODO: Implement selective cancel using stored meal notification IDs.
     // Do NOT call _notifications.cancelAll() — it also cancels water reminders (ID: 999).
-    _logger.d('[NotificationService] cancelMealReminders called — selective cancel not yet implemented');
+    _logger.d(
+        '[NotificationService] cancelMealReminders called — selective cancel not yet implemented');
   }
 }

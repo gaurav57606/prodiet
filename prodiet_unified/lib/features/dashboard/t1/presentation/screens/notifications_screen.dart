@@ -18,7 +18,8 @@ class NotificationsScreen extends StatelessWidget {
       body: const Center(
         child: DmEmptyState(
           title: 'No notifications yet',
-          message: 'We will notify you when your diet plan is updated or a goal is reached.',
+          message:
+              'We will notify you when your diet plan is updated or a goal is reached.',
           icon: Icons.notifications_none_rounded,
         ),
       ),

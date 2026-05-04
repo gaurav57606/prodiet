@@ -16,14 +16,23 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
   final Map<String, List<({IconData icon, String text})>> _steps = {
     'diet': [
       (icon: Icons.restaurant_rounded, text: "Reading your fitness goals..."),
-      (icon: Icons.psychology_rounded, text: "Calculating your calorie targets..."),
+      (
+        icon: Icons.psychology_rounded,
+        text: "Calculating your calorie targets..."
+      ),
       (icon: Icons.calendar_today_rounded, text: "Building your 7-day plan..."),
-      (icon: Icons.auto_awesome_rounded, text: "Almost done — adding variety..."),
+      (
+        icon: Icons.auto_awesome_rounded,
+        text: "Almost done — adding variety..."
+      ),
     ],
     'ocr': [
       (icon: Icons.camera_alt_rounded, text: "Reading your grocery bill..."),
       (icon: Icons.search_rounded, text: "Identifying ingredients..."),
-      (icon: Icons.label_important_rounded, text: "Looking up nutritional data..."),
+      (
+        icon: Icons.label_important_rounded,
+        text: "Looking up nutritional data..."
+      ),
       (icon: Icons.inventory_2_rounded, text: "Adding items to your pantry..."),
     ],
   };
@@ -77,8 +86,8 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
                   stepData.text,
                   key: ValueKey('text_$_currentStep'),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                        fontWeight: FontWeight.w600,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -87,7 +96,8 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
                 width: 200,
                 child: LinearProgressIndicator(
                   value: (_currentStep + 1) / 4,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -95,9 +105,12 @@ class _AiThinkingLoaderState extends State<AiThinkingLoader> {
               Text(
                 "This usually takes 5–10 seconds",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
+                      fontStyle: FontStyle.italic,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.5),
+                    ),
               ),
             ],
           ),

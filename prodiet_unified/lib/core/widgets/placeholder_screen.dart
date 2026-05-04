@@ -14,7 +14,8 @@ class PlaceholderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isT2 = theme.brightness == Brightness.dark && theme.colorScheme.primary.value == 0xFFD4F263;
+    final isT2 = theme.brightness == Brightness.dark &&
+        theme.colorScheme.primary.value == 0xFFD4F263;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -45,7 +46,8 @@ class PlaceholderScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                message ?? 'The $title screen is currently under development. Stay tuned for updates!',
+                message ??
+                    'The $title screen is currently under development. Stay tuned for updates!',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),

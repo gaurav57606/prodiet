@@ -15,9 +15,9 @@ class SyncService {
   // Call this on app resume + on connectivity restored
   Future<void> syncAll(String userId) async {
     final hasNet = await _isOnline();
-    if (!hasNet) { 
-      _logger.w('[$_tag] Offline — skipping sync'); 
-      return; 
+    if (!hasNet) {
+      _logger.w('[$_tag] Offline — skipping sync');
+      return;
     }
 
     await Future.wait([
@@ -32,11 +32,16 @@ class SyncService {
     final unsynced = await _db.mealDao.getUnsynced(userId);
     if (unsynced.isEmpty) return;
     // Upsert all unsynced to Supabase meals table
-    final rows = unsynced.map((m) => {
-      'id': m.id, 'user_id': m.userId,
-      'name': m.name, 'meal_type': m.mealType,
-      'status': m.status, 'date': m.date,
-    }).toList();
+    final rows = unsynced
+        .map((m) => {
+              'id': m.id,
+              'user_id': m.userId,
+              'name': m.name,
+              'meal_type': m.mealType,
+              'status': m.status,
+              'date': m.date,
+            })
+        .toList();
     await _supabase.from('meals').upsert(rows);
     await _db.mealDao.markSynced(unsynced.map((m) => m.id).toList());
     await _db.mealDao.pruneOldSynced();
@@ -45,11 +50,15 @@ class SyncService {
   Future<void> _syncInventory(String userId) async {
     final unsynced = await _db.inventoryDao.getUnsynced(userId);
     if (unsynced.isEmpty) return;
-    final rows = unsynced.map((i) => {
-      'id': i.id, 'user_id': i.userId,
-      'ingredient_name': i.ingredientName,
-      'quantity': i.quantity, 'unit': i.unit,
-    }).toList();
+    final rows = unsynced
+        .map((i) => {
+              'id': i.id,
+              'user_id': i.userId,
+              'ingredient_name': i.ingredientName,
+              'quantity': i.quantity,
+              'unit': i.unit,
+            })
+        .toList();
     await _supabase.from('inventory').upsert(rows);
     await _db.inventoryDao.markSynced(unsynced.map((i) => i.id).toList());
   }
@@ -57,10 +66,14 @@ class SyncService {
   Future<void> _syncWater(String userId) async {
     final unsynced = await _db.waterDao.getUnsynced(userId);
     if (unsynced.isEmpty) return;
-    final rows = unsynced.map((w) => {
-      'id': w.id, 'user_id': w.userId,
-      'amount_ml': w.amountMl, 'logged_at': w.loggedAt,
-    }).toList();
+    final rows = unsynced
+        .map((w) => {
+              'id': w.id,
+              'user_id': w.userId,
+              'amount_ml': w.amountMl,
+              'logged_at': w.loggedAt,
+            })
+        .toList();
     await _supabase.from('water_logs').upsert(rows);
     await _db.waterDao.markSynced(unsynced.map((w) => w.id).toList());
   }

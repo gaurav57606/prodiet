@@ -67,9 +67,11 @@ class ActivitySyncScreen extends ConsumerWidget {
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
+              border: Border.all(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.2)),
             ),
-            child: Icon(Icons.fitness_center_rounded, color: theme.colorScheme.primary, size: 22),
+            child: Icon(Icons.fitness_center_rounded,
+                color: theme.colorScheme.primary, size: 22),
           ),
           const SizedBox(width: T1Spacing.md),
           Expanded(
@@ -79,7 +81,9 @@ class ActivitySyncScreen extends ConsumerWidget {
                 Text('Google Fit', style: theme.textTheme.titleMedium),
                 Text(
                   'Connected and syncing calories',
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                 ),
               ],
             ),
@@ -89,11 +93,15 @@ class ActivitySyncScreen extends ConsumerWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF40D8B8).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF40D8B8).withValues(alpha: 0.2)),
+              border: Border.all(
+                  color: const Color(0xFF40D8B8).withValues(alpha: 0.2)),
             ),
             child: const Text(
               'Active',
-              style: TextStyle(color: Color(0xFF40D8B8), fontSize: 10, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color(0xFF40D8B8),
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -104,16 +112,20 @@ class ActivitySyncScreen extends ConsumerWidget {
   Widget _buildStatsRow(BuildContext context, DashboardSummary summary) {
     return Row(
       children: [
-        _buildStatTile(context, summary.stepsToday.toString(), 'STEPS', T1ColorSchemes.accentViolet),
+        _buildStatTile(context, summary.stepsToday.toString(), 'STEPS',
+            T1ColorSchemes.accentViolet),
         const SizedBox(width: T1Spacing.sm),
-        _buildStatTile(context, summary.caloriesBurned.toString(), 'BURNED', T1ColorSchemes.accentPink),
+        _buildStatTile(context, summary.caloriesBurned.toString(), 'BURNED',
+            T1ColorSchemes.accentPink),
         const SizedBox(width: T1Spacing.sm),
-        _buildStatTile(context, '0m', 'ACTIVE', T1ColorSchemes.accentTeal), // Active minutes not in summary yet
+        _buildStatTile(context, '0m', 'ACTIVE',
+            T1ColorSchemes.accentTeal), // Active minutes not in summary yet
       ],
     );
   }
 
-  Widget _buildStatTile(BuildContext context, String value, String label, Color color) {
+  Widget _buildStatTile(
+      BuildContext context, String value, String label, Color color) {
     final theme = Theme.of(context);
     return Expanded(
       child: DmCard(
@@ -122,10 +134,15 @@ class ActivitySyncScreen extends ConsumerWidget {
         borderSide: BorderSide(color: color.withValues(alpha: 0.15)),
         child: Column(
           children: [
-            Text(value, style: theme.textTheme.headlineSmall?.copyWith(color: color, fontSize: 20, fontWeight: FontWeight.w900)),
+            Text(value,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                    color: color, fontSize: 20, fontWeight: FontWeight.w900)),
             Text(
               label,
-              style: theme.textTheme.labelSmall?.copyWith(color: color.withValues(alpha: 0.4), letterSpacing: 0.4, fontWeight: FontWeight.w900),
+              style: theme.textTheme.labelSmall?.copyWith(
+                  color: color.withValues(alpha: 0.4),
+                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w900),
             ),
           ],
         ),
@@ -144,29 +161,43 @@ class ActivitySyncScreen extends ConsumerWidget {
         children: [
           Text(
             'Diet adjusted for today\'s activity',
-            style: theme.textTheme.titleSmall?.copyWith(color: teal, fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleSmall
+                ?.copyWith(color: teal, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: T1Spacing.sm),
-          _buildAdjustmentRow(context, 'Extra calories allowed', '+${summary.caloriesBurned} kcal', teal),
-          _buildAdjustmentRow(context, 'Net calories today', '${summary.netCalories} kcal', teal),
-          _buildAdjustmentRow(context, 'Activity bonus', 'Step goal reached', teal, isLast: true),
+          _buildAdjustmentRow(context, 'Extra calories allowed',
+              '+${summary.caloriesBurned} kcal', teal),
+          _buildAdjustmentRow(context, 'Net calories today',
+              '${summary.netCalories} kcal', teal),
+          _buildAdjustmentRow(
+              context, 'Activity bonus', 'Step goal reached', teal,
+              isLast: true),
         ],
       ),
     );
   }
 
-  Widget _buildAdjustmentRow(BuildContext context, String label, String value, Color color, {bool isLast = false}) {
+  Widget _buildAdjustmentRow(
+      BuildContext context, String label, String value, Color color,
+      {bool isLast = false}) {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-        border: isLast ? null : Border(bottom: BorderSide(color: color.withValues(alpha: 0.1))),
+        border: isLast
+            ? null
+            : Border(bottom: BorderSide(color: color.withValues(alpha: 0.1))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
-          Text(value, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
+          Text(value,
+              style: TextStyle(
+                  fontSize: 11, fontWeight: FontWeight.bold, color: color)),
         ],
       ),
     );
@@ -176,7 +207,7 @@ class ActivitySyncScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    
+
     // Simulate some historical data based on current stats for visual variety
     final burned = [
       (summary.caloriesBurned * 0.8).toInt(),
@@ -187,7 +218,7 @@ class ActivitySyncScreen extends ConsumerWidget {
       (summary.caloriesBurned * 1.3).toInt(),
       summary.caloriesBurned,
     ];
-    
+
     final consumed = [
       (summary.caloriesGoal * 0.9).toInt(),
       (summary.caloriesGoal * 1.0).toInt(),
@@ -237,8 +268,10 @@ class ActivitySyncScreen extends ConsumerWidget {
                             width: 8,
                             height: (consumed[i] / safeMaxV) * maxH,
                             decoration: BoxDecoration(
-                              color: T1ColorSchemes.chartConsumed.withValues(alpha: 0.3),
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                              color: T1ColorSchemes.chartConsumed
+                                  .withValues(alpha: 0.3),
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(4)),
                             ),
                           ),
                           const SizedBox(width: 2),
@@ -248,7 +281,8 @@ class ActivitySyncScreen extends ConsumerWidget {
                             height: (burned[i] / safeMaxV) * maxH,
                             decoration: const BoxDecoration(
                               color: T1ColorSchemes.chartBurned,
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(4)),
                             ),
                           ),
                         ],
@@ -257,7 +291,9 @@ class ActivitySyncScreen extends ConsumerWidget {
                       Text(
                         days[i],
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: isToday ? scheme.primary : scheme.onSurface.withValues(alpha: 0.3),
+                          color: isToday
+                              ? scheme.primary
+                              : scheme.onSurface.withValues(alpha: 0.3),
                           fontWeight: isToday ? FontWeight.bold : null,
                         ),
                       ),
@@ -270,7 +306,8 @@ class ActivitySyncScreen extends ConsumerWidget {
           const SizedBox(height: T1Spacing.md),
           Row(
             children: [
-              _buildLegendItem(context, 'Consumed', T1ColorSchemes.chartConsumed.withValues(alpha: 0.4)),
+              _buildLegendItem(context, 'Consumed',
+                  T1ColorSchemes.chartConsumed.withValues(alpha: 0.4)),
               const SizedBox(width: T1Spacing.md),
               _buildLegendItem(context, 'Burned', T1ColorSchemes.chartBurned),
             ],
@@ -287,10 +324,14 @@ class ActivitySyncScreen extends ConsumerWidget {
         Container(
           width: 12,
           height: 12,
-          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
+          decoration: BoxDecoration(
+              color: color, borderRadius: BorderRadius.circular(3)),
         ),
         const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
+        Text(label,
+            style: TextStyle(
+                fontSize: 10,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
       ],
     );
   }

@@ -11,13 +11,12 @@ class T2Theme {
 
   static ThemeData _buildTheme(ColorScheme colorScheme) {
     final textTheme = T2TextStyles.getTextTheme(colorScheme);
-    
+
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
       textTheme: textTheme,
-      
       cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerHighest,
         elevation: 0,
@@ -27,14 +26,12 @@ class T2Theme {
         ),
         margin: EdgeInsets.zero,
       ),
-
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: textTheme.headlineLarge,
       ),
-
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: colorScheme.surface,
         selectedItemColor: colorScheme.primary,
@@ -43,7 +40,6 @@ class T2Theme {
         selectedLabelStyle: textTheme.labelSmall,
         unselectedLabelStyle: textTheme.labelSmall,
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest,
@@ -63,7 +59,6 @@ class T2Theme {
           color: colorScheme.onSurfaceVariant,
         ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,

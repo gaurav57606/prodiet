@@ -37,7 +37,8 @@ class NutritionScreen extends ConsumerWidget {
               const SizedBox(height: T1Spacing.md),
               const DmEmptyState(
                 title: 'Data Integration Pending',
-                message: 'Detailed micronutrient tracking will be available in a future update.',
+                message:
+                    'Detailed micronutrient tracking will be available in a future update.',
                 icon: Icons.biotech_rounded,
               ),
               const SizedBox(height: T1Spacing.lg),
@@ -52,7 +53,8 @@ class NutritionScreen extends ConsumerWidget {
               const SizedBox(height: T1Spacing.md),
               const DmEmptyState(
                 title: 'Coming Soon',
-                message: 'Identify your best protein sources once you log more meals.',
+                message:
+                    'Identify your best protein sources once you log more meals.',
                 icon: Icons.restaurant_menu_rounded,
               ),
               const SizedBox(height: 100),
@@ -70,9 +72,21 @@ class NutritionScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              DmMacroChip(value: '${summary.proteinConsumed}g', label: 'Protein', type: MacroType.protein, large: true),
-              DmMacroChip(value: '${summary.carbsConsumed}g', label: 'Carbs', type: MacroType.carbs, large: true),
-              DmMacroChip(value: '${summary.fatConsumed}g', label: 'Fats', type: MacroType.fat, large: true),
+              DmMacroChip(
+                  value: '${summary.proteinConsumed}g',
+                  label: 'Protein',
+                  type: MacroType.protein,
+                  large: true),
+              DmMacroChip(
+                  value: '${summary.carbsConsumed}g',
+                  label: 'Carbs',
+                  type: MacroType.carbs,
+                  large: true),
+              DmMacroChip(
+                  value: '${summary.fatConsumed}g',
+                  label: 'Fats',
+                  type: MacroType.fat,
+                  large: true),
             ],
           ),
         ],

@@ -35,7 +35,12 @@ void main() {
         'meal_type': 'breakfast',
         'name': 'Oatmeal',
         'ingredients': [
-          {'name': 'Oats', 'quantity': 50.0, 'unit': 'g', 'calories_per_100g': 389}
+          {
+            'name': 'Oats',
+            'quantity': 50.0,
+            'unit': 'g',
+            'calories_per_100g': 389
+          }
         ],
         'nutritional_values': {
           'calories': 195,

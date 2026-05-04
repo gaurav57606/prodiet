@@ -1,3 +1,4 @@
+import "package:flutter/services.dart";
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 
@@ -66,7 +67,8 @@ class DmButton extends StatelessWidget {
       foregroundColor: foregroundColor,
       side: borderSide,
       elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: T2Spacing.md, horizontal: T2Spacing.lg),
+      padding: const EdgeInsets.symmetric(
+          vertical: T2Spacing.md, horizontal: T2Spacing.lg),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(T2Spacing.radiusMedium),
       ),
@@ -90,14 +92,21 @@ class DmButton extends StatelessWidget {
             ),
           )
         else
-          Text(label, style: theme.textTheme.titleMedium?.copyWith(color: foregroundColor)),
+          Text(label,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: foregroundColor)),
       ],
     );
 
     return SizedBox(
       width: isFullWidth ? double.infinity : null,
       child: ElevatedButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading
+            ? null
+            : () {
+                HapticFeedback.lightImpact();
+                onPressed?.call();
+              },
         style: buttonStyle,
         child: content,
       ),

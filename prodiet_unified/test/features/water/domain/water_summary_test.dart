@@ -6,8 +6,18 @@ void main() {
   group('WaterSummary', () {
     test('calculate should return correct total and percent', () {
       final logs = [
-        WaterLog(id: '1', userId: 'u1', amountMl: 500, loggedAt: DateTime.now(), date: DateTime.now()),
-        WaterLog(id: '2', userId: 'u1', amountMl: 250, loggedAt: DateTime.now(), date: DateTime.now()),
+        WaterLog(
+            id: '1',
+            userId: 'u1',
+            amountMl: 500,
+            loggedAt: DateTime.now(),
+            date: DateTime.now()),
+        WaterLog(
+            id: '2',
+            userId: 'u1',
+            amountMl: 250,
+            loggedAt: DateTime.now(),
+            date: DateTime.now()),
       ];
 
       final summary = WaterSummary.calculate(logs, 2000);
@@ -19,9 +29,12 @@ void main() {
     });
 
     test('isGoalReached should be true when total >= target', () {
-      const summary1 = WaterSummary(totalMl: 2000, targetMl: 2000, glasses: 8, targetGlasses: 8);
-      const summary2 = WaterSummary(totalMl: 2100, targetMl: 2000, glasses: 8, targetGlasses: 8);
-      const summary3 = WaterSummary(totalMl: 1900, targetMl: 2000, glasses: 7, targetGlasses: 8);
+      const summary1 = WaterSummary(
+          totalMl: 2000, targetMl: 2000, glasses: 8, targetGlasses: 8);
+      const summary2 = WaterSummary(
+          totalMl: 2100, targetMl: 2000, glasses: 8, targetGlasses: 8);
+      const summary3 = WaterSummary(
+          totalMl: 1900, targetMl: 2000, glasses: 7, targetGlasses: 8);
 
       expect(summary1.isGoalReached, true);
       expect(summary2.isGoalReached, true);

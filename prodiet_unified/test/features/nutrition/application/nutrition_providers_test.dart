@@ -9,6 +9,7 @@ import 'package:prodiet_unified/features/nutrition/data/nutrition_repository.dar
 import 'package:prodiet_unified/features/nutrition/domain/models/nutrition_item.dart';
 
 class MockNutritionRepository extends Mock implements NutritionRepository {}
+
 class MockAppUser extends Mock implements AppUser {}
 
 void main() {
@@ -22,7 +23,8 @@ void main() {
   });
 
   group('Nutrition Providers', () {
-    test('nutritionSearchProvider should return empty list for short queries', () async {
+    test('nutritionSearchProvider should return empty list for short queries',
+        () async {
       final container = ProviderContainer(
         overrides: [
           nutritionRepositoryProvider.overrideWithValue(mockRepo),
@@ -36,7 +38,8 @@ void main() {
       verifyNever(() => mockRepo.searchByName(any(), any()));
     });
 
-    test('nutritionSearchProvider should return results from repository', () async {
+    test('nutritionSearchProvider should return results from repository',
+        () async {
       final tItems = [
         NutritionItem(
           id: '1',
@@ -62,7 +65,8 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final result = await container.read(nutritionSearchProvider('Apple').future);
+      final result =
+          await container.read(nutritionSearchProvider('Apple').future);
 
       expect(result, tItems);
       verify(() => mockRepo.searchByName('user_1', 'Apple')).called(1);
@@ -91,7 +95,8 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final result = await container.read(barcodeLookupProvider('123456789').future);
+      final result =
+          await container.read(barcodeLookupProvider('123456789').future);
 
       expect(result, tItem);
       verify(() => mockRepo.lookupByBarcode('123456789')).called(1);

@@ -25,7 +25,7 @@ class _HydrationCardState extends State<HydrationCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     // Status color mapping
     Color statusColor;
     switch (_filterIndex) {
@@ -67,13 +67,16 @@ class _HydrationCardState extends State<HydrationCard> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: statusColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          _filterIndex == 0 ? 'ON TRACK' : (_filterIndex == 1 ? 'ALMOST TIME' : 'OVERDUE'),
+                          _filterIndex == 0
+                              ? 'ON TRACK'
+                              : (_filterIndex == 1 ? 'ALMOST TIME' : 'OVERDUE'),
                           style: TextStyle(
                             color: statusColor,
                             fontSize: 9,
@@ -90,7 +93,9 @@ class _HydrationCardState extends State<HydrationCard> {
                     textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(
-                        _filterIndex == 0 ? '42' : (_filterIndex == 1 ? '05' : '00'),
+                        _filterIndex == 0
+                            ? '42'
+                            : (_filterIndex == 1 ? '05' : '00'),
                         style: theme.textTheme.displayLarge?.copyWith(
                           color: statusColor,
                           fontSize: 56,
@@ -112,7 +117,8 @@ class _HydrationCardState extends State<HydrationCard> {
                   Text(
                     'UNTIL YOUR NEXT DRINK',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.35),
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.5,
                     ),
@@ -131,7 +137,10 @@ class _HydrationCardState extends State<HydrationCard> {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [statusColor, statusColor.withValues(alpha: 0.6)],
+                            colors: [
+                              statusColor,
+                              statusColor.withValues(alpha: 0.6)
+                            ],
                           ),
                           borderRadius: BorderRadius.circular(3),
                         ),
@@ -155,8 +164,11 @@ class _HydrationCardState extends State<HydrationCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildStatItem(theme, 'CONSUMED', '${widget.consumed} ml', statusColor),
-                  _buildStatItem(theme, 'TARGET', '${widget.target} ml', theme.colorScheme.onSurface.withValues(alpha: 0.5), textAlign: TextAlign.right),
+                  _buildStatItem(
+                      theme, 'CONSUMED', '${widget.consumed} ml', statusColor),
+                  _buildStatItem(theme, 'TARGET', '${widget.target} ml',
+                      theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      textAlign: TextAlign.right),
                 ],
               ),
             ),
@@ -186,10 +198,14 @@ class _HydrationCardState extends State<HydrationCard> {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isActive ? color.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
+          color: isActive
+              ? color.withValues(alpha: 0.15)
+              : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isActive ? color.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.08),
+            color: isActive
+                ? color.withValues(alpha: 0.4)
+                : Colors.white.withValues(alpha: 0.08),
           ),
         ),
         child: Text(
@@ -206,9 +222,13 @@ class _HydrationCardState extends State<HydrationCard> {
     );
   }
 
-  Widget _buildStatItem(ThemeData theme, String label, String value, Color valueColor, {TextAlign textAlign = TextAlign.left}) {
+  Widget _buildStatItem(
+      ThemeData theme, String label, String value, Color valueColor,
+      {TextAlign textAlign = TextAlign.left}) {
     return Column(
-      crossAxisAlignment: textAlign == TextAlign.left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      crossAxisAlignment: textAlign == TextAlign.left
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.end,
       children: [
         Text(
           label,

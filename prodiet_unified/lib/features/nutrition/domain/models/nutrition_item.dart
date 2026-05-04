@@ -54,7 +54,8 @@ class NutritionItem {
       servingSize: (json['serving_size'] as num?)?.toDouble(),
       imageUrl: json['image_url'],
       category: json['category'],
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+          json['created_at'] ?? DateTime.now().toIso8601String()),
     );
   }
 

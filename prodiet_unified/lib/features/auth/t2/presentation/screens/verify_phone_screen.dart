@@ -13,9 +13,10 @@ class VerifyPhoneScreen extends StatefulWidget {
 }
 
 class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
-  final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _otpControllers =
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
-  
+
   Timer? _timer;
   int _secondsLeft = 60;
   bool _isVerifying = false;
@@ -154,7 +155,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                 ),
               ),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 child: Column(
                   children: [
                     // Back Link
@@ -165,7 +167,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.arrow_back, size: 16, color: Color(0xFF4DD8D0)),
+                            Icon(Icons.arrow_back,
+                                size: 16, color: Color(0xFF4DD8D0)),
                             SizedBox(width: 4),
                             Text(
                               "Back",
@@ -234,7 +237,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                     // OTP Boxes
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(6, (index) => _buildOtpBox(index)),
+                      children:
+                          List.generate(6, (index) => _buildOtpBox(index)),
                     ),
                     const SizedBox(height: 32),
 
@@ -244,7 +248,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                       children: [
                         const Text(
                           "Code expires in ",
-                          style: TextStyle(color: Color(0xFF888888), fontSize: 12),
+                          style:
+                              TextStyle(color: Color(0xFF888888), fontSize: 12),
                         ),
                         Text(
                           _formatTime(_secondsLeft),
@@ -259,18 +264,20 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                           style: TextStyle(color: Color(0xFF888888)),
                         ),
                         GestureDetector(
-                          onTap: _secondsLeft == 0 
-                            ? () {
-                                _startTimer();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("OTP resent")),
-                                );
-                              } 
-                            : null,
+                          onTap: _secondsLeft == 0
+                              ? () {
+                                  _startTimer();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text("OTP resent")),
+                                  );
+                                }
+                              : null,
                           child: Text(
                             "Resend",
                             style: TextStyle(
-                              color: _secondsLeft == 0 ? const Color(0xFF4DD8D0) : const Color(0xFF333338),
+                              color: _secondsLeft == 0
+                                  ? const Color(0xFF4DD8D0)
+                                  : const Color(0xFF333338),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -291,7 +298,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                             colors: [Color(0xFF1A2E2B), Color(0xFF1A2828)],
                           ),
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: const Color(0xFF2A4442), width: 1),
+                          border: Border.all(
+                              color: const Color(0xFF2A4442), width: 1),
                         ),
                         alignment: Alignment.center,
                         child: _isVerifying
@@ -300,7 +308,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
                                 ),
                               )
                             : const Text(
@@ -323,7 +332,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                           children: [
                             TextSpan(
                               text: "Wrong number? ",
-                              style: TextStyle(color: Color(0xFF888888), fontSize: 13),
+                              style: TextStyle(
+                                  color: Color(0xFF888888), fontSize: 13),
                             ),
                             TextSpan(
                               text: "Change it",
@@ -356,7 +366,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
         color: const Color(0xFF1A1A20),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: _focusNodes[index].hasFocus || _otpControllers[index].text.isNotEmpty
+          color: _focusNodes[index].hasFocus ||
+                  _otpControllers[index].text.isNotEmpty
               ? const Color(0xFF4DD8D0)
               : const Color(0xFF2A2A34),
           width: 1.5,
@@ -365,7 +376,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
       child: RawKeyboardListener(
         focusNode: FocusNode(), // Dummy node for listener
         onKey: (event) {
-          if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
+          if (event is RawKeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.backspace) {
             if (_otpControllers[index].text.isEmpty && index > 0) {
               FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
             }

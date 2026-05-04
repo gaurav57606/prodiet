@@ -12,27 +12,28 @@ class ShoppingRepository {
 
   Future<Either<AppError, List<ShoppingItem>>> getList(String userId) async {
     try {
-      final response = await _supabase
-          .from('shopping_list')
-          .select()
-          .eq('user_id', userId);
-      
-      final items = (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
+      final response =
+          await _supabase.from('shopping_list').select().eq('user_id', userId);
+
+      final items =
+          (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
       return Right(items);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.getList'));
     }
   }
 
-  Future<Either<AppError, List<ShoppingItem>>> getUnpurchased(String userId) async {
+  Future<Either<AppError, List<ShoppingItem>>> getUnpurchased(
+      String userId) async {
     try {
       final response = await _supabase
           .from('shopping_list')
           .select()
           .eq('user_id', userId)
           .eq('is_purchased', false);
-      
-      final items = (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
+
+      final items =
+          (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
       return Right(items);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.getUnpurchased'));
@@ -46,14 +47,15 @@ class ShoppingRepository {
           .insert(item.toJson())
           .select()
           .single();
-      
+
       return Right(ShoppingItem.fromJson(response));
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.addItem'));
     }
   }
 
-  Future<Either<AppError, ShoppingItem>> markPurchased(String itemId, bool isPurchased) async {
+  Future<Either<AppError, ShoppingItem>> markPurchased(
+      String itemId, bool isPurchased) async {
     try {
       final response = await _supabase
           .from('shopping_list')
@@ -61,7 +63,7 @@ class ShoppingRepository {
           .eq('id', itemId)
           .select()
           .single();
-      
+
       return Right(ShoppingItem.fromJson(response));
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.markPurchased'));
@@ -90,40 +92,45 @@ class ShoppingRepository {
     }
   }
 
-  Future<Either<AppError, List<ShoppingItem>>> generateFromLowStock(String userId) async {
+  Future<Either<AppError, List<ShoppingItem>>> generateFromLowStock(
+      String userId) async {
     try {
       // 1. Get low stock items from inventory
-      final inventoryResponse = await _supabase
-          .from('inventory')
-          .select()
-          .eq('user_id', userId);
-      
+      final inventoryResponse =
+          await _supabase.from('inventory').select().eq('user_id', userId);
+
       final lowStockItems = (inventoryResponse as List)
-          .where((i) => (i['quantity'] as num) <= (i['reorder_threshold'] as num))
+          .where(
+              (i) => (i['quantity'] as num) <= (i['reorder_threshold'] as num))
           .toList();
-      
+
       if (lowStockItems.isEmpty) return const Right([]);
 
       // 2. Map to shopping items
-      final newShoppingItems = lowStockItems.map((i) => {
-        'user_id': userId,
-        'ingredient_name': i['ingredient_name'],
-        'quantity': (i['reorder_threshold'] as num) * 2, // Arbitrary refill amount
-        'unit': i['unit'],
-        'is_purchased': false,
-        'source': 'auto',
-      }).toList();
+      final newShoppingItems = lowStockItems
+          .map((i) => {
+                'user_id': userId,
+                'ingredient_name': i['ingredient_name'],
+                'quantity': (i['reorder_threshold'] as num) *
+                    2, // Arbitrary refill amount
+                'unit': i['unit'],
+                'is_purchased': false,
+                'source': 'auto',
+              })
+          .toList();
 
       // 3. Insert into shopping_list
       final response = await _supabase
           .from('shopping_list')
           .insert(newShoppingItems)
           .select();
-      
-      final items = (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
+
+      final items =
+          (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
       return Right(items);
     } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.generateFromLowStock'));
+      return Left(
+          ErrorHandler.handle(e, context: '$_tag.generateFromLowStock'));
     }
   }
 }

@@ -8,8 +8,10 @@ class ThemeToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeTheme = ref.watch(activeThemeProvider);
-    final isDark = activeTheme == ActiveTheme.t1Dark || activeTheme == ActiveTheme.t1Amoled || 
-                   activeTheme == ActiveTheme.t2Dark || activeTheme == ActiveTheme.t2Amoled;
+    final isDark = activeTheme == ActiveTheme.t1Dark ||
+        activeTheme == ActiveTheme.t1Amoled ||
+        activeTheme == ActiveTheme.t2Dark ||
+        activeTheme == ActiveTheme.t2Amoled;
 
     return IconButton(
       icon: Icon(
@@ -23,7 +25,8 @@ class ThemeToggle extends ConsumerWidget {
           ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t1Light);
         } else if (current == ActiveTheme.t1Light) {
           ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t1Dark);
-        } else if (current == ActiveTheme.t2Dark || current == ActiveTheme.t2Amoled) {
+        } else if (current == ActiveTheme.t2Dark ||
+            current == ActiveTheme.t2Amoled) {
           ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t2Light);
         } else if (current == ActiveTheme.t2Light) {
           ref.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t2Dark);

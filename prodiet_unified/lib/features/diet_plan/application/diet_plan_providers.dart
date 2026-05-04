@@ -8,7 +8,8 @@ final dietPlanRepositoryProvider = Provider<DietPlanRepository>((ref) {
   return DietPlanRepository(ref.watch(supabaseClientProvider));
 });
 
-final dietPlanProvider = StateNotifierProvider<DietPlanNotifier, DietPlanState>((ref) {
+final dietPlanProvider =
+    StateNotifierProvider<DietPlanNotifier, DietPlanState>((ref) {
   final userId = ref.watch(currentUserIdProvider);
   return DietPlanNotifier(ref.watch(dietPlanRepositoryProvider), userId);
 });

@@ -24,12 +24,14 @@ class DietPlanScreen extends ConsumerWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Text('DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
+          title: Text('DIET PLAN',
+              style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
         ),
         body: ProDietEmptyState(
           icon: EmptyStateConfigs.dietPlan.icon,
           headline: 'NO DIET PLAN YET',
-          subtext: 'Let AI build your personalised 7-day plan based on your goals.',
+          subtext:
+              'Let AI build your personalised 7-day plan based on your goals.',
           buttonLabel: '✨ CREATE MY PLAN',
           onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
         ),
@@ -72,7 +74,8 @@ class DietPlanScreen extends ConsumerWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Text('DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
+          title: Text('DIET PLAN',
+              style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
         ),
         body: ProDietEmptyState(
           icon: Icons.error_outline_rounded,
@@ -93,7 +96,9 @@ class DietPlanScreen extends ConsumerWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            title: Text('YOUR DIET PLAN', style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
+            title: Text('YOUR DIET PLAN',
+                style:
+                    GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900)),
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh, color: T2Colors.lime),
@@ -105,7 +110,8 @@ class DietPlanScreen extends ConsumerWidget {
               indicatorColor: T2Colors.lime,
               labelColor: T2Colors.lime,
               unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
-              labelStyle: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w800, fontSize: 16),
+              labelStyle: GoogleFonts.barlowCondensed(
+                  fontWeight: FontWeight.w800, fontSize: 16),
               tabs: const [
                 Tab(text: 'MON'),
                 Tab(text: 'TUE'),
@@ -122,7 +128,9 @@ class DietPlanScreen extends ConsumerWidget {
               _buildSummaryCard(context, ref, plan),
               Expanded(
                 child: TabBarView(
-                  children: plan.days.map((day) => _buildDayTab(context, day)).toList(),
+                  children: plan.days
+                      .map((day) => _buildDayTab(context, day))
+                      .toList(),
                 ),
               ),
             ],
@@ -170,11 +178,13 @@ class DietPlanScreen extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: T2Colors.lime,
                 foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
               child: Text(
                 'ADD TODAY\'S MEALS TO LOG',
-                style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w900, fontSize: 16),
+                style: GoogleFonts.barlowCondensed(
+                    fontWeight: FontWeight.w900, fontSize: 16),
               ),
             ),
           ),
@@ -218,7 +228,8 @@ class DietPlanScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMealSection(BuildContext context, String title, List<DietMeal> meals) {
+  Widget _buildMealSection(
+      BuildContext context, String title, List<DietMeal> meals) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -264,15 +275,18 @@ class DietPlanScreen extends ConsumerWidget {
       child: ListTile(
         title: Text(
           meal.name.toUpperCase(),
-          style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w800, color: Colors.white),
+          style: GoogleFonts.barlowCondensed(
+              fontWeight: FontWeight.w800, color: Colors.white),
         ),
         subtitle: Text(
           '${meal.calories.toInt()} KCAL  •  P${meal.proteinG.toInt()} C${meal.carbsG.toInt()} F${meal.fatG.toInt()}',
-          style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
+          style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
         ),
         trailing: meal.ingredients.isNotEmpty
             ? IconButton(
-                icon: const Icon(Icons.info_outline, color: T2Colors.border, size: 20),
+                icon: const Icon(Icons.info_outline,
+                    color: T2Colors.border, size: 20),
                 onPressed: () => _showIngredients(context, meal),
               )
             : null,

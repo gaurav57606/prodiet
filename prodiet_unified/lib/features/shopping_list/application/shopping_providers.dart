@@ -8,25 +8,28 @@ final shoppingRepositoryProvider = Provider<ShoppingRepository>((ref) {
   return ShoppingRepository(Supabase.instance.client);
 });
 
-final shoppingListProvider = FutureProvider.autoDispose<List<ShoppingItem>>((ref) async {
+final shoppingListProvider =
+    FutureProvider.autoDispose<List<ShoppingItem>>((ref) async {
   final authState = ref.watch(authProvider);
   if (authState is! AuthAuthenticated) return [];
-  
+
   final repository = ref.watch(shoppingRepositoryProvider);
   final result = await repository.getList(authState.user.id);
-  
+
   return result.fold(
     (l) => throw l,
     (r) => r,
   );
 });
 
-final unpurchasedItemsProvider = FutureProvider.autoDispose<List<ShoppingItem>>((ref) async {
+final unpurchasedItemsProvider =
+    FutureProvider.autoDispose<List<ShoppingItem>>((ref) async {
   final items = await ref.watch(shoppingListProvider.future);
   return items.where((i) => !i.isPurchased).toList();
 });
 
-final shoppingActionsProvider = StateNotifierProvider<ShoppingActionsNotifier, AsyncValue<void>>((ref) {
+final shoppingActionsProvider =
+    StateNotifierProvider<ShoppingActionsNotifier, AsyncValue<void>>((ref) {
   return ShoppingActionsNotifier(ref.watch(shoppingRepositoryProvider), ref);
 });
 
@@ -34,7 +37,8 @@ class ShoppingActionsNotifier extends StateNotifier<AsyncValue<void>> {
   final ShoppingRepository _repository;
   final Ref _ref;
 
-  ShoppingActionsNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
+  ShoppingActionsNotifier(this._repository, this._ref)
+      : super(const AsyncValue.data(null));
 
   Future<void> addItem(ShoppingItem item) async {
     state = const AsyncValue.loading();

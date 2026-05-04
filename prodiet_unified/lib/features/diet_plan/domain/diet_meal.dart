@@ -14,5 +14,6 @@ class DietMeal with _$DietMeal {
     required List<String> ingredients,
   }) = _DietMeal;
 
-  factory DietMeal.fromJson(Map<String, dynamic> json) => _$DietMealFromJson(json);
+  factory DietMeal.fromJson(Map<String, dynamic> json) =>
+      _$DietMealFromJson(json);
 }

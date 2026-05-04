@@ -18,8 +18,8 @@ class ProDietLoader extends StatelessWidget {
           if (message != null) ...[
             const SizedBox(height: 12),
             Text(message!,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center),
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center),
           ],
         ],
       ),
@@ -32,11 +32,11 @@ class CardLoader extends StatelessWidget {
   const CardLoader({super.key});
   @override
   Widget build(BuildContext context) => const Center(
-    child: Padding(
-      padding: EdgeInsets.all(16),
-      child: CircularProgressIndicator(strokeWidth: 2),
-    ),
-  );
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      );
 }
 
 // Full-page loading for auth transitions (splash → dashboard)
@@ -94,16 +94,19 @@ class _ProDietAuthLoaderState extends State<ProDietAuthLoader>
             Text(
               'ProDiet',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.2,
-              ),
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               widget.message,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.55),
-              ),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.55),
+                  ),
             ),
           ],
         ),

@@ -10,7 +10,7 @@ class RecipeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -27,13 +27,13 @@ class RecipeScreen extends StatelessWidget {
               padding: EdgeInsets.all(18),
               child: VarietyToggle(),
             ),
-            
+
             const AlertStrip(
               message: "3 ingredients in stock match these",
               subMessage: "Tap to see items in your pantry",
               isWarning: false,
             ),
-            
+
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Column(
@@ -53,7 +53,7 @@ class RecipeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.all(18),
               child: Column(
@@ -65,8 +65,14 @@ class RecipeScreen extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      DmChip(label: "No Dairy", isSelected: true, color: Color(0xFFFF5C3A)),
-                      DmChip(label: "No Nuts", isSelected: true, color: Color(0xFFFF5C3A)),
+                      DmChip(
+                          label: "No Dairy",
+                          isSelected: true,
+                          color: Color(0xFFFF5C3A)),
+                      DmChip(
+                          label: "No Nuts",
+                          isSelected: true,
+                          color: Color(0xFFFF5C3A)),
                       DmChip(label: "No Gluten", isSelected: false),
                       DmChip(label: "No Eggs", isSelected: false),
                       DmChip(label: "No Soy", isSelected: false),
@@ -75,7 +81,7 @@ class RecipeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 40),
           ],
         ),

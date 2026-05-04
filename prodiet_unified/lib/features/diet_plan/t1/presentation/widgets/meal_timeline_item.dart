@@ -15,7 +15,7 @@ class MealTimelineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     Color statusColor;
     IconData? statusIcon;
     switch (data.status) {
@@ -59,7 +59,7 @@ class MealTimelineItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: T1Spacing.md),
-          
+
           // Timeline line and dot
           Column(
             children: [
@@ -67,13 +67,18 @@ class MealTimelineItem extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: data.status == MealStatus.pending ? Colors.transparent : statusColor.withValues(alpha: 0.12),
+                  color: data.status == MealStatus.pending
+                      ? Colors.transparent
+                      : statusColor.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
-                  border: data.status == MealStatus.pending 
-                      ? Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.1), width: 1.5)
+                  border: data.status == MealStatus.pending
+                      ? Border.all(
+                          color:
+                              theme.colorScheme.outline.withValues(alpha: 0.1),
+                          width: 1.5)
                       : null,
                 ),
-                child: statusIcon != null 
+                child: statusIcon != null
                     ? Icon(statusIcon, size: 12, color: statusColor)
                     : null,
               ),
@@ -87,7 +92,7 @@ class MealTimelineItem extends StatelessWidget {
             ],
           ),
           const SizedBox(width: T1Spacing.md),
-          
+
           // Content section
           Expanded(
             child: Padding(

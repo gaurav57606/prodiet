@@ -16,14 +16,15 @@ class AlertStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isWarning ? T2Colors.amber : T2Colors.coral;
-    
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         border: Border.symmetric(
-          horizontal: BorderSide(color: color.withValues(alpha: 0.20), width: 1),
+          horizontal:
+              BorderSide(color: color.withValues(alpha: 0.20), width: 1),
         ),
       ),
       child: Row(

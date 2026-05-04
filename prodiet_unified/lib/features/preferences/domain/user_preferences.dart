@@ -52,7 +52,7 @@ class UserPreferences {
   factory UserPreferences.fromMap(Map<String, dynamic> map) {
     return UserPreferences(
       allergies: List<String>.from(map['allergies'] ?? []),
-      dietType: map['dietary_preferences'] is List 
+      dietType: map['dietary_preferences'] is List
           ? (map['dietary_preferences'] as List).firstOrNull ?? "Non-Vegetarian"
           : map['dietary_preferences']?.toString() ?? "Non-Vegetarian",
       spiceLevel: map['spice_level'] as int? ?? 3,

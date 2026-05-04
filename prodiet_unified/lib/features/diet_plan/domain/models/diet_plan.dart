@@ -29,8 +29,8 @@ class DietPlan {
     final now = DateTime.now();
     final start = DateTime.parse(startDate);
     final end = DateTime.parse(endDate);
-    return now.isAfter(start.subtract(const Duration(seconds: 1))) && 
-           now.isBefore(end.add(const Duration(days: 1)));
+    return now.isAfter(start.subtract(const Duration(seconds: 1))) &&
+        now.isBefore(end.add(const Duration(days: 1)));
   }
 
   factory DietPlan.fromJson(Map<String, dynamic> json) {

@@ -28,7 +28,9 @@ class ProgressSummary {
     }
   }
 
-  factory ProgressSummary.calculate(List<WeightEntry> entries, double targetWeight, double initialWeight, [DateTime? now]) {
+  factory ProgressSummary.calculate(
+      List<WeightEntry> entries, double targetWeight, double initialWeight,
+      [DateTime? now]) {
     if (entries.isEmpty) {
       return ProgressSummary(
         entries: [],
@@ -39,7 +41,8 @@ class ProgressSummary {
       );
     }
 
-    final sortedEntries = List<WeightEntry>.from(entries)..sort((a, b) => a.loggedAt.compareTo(b.loggedAt));
+    final sortedEntries = List<WeightEntry>.from(entries)
+      ..sort((a, b) => a.loggedAt.compareTo(b.loggedAt));
     final currentWeight = sortedEntries.last.weightKg;
     final startWeight = sortedEntries.first.weightKg;
 
@@ -47,7 +50,7 @@ class ProgressSummary {
     int streak = 0;
     final currentNow = now ?? DateTime.now();
     final today = DateTime(currentNow.year, currentNow.month, currentNow.day);
-    
+
     final entryDates = entries
         .map((e) => DateTime(e.loggedAt.year, e.loggedAt.month, e.loggedAt.day))
         .toSet();

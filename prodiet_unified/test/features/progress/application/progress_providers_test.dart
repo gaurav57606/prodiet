@@ -16,7 +16,9 @@ void main() {
   });
 
   group('Progress Providers', () {
-    test('progressSummaryProvider should call repository with correct parameters', () async {
+    test(
+        'progressSummaryProvider should call repository with correct parameters',
+        () async {
       const tSummary = ProgressSummary(
         entries: [],
         targetWeightKg: 70,
@@ -42,7 +44,8 @@ void main() {
       verify(() => mockRepo.getProgressSummary('user_123', days: 30)).called(1);
     });
 
-    test('progressSummaryProvider should react to selectedRangeProvider', () async {
+    test('progressSummaryProvider should react to selectedRangeProvider',
+        () async {
       const tSummary = ProgressSummary(
         entries: [],
         targetWeightKg: 70,

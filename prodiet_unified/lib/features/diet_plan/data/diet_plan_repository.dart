@@ -26,7 +26,8 @@ class DietPlanRepository {
     // 1. Fetch user profile
     final profile = await _supabase
         .from('users')
-        .select('age,weight_kg,height_cm,fitness_goal,activity_level,dietary_preferences,allergies,daily_calorie_goal')
+        .select(
+            'age,weight_kg,height_cm,fitness_goal,activity_level,dietary_preferences,allergies,daily_calorie_goal')
         .eq('id', userId)
         .single();
 
@@ -56,11 +57,8 @@ class DietPlanRepository {
     };
 
     // 5. INSERT into database
-    final inserted = await _supabase
-        .from('diet_plans')
-        .insert(planData)
-        .select()
-        .single();
+    final inserted =
+        await _supabase.from('diet_plans').insert(planData).select().single();
 
     return DietPlan.fromJson(inserted);
   }
@@ -71,7 +69,7 @@ class DietPlanRepository {
     // 1-based (1 = Monday ... 7 = Sunday)
     final dayIndex = DateTime.now().weekday - 1;
     if (dayIndex < 0 || dayIndex >= plan.days.length) return;
-    
+
     final todayPlan = plan.days[dayIndex];
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -108,7 +106,6 @@ class DietPlanRepository {
   Future<void> deactivateAllPlans(String userId) async {
     await _supabase
         .from('diet_plans')
-        .update({'is_active': false})
-        .eq('user_id', userId);
+        .update({'is_active': false}).eq('user_id', userId);
   }
 }

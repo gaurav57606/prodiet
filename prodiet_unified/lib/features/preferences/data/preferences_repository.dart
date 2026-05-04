@@ -9,15 +9,13 @@ class PreferencesRepository {
 
   Future<UserPreferences?> fetchPreferences(String userId) async {
     try {
-      final response = await _supabase
-          .from('profiles')
-          .select()
-          .eq('id', userId)
-          .single();
-      
+      final response =
+          await _supabase.from('profiles').select().eq('id', userId).single();
+
       return UserPreferences.fromMap(response);
     } catch (e) {
-      throw ErrorHandler.handle(e, context: 'PreferencesRepository.fetchPreferences');
+      throw ErrorHandler.handle(e,
+          context: 'PreferencesRepository.fetchPreferences');
     }
   }
 
@@ -25,12 +23,11 @@ class PreferencesRepository {
     try {
       final data = prefs.toMap();
       data['id'] = userId;
-      
-      await _supabase
-          .from('profiles')
-          .upsert(data);
+
+      await _supabase.from('profiles').upsert(data);
     } catch (e) {
-      throw ErrorHandler.handle(e, context: 'PreferencesRepository.savePreferences');
+      throw ErrorHandler.handle(e,
+          context: 'PreferencesRepository.savePreferences');
     }
   }
 }

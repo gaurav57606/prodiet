@@ -58,7 +58,8 @@ class EmptyStateConfigs {
   static const ocr = (
     icon: Icons.camera_alt_rounded,
     headline: 'Point at any grocery bill',
-    subtext: 'Your camera will read the items and add them to your pantry automatically.',
+    subtext:
+        'Your camera will read the items and add them to your pantry automatically.',
     buttonLabel: null,
   );
 }

@@ -30,7 +30,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context, ) {
+  Widget build(
+    BuildContext context,
+  ) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final authState = ref.watch(authProvider);
@@ -54,20 +56,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.warning_amber_rounded, size: 48, color: Color(0xFFF5A623)),
+                  const Icon(Icons.warning_amber_rounded,
+                      size: 48, color: Color(0xFFF5A623)),
                   const SizedBox(height: 16),
                   Text(
-                    authState is AuthFailure ? 'Authentication Error' : 'Could not connect',
-                    style: TextStyle(color: scheme.onSurface, fontSize: 20,
-                      fontWeight: FontWeight.w800),
+                    authState is AuthFailure
+                        ? 'Authentication Error'
+                        : 'Could not connect',
+                    style: TextStyle(
+                        color: scheme.onSurface,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     authState is AuthFailure
-                      ? authState.error.displayMessage
-                      : 'Connection timed out. Check your internet and try again.',
-                    style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.6), fontSize: 13),
+                        ? authState.error.displayMessage
+                        : 'Connection timed out. Check your internet and try again.',
+                    style: TextStyle(
+                        color: scheme.onSurface.withValues(alpha: 0.6),
+                        fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
@@ -81,13 +90,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                       ref.invalidate(authProvider);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: scheme.primary,
-                      minimumSize: const Size(180, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12))),
+                        backgroundColor: scheme.primary,
+                        minimumSize: const Size(180, 48),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12))),
                     child: Text('RETRY',
-                      style: TextStyle(color: scheme.onPrimary,
-                        fontWeight: FontWeight.w900)),
+                        style: TextStyle(
+                            color: scheme.onPrimary,
+                            fontWeight: FontWeight.w900)),
                   ),
                 ],
               ),

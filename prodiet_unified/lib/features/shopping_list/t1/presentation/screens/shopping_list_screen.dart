@@ -19,9 +19,9 @@ class ShoppingListScreen extends ConsumerWidget {
         title: const Text('Shopping List'),
         actions: [
           IconButton(
-            onPressed: () => ref.read(shoppingActionsProvider.notifier).clearPurchased(), 
-            icon: const Icon(Icons.delete_sweep_rounded)
-          ),
+              onPressed: () =>
+                  ref.read(shoppingActionsProvider.notifier).clearPurchased(),
+              icon: const Icon(Icons.delete_sweep_rounded)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.share_rounded)),
         ],
       ),
@@ -34,9 +34,16 @@ class ShoppingListScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.shopping_basket_outlined, size: 64, color: theme.colorScheme.onSurface.withValues(alpha: 0.1)),
+                  Icon(Icons.shopping_basket_outlined,
+                      size: 64,
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.1)),
                   const SizedBox(height: 16),
-                  Text('Your list is empty', style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.bold)),
+                  Text('Your list is empty',
+                      style: TextStyle(
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.3),
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
             );
@@ -56,20 +63,23 @@ class ShoppingListScreen extends ConsumerWidget {
                   children: grouped.entries.map((entry) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: T1Spacing.lg),
-                      child: _buildCategory(context, ref, entry.key.toUpperCase(), entry.value),
+                      child: _buildCategory(
+                          context, ref, entry.key.toUpperCase(), entry.value),
                     );
                   }).toList(),
                 ),
               ),
-              
               Padding(
                 padding: const EdgeInsets.all(T1Spacing.md),
                 child: DmButton(
                   label: 'Generate from Low Stock',
                   onPressed: () async {
-                    await ref.read(shoppingActionsProvider.notifier).generateFromLowStock();
+                    await ref
+                        .read(shoppingActionsProvider.notifier)
+                        .generateFromLowStock();
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('List generated from low stock!')));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('List generated from low stock!')));
                     }
                   },
                   width: double.infinity,
@@ -83,7 +93,8 @@ class ShoppingListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategory(BuildContext context, WidgetRef ref, String title, List<ShoppingItem> items) {
+  Widget _buildCategory(BuildContext context, WidgetRef ref, String title,
+      List<ShoppingItem> items) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +112,8 @@ class ShoppingListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildItemTile(BuildContext context, WidgetRef ref, ShoppingItem item) {
+  Widget _buildItemTile(
+      BuildContext context, WidgetRef ref, ShoppingItem item) {
     final theme = Theme.of(context);
     return DmCard(
       margin: const EdgeInsets.only(bottom: 8),
@@ -112,11 +124,14 @@ class ShoppingListScreen extends ConsumerWidget {
             value: item.isPurchased,
             onChanged: (val) {
               if (val != null) {
-                ref.read(shoppingActionsProvider.notifier).markPurchased(item.id, val);
+                ref
+                    .read(shoppingActionsProvider.notifier)
+                    .markPurchased(item.id, val);
               }
             },
             activeColor: theme.colorScheme.primary,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           ),
           const SizedBox(width: 4),
           Expanded(
@@ -126,8 +141,11 @@ class ShoppingListScreen extends ConsumerWidget {
                 Text(
                   item.ingredientName,
                   style: theme.textTheme.titleSmall?.copyWith(
-                    decoration: item.isPurchased ? TextDecoration.lineThrough : null,
-                    color: item.isPurchased ? theme.colorScheme.onSurface.withValues(alpha: 0.3) : null,
+                    decoration:
+                        item.isPurchased ? TextDecoration.lineThrough : null,
+                    color: item.isPurchased
+                        ? theme.colorScheme.onSurface.withValues(alpha: 0.3)
+                        : null,
                   ),
                 ),
                 Text(

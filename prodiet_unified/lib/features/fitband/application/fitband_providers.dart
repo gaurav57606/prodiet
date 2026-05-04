@@ -51,13 +51,13 @@ class FitbandNotifier extends StateNotifier<FitbandState> {
 
   Future<void> refresh() async {
     if (!state.hasPermission) return;
-    
+
     state = state.copyWith(isLoading: true);
     try {
       final steps = await _healthService.getTodaySteps();
       final calories = await _healthService.getTodayCalories();
       final hr = await _healthService.getLatestHeartRate();
-      
+
       state = state.copyWith(
         steps: steps,
         calories: calories,
@@ -70,6 +70,7 @@ class FitbandNotifier extends StateNotifier<FitbandState> {
   }
 }
 
-final fitbandProvider = StateNotifierProvider<FitbandNotifier, FitbandState>((ref) {
+final fitbandProvider =
+    StateNotifierProvider<FitbandNotifier, FitbandState>((ref) {
   return FitbandNotifier(ref.watch(healthServiceProvider));
 });

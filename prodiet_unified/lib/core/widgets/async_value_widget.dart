@@ -50,9 +50,8 @@ class AsyncValueWidget<T> extends StatelessWidget {
     return value.when(
       loading: () => skeleton ?? const ProDietLoader(),
       error: (e, st) {
-        final appError = e is AppError
-            ? e
-            : UnknownError(message: e.toString());
+        final appError =
+            e is AppError ? e : UnknownError(message: e.toString());
         return ProDietErrorWidget(error: appError, onRetry: onRetry);
       },
       data: (data) {

@@ -88,123 +88,160 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: isLoading 
+      body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSection(context, "Allergies & Intolerances", [
-              _buildAllergyChip('Dairy'),
-              _buildAllergyChip('Tree Nuts'),
-              _buildAllergyChip('Gluten'),
-              _buildAllergyChip('Eggs'),
-              _buildAllergyChip('Soy'),
-              _buildAllergyChip('Shellfish'),
-              _buildAllergyChip('Peanuts'),
-              _buildAllergyChip('Fish'),
-            ]),
-            
-            _buildSection(context, "Diet Type", [
-              _buildChoiceChip("Non-Vegetarian", _dietType, (v) => setState(() => _dietType = v), color: const Color(0xFFB8FF00)),
-              _buildChoiceChip("Vegetarian", _dietType, (v) => setState(() => _dietType = v)),
-              _buildChoiceChip("Vegan", _dietType, (v) => setState(() => _dietType = v)),
-              _buildChoiceChip("Keto", _dietType, (v) => setState(() => _dietType = v)),
-              _buildChoiceChip("Intermittent Fast", _dietType, (v) => setState(() => _dietType = v)),
-            ]),
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSection(context, "Allergies & Intolerances", [
+                    _buildAllergyChip('Dairy'),
+                    _buildAllergyChip('Tree Nuts'),
+                    _buildAllergyChip('Gluten'),
+                    _buildAllergyChip('Eggs'),
+                    _buildAllergyChip('Soy'),
+                    _buildAllergyChip('Shellfish'),
+                    _buildAllergyChip('Peanuts'),
+                    _buildAllergyChip('Fish'),
+                  ]),
 
-            // FIX 3: Preferences Section Label
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text("PREFERENCES", style: T2TextStyles.sectionLabel(theme.colorScheme)),
-            ),
+                  _buildSection(context, "Diet Type", [
+                    _buildChoiceChip("Non-Vegetarian", _dietType,
+                        (v) => setState(() => _dietType = v),
+                        color: const Color(0xFFB8FF00)),
+                    _buildChoiceChip("Vegetarian", _dietType,
+                        (v) => setState(() => _dietType = v)),
+                    _buildChoiceChip("Vegan", _dietType,
+                        (v) => setState(() => _dietType = v)),
+                    _buildChoiceChip("Keto", _dietType,
+                        (v) => setState(() => _dietType = v)),
+                    _buildChoiceChip("Intermittent Fast", _dietType,
+                        (v) => setState(() => _dietType = v)),
+                  ]),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: DmCard(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  children: [
-                    _buildPrefRow(context, "Spice level", trailing: _buildSpiceLevel(context)),
-                    _buildPrefRow(context, "Meal variety", hasToggle: true, toggleValue: _mealVariety, 
-                      onToggle: (v) => setState(() => _mealVariety = v)),
-                    _buildPrefRow(context, "Online ordering", hasToggle: true, toggleValue: _onlineOrder, 
-                      onToggle: (v) => setState(() => _onlineOrder = v)),
-                    _buildPrefRow(context, "Local vendors", hasToggle: true, toggleValue: _localVendors, 
-                      onToggle: (v) => setState(() => _localVendors = v)),
-                    _buildPrefRow(context, "Fitband sync", hasToggle: true, toggleValue: _fitbandSync, 
-                      onToggle: (v) => setState(() => _fitbandSync = v)),
-                    // FIX 1: Notifications Toggle (Last item, no border)
-                    _buildPrefRow(context, "Notifications", hasToggle: true, toggleValue: _notifications, 
-                      onToggle: (v) => setState(() => _notifications = v), showBorder: false),
-                  ],
-                ),
-              ),
-            ),
-
-            // FIX 2: South Indian as 3rd chip
-            _buildSection(context, "Cuisine Preferences", [
-              _buildMultiChip("North Indian", _cuisines, color: const Color(0xFFB06EFF)),
-              _buildMultiChip("Mediterranean", _cuisines, color: const Color(0xFFB06EFF)),
-              _buildMultiChip("South Indian", _cuisines),
-              _buildMultiChip("Continental", _cuisines),
-              _buildMultiChip("Asian", _cuisines, color: const Color(0xFFB06EFF)),
-              _buildMultiChip("Mexican", _cuisines),
-              _buildMultiChip("Middle Eastern", _cuisines),
-            ]),
-
-            _buildSection(context, "Meal Frequency", [
-              _buildChoiceChip("3 meals", "$_mealsCount meals", (v) => setState(() => _mealsCount = 3)),
-              _buildChoiceChip("5 meals", "$_mealsCount meals", (v) => setState(() => _mealsCount = 5), color: const Color(0xFFB8FF00)),
-              _buildChoiceChip("6 meals", "$_mealsCount meals", (v) => setState(() => _mealsCount = 6)),
-              _buildChoiceChip("Intermittent", "$_mealsCount meals", (v) => setState(() => _mealsCount = 0)),
-            ]),
-
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: DmButton(
-                label: "Save Preferences",
-                isLoading: isSaving,
-                onPressed: isSaving ? null : () {
-                  final user = ref.read(currentUserProvider);
-                  if (user == null) return;
-                  
-                  final prefs = UserPreferences(
-                    allergies: _allergies.toList(),
-                    dietType: _dietType,
-                    spiceLevel: _spiceLevel,
-                    mealVariety: _mealVariety,
-                    onlineOrdering: _onlineOrder,
-                    localVendors: _localVendors,
-                    fitbandSync: _fitbandSync,
-                    notifications: _notifications,
-                    cuisinePrefs: _cuisines.toList(),
-                    mealsPerDay: _mealsCount,
-                  );
-                  
-                  ref.read(preferencesNotifierProvider.notifier).savePreferences(user.id, prefs);
-                },
-                backgroundColor: const Color(0xFFB8FF00),
-                textColor: Colors.black,
-              ),
-            ),
-            Center(
-              child: TextButton(
-                onPressed: () => context.push(AppRoutes.t2PrivacyPolicy),
-                child: Text(
-                  'Privacy Policy',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: T2Colors.textSecondary,
-                    decoration: TextDecoration.underline,
+                  // FIX 3: Preferences Section Label
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                    child: Text("PREFERENCES",
+                        style: T2TextStyles.sectionLabel(theme.colorScheme)),
                   ),
-                ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: DmCard(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        children: [
+                          _buildPrefRow(context, "Spice level",
+                              trailing: _buildSpiceLevel(context)),
+                          _buildPrefRow(context, "Meal variety",
+                              hasToggle: true,
+                              toggleValue: _mealVariety,
+                              onToggle: (v) =>
+                                  setState(() => _mealVariety = v)),
+                          _buildPrefRow(context, "Online ordering",
+                              hasToggle: true,
+                              toggleValue: _onlineOrder,
+                              onToggle: (v) =>
+                                  setState(() => _onlineOrder = v)),
+                          _buildPrefRow(context, "Local vendors",
+                              hasToggle: true,
+                              toggleValue: _localVendors,
+                              onToggle: (v) =>
+                                  setState(() => _localVendors = v)),
+                          _buildPrefRow(context, "Fitband sync",
+                              hasToggle: true,
+                              toggleValue: _fitbandSync,
+                              onToggle: (v) =>
+                                  setState(() => _fitbandSync = v)),
+                          // FIX 1: Notifications Toggle (Last item, no border)
+                          _buildPrefRow(context, "Notifications",
+                              hasToggle: true,
+                              toggleValue: _notifications,
+                              onToggle: (v) =>
+                                  setState(() => _notifications = v),
+                              showBorder: false),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // FIX 2: South Indian as 3rd chip
+                  _buildSection(context, "Cuisine Preferences", [
+                    _buildMultiChip("North Indian", _cuisines,
+                        color: const Color(0xFFB06EFF)),
+                    _buildMultiChip("Mediterranean", _cuisines,
+                        color: const Color(0xFFB06EFF)),
+                    _buildMultiChip("South Indian", _cuisines),
+                    _buildMultiChip("Continental", _cuisines),
+                    _buildMultiChip("Asian", _cuisines,
+                        color: const Color(0xFFB06EFF)),
+                    _buildMultiChip("Mexican", _cuisines),
+                    _buildMultiChip("Middle Eastern", _cuisines),
+                  ]),
+
+                  _buildSection(context, "Meal Frequency", [
+                    _buildChoiceChip("3 meals", "$_mealsCount meals",
+                        (v) => setState(() => _mealsCount = 3)),
+                    _buildChoiceChip("5 meals", "$_mealsCount meals",
+                        (v) => setState(() => _mealsCount = 5),
+                        color: const Color(0xFFB8FF00)),
+                    _buildChoiceChip("6 meals", "$_mealsCount meals",
+                        (v) => setState(() => _mealsCount = 6)),
+                    _buildChoiceChip("Intermittent", "$_mealsCount meals",
+                        (v) => setState(() => _mealsCount = 0)),
+                  ]),
+
+                  Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: DmButton(
+                      label: "Save Preferences",
+                      isLoading: isSaving,
+                      onPressed: isSaving
+                          ? null
+                          : () {
+                              final user = ref.read(currentUserProvider);
+                              if (user == null) return;
+
+                              final prefs = UserPreferences(
+                                allergies: _allergies.toList(),
+                                dietType: _dietType,
+                                spiceLevel: _spiceLevel,
+                                mealVariety: _mealVariety,
+                                onlineOrdering: _onlineOrder,
+                                localVendors: _localVendors,
+                                fitbandSync: _fitbandSync,
+                                notifications: _notifications,
+                                cuisinePrefs: _cuisines.toList(),
+                                mealsPerDay: _mealsCount,
+                              );
+
+                              ref
+                                  .read(preferencesNotifierProvider.notifier)
+                                  .savePreferences(user.id, prefs);
+                            },
+                      backgroundColor: const Color(0xFFB8FF00),
+                      textColor: Colors.black,
+                    ),
+                  ),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => context.push(AppRoutes.t2PrivacyPolicy),
+                      child: Text(
+                        'Privacy Policy',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: T2Colors.textSecondary,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
             ),
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
     );
   }
 
@@ -218,11 +255,14 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
       label: label,
       isSelected: sel,
       color: color,
-      onTap: () => setState(() => sel ? selection.remove(label) : selection.add(label)),
+      onTap: () =>
+          setState(() => sel ? selection.remove(label) : selection.add(label)),
     );
   }
 
-  Widget _buildChoiceChip(String label, String current, ValueChanged<String> onSelected, {Color? color}) {
+  Widget _buildChoiceChip(
+      String label, String current, ValueChanged<String> onSelected,
+      {Color? color}) {
     final sel = label == current;
     return DmChip(
       label: label,
@@ -239,7 +279,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title.toUpperCase(), style: T2TextStyles.sectionLabel(theme.colorScheme)),
+          Text(title.toUpperCase(),
+              style: T2TextStyles.sectionLabel(theme.colorScheme)),
           const SizedBox(height: 8),
           Wrap(spacing: 6, runSpacing: 6, children: chips),
         ],
@@ -247,14 +288,19 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
     );
   }
 
-  Widget _buildPrefRow(BuildContext context, String lbl, {Widget? trailing, bool hasToggle = false, bool toggleValue = false, ValueChanged<bool>? onToggle, bool showBorder = true}) {
+  Widget _buildPrefRow(BuildContext context, String lbl,
+      {Widget? trailing,
+      bool hasToggle = false,
+      bool toggleValue = false,
+      ValueChanged<bool>? onToggle,
+      bool showBorder = true}) {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
       decoration: BoxDecoration(
-        border: showBorder 
-          ? Border(bottom: BorderSide(color: theme.colorScheme.outline))
-          : null,
+        border: showBorder
+            ? Border(bottom: BorderSide(color: theme.colorScheme.outline))
+            : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,11 +308,16 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(lbl, style: theme.textTheme.titleMedium?.copyWith(fontSize: 12)),
-              if (!hasToggle && lbl == "Spice level") Text(_getSpiceLabel(), style: theme.textTheme.bodySmall),
+              Text(lbl,
+                  style: theme.textTheme.titleMedium?.copyWith(fontSize: 12)),
+              if (!hasToggle && lbl == "Spice level")
+                Text(_getSpiceLabel(), style: theme.textTheme.bodySmall),
             ],
           ),
-          if (hasToggle) _buildToggle(context, toggleValue, onToggle) else if (trailing != null) trailing,
+          if (hasToggle)
+            _buildToggle(context, toggleValue, onToggle)
+          else if (trailing != null)
+            trailing,
         ],
       ),
     );
@@ -274,16 +325,23 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
 
   String _getSpiceLabel() {
     switch (_spiceLevel) {
-      case 1: return "Mild";
-      case 2: return "Medium-Mild";
-      case 3: return "Medium";
-      case 4: return "Hot";
-      case 5: return "Very Hot";
-      default: return "Medium";
+      case 1:
+        return "Mild";
+      case 2:
+        return "Medium-Mild";
+      case 3:
+        return "Medium";
+      case 4:
+        return "Hot";
+      case 5:
+        return "Very Hot";
+      default:
+        return "Medium";
     }
   }
 
-  Widget _buildToggle(BuildContext context, bool isOn, ValueChanged<bool>? onToggle) {
+  Widget _buildToggle(
+      BuildContext context, bool isOn, ValueChanged<bool>? onToggle) {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () => onToggle?.call(!isOn),
@@ -292,7 +350,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
         height: 20,
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: isOn ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+          color: isOn
+              ? theme.colorScheme.primary
+              : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Align(
@@ -300,7 +360,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
           child: Container(
             width: 16,
             height: 16,
-            decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: Colors.white, shape: BoxShape.circle),
           ),
         ),
       ),
@@ -309,17 +370,22 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
 
   Widget _buildSpiceLevel(BuildContext context) {
     return Row(
-      children: List.generate(5, (i) => GestureDetector(
-        onTap: () => setState(() => _spiceLevel = i + 1),
-        child: Container(
-          width: 14, height: 14,
-          margin: const EdgeInsets.only(left: 6),
-          decoration: BoxDecoration(
-            color: i < _spiceLevel ? T2Colors.lime : const Color(0xFF3A3A35),
-            borderRadius: BorderRadius.circular(3),
-          ),
-        ),
-      )),
+      children: List.generate(
+          5,
+          (i) => GestureDetector(
+                onTap: () => setState(() => _spiceLevel = i + 1),
+                child: Container(
+                  width: 14,
+                  height: 14,
+                  margin: const EdgeInsets.only(left: 6),
+                  decoration: BoxDecoration(
+                    color: i < _spiceLevel
+                        ? T2Colors.lime
+                        : const Color(0xFF3A3A35),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              )),
     );
   }
 }

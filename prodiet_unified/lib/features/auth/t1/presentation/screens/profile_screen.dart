@@ -34,11 +34,12 @@ class ProfileScreen extends ConsumerWidget {
                     final userName = user?.name;
                     return CircleAvatar(
                       radius: 50,
-                      backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                      backgroundColor:
+                          theme.colorScheme.primary.withValues(alpha: 0.1),
                       child: Text(
                         (userName != null && userName.isNotEmpty)
-                          ? userName.substring(0, 1).toUpperCase() 
-                          : 'U',
+                            ? userName.substring(0, 1).toUpperCase()
+                            : 'U',
                         style: theme.textTheme.displayMedium?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.w900,
@@ -49,11 +50,14 @@ class ProfileScreen extends ConsumerWidget {
                   const SizedBox(height: T1Spacing.md),
                   Text(
                     user?.name ?? 'User',
-                    style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+                    style: theme.textTheme.headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.w900),
                   ),
                   Text(
                     user?.email ?? 'email@example.com',
-                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                 ],
               ),
@@ -68,26 +72,26 @@ class ProfileScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   _buildThemeOption(
-                    context, 
-                    ref, 
-                    'Light Mode', 
-                    ActiveTheme.t1Light, 
+                    context,
+                    ref,
+                    'Light Mode',
+                    ActiveTheme.t1Light,
                     activeTheme == ActiveTheme.t1Light,
                     Icons.light_mode_rounded,
                   ),
                   _buildThemeOption(
-                    context, 
-                    ref, 
-                    'Dark Mode', 
-                    ActiveTheme.t1Dark, 
+                    context,
+                    ref,
+                    'Dark Mode',
+                    ActiveTheme.t1Dark,
                     activeTheme == ActiveTheme.t1Dark,
                     Icons.dark_mode_rounded,
                   ),
                   _buildThemeOption(
-                    context, 
-                    ref, 
-                    'AMOLED Mode', 
-                    ActiveTheme.t1Amoled, 
+                    context,
+                    ref,
+                    'AMOLED Mode',
+                    ActiveTheme.t1Amoled,
                     activeTheme == ActiveTheme.t1Amoled,
                     Icons.blur_on_rounded,
                   ),
@@ -104,26 +108,26 @@ class ProfileScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   _buildMenuTile(
-                    theme, 
-                    'Preferences', 
+                    theme,
+                    'Preferences',
                     Icons.settings_suggest_rounded,
                     onTap: () => context.pushNamed(AppRoutes.t1Preferences),
                   ),
                   _buildMenuTile(
-                    theme, 
-                    'Edit Profile', 
+                    theme,
+                    'Edit Profile',
                     Icons.person_outline_rounded,
                     onTap: () {},
                   ),
                   _buildMenuTile(
-                    theme, 
-                    'Health Goals', 
+                    theme,
+                    'Health Goals',
                     Icons.track_changes_rounded,
                     onTap: () {},
                   ),
                   _buildMenuTile(
-                    theme, 
-                    'Notifications', 
+                    theme,
+                    'Notifications',
                     Icons.notifications_none_rounded,
                     onTap: () {},
                   ),
@@ -139,11 +143,14 @@ class ProfileScreen extends ConsumerWidget {
               child: FilledButton(
                 onPressed: () => _handleLogout(context, ref),
                 style: FilledButton.styleFrom(
-                  backgroundColor: theme.colorScheme.error.withValues(alpha: 0.1),
+                  backgroundColor:
+                      theme.colorScheme.error.withValues(alpha: 0.1),
                   foregroundColor: theme.colorScheme.error,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('LOGOUT', style: TextStyle(fontWeight: FontWeight.w900)),
+                child: const Text('LOGOUT',
+                    style: TextStyle(fontWeight: FontWeight.w900)),
               ),
             ),
             const SizedBox(height: 40),
@@ -168,30 +175,41 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildThemeOption(
-    BuildContext context, 
-    WidgetRef ref, 
-    String label, 
-    ActiveTheme themeMode, 
+    BuildContext context,
+    WidgetRef ref,
+    String label,
+    ActiveTheme themeMode,
     bool isSelected,
     IconData icon,
   ) {
     final theme = Theme.of(context);
     return ListTile(
-      leading: Icon(icon, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.5)),
-      title: Text(label, style: theme.textTheme.titleMedium?.copyWith(
-        color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.normal,
-      )),
-      trailing: isSelected ? Icon(Icons.check_circle_rounded, color: theme.colorScheme.primary) : null,
+      leading: Icon(icon,
+          color: isSelected
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+      title: Text(label,
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: isSelected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.onSurface,
+            fontWeight: isSelected ? FontWeight.w900 : FontWeight.normal,
+          )),
+      trailing: isSelected
+          ? Icon(Icons.check_circle_rounded, color: theme.colorScheme.primary)
+          : null,
       onTap: () => ref.read(activeThemeProvider.notifier).setTheme(themeMode),
     );
   }
 
-  Widget _buildMenuTile(ThemeData theme, String label, IconData icon, {required VoidCallback onTap}) {
+  Widget _buildMenuTile(ThemeData theme, String label, IconData icon,
+      {required VoidCallback onTap}) {
     return ListTile(
-      leading: Icon(icon, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+      leading:
+          Icon(icon, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
       title: Text(label, style: theme.textTheme.titleMedium),
-      trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
+      trailing: Icon(Icons.chevron_right_rounded,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
       onTap: onTap,
     );
   }
@@ -212,7 +230,8 @@ class ProfileScreen extends ConsumerWidget {
               Navigator.pop(context);
               ref.read(authProvider.notifier).signOut();
             },
-            child: Text('LOGOUT', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            child: Text('LOGOUT',
+                style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ),
         ],
       ),

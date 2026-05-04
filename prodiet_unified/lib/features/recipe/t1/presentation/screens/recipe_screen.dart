@@ -18,7 +18,8 @@ class RecipeScreen extends StatelessWidget {
       body: const Center(
         child: DmEmptyState(
           title: 'Recipes Coming Soon',
-          message: 'Personalized recipes based on your pantry and diet plan are under development.',
+          message:
+              'Personalized recipes based on your pantry and diet plan are under development.',
           icon: Icons.restaurant_menu_rounded,
         ),
       ),

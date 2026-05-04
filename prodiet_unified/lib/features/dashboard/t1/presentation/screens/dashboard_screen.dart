@@ -35,7 +35,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authState = ref.read(authProvider);
       if (authState is AuthAuthenticated) {
-        ref.read(analyticsServiceProvider)
+        ref
+            .read(analyticsServiceProvider)
             .logScreen(authState.user.id, 't1_dashboard');
       }
     });
@@ -71,8 +72,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 title: Text(
                   greeting,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 actions: [
                   const ThemeToggle(),
@@ -83,7 +84,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   const SizedBox(width: 8),
                 ],
               ),
-              
               SliverToBoxAdapter(
                 child: CalorieSummaryCard(
                   caloriesConsumed: data.caloriesConsumed,
@@ -92,7 +92,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   activePlanName: data.activeDietPlanName,
                 ),
               ),
-              
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
@@ -103,10 +102,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                 ),
               ),
-              
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Macros Today',
                     onAction: () => context.goNamed(AppRoutes.mealsName),
@@ -125,29 +124,28 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   fatProgress: data.fatProgress,
                 ),
               ),
-              
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Next Meal',
                     onAction: () => context.goNamed(AppRoutes.mealsName),
                   ),
                 ),
               ),
-              
               SliverToBoxAdapter(child: TodayMealsRow(meal: data.nextMeal)),
-              
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Activity · Fitband',
-                    onAction: () => context.pushNamed(AppRoutes.activitySyncName),
+                    onAction: () =>
+                        context.pushNamed(AppRoutes.activitySyncName),
                   ),
                 ),
               ),
-              
               SliverToBoxAdapter(
                 child: ActivityGrid(
                   steps: data.stepsToday,
@@ -155,18 +153,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   netCalories: data.netCalories,
                 ),
               ),
-              
               const SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
                   child: _SectionHeader(
                     title: 'Alerts',
                   ),
                 ),
               ),
-              
               const SliverToBoxAdapter(child: AlertsList()),
-              
               SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom + 80,
@@ -190,7 +186,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

@@ -8,20 +8,23 @@ class DmLoader extends StatelessWidget {
   final double? height;
   final double borderRadius;
 
-  const DmLoader.circular({super.key}) 
-    : isShimmer = false, width = null, height = null, borderRadius = 0;
+  const DmLoader.circular({super.key})
+      : isShimmer = false,
+        width = null,
+        height = null,
+        borderRadius = 0;
 
   const DmLoader.shimmer({
-    super.key, 
-    required this.width, 
-    required this.height, 
+    super.key,
+    required this.width,
+    required this.height,
     this.borderRadius = T2Spacing.radiusMedium,
   }) : isShimmer = true;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     if (isShimmer) {
       return Shimmer.fromColors(
         baseColor: theme.colorScheme.surfaceContainerHighest,
