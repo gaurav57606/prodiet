@@ -76,8 +76,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
         'dietary_preferences': [],
         'allergies': [],
         'variety_preference': 'balanced',
-        'daily_calorie_goal': dailyCalorieTarget,
-        'daily_water_goal_ml': 2500,
+        'daily_calorie_target': dailyCalorieTarget,
+        'daily_water_target_ml': 2500,
       },
     );
   }
