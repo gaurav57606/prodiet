@@ -77,7 +77,8 @@ class VerifyEmailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => context.go(AppRoutes.login),
+                // Fixed: was AppRoutes.login (undefined getter) — now AppRoutes.t1Login
+                onPressed: () => context.go(AppRoutes.t1Login),
                 child: Text(
                   'Back to Login',
                   style: TextStyle(
