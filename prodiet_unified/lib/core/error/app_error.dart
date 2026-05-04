@@ -24,7 +24,8 @@ class AuthError extends AppError {
     if (msg.contains('Invalid login')) return 'Incorrect email or password';
     if (msg.contains('already registered')) return 'This email is already registered';
     if (msg.contains('Password should')) return 'Password must be at least 6 characters';
-    return msg;
+    // ✅ SAFE: Generic fallback for unknown auth errors to prevent information leakage
+    return 'Authentication failed. Please try again.';
   }
 }
 
@@ -62,4 +63,6 @@ class OfflineError extends AppError {
 class UnknownError extends AppError {
   const UnknownError({super.message = 'An unexpected error occurred'})
       : super(code: 'UNKNOWN');
+  @override
+  String get displayMessage => 'An unexpected error occurred. Please try again.';
 }
