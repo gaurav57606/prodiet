@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/services/notification_service.dart';
 import 'package:logger/logger.dart';
@@ -118,6 +119,13 @@ class AppRouterNavigator {
   }
 
   static void navigateTo(String route) {
-    _navigatorKey?.currentState?.pushNamed(route);
+    // Memory recommendation: prefer path-based navigation via navigatorKey.currentContext?.push(route)
+    // over the standard Navigator's pushNamed method.
+    final context = _navigatorKey?.currentContext;
+    if (context != null) {
+      context.push(route);
+    } else {
+      _navigatorKey?.currentState?.pushNamed(route);
+    }
   }
 }

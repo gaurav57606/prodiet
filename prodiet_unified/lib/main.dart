@@ -10,6 +10,8 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:prodiet_unified/core/config/app_config.dart';
 import 'package:prodiet_unified/core/widgets/error_boundary.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
+import 'package:prodiet_unified/core/services/fcm_service.dart';
 import 'app.dart';
 
 final logger = Logger(
@@ -71,6 +73,9 @@ void main() {
       logger.e('Firebase init failed: $e', error: e, stackTrace: st);
       // App can still run without Firebase — Supabase is the primary backend
     }
+
+    // 5. Wire FCM navigator to GoRouter's root navigator key
+    AppRouterNavigator.setKey(appRouterNavigatorKey);
 
     logger.i('[Main] All services initialized. '
         'Supabase: ${AppConfig.supabaseUrl.substring(0, 20)}...');
