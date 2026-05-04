@@ -24,10 +24,7 @@ class AppDatabase extends _$AppDatabase {
     onCreate: (Migrator m) async {
       await m.createAll();
     },
-    onUpgrade: (Migrator m, int from, int to) async {
-      // Add new migration cases here when schema changes:
-      // if (from == 1) { await m.addColumn(table, table.newColumn); }
-    },
+    onUpgrade: (Migrator m, int from, int to) async {},
     beforeOpen: (OpeningDetails details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     },
