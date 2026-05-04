@@ -13,5 +13,6 @@ class WaterLog with _$WaterLog {
     required DateTime date,
   }) = _WaterLog;
 
-  factory WaterLog.fromJson(Map<String, dynamic> json) => _$WaterLogFromJson(json);
+  factory WaterLog.fromJson(Map<String, dynamic> json) =>
+      _$WaterLogFromJson(json);
 }

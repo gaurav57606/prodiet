@@ -8,7 +8,7 @@ class ScanPreviewBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final lime = theme.colorScheme.primary;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       child: Container(
@@ -25,7 +25,7 @@ class ScanPreviewBox extends StatelessWidget {
             _buildCorner(lime, top: 9, right: 9, rotate: 1),
             _buildCorner(lime, bottom: 9, left: 9, rotate: 3),
             _buildCorner(lime, bottom: 9, right: 9, rotate: 2),
-            
+
             // Scan Line Placeholder
             Positioned(
               top: 40,
@@ -65,7 +65,12 @@ class ScanPreviewBox extends StatelessWidget {
     );
   }
 
-  Widget _buildCorner(Color color, {double? top, double? bottom, double? left, double? right, int rotate = 0}) {
+  Widget _buildCorner(Color color,
+      {double? top,
+      double? bottom,
+      double? left,
+      double? right,
+      int rotate = 0}) {
     return Positioned(
       top: top,
       bottom: bottom,

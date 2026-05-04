@@ -14,8 +14,10 @@ class HealthGoalsScreen extends ConsumerStatefulWidget {
 }
 
 class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
-  int _selectedGoal = 0; // 0 = Lose weight, 1 = Build muscle, 2 = Eat healthier, 3 = More energy
-  int _selectedActivity = 1; // 0 = Sedentary, 1 = Lightly active, 2 = Very active
+  int _selectedGoal =
+      0; // 0 = Lose weight, 1 = Build muscle, 2 = Eat healthier, 3 = More energy
+  int _selectedActivity =
+      1; // 0 = Sedentary, 1 = Lightly active, 2 = Very active
 
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
@@ -31,20 +33,29 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
 
   String _getGoalString() {
     switch (_selectedGoal) {
-      case 0: return 'lose_weight';
-      case 1: return 'gain_muscle';
-      case 2: return 'eat_healthy';
-      case 3: return 'maintain';
-      default: return 'maintain';
+      case 0:
+        return 'lose_weight';
+      case 1:
+        return 'gain_muscle';
+      case 2:
+        return 'eat_healthy';
+      case 3:
+        return 'maintain';
+      default:
+        return 'maintain';
     }
   }
 
   String _getActivityString() {
     switch (_selectedActivity) {
-      case 0: return 'sedentary';
-      case 1: return 'light';
-      case 2: return 'moderate';
-      default: return 'light';
+      case 0:
+        return 'sedentary';
+      case 1:
+        return 'light';
+      case 2:
+        return 'moderate';
+      default:
+        return 'light';
     }
   }
 
@@ -133,10 +144,15 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   const SizedBox(height: 8),
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w800),
                       children: [
-                        TextSpan(text: 'Your health ', style: TextStyle(color: scheme.onSurface)),
-                        TextSpan(text: 'goals', style: TextStyle(color: scheme.primary)),
+                        TextSpan(
+                            text: 'Your health ',
+                            style: TextStyle(color: scheme.onSurface)),
+                        TextSpan(
+                            text: 'goals',
+                            style: TextStyle(color: scheme.primary)),
                       ],
                     ),
                   ),
@@ -199,10 +215,14 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                     crossAxisSpacing: 12,
                     childAspectRatio: 1.3,
                     children: [
-                      _buildGoalCard(0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
-                      _buildGoalCard(1, '💪', 'Build muscle', 'High protein', theme),
-                      _buildGoalCard(2, '🥗', 'Eat healthier', 'Balanced macros', theme),
-                      _buildGoalCard(3, '⚡', 'More energy', 'Optimised meals', theme),
+                      _buildGoalCard(
+                          0, '⚖️', 'Lose weight', 'Calorie deficit', theme),
+                      _buildGoalCard(
+                          1, '💪', 'Build muscle', 'High protein', theme),
+                      _buildGoalCard(
+                          2, '🥗', 'Eat healthier', 'Balanced macros', theme),
+                      _buildGoalCard(
+                          3, '⚡', 'More energy', 'Optimised meals', theme),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -214,11 +234,14 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                   ),
                   const SizedBox(height: 16),
                   // ACTIVITY OPTIONS
-                  _buildActivityOption(0, 'Sedentary', 'Desk job, little exercise', theme),
+                  _buildActivityOption(
+                      0, 'Sedentary', 'Desk job, little exercise', theme),
                   const SizedBox(height: 12),
-                  _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', theme),
+                  _buildActivityOption(
+                      1, 'Lightly active', '1–3 days exercise / week', theme),
                   const SizedBox(height: 12),
-                  _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', theme),
+                  _buildActivityOption(
+                      2, 'Very active', 'Hard exercise 6–7 days', theme),
                   const SizedBox(height: 32),
 
                   // BOTTOM INPUTS
@@ -243,7 +266,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             _buildLabel('WEIGHT (KG)', theme),
+                            _buildLabel('WEIGHT (KG)', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _weightController,
@@ -258,7 +281,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             _buildLabel('HEIGHT (CM)', theme),
+                            _buildLabel('HEIGHT (CM)', theme),
                             const SizedBox(height: 8),
                             DmTextField(
                               controller: _heightController,
@@ -310,18 +333,23 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: scheme.onSurface),
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: scheme.onSurface),
         ),
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 13, color: scheme.onSurface.withValues(alpha: 0.45)),
+          style: TextStyle(
+              fontSize: 13, color: scheme.onSurface.withValues(alpha: 0.45)),
         ),
       ],
     );
   }
 
-  Widget _buildGoalCard(int index, String emoji, String title, String subtitle, ThemeData theme) {
+  Widget _buildGoalCard(
+      int index, String emoji, String title, String subtitle, ThemeData theme) {
     final scheme = theme.colorScheme;
     final isSelected = _selectedGoal == index;
     return GestureDetector(
@@ -332,7 +360,9 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
           color: scheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? scheme.primary : scheme.outline.withValues(alpha: 0.1),
+            color: isSelected
+                ? scheme.primary
+                : scheme.outline.withValues(alpha: 0.1),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -346,12 +376,17 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                 const SizedBox(height: 8),
                 Text(
                   title,
-                  style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w700, fontSize: 14),
+                  style: TextStyle(
+                      color: scheme.onSurface,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.45), fontSize: 11),
+                  style: TextStyle(
+                      color: scheme.onSurface.withValues(alpha: 0.45),
+                      fontSize: 11),
                 ),
               ],
             ),
@@ -374,7 +409,8 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
     );
   }
 
-  Widget _buildActivityOption(int index, String title, String subtitle, ThemeData theme) {
+  Widget _buildActivityOption(
+      int index, String title, String subtitle, ThemeData theme) {
     final scheme = theme.colorScheme;
     final isSelected = _selectedActivity == index;
     return GestureDetector(
@@ -397,13 +433,17 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? scheme.primary : scheme.outline.withValues(alpha: 0.2),
+                  color: isSelected
+                      ? scheme.primary
+                      : scheme.outline.withValues(alpha: 0.2),
                   width: isSelected ? 6 : 2,
                 ),
               ),
-              child: isSelected 
-                ? Center(child: Icon(Icons.check, color: scheme.onSurface, size: 10))
-                : null,
+              child: isSelected
+                  ? Center(
+                      child:
+                          Icon(Icons.check, color: scheme.onSurface, size: 10))
+                  : null,
             ),
             const SizedBox(width: 16),
             Column(
@@ -411,12 +451,17 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: TextStyle(
+                      color: scheme.onSurface,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: scheme.onSurface.withValues(alpha: 0.45), fontSize: 12),
+                  style: TextStyle(
+                      color: scheme.onSurface.withValues(alpha: 0.45),
+                      fontSize: 12),
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' hide currentUserIdProvider;
+import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart'
+    hide currentUserIdProvider;
 import 'package:prodiet_unified/features/water/data/water_repository.dart';
 import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 import '../domain/water_log.dart';
@@ -17,17 +18,18 @@ final userWaterTargetProvider = Provider.autoDispose<int>((ref) {
 final waterSummaryProvider = StreamProvider.autoDispose<WaterSummary>((ref) {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return Stream.value(WaterSummary.empty(2000));
-  
+
   final targetMl = ref.watch(userWaterTargetProvider);
-  
+
   return ref.watch(waterRepositoryProvider).watchTodayLogs(userId).map((logs) {
     return WaterSummary.calculate(logs, targetMl);
   });
 });
 
-final todayWaterLogsProvider = StreamProvider.autoDispose<List<WaterLog>>((ref) {
+final todayWaterLogsProvider =
+    StreamProvider.autoDispose<List<WaterLog>>((ref) {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return Stream.value([]);
-  
+
   return ref.watch(waterRepositoryProvider).watchTodayLogs(userId);
 });

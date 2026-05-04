@@ -22,15 +22,16 @@ class AuthError extends AppError {
   // Strip internal codes from user-visible text
   static String _sanitize(String msg) {
     if (msg.contains('Invalid login')) return 'Incorrect email or password';
-    if (msg.contains('already registered')) return 'This email is already registered';
-    if (msg.contains('Password should')) return 'Password must be at least 6 characters';
+    if (msg.contains('already registered'))
+      return 'This email is already registered';
+    if (msg.contains('Password should'))
+      return 'Password must be at least 6 characters';
     return msg;
   }
 }
 
 class DatabaseError extends AppError {
-  const DatabaseError({required super.message})
-      : super(code: 'DB_ERROR');
+  const DatabaseError({required super.message}) : super(code: 'DB_ERROR');
   @override
   String get displayMessage => 'Something went wrong. Please try again.';
 }

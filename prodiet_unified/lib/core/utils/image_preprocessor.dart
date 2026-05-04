@@ -38,11 +38,13 @@ class ImagePreprocessor {
     await supabase.storage.from('ocr-temp').uploadBinary(
           fileName,
           bytes,
-          fileOptions: const FileOptions(contentType: 'image/jpeg', upsert: true),
+          fileOptions:
+              const FileOptions(contentType: 'image/jpeg', upsert: true),
         );
 
     // Return a signed URL with 10 min expiry
-    final signedUrl = await supabase.storage.from('ocr-temp').createSignedUrl(fileName, 600);
+    final signedUrl =
+        await supabase.storage.from('ocr-temp').createSignedUrl(fileName, 600);
     return signedUrl;
   }
 }

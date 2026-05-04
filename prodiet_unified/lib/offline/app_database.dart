@@ -21,17 +21,17 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (Migrator m) async {
-      await m.createAll();
-    },
-    onUpgrade: (Migrator m, int from, int to) async {
-      // Add new migration cases here when schema changes:
-      // if (from == 1) { await m.addColumn(table, table.newColumn); }
-    },
-    beforeOpen: (OpeningDetails details) async {
-      await customStatement('PRAGMA foreign_keys = ON');
-    },
-  );
+        onCreate: (Migrator m) async {
+          await m.createAll();
+        },
+        onUpgrade: (Migrator m, int from, int to) async {
+          // Add new migration cases here when schema changes:
+          // if (from == 1) { await m.addColumn(table, table.newColumn); }
+        },
+        beforeOpen: (OpeningDetails details) async {
+          await customStatement('PRAGMA foreign_keys = ON');
+        },
+      );
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'prodiet_offline');

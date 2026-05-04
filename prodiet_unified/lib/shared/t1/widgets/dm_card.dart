@@ -30,7 +30,8 @@ class DmCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final shape = theme.cardTheme.shape;
-    final BorderSide side = borderSide ?? (shape is RoundedRectangleBorder ? shape.side : BorderSide.none);
+    final BorderSide side = borderSide ??
+        (shape is RoundedRectangleBorder ? shape.side : BorderSide.none);
 
     Widget cardContent = Container(
       margin: margin,
@@ -68,7 +69,9 @@ class DmCard extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     Colors.transparent,
-                    isDark ? Colors.white.withOpacity(0.12) : Colors.white.withOpacity(0.9),
+                    isDark
+                        ? Colors.white.withOpacity(0.12)
+                        : Colors.white.withOpacity(0.9),
                     Colors.transparent,
                   ],
                 ),

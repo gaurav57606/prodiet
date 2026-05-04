@@ -63,7 +63,10 @@ class DmButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
-          elevation: variant == DmButtonVariant.ghost || variant == DmButtonVariant.outline ? 0 : 2,
+          elevation: variant == DmButtonVariant.ghost ||
+                  variant == DmButtonVariant.outline
+              ? 0
+              : 2,
           shadowColor: backgroundColor.withOpacity(0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(T1Spacing.radiusMd),

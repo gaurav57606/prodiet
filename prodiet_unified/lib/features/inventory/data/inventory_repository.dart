@@ -6,7 +6,12 @@ class InventoryRepository {
 
   InventoryRepository(this._supabase);
 
-  Stream<List<InventoryItem>> watchInventory(String userId) {
+  String? get _currentUserId => _supabase.auth.currentUser?.id;
+
+  Stream<List<InventoryItem>> watchInventory() {
+    final userId = _currentUserId;
+    if (userId == null) return Stream.value([]);
+
     return _supabase
         .from('inventory')
         .stream(primaryKey: ['id'])
@@ -15,13 +20,16 @@ class InventoryRepository {
           ..sort((a, b) => a.ingredientName.compareTo(b.ingredientName)));
   }
 
-  Future<void> addItem(String userId, {
+  Future<void> addItem({
     required String name,
     required double quantity,
     required String unit,
     String category = 'Other',
     double reorderThreshold = 100,
   }) async {
+    final userId = _currentUserId;
+    if (userId == null) return;
+
     final data = {
       'user_id': userId,
       'ingredient_name': name,
@@ -31,34 +39,31 @@ class InventoryRepository {
       'reorder_threshold': reorderThreshold,
       'updated_at': DateTime.now().toIso8601String(),
     };
-    
+
     await _supabase.from('inventory').insert(data);
   }
 
   Future<void> updateQuantity(String itemId, double newQuantity) async {
-    await _supabase
-        .from('inventory')
-        .update({
-          'quantity': newQuantity,
-          'updated_at': DateTime.now().toIso8601String(),
-        })
-        .eq('id', itemId);
+    await _supabase.from('inventory').update({
+      'quantity': newQuantity,
+      'updated_at': DateTime.now().toIso8601String(),
+    }).eq('id', itemId);
   }
 
   Future<void> deleteItem(String itemId) async {
     await _supabase.from('inventory').delete().eq('id', itemId);
   }
 
-  Future<void> addItemsFromOcr(String userId, List<Map<String, dynamic>> items) async {
+  Future<void> addItemsFromOcr(List<Map<String, dynamic>> items) async {
+    final userId = _currentUserId;
+    if (userId == null) return;
+
     // 1. Fetch current inventory to handle increments
-    final currentInventory = await _supabase
-        .from('inventory')
-        .select()
-        .eq('user_id', userId);
-    
+    final currentInventory =
+        await _supabase.from('inventory').select().eq('user_id', userId);
+
     final existingItems = {
-      for (var item in currentInventory)
-        item['ingredient_name'] as String: item
+      for (var item in currentInventory) item['ingredient_name'] as String: item
     };
 
     final List<Map<String, dynamic>> upsertData = [];
@@ -78,7 +83,8 @@ class InventoryRepository {
           'quantity': (existing['quantity'] as num).toDouble() + qty,
           'unit': unit,
           'category': category,
-          'reorder_threshold': (existing['reorder_threshold'] as num).toDouble(),
+          'reorder_threshold':
+              (existing['reorder_threshold'] as num).toDouble(),
           'updated_at': DateTime.now().toIso8601String(),
         });
       } else {
@@ -95,7 +101,9 @@ class InventoryRepository {
     }
 
     if (upsertData.isNotEmpty) {
-      await _supabase.from('inventory').upsert(upsertData, onConflict: 'user_id,ingredient_name');
+      await _supabase
+          .from('inventory')
+          .upsert(upsertData, onConflict: 'user_id,ingredient_name');
     }
   }
 

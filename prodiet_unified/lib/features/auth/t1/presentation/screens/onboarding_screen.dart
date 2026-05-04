@@ -18,17 +18,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingData> _pages = [
     OnboardingData(
       title: 'Precision Nutrition',
-      description: 'Track your macros with clinical accuracy and AI-powered suggestions.',
+      description:
+          'Track your macros with clinical accuracy and AI-powered suggestions.',
       icon: Icons.track_changes_rounded,
     ),
     OnboardingData(
       title: 'Smart Meal Planning',
-      description: 'Personalized meal plans that adapt to your taste and inventory.',
+      description:
+          'Personalized meal plans that adapt to your taste and inventory.',
       icon: Icons.auto_awesome_rounded,
     ),
     OnboardingData(
       title: 'Real-time Sync',
-      description: 'Sync your activity data from fitbands and get instant adjustments.',
+      description:
+          'Sync your activity data from fitbands and get instant adjustments.',
       icon: Icons.sync_rounded,
     ),
   ];
@@ -118,7 +121,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   const SizedBox(height: T1Spacing.xxl),
                   DmButton(
-                    label: _currentPage == _pages.length - 1 ? 'Get Started' : 'Next',
+                    label: _currentPage == _pages.length - 1
+                        ? 'Get Started'
+                        : 'Next',
                     onPressed: () {
                       if (_currentPage < _pages.length - 1) {
                         _pageController.nextPage(

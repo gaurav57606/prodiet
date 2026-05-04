@@ -8,7 +8,6 @@ import '../domain/models/app_user.dart';
 import 'auth_state.dart';
 import '../../../core/error/app_error.dart';
 
-
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
   final FcmService? _fcm;
@@ -45,7 +44,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       _handleProfile(profile);
     } catch (e) {
       logger.e('[$_tag] _handleSession error: $e');
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag._handleSession'));
+      state =
+          AuthFailure(ErrorHandler.handle(e, context: '$_tag._handleSession'));
     }
   }
 
@@ -83,7 +83,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = const AuthLoading();
       await _repo.signInWithGoogle();
     } catch (e) {
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.signInWithGoogle'));
+      state = AuthFailure(
+          ErrorHandler.handle(e, context: '$_tag.signInWithGoogle'));
     }
   }
 
@@ -107,14 +108,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
           _handleProfile(profile);
           return;
         }
-        logger.w('[$_tag] retryProfileLoad attempt $attempt — profile still null');
+        logger.w(
+            '[$_tag] retryProfileLoad attempt $attempt — profile still null');
       } catch (e) {
         logger.e('[$_tag] retryProfileLoad error on attempt $attempt: $e');
       }
     }
     // Exhausted all retries — emit a descriptive failure
     state = const AuthFailure(UnknownError(
-      message: 'Could not load your profile. Please check your connection and try again.',
+      message:
+          'Could not load your profile. Please check your connection and try again.',
     ));
   }
 
@@ -142,7 +145,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = AuthAuthenticated(updatedProfile);
       }
     } catch (e) {
-      state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.completeOnboarding'));
+      state = AuthFailure(
+          ErrorHandler.handle(e, context: '$_tag.completeOnboarding'));
     }
   }
 
@@ -159,4 +163,3 @@ class AuthNotifier extends StateNotifier<AuthState> {
     return null;
   }
 }
-

@@ -26,15 +26,13 @@ class OcrNotifier extends StateNotifier<AsyncValue<OcrResult?>> {
   void toggleItemSelection(int index) {
     final current = state.value;
     if (current == null) return;
-    
+
     final updatedItems = current.items.toList();
-    updatedItems[index] = updatedItems[index].copyWith(
-      isSelected: !updatedItems[index].isSelected
-    );
-    
+    updatedItems[index] = updatedItems[index]
+        .copyWith(isSelected: !updatedItems[index].isSelected);
+
     state = AsyncValue.data(
-      OcrResult(items: updatedItems, rawText: current.rawText)
-    );
+        OcrResult(items: updatedItems, rawText: current.rawText));
   }
 
   void reset() {
@@ -42,7 +40,8 @@ class OcrNotifier extends StateNotifier<AsyncValue<OcrResult?>> {
   }
 }
 
-final ocrStateProvider = StateNotifierProvider<OcrNotifier, AsyncValue<OcrResult?>>((ref) {
+final ocrStateProvider =
+    StateNotifierProvider<OcrNotifier, AsyncValue<OcrResult?>>((ref) {
   return OcrNotifier(ref.watch(ocrRepositoryProvider));
 });
 

@@ -14,10 +14,10 @@ class ActivityData {
   });
 
   Map<String, dynamic> toJson() => {
-    'steps': steps,
-    'calories_burned': caloriesBurned,
-    'active_minutes': activeMinutes,
-  };
+        'steps': steps,
+        'calories_burned': caloriesBurned,
+        'active_minutes': activeMinutes,
+      };
 }
 
 class FitbandService {
@@ -48,7 +48,7 @@ class FitbandService {
   Future<ActivityData> getTodayActivity() async {
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
-    
+
     final types = [
       HealthDataType.STEPS,
       HealthDataType.ACTIVE_ENERGY_BURNED,
@@ -94,7 +94,7 @@ class FitbandService {
   Future<void> syncToSupabase(String userId, ActivityData data) async {
     try {
       final today = DateTime.now().toIso8601String().split('T')[0];
-      
+
       await _supabase.from('activity_logs').upsert({
         'user_id': userId,
         'steps': data.steps,
@@ -104,7 +104,7 @@ class FitbandService {
         'source': 'fitband',
         'updated_at': DateTime.now().toIso8601String(),
       }, onConflict: 'user_id, date');
-      
+
       _logger.i('Synced activity data for $userId');
     } catch (e) {
       _logger.e('Error syncing activity data: $e');

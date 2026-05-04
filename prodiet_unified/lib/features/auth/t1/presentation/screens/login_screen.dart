@@ -93,8 +93,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontFamily: 'Inter',
                       ),
                       children: [
-                        TextSpan(text: 'DietMaster', style: TextStyle(color: scheme.onSurface)),
-                        TextSpan(text: 'Pro', style: TextStyle(color: scheme.primaryContainer)),
+                        TextSpan(
+                            text: 'DietMaster',
+                            style: TextStyle(color: scheme.onSurface)),
+                        TextSpan(
+                            text: 'Pro',
+                            style: TextStyle(color: scheme.primaryContainer)),
                       ],
                     ),
                   ),
@@ -135,14 +139,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 0 ? scheme.primary : Colors.transparent,
+                                color: _selectedTab == 0
+                                    ? scheme.primary
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 0
+                                        ? scheme.onSurface
+                                        : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -158,14 +166,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _selectedTab == 1 ? scheme.primary : Colors.transparent,
+                                color: _selectedTab == 1
+                                    ? scheme.primary
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? scheme.onSurface : scheme.onSurface.withOpacity(0.4),
+                                    color: _selectedTab == 1
+                                        ? scheme.onSurface
+                                        : scheme.onSurface.withOpacity(0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -212,11 +224,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
                         color: scheme.onSurface.withOpacity(0.3),
                         size: 20,
                       ),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -229,9 +244,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         height: 24,
                         child: Checkbox(
                           value: _keepSignedIn,
-                          onChanged: (val) => setState(() => _keepSignedIn = val ?? false),
+                          onChanged: (val) =>
+                              setState(() => _keepSignedIn = val ?? false),
                           activeColor: scheme.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -253,9 +270,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: () async {
                       if (isLoading) return;
                       await ref.read(authProvider.notifier).signIn(
-                        _emailController.text.trim(),
-                        _passwordController.text.trim(),
-                      );
+                            _emailController.text.trim(),
+                            _passwordController.text.trim(),
+                          );
                     },
                     width: double.infinity,
                   ),
@@ -281,7 +298,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           label: 'Google',
                           variant: DmButtonVariant.outline,
                           icon: Icons.g_mobiledata_rounded,
-                          onPressed: () => ref.read(authProvider.notifier).signInWithGoogle(),
+                          onPressed: () => ref
+                              .read(authProvider.notifier)
+                              .signInWithGoogle(),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -303,7 +322,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: scheme.onSurface.withOpacity(0.5)),
+                        style:
+                            TextStyle(color: scheme.onSurface.withOpacity(0.5)),
                       ),
                       GestureDetector(
                         onTap: () => context.go('/t1/signup'),

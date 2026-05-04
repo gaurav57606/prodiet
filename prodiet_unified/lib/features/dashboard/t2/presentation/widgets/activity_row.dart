@@ -9,22 +9,27 @@ class ActivityRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),
+      padding: const EdgeInsets.symmetric(
+          horizontal: T2Spacing.lg, vertical: T2Spacing.md),
       child: Row(
         children: [
-          _buildActivityItem('STEPS', '8,420', Icons.directions_walk, T2Colors.lime),
+          _buildActivityItem(
+              'STEPS', '8,420', Icons.directions_walk, T2Colors.lime),
           const SizedBox(width: 6),
           _buildActivityItem('ACTIVE', '42 min', Icons.timer, T2Colors.coral),
           const SizedBox(width: 6),
-          _buildActivityItem('BURNED', '312 kcal', Icons.whatshot, T2Colors.amber),
+          _buildActivityItem(
+              'BURNED', '312 kcal', Icons.whatshot, T2Colors.amber),
           const SizedBox(width: 6),
-          _buildActivityItem('HEART', '74 bpm', Icons.favorite, T2Colors.purple),
+          _buildActivityItem(
+              'HEART', '74 bpm', Icons.favorite, T2Colors.purple),
         ],
       ),
     );
   }
 
-  Widget _buildActivityItem(String label, String value, IconData iconData, Color tileColor) {
+  Widget _buildActivityItem(
+      String label, String value, IconData iconData, Color tileColor) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(14),

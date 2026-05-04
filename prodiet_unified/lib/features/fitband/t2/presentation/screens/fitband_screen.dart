@@ -113,7 +113,23 @@ class FitbandScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(15, (index) {
-                          final h = [20, 30, 25, 40, 35, 45, 30, 20, 25, 35, 40, 30, 25, 20, 15][index];
+                          final h = [
+                            20,
+                            30,
+                            25,
+                            40,
+                            35,
+                            45,
+                            30,
+                            20,
+                            25,
+                            35,
+                            40,
+                            30,
+                            25,
+                            20,
+                            15
+                          ][index];
                           return Container(
                             width: 4,
                             height: h.toDouble(),
@@ -135,9 +151,13 @@ class FitbandScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  Expanded(child: _buildMetricTile('STEPS', '8,420', 'Goal: 10k', T2Colors.lime)),
+                  Expanded(
+                      child: _buildMetricTile(
+                          'STEPS', '8,420', 'Goal: 10k', T2Colors.lime)),
                   const SizedBox(width: 12),
-                  Expanded(child: _buildMetricTile('ACTIVE', '42 min', 'Goal: 60m', T2Colors.coral)),
+                  Expanded(
+                      child: _buildMetricTile(
+                          'ACTIVE', '42 min', 'Goal: 60m', T2Colors.coral)),
                 ],
               ),
             ),
@@ -159,16 +179,21 @@ class FitbandScreen extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: 3,
-              separatorBuilder: (_, __) => Divider(color: T2Colors.border, height: 1),
+              separatorBuilder: (_, __) =>
+                  Divider(color: T2Colors.border, height: 1),
               itemBuilder: (context, index) {
                 final titles = ['Morning Walk', 'Gym Session', 'Evening Jog'];
                 final times = ['07:30 AM', '11:00 AM', '06:15 PM'];
                 final kcal = ['120 kcal', '310 kcal', '215 kcal'];
                 return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   title: Text(
                     titles[index],
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15),
                   ),
                   subtitle: Text(
                     times[index],
@@ -212,7 +237,8 @@ class FitbandScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricTile(String label, String value, String sub, Color accent) {
+  Widget _buildMetricTile(
+      String label, String value, String sub, Color accent) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(

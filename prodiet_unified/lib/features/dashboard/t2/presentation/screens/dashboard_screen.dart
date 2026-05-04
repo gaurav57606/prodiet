@@ -37,234 +37,239 @@ class DashboardScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
       body: AsyncValueWidget<DashboardSummary>(
-          value: ref.watch(dashboardProvider),
-          skeleton: const DashboardSkeleton(),
-          isEmpty: (data) => data.mealsToday == 0 && data.waterMl == 0,
-          emptyState: ProDietEmptyState(
-            emoji: EmptyStateConfigs.dashboard.emoji,
-            headline: EmptyStateConfigs.dashboard.headline,
-            subtext: EmptyStateConfigs.dashboard.subtext,
-            buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,
-            onButtonTap: () => context.push(AppRoutes.t2Meals), // T2 uses /meals
-          ),
-          builder: (data) => CustomScrollView(
-            slivers: [
-              // Static Header
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Left Column
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _getGreeting(data.userName.split(' ')[0]),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: T2Colors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "EAT",
-                            style: GoogleFonts.barlowCondensed(
-                              fontSize: 56,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              height: 1.0,
-                            ),
-                          ),
-                          Text(
-                            "RIGHT.",
-                            style: GoogleFonts.barlowCondensed(
-                              fontSize: 56,
-                              fontWeight: FontWeight.w900,
-                              color: T2Colors.lime,
-                              height: 1.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Right Column
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "CALORIES LEFT",
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: T2Colors.textSecondary,
-                              letterSpacing: 1.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            (data.caloriesGoal - data.caloriesConsumed).toString(),
-                            style: GoogleFonts.barlowCondensed(
-                              fontSize: 56,
-                              fontWeight: FontWeight.w900,
-                              color: T2Colors.lime,
-                              letterSpacing: -1.5,
-                              height: 1.0,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'of ${data.caloriesGoal}',
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: T2Colors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              
-              // Calorie Stat Bar
-              SliverToBoxAdapter(
-                child: CalorieStat(
-                  consumed: data.caloriesConsumed,
-                  burned: data.caloriesBurned,
-                  net: data.netCalories,
-                ),
-              ),
-
-              // Divider
-              const SliverToBoxAdapter(
-                child: Divider(color: T2Colors.border, height: 1, thickness: 1),
-              ),
-
-              // Water Banner
-              SliverToBoxAdapter(
-                child: GestureDetector(
-                  onTap: () => context.go(AppRoutes.t2Water),
-                  child: WaterBanner(
-                    consumed: data.waterMl,
-                    target: data.waterGoalMl,
-                    progress: data.waterProgress,
-                  ),
-                ),
-              ),
-              
-              // Macros Today Section
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(T2Spacing.lg, T2Spacing.lg, T2Spacing.lg, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "MACROS TODAY",
-                        style: T2TextStyles.sectionLabel(colorScheme),
-                      ),
-                      GestureDetector(
-                        onTap: () => context.go(AppRoutes.t2DietPlan),
-                        child: Text(
-                          "Full view",
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(T2Spacing.lg, T2Spacing.md, T2Spacing.lg, T2Spacing.md),
-                  child: MacroRingChart(
-                    calorieProgress: data.calorieProgress,
-                    calories: data.caloriesConsumed,
-                    proteinProgress: data.proteinProgress,
-                    protein: data.proteinConsumed,
-                    carbsProgress: data.carbsProgress,
-                    carbs: data.carbsConsumed,
-                    fatProgress: data.fatProgress,
-                    fat: data.fatConsumed,
-                  ),
-                ),
-              ),
-
-              // Next Meal Section
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "NEXT MEAL",
-                        style: T2TextStyles.sectionLabel(colorScheme),
-                      ),
-                      GestureDetector(
-                        onTap: () => context.go(AppRoutes.t2Meals),
-                        child: Text(
-                          "Meal plan ›",
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              
-              SliverToBoxAdapter(
-                child: NextMealCard(meal: data.nextMeal),
-              ),
-
-              // Activity Section
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "ACTIVITY · FITBAND",
-                        style: T2TextStyles.sectionLabel(colorScheme),
-                      ),
-                      GestureDetector(
-                        onTap: () => context.go(AppRoutes.t2Fitband),
-                        child: Text(
-                          "Details",
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              
-              const SliverToBoxAdapter(
-                child: ActivityRow(),
-              ),
-
-              SliverToBoxAdapter(
-                child: GestureDetector(
-                  onTap: () => context.go(AppRoutes.t2Compensation),
-                  child: const AlertStrip(
-                    message: "Check AI Insights",
-                    subMessage: "Click to see plan adjustments",
-                    isWarning: false,
-                  ),
-                ),
-              ),
-              
-              const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
-            ],
-          ),
+        value: ref.watch(dashboardProvider),
+        skeleton: const DashboardSkeleton(),
+        isEmpty: (data) => data.mealsToday == 0 && data.waterMl == 0,
+        emptyState: ProDietEmptyState(
+          emoji: EmptyStateConfigs.dashboard.emoji,
+          headline: EmptyStateConfigs.dashboard.headline,
+          subtext: EmptyStateConfigs.dashboard.subtext,
+          buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,
+          onButtonTap: () => context.push(AppRoutes.t2Meals), // T2 uses /meals
         ),
-      );
+        builder: (data) => CustomScrollView(
+          slivers: [
+            // Static Header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Left Column
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _getGreeting(data.userName.split(' ')[0]),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: T2Colors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "EAT",
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 56,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            height: 1.0,
+                          ),
+                        ),
+                        Text(
+                          "RIGHT.",
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 56,
+                            fontWeight: FontWeight.w900,
+                            color: T2Colors.lime,
+                            height: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Right Column
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "CALORIES LEFT",
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: T2Colors.textSecondary,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          (data.caloriesGoal - data.caloriesConsumed)
+                              .toString(),
+                          style: GoogleFonts.barlowCondensed(
+                            fontSize: 56,
+                            fontWeight: FontWeight.w900,
+                            color: T2Colors.lime,
+                            letterSpacing: -1.5,
+                            height: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'of ${data.caloriesGoal}',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: T2Colors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Calorie Stat Bar
+            SliverToBoxAdapter(
+              child: CalorieStat(
+                consumed: data.caloriesConsumed,
+                burned: data.caloriesBurned,
+                net: data.netCalories,
+              ),
+            ),
+
+            // Divider
+            const SliverToBoxAdapter(
+              child: Divider(color: T2Colors.border, height: 1, thickness: 1),
+            ),
+
+            // Water Banner
+            SliverToBoxAdapter(
+              child: GestureDetector(
+                onTap: () => context.go(AppRoutes.t2Water),
+                child: WaterBanner(
+                  consumed: data.waterMl,
+                  target: data.waterGoalMl,
+                  progress: data.waterProgress,
+                ),
+              ),
+            ),
+
+            // Macros Today Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    T2Spacing.lg, T2Spacing.lg, T2Spacing.lg, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "MACROS TODAY",
+                      style: T2TextStyles.sectionLabel(colorScheme),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.go(AppRoutes.t2DietPlan),
+                      child: Text(
+                        "Full view",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    T2Spacing.lg, T2Spacing.md, T2Spacing.lg, T2Spacing.md),
+                child: MacroRingChart(
+                  calorieProgress: data.calorieProgress,
+                  calories: data.caloriesConsumed,
+                  proteinProgress: data.proteinProgress,
+                  protein: data.proteinConsumed,
+                  carbsProgress: data.carbsProgress,
+                  carbs: data.carbsConsumed,
+                  fatProgress: data.fatProgress,
+                  fat: data.fatConsumed,
+                ),
+              ),
+            ),
+
+            // Next Meal Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: T2Spacing.lg, vertical: T2Spacing.md),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "NEXT MEAL",
+                      style: T2TextStyles.sectionLabel(colorScheme),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.go(AppRoutes.t2Meals),
+                      child: Text(
+                        "Meal plan ›",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: NextMealCard(meal: data.nextMeal),
+            ),
+
+            // Activity Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: T2Spacing.lg, vertical: T2Spacing.md),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "ACTIVITY · FITBAND",
+                      style: T2TextStyles.sectionLabel(colorScheme),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.go(AppRoutes.t2Fitband),
+                      child: Text(
+                        "Details",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(
+              child: ActivityRow(),
+            ),
+
+            SliverToBoxAdapter(
+              child: GestureDetector(
+                onTap: () => context.go(AppRoutes.t2Compensation),
+                child: const AlertStrip(
+                  message: "Check AI Insights",
+                  subMessage: "Click to see plan adjustments",
+                  isWarning: false,
+                ),
+              ),
+            ),
+
+            const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
+          ],
+        ),
+      ),
+    );
   }
 }

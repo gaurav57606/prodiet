@@ -8,7 +8,7 @@ class LocalMeals extends Table {
   // 'breakfast' | 'lunch' | 'dinner' | 'snack'
   TextColumn get status => text().withDefault(const Constant('scheduled'))();
   // 'scheduled' | 'completed' | 'missed'
-  TextColumn get date => text()();  // ISO date string
+  TextColumn get date => text()(); // ISO date string
   TextColumn get ingredientsJson => text().nullable()(); // JSON string
   TextColumn get nutritionalValuesJson => text().nullable()(); // JSON string
   TextColumn get scheduledTime => text().nullable()(); // HH:mm string

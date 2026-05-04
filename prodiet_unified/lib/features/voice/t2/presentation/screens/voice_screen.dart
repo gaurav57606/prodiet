@@ -15,7 +15,8 @@ class VoiceScreen extends ConsumerStatefulWidget {
   ConsumerState<VoiceScreen> createState() => _VoiceScreenState();
 }
 
-class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProviderStateMixin {
+class _VoiceScreenState extends ConsumerState<VoiceScreen>
+    with SingleTickerProviderStateMixin {
   bool _isListening = false;
   String _detectedText = '"150g chicken breast"';
   final TextEditingController _typeController = TextEditingController();
@@ -25,7 +26,7 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
   void initState() {
     super.initState();
     _waveCtrl = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 700));
+        vsync: this, duration: const Duration(milliseconds: 700));
   }
 
   @override
@@ -39,7 +40,7 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
-    
+
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,
       body: SafeArea(
@@ -55,7 +56,6 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                   style: theme.textTheme.displayMedium?.copyWith(fontSize: 26),
                 ),
               ),
-              
               Padding(
                 padding: const EdgeInsets.all(18),
                 child: DmCard(
@@ -78,11 +78,14 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                           decoration: BoxDecoration(
                             color: primary.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
-                            border: Border.all(color: primary.withValues(alpha: 0.3), width: 2),
+                            border: Border.all(
+                                color: primary.withValues(alpha: 0.3),
+                                width: 2),
                           ),
                           child: Icon(
                             _isListening ? Icons.stop : Icons.mic,
-                            color: primary, size: 32,
+                            color: primary,
+                            size: 32,
                           ),
                         ),
                       ),
@@ -92,16 +95,32 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                         builder: (_, __) => Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: List.generate(12, (i) {
-                            const bases = [4.0, 8.0, 6.0, 12.0, 7.0, 10.0, 5.0, 9.0, 6.0, 11.0, 4.0, 8.0];
+                            const bases = [
+                              4.0,
+                              8.0,
+                              6.0,
+                              12.0,
+                              7.0,
+                              10.0,
+                              5.0,
+                              9.0,
+                              6.0,
+                              11.0,
+                              4.0,
+                              8.0
+                            ];
                             final h = _isListening
-                              ? bases[i] + (_waveCtrl.value * bases[i] * 0.9)
-                              : 4.0;
+                                ? bases[i] + (_waveCtrl.value * bases[i] * 0.9)
+                                : 4.0;
                             return Container(
-                              width: 3, height: h,
-                              margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                              width: 3,
+                              height: h,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 1.5),
                               decoration: BoxDecoration(
-                                color: T2Colors.lime.withValues(alpha: _isListening ? 1.0 : 0.3),
-                                borderRadius: BorderRadius.circular(2)),
+                                  color: T2Colors.lime.withValues(
+                                      alpha: _isListening ? 1.0 : 0.3),
+                                  borderRadius: BorderRadius.circular(2)),
                             );
                           }),
                         ),
@@ -109,17 +128,19 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                       const SizedBox(height: 12),
                       Text(
                         _detectedText,
-                        style: theme.textTheme.headlineMedium?.copyWith(fontSize: 20, color: primary),
+                        style: theme.textTheme.headlineMedium
+                            ?.copyWith(fontSize: 20, color: primary),
                       ),
                       Text(
-                        _isListening ? "Listening..." : "Tap mic to start · Speak naturally",
+                        _isListening
+                            ? "Listening..."
+                            : "Tap mic to start · Speak naturally",
                         style: theme.textTheme.bodySmall,
                       ),
                     ],
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Container(
@@ -132,41 +153,49 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Detected: Chicken Breast 150g", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontWeight: FontWeight.w700)),
-                      Text("246 kcal · 46g protein · 0g carbs · 5g fat", style: theme.textTheme.bodySmall),
+                      Text("Detected: Chicken Breast 150g",
+                          style: theme.textTheme.labelLarge?.copyWith(
+                              color: primary, fontWeight: FontWeight.w700)),
+                      Text("246 kcal · 46g protein · 0g carbs · 5g fat",
+                          style: theme.textTheme.bodySmall),
                       const SizedBox(height: 6),
                       GestureDetector(
                         onTap: () async {
-                          final userId = ref.read(currentUserIdProvider);
                           await ref.read(inventoryRepositoryProvider).addItem(
-                            userId, name: "Chicken Breast", quantity: 150, unit: 'g', category: 'Protein');
+                              name: "Chicken Breast",
+                              quantity: 150,
+                              unit: "g",
+                              category: "Protein");
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Item added to pantry ✓')),
+                              const SnackBar(
+                                  content: Text('Item added to pantry ✓')),
                             );
                           }
                         },
-                        child: Text("Add to inventory ›", style: theme.textTheme.labelLarge?.copyWith(color: primary, fontSize: 10)),
+                        child: Text("Add to inventory ›",
+                            style: theme.textTheme.labelLarge
+                                ?.copyWith(color: primary, fontSize: 10)),
                       ),
                     ],
                   ),
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                 child: Row(
                   children: [
                     Expanded(child: Divider(color: theme.colorScheme.outline)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text("OR TYPE INSTEAD", style: T2TextStyles.sectionLabel(theme.colorScheme)),
+                      child: Text("OR TYPE INSTEAD",
+                          style: T2TextStyles.sectionLabel(theme.colorScheme)),
                     ),
                     Expanded(child: Divider(color: theme.colorScheme.outline)),
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Row(
@@ -182,38 +211,41 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                       onTap: () async {
                         final text = _typeController.text.trim();
                         if (text.isEmpty) return;
-                        final userId = ref.read(currentUserIdProvider);
                         await ref.read(inventoryRepositoryProvider).addItem(
-                          userId, name: text, quantity: 1, unit: 'pcs', category: 'Other');
-                        setState(() => _detectedText = '"$text"');
+                            name: text,
+                            quantity: 1,
+                            unit: "pcs",
+                            category: "Other");
                         _typeController.clear();
                         FocusScope.of(context).unfocus();
                         if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text('$text added to pantry ✓'),
                               backgroundColor: T2Colors.lime,
                               behavior: SnackBarBehavior.floating));
                         }
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
                           color: primary,
                           borderRadius: BorderRadius.circular(7),
                         ),
-                        child: Text("Add", style: theme.textTheme.labelLarge?.copyWith(color: Colors.black)),
+                        child: Text("Add",
+                            style: theme.textTheme.labelLarge
+                                ?.copyWith(color: Colors.black)),
                       ),
                     ),
                   ],
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                child: Text("RECENTLY ADDED", style: T2TextStyles.sectionLabel(theme.colorScheme)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                child: Text("RECENTLY ADDED",
+                    style: T2TextStyles.sectionLabel(theme.colorScheme)),
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: DmCard(
@@ -221,8 +253,11 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                   child: Builder(builder: (context) {
                     final invAsync = ref.watch(inventoryStreamProvider);
                     return invAsync.when(
-                      loading: () => const SizedBox(height: 48,
-                        child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
+                      loading: () => const SizedBox(
+                          height: 48,
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2))),
                       error: (_, __) => const SizedBox.shrink(),
                       data: (items) {
                         final recent = items.take(5).toList();
@@ -230,22 +265,33 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             child: Text('No items yet — add some above',
-                              style: const TextStyle(color: T2Colors.textMuted, fontSize: 12)),
+                                style: const TextStyle(
+                                    color: T2Colors.textMuted, fontSize: 12)),
                           );
                         }
                         return Column(
-                          children: recent.map((item) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            child: Row(children: [
-                              const Icon(Icons.circle, size: 6, color: T2Colors.lime),
-                              const SizedBox(width: 10),
-                              Expanded(child: Text(item.ingredientName,
-                                style: const TextStyle(color: Colors.white,
-                                  fontWeight: FontWeight.w600, fontSize: 14))),
-                              Text('${item.quantity.toInt()} ${item.unit}',
-                                style: const TextStyle(color: T2Colors.textMuted, fontSize: 12)),
-                            ]),
-                          )).toList(),
+                          children: recent
+                              .map((item) => Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 6),
+                                    child: Row(children: [
+                                      const Icon(Icons.circle,
+                                          size: 6, color: T2Colors.lime),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                          child: Text(item.ingredientName,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14))),
+                                      Text(
+                                          '${item.quantity.toInt()} ${item.unit}',
+                                          style: const TextStyle(
+                                              color: T2Colors.textMuted,
+                                              fontSize: 12)),
+                                    ]),
+                                  ))
+                              .toList(),
                         );
                       },
                     );

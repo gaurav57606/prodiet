@@ -24,8 +24,9 @@ class CalorieSummaryCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final user = ref.watch(currentUserProvider);
-    
-    final caloriesRemaining = (caloriesGoal - caloriesConsumed).clamp(0, caloriesGoal);
+
+    final caloriesRemaining =
+        (caloriesGoal - caloriesConsumed).clamp(0, caloriesGoal);
     final dateString = DateFormat('EEEE, d MMM').format(DateTime.now());
 
     return Container(
@@ -35,8 +36,8 @@ class CalorieSummaryCard extends ConsumerWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: scheme.brightness == Brightness.light
-            ? T1ColorSchemes.heroGradientLightMode
-            : T1ColorSchemes.heroGradient,
+              ? T1ColorSchemes.heroGradientLightMode
+              : T1ColorSchemes.heroGradient,
         ),
       ),
       padding: const EdgeInsets.fromLTRB(
@@ -64,7 +65,6 @@ class CalorieSummaryCard extends ConsumerWidget {
               ),
             ),
           ),
-          
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -86,7 +86,8 @@ class CalorieSummaryCard extends ConsumerWidget {
                     letterSpacing: -0.5,
                   ),
                   children: [
-                    TextSpan(text: '${user?.name?.split(' ').first ?? 'Hello'} '),
+                    TextSpan(
+                        text: '${user?.name?.split(' ').first ?? 'Hello'} '),
                     TextSpan(
                       text: user?.name?.split(' ').skip(1).join(' ') ?? '',
                       style: TextStyle(color: theme.colorScheme.primary),
@@ -124,7 +125,8 @@ class CalorieSummaryCard extends ConsumerWidget {
                       Text(
                         'KCAL REMAINING TODAY',
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.4),
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.0,
                         ),
@@ -157,7 +159,8 @@ class CalorieSummaryCard extends ConsumerWidget {
                         Text(
                           'DAY STREAK',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: const Color(0xFFFFD070).withValues(alpha: 0.6),
+                            color:
+                                const Color(0xFFFFD070).withValues(alpha: 0.6),
                             fontSize: 8,
                             letterSpacing: 1.2,
                             fontWeight: FontWeight.w900,

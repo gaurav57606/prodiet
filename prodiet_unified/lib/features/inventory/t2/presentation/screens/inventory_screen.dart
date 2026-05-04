@@ -35,7 +35,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () => _showAddItemSheet(context, ref, userId),
+            onPressed: () => _showAddItemSheet(context, ref),
             icon: const Icon(Icons.add_rounded, color: Colors.white),
           ),
         ],
@@ -45,7 +45,10 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         backgroundColor: T2Colors.lime,
         label: const Text(
           'SCAN BILL',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.2),
         ),
         icon: const Icon(Icons.qr_code_scanner, color: Colors.black),
       ),
@@ -79,15 +82,19 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           ),
           AsyncValueWidget<List<InventoryItem>>(
             value: inventoryAsync,
-            skeleton: const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator(color: T2Colors.amber))),
+            skeleton: const SliverToBoxAdapter(
+                child: Center(
+                    child: CircularProgressIndicator(color: T2Colors.amber))),
             isEmpty: (items) => items.isEmpty,
             emptyState: SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.inventory_2_outlined, color: T2Colors.textMuted, size: 48),
+                    const Icon(Icons.inventory_2_outlined,
+                        color: T2Colors.textMuted, size: 48),
                     const SizedBox(height: 16),
                     Text(
                       'PANTRY EMPTY',
@@ -100,26 +107,34 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                     const SizedBox(height: 8),
                     const Text(
                       'Scan a bill or add items manually to get started.',
-                      style: TextStyle(color: T2Colors.textSecondary, fontSize: 13),
+                      style: TextStyle(
+                          color: T2Colors.textSecondary, fontSize: 13),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context).pushNamed('/t2/ocr'),
-                      icon: const Icon(Icons.qr_code_scanner, color: Colors.black),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('/t2/ocr'),
+                      icon: const Icon(Icons.qr_code_scanner,
+                          color: Colors.black),
                       label: const Text(
                         'SCAN A BILL',
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: T2Colors.lime,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 14),
                       ),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed: () => _showAddItemSheet(context, ref, userId),
+                      onPressed: () => _showAddItemSheet(context, ref),
                       child: Text(
                         'ADD MANUALLY',
                         style: GoogleFonts.barlowCondensed(
@@ -135,9 +150,14 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
               ),
             ),
             builder: (items) {
-              var filtered = items.where((i) => i.ingredientName.toLowerCase().contains(_searchQuery)).toList();
+              var filtered = items
+                  .where((i) =>
+                      i.ingredientName.toLowerCase().contains(_searchQuery))
+                  .toList();
               if (selectedCategory != null && selectedCategory != 'All') {
-                filtered = filtered.where((i) => i.category == selectedCategory).toList();
+                filtered = filtered
+                    .where((i) => i.category == selectedCategory)
+                    .toList();
               }
 
               return SliverPadding(
@@ -150,7 +170,8 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                     childAspectRatio: 0.9,
                   ),
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildStockTile(context, ref, filtered[index]),
+                    (context, index) =>
+                        _buildStockTile(context, ref, filtered[index]),
                     childCount: filtered.length,
                   ),
                 ),
@@ -173,11 +194,15 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: T2Colors.coral, size: 20),
+          const Icon(Icons.warning_amber_rounded,
+              color: T2Colors.coral, size: 20),
           const SizedBox(width: 12),
           Text(
             '$count ITEMS RUNNING LOW',
-            style: GoogleFonts.barlowCondensed(color: T2Colors.coral, fontWeight: FontWeight.w900, fontSize: 16),
+            style: GoogleFonts.barlowCondensed(
+                color: T2Colors.coral,
+                fontWeight: FontWeight.w900,
+                fontSize: 16),
           ),
         ],
       ),
@@ -187,7 +212,8 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   Widget _buildSearchBar() {
     return Container(
       height: 50,
-      decoration: BoxDecoration(color: T2Colors.bgDeep, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          color: T2Colors.bgDeep, borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
@@ -198,7 +224,8 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
               onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
               decoration: InputDecoration(
                 hintText: 'Search pantry...',
-                hintStyle: const TextStyle(color: T2Colors.textMuted, fontSize: 14),
+                hintStyle:
+                    const TextStyle(color: T2Colors.textMuted, fontSize: 14),
                 border: InputBorder.none,
               ),
               style: const TextStyle(color: Colors.white),
@@ -210,7 +237,17 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   }
 
   Widget _buildCategoryFilter(WidgetRef ref, String? selected) {
-    final categories = ['All', 'Grains', 'Protein', 'Dairy', 'Vegetables', 'Fruits', 'Oils', 'Spices', 'Other'];
+    final categories = [
+      'All',
+      'Grains',
+      'Protein',
+      'Dairy',
+      'Vegetables',
+      'Fruits',
+      'Oils',
+      'Spices',
+      'Other'
+    ];
     return SizedBox(
       height: 40,
       child: ListView.builder(
@@ -219,19 +256,27 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(right: 8),
           child: ChoiceChip(
-            label: Text(categories[index].toUpperCase(), style: GoogleFonts.barlowCondensed(fontWeight: FontWeight.w800, fontSize: 12)),
+            label: Text(categories[index].toUpperCase(),
+                style: GoogleFonts.barlowCondensed(
+                    fontWeight: FontWeight.w800, fontSize: 12)),
             selected: selected == categories[index],
-            onSelected: (val) => ref.read(inventoryCategoryFilterProvider.notifier).state = categories[index],
+            onSelected: (val) => ref
+                .read(inventoryCategoryFilterProvider.notifier)
+                .state = categories[index],
             selectedColor: T2Colors.lime,
             backgroundColor: T2Colors.bgElevated,
-            labelStyle: TextStyle(color: selected == categories[index] ? Colors.black : Colors.white),
+            labelStyle: TextStyle(
+                color: selected == categories[index]
+                    ? Colors.black
+                    : Colors.white),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildStockTile(BuildContext context, WidgetRef ref, InventoryItem item) {
+  Widget _buildStockTile(
+      BuildContext context, WidgetRef ref, InventoryItem item) {
     final isLow = item.isLowStock;
     final accent = _getCategoryColor(item.category);
     final icon = _getCategoryIcon(item.category);
@@ -244,10 +289,19 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: T2Colors.bgDeep,
-            title: Text('DELETE ${item.ingredientName.toUpperCase()}?', style: GoogleFonts.barlowCondensed(color: Colors.white, fontWeight: FontWeight.w900)),
+            title: Text('DELETE ${item.ingredientName.toUpperCase()}?',
+                style: GoogleFonts.barlowCondensed(
+                    color: Colors.white, fontWeight: FontWeight.w900)),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('CANCEL', style: TextStyle(color: T2Colors.textMuted))),
-              TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('DELETE', style: TextStyle(color: T2Colors.coral, fontWeight: FontWeight.w900))),
+              TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('CANCEL',
+                      style: TextStyle(color: T2Colors.textMuted))),
+              TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('DELETE',
+                      style: TextStyle(
+                          color: T2Colors.coral, fontWeight: FontWeight.w900))),
             ],
           ),
         );
@@ -261,7 +315,8 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           color: T2Colors.bgElevated,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isLow ? T2Colors.coral.withValues(alpha: 0.4) : T2Colors.border,
+            color:
+                isLow ? T2Colors.coral.withValues(alpha: 0.4) : T2Colors.border,
             width: isLow ? 1.5 : 1.0,
           ),
         ),
@@ -273,16 +328,26 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: accent.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(
+                      color: accent.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8)),
                   child: Icon(icon, color: accent, size: 20),
                 ),
-                if (isLow) Container(width: 8, height: 8, decoration: const BoxDecoration(color: T2Colors.coral, shape: BoxShape.circle)),
+                if (isLow)
+                  Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                          color: T2Colors.coral, shape: BoxShape.circle)),
               ],
             ),
             const Spacer(),
             Text(
               item.ingredientName.toUpperCase(),
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -313,54 +378,78 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
   Color _getCategoryColor(String category) {
     switch (category) {
-      case 'Protein': return T2Colors.coral;
-      case 'Dairy': return T2Colors.sky;
-      case 'Vegetables': return T2Colors.lime;
-      case 'Fruits': return T2Colors.lime;
-      case 'Grains': return T2Colors.amber;
-      default: return T2Colors.textMuted;
+      case 'Protein':
+        return T2Colors.coral;
+      case 'Dairy':
+        return T2Colors.sky;
+      case 'Vegetables':
+        return T2Colors.lime;
+      case 'Fruits':
+        return T2Colors.lime;
+      case 'Grains':
+        return T2Colors.amber;
+      default:
+        return T2Colors.textMuted;
     }
   }
 
   IconData _getCategoryIcon(String category) {
     switch (category) {
-      case 'Protein': return Icons.kebab_dining;
-      case 'Dairy': return Icons.icecream;
-      case 'Vegetables': return Icons.eco;
-      case 'Fruits': return Icons.apple;
-      case 'Grains': return Icons.grain;
-      default: return Icons.inventory_2;
+      case 'Protein':
+        return Icons.kebab_dining;
+      case 'Dairy':
+        return Icons.icecream;
+      case 'Vegetables':
+        return Icons.eco;
+      case 'Fruits':
+        return Icons.apple;
+      case 'Grains':
+        return Icons.grain;
+      default:
+        return Icons.inventory_2;
     }
   }
 
-  void _showEditDialog(BuildContext context, WidgetRef ref, InventoryItem item) {
+  void _showEditDialog(
+      BuildContext context, WidgetRef ref, InventoryItem item) {
     final controller = TextEditingController(text: item.quantity.toString());
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: T2Colors.bgDeep,
-        title: Text('EDIT ${item.ingredientName.toUpperCase()}', style: GoogleFonts.barlowCondensed(color: Colors.white, fontWeight: FontWeight.w900)),
+        title: Text('EDIT ${item.ingredientName.toUpperCase()}',
+            style: GoogleFonts.barlowCondensed(
+                color: Colors.white, fontWeight: FontWeight.w900)),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(labelText: 'New Quantity', labelStyle: TextStyle(color: T2Colors.textMuted)),
+          decoration: const InputDecoration(
+              labelText: 'New Quantity',
+              labelStyle: TextStyle(color: T2Colors.textMuted)),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('CANCEL', style: TextStyle(color: T2Colors.textMuted))),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('CANCEL',
+                  style: TextStyle(color: T2Colors.textMuted))),
           TextButton(
             onPressed: () {
-              ref.read(inventoryRepositoryProvider).updateQuantity(item.id, double.parse(controller.text));
+              ref
+                  .read(inventoryRepositoryProvider)
+                  .updateQuantity(item.id, double.parse(controller.text));
               Navigator.pop(context);
             },
-            child: const Text('UPDATE', style: TextStyle(color: T2Colors.lime, fontWeight: FontWeight.w900)),
+            child: const Text('UPDATE',
+                style: TextStyle(
+                    color: T2Colors.lime, fontWeight: FontWeight.w900)),
           ),
         ],
       ),
     );
   }
 
-  void _showAddItemSheet(BuildContext context, WidgetRef ref, String userId) {
+  void _showAddItemSheet(BuildContext context, WidgetRef ref) {
     final nameController = TextEditingController();
     final qtyController = TextEditingController();
     String selectedUnit = 'g';
@@ -370,21 +459,33 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: T2Colors.bgDeep,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 24,
+              right: 24,
+              top: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('ADD TO PANTRY', style: GoogleFonts.barlowCondensed(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white)),
+              Text('ADD TO PANTRY',
+                  style: GoogleFonts.barlowCondensed(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white)),
               const SizedBox(height: 20),
               _sheetInput(nameController, 'Ingredient Name'),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(flex: 2, child: _sheetInput(qtyController, 'Quantity', isNumber: true)),
+                  Expanded(
+                      flex: 2,
+                      child: _sheetInput(qtyController, 'Quantity',
+                          isNumber: true)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: _sheetDropdown<String>(
@@ -398,7 +499,16 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
               const SizedBox(height: 12),
               _sheetDropdown<String>(
                 value: selectedCategory,
-                items: ['Grains', 'Protein', 'Dairy', 'Vegetables', 'Fruits', 'Oils', 'Spices', 'Other'],
+                items: [
+                  'Grains',
+                  'Protein',
+                  'Dairy',
+                  'Vegetables',
+                  'Fruits',
+                  'Oils',
+                  'Spices',
+                  'Other'
+                ],
                 onChanged: (v) => setState(() => selectedCategory = v!),
               ),
               const SizedBox(height: 24),
@@ -407,18 +517,23 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
                 height: 54,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (nameController.text.isEmpty || qtyController.text.isEmpty) return;
+                    if (nameController.text.isEmpty ||
+                        qtyController.text.isEmpty) return;
                     await ref.read(inventoryRepositoryProvider).addItem(
-                      userId,
-                      name: nameController.text,
-                      quantity: double.parse(qtyController.text),
-                      unit: selectedUnit,
-                      category: selectedCategory,
-                    );
+                          name: nameController.text,
+                          quantity: double.parse(qtyController.text),
+                          unit: selectedUnit,
+                          category: selectedCategory,
+                        );
                     if (context.mounted) Navigator.pop(context);
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: T2Colors.lime, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                  child: const Text('ADD TO PANTRY', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black)),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: T2Colors.lime,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))),
+                  child: const Text('ADD TO PANTRY',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900, color: Colors.black)),
                 ),
               ),
               const SizedBox(height: 24),
@@ -429,7 +544,8 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     );
   }
 
-  Widget _sheetInput(TextEditingController controller, String label, {bool isNumber = false}) {
+  Widget _sheetInput(TextEditingController controller, String label,
+      {bool isNumber = false}) {
     return TextField(
       controller: controller,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
@@ -439,21 +555,33 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         labelStyle: const TextStyle(color: T2Colors.textMuted, fontSize: 12),
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.05),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none),
       ),
     );
   }
 
-  Widget _sheetDropdown<T>({required T value, required List<T> items, required ValueChanged<T?> onChanged}) {
+  Widget _sheetDropdown<T>(
+      {required T value,
+      required List<T> items,
+      required ValueChanged<T?> onChanged}) {
     return DropdownButtonFormField<T>(
       value: value,
       dropdownColor: T2Colors.bgDeep,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.05),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none),
       ),
-      items: items.map((i) => DropdownMenuItem(value: i, child: Text(i.toString(), style: const TextStyle(color: Colors.white)))).toList(),
+      items: items
+          .map((i) => DropdownMenuItem(
+              value: i,
+              child: Text(i.toString(),
+                  style: const TextStyle(color: Colors.white))))
+          .toList(),
       onChanged: onChanged,
     );
   }
@@ -476,7 +604,8 @@ class _SlidableInventoryCard extends StatefulWidget {
   State<_SlidableInventoryCard> createState() => _SlidableInventoryCardState();
 }
 
-class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with SingleTickerProviderStateMixin {
+class _SlidableInventoryCardState extends State<_SlidableInventoryCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   double _dragOffset = 0;
   static const double _actionWidth = 60;
@@ -485,7 +614,8 @@ class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with Sin
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
   }
 
   @override
@@ -527,7 +657,8 @@ class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with Sin
                 child: Container(
                   width: _actionWidth,
                   color: T2Colors.sky,
-                  child: const Center(child: Icon(Icons.edit_rounded, color: Colors.white)),
+                  child: const Center(
+                      child: Icon(Icons.edit_rounded, color: Colors.white)),
                 ),
               ),
               GestureDetector(
@@ -539,9 +670,13 @@ class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with Sin
                   width: _actionWidth,
                   decoration: const BoxDecoration(
                     color: T2Colors.coral,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(16), bottomRight: Radius.circular(16)),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16),
+                        bottomRight: Radius.circular(16)),
                   ),
-                  child: const Center(child: Icon(Icons.delete_outline_rounded, color: Colors.white)),
+                  child: const Center(
+                      child: Icon(Icons.delete_outline_rounded,
+                          color: Colors.white)),
                 ),
               ),
             ],

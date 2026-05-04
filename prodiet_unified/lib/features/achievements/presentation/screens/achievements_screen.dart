@@ -19,15 +19,18 @@ class AchievementsScreen extends ConsumerWidget {
         data: (list) {
           if (list.isEmpty) {
             return Center(
-              child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('🏆', style: TextStyle(fontSize: 48)),
-                  const SizedBox(height: 16),
-                  Text('No achievements yet', style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  Text('Keep logging meals and hitting your goals!',
-                    style: theme.textTheme.bodySmall, textAlign: TextAlign.center),
-                ]),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('🏆', style: TextStyle(fontSize: 48)),
+                    const SizedBox(height: 16),
+                    Text('No achievements yet',
+                        style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    Text('Keep logging meals and hitting your goals!',
+                        style: theme.textTheme.bodySmall,
+                        textAlign: TextAlign.center),
+                  ]),
             );
           }
           return ListView.separated(
@@ -48,12 +51,18 @@ class _AchievementTile extends StatelessWidget {
 
   String _emoji(String type) {
     switch (type) {
-      case 'streak_7':     return '🔥';
-      case 'streak_30':    return '⚡';
-      case 'protein_goal': return '💪';
-      case 'hydration':    return '💧';
-      case 'weight_loss':  return '⚖️';
-      default:             return '🏆';
+      case 'streak_7':
+        return '🔥';
+      case 'streak_30':
+        return '⚡';
+      case 'protein_goal':
+        return '💪';
+      case 'hydration':
+        return '💧';
+      case 'weight_loss':
+        return '⚖️';
+      default:
+        return '🏆';
     }
   }
 
@@ -69,31 +78,41 @@ class _AchievementTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         child: Row(children: [
           Container(
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: scheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle),
-            child: Center(child: Text(_emoji(a.type),
-              style: const TextStyle(fontSize: 24))),
+                color: scheme.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle),
+            child: Center(
+                child:
+                    Text(_emoji(a.type), style: const TextStyle(fontSize: 24))),
           ),
           const SizedBox(width: 12),
-          Expanded(child: Column(
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(a.title, style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w900)),
+              Text(a.title,
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w900)),
               const SizedBox(height: 2),
-              Text(a.description, style: theme.textTheme.bodySmall?.copyWith(
-                color: scheme.onSurface.withValues(alpha: 0.5))),
+              Text(a.description,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurface.withValues(alpha: 0.5))),
               if (a.streakCount > 0)
                 Text('${a.streakCount} day streak 🔥',
-                  style: const TextStyle(fontSize: 10,
-                    color: Colors.orangeAccent, fontWeight: FontWeight.w700)),
+                    style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.orangeAccent,
+                        fontWeight: FontWeight.w700)),
             ],
           )),
-          Text(a.earnedAt.length >= 10 ? a.earnedAt.substring(0, 10) : a.earnedAt,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: scheme.onSurface.withValues(alpha: 0.35))),
+          Text(
+              a.earnedAt.length >= 10
+                  ? a.earnedAt.substring(0, 10)
+                  : a.earnedAt,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: scheme.onSurface.withValues(alpha: 0.35))),
         ]),
       ),
     );

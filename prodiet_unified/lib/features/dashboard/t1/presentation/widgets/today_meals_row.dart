@@ -52,12 +52,16 @@ class TodayMealsRow extends StatelessWidget {
     final timeUntil = meal!.scheduledTime.difference(DateTime.now());
     final hoursUntil = timeUntil.inHours;
     final minutesUntil = timeUntil.inMinutes % 60;
-    final timeUntilStr = hoursUntil > 0 ? '${hoursUntil}h ${minutesUntil}m' : '${minutesUntil}m';
+    final timeUntilStr =
+        hoursUntil > 0 ? '${hoursUntil}h ${minutesUntil}m' : '${minutesUntil}m';
 
     return DmCard(
       padding: EdgeInsets.zero,
-      color: isDark ? const Color(0xFFFF8C64).withValues(alpha: 0.08) : const Color(0xFFFFE6D7).withValues(alpha: 0.85),
-      borderSide: BorderSide(color: const Color(0xFFFF8C64).withValues(alpha: 0.18)),
+      color: isDark
+          ? const Color(0xFFFF8C64).withValues(alpha: 0.08)
+          : const Color(0xFFFFE6D7).withValues(alpha: 0.85),
+      borderSide:
+          BorderSide(color: const Color(0xFFFF8C64).withValues(alpha: 0.18)),
       child: Column(
         children: [
           Padding(
@@ -153,7 +157,8 @@ class TodayMealsRow extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: DmMacroChip(
-                        value: '${meal!.nutritionalValues.fiberG?.toInt() ?? 0}g',
+                        value:
+                            '${meal!.nutritionalValues.fiberG?.toInt() ?? 0}g',
                         label: 'FIBRE',
                         type: MacroType.fibre,
                       ),

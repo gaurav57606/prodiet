@@ -8,11 +8,12 @@ final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
   return InventoryRepository(ref.watch(supabaseClientProvider));
 });
 
-final inventoryStreamProvider = StreamProvider.autoDispose<List<InventoryItem>>((ref) {
-  final userId = ref.watch(currentUserIdProvider);
-  if (userId.isEmpty) return Stream.value([]);
-  
-  return ref.watch(inventoryRepositoryProvider).watchInventory(userId);
+final inventoryStreamProvider =
+    StreamProvider.autoDispose<List<InventoryItem>>((ref) {
+  final isAuthenticated = ref.watch(isAuthenticatedProvider);
+  if (!isAuthenticated) return Stream.value([]);
+
+  return ref.watch(inventoryRepositoryProvider).watchInventory();
 });
 
 final lowStockProvider = Provider.autoDispose<List<InventoryItem>>((ref) {

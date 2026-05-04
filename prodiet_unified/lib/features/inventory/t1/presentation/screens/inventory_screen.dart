@@ -28,7 +28,7 @@ class InventoryScreen extends ConsumerWidget {
         title: const Text('My Pantry'),
         actions: [
           IconButton(
-            onPressed: () => _showAddItemSheet(context, ref, userId),
+            onPressed: () => _showAddItemSheet(context, ref),
             icon: const Icon(Icons.add_rounded),
           ),
         ],
@@ -38,9 +38,7 @@ class InventoryScreen extends ConsumerWidget {
         children: [
           if (lowStockItems.isNotEmpty)
             _buildLowStockBanner(context, theme, lowStockItems.length),
-          
           _buildCategoryFilter(ref, selectedCategory),
-          
           Expanded(
             child: AsyncValueWidget<List<InventoryItem>>(
               value: inventoryAsync,
@@ -54,16 +52,20 @@ class InventoryScreen extends ConsumerWidget {
                 onButtonTap: () => context.push('/t1/ocr'),
               ),
               builder: (items) {
-                final filtered = selectedCategory == null || selectedCategory == 'All'
-                    ? items
-                    : items.where((i) => i.category == selectedCategory).toList();
+                final filtered =
+                    selectedCategory == null || selectedCategory == 'All'
+                        ? items
+                        : items
+                            .where((i) => i.category == selectedCategory)
+                            .toList();
 
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
                   itemCount: filtered.length,
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: _buildInventoryItemCard(context, ref, theme, filtered[index]),
+                    child: _buildInventoryItemCard(
+                        context, ref, theme, filtered[index]),
                   ),
                 );
               },
@@ -74,7 +76,8 @@ class InventoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildLowStockBanner(BuildContext context, ThemeData theme, int count) {
+  Widget _buildLowStockBanner(
+      BuildContext context, ThemeData theme, int count) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(T1Spacing.lg),
@@ -86,11 +89,15 @@ class InventoryScreen extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.orangeAccent, size: 20),
+          const Icon(Icons.warning_amber_rounded,
+              color: Colors.orangeAccent, size: 20),
           const SizedBox(width: 12),
           Text(
             '$count items running low',
-            style: const TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.w900, fontSize: 13),
+            style: const TextStyle(
+                color: Colors.orangeAccent,
+                fontWeight: FontWeight.w900,
+                fontSize: 13),
           ),
         ],
       ),
@@ -98,7 +105,17 @@ class InventoryScreen extends ConsumerWidget {
   }
 
   Widget _buildCategoryFilter(WidgetRef ref, String? selected) {
-    final categories = ['All', 'Grains', 'Protein', 'Dairy', 'Vegetables', 'Fruits', 'Oils', 'Spices', 'Other'];
+    final categories = [
+      'All',
+      'Grains',
+      'Protein',
+      'Dairy',
+      'Vegetables',
+      'Fruits',
+      'Oils',
+      'Spices',
+      'Other'
+    ];
     return SizedBox(
       height: 60,
       child: ListView.builder(
@@ -110,14 +127,17 @@ class InventoryScreen extends ConsumerWidget {
           child: DmChip(
             label: categories[index],
             isSelected: selected == categories[index],
-            onSelected: (val) => ref.read(inventoryCategoryFilterProvider.notifier).state = categories[index],
+            onSelected: (val) => ref
+                .read(inventoryCategoryFilterProvider.notifier)
+                .state = categories[index],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInventoryItemCard(BuildContext context, WidgetRef ref, ThemeData theme, InventoryItem item) {
+  Widget _buildInventoryItemCard(BuildContext context, WidgetRef ref,
+      ThemeData theme, InventoryItem item) {
     return _SlidableInventoryCard(
       item: item,
       onEdit: () => _showEditQuantitySheet(context, ref, item),
@@ -128,8 +148,13 @@ class InventoryScreen extends ConsumerWidget {
             title: const Text('Delete Item?'),
             content: Text('Remove ${item.ingredientName} from your pantry?'),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('CANCEL')),
-              TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('DELETE', style: TextStyle(color: Colors.red))),
+              TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('CANCEL')),
+              TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('DELETE',
+                      style: TextStyle(color: Colors.red))),
             ],
           ),
         );
@@ -147,18 +172,33 @@ class InventoryScreen extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      Text(item.ingredientName, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900)),
+                      Text(item.ingredientName,
+                          style: theme.textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w900)),
                       if (item.isLowStock) ...[
                         const SizedBox(width: 8),
-                        Container(width: 6, height: 6, decoration: const BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle)),
+                        Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                                color: Colors.redAccent,
+                                shape: BoxShape.circle)),
                       ],
                     ],
                   ),
                   const SizedBox(height: 4),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(4)),
-                    child: Text(item.category.toUpperCase(), style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface.withValues(alpha: 0.4))),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(4)),
+                    child: Text(item.category.toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.w900,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.4))),
                   ),
                 ],
               ),
@@ -168,9 +208,16 @@ class InventoryScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    Text('${item.quantity % 1 == 0 ? item.quantity.toInt() : item.quantity}', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
+                    Text(
+                        '${item.quantity % 1 == 0 ? item.quantity.toInt() : item.quantity}',
+                        style: theme.textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w900)),
                     const SizedBox(width: 4),
-                    Text(item.unit, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.3), fontWeight: FontWeight.w900)),
+                    Text(item.unit,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.3),
+                            fontWeight: FontWeight.w900)),
                   ],
                 ),
               ],
@@ -181,33 +228,49 @@ class InventoryScreen extends ConsumerWidget {
     );
   }
 
-  void _showEditQuantitySheet(BuildContext context, WidgetRef ref, InventoryItem item) {
+  void _showEditQuantitySheet(
+      BuildContext context, WidgetRef ref, InventoryItem item) {
     final controller = TextEditingController(text: item.quantity.toString());
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: const Color(0xFF0F172A),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 24,
+            right: 24,
+            top: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('EDIT QUANTITY', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+            const Text('EDIT QUANTITY',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white)),
             const SizedBox(height: 8),
-            Text(item.ingredientName.toUpperCase(), style: const TextStyle(fontSize: 12, color: Colors.white30)),
+            Text(item.ingredientName.toUpperCase(),
+                style: const TextStyle(fontSize: 12, color: Colors.white30)),
             const SizedBox(height: 24),
             TextField(
               controller: controller,
               keyboardType: TextInputType.number,
               autofocus: true,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white),
               decoration: InputDecoration(
                 suffixText: item.unit,
                 filled: true,
                 fillColor: Colors.white.withValues(alpha: 0.05),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none),
               ),
             ),
             const SizedBox(height: 24),
@@ -218,12 +281,19 @@ class InventoryScreen extends ConsumerWidget {
                 onPressed: () async {
                   final qty = double.tryParse(controller.text);
                   if (qty != null) {
-                    await ref.read(inventoryRepositoryProvider).updateQuantity(item.id, qty);
+                    await ref
+                        .read(inventoryRepositoryProvider)
+                        .updateQuantity(item.id, qty);
                     if (context.mounted) Navigator.pop(context);
                   }
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8B5CF6), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                child: const Text('UPDATE', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF8B5CF6),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12))),
+                child: const Text('UPDATE',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900, color: Colors.white)),
               ),
             ),
             const SizedBox(height: 40),
@@ -233,7 +303,7 @@ class InventoryScreen extends ConsumerWidget {
     );
   }
 
-  void _showAddItemSheet(BuildContext context, WidgetRef ref, String userId) {
+  void _showAddItemSheet(BuildContext context, WidgetRef ref) {
     final nameController = TextEditingController();
     final qtyController = TextEditingController();
     String selectedUnit = 'g';
@@ -243,21 +313,33 @@ class InventoryScreen extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: const Color(0xFF0F172A),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 24,
+              right: 24,
+              top: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('ADD TO PANTRY', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+              const Text('ADD TO PANTRY',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white)),
               const SizedBox(height: 20),
               _sheetInput(nameController, 'Ingredient Name'),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(flex: 2, child: _sheetInput(qtyController, 'Quantity', isNumber: true)),
+                  Expanded(
+                      flex: 2,
+                      child: _sheetInput(qtyController, 'Quantity',
+                          isNumber: true)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: _sheetDropdown<String>(
@@ -271,7 +353,16 @@ class InventoryScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               _sheetDropdown<String>(
                 value: selectedCategory,
-                items: ['Grains', 'Protein', 'Dairy', 'Vegetables', 'Fruits', 'Oils', 'Spices', 'Other'],
+                items: [
+                  'Grains',
+                  'Protein',
+                  'Dairy',
+                  'Vegetables',
+                  'Fruits',
+                  'Oils',
+                  'Spices',
+                  'Other'
+                ],
                 onChanged: (v) => setState(() => selectedCategory = v!),
               ),
               const SizedBox(height: 24),
@@ -280,18 +371,23 @@ class InventoryScreen extends ConsumerWidget {
                 height: 54,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (nameController.text.isEmpty || qtyController.text.isEmpty) return;
+                    if (nameController.text.isEmpty ||
+                        qtyController.text.isEmpty) return;
                     await ref.read(inventoryRepositoryProvider).addItem(
-                      userId,
-                      name: nameController.text,
-                      quantity: double.parse(qtyController.text),
-                      unit: selectedUnit,
-                      category: selectedCategory,
-                    );
+                          name: nameController.text,
+                          quantity: double.parse(qtyController.text),
+                          unit: selectedUnit,
+                          category: selectedCategory,
+                        );
                     if (context.mounted) Navigator.pop(context);
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8B5CF6), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                  child: const Text('ADD TO PANTRY', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF8B5CF6),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))),
+                  child: const Text('ADD TO PANTRY',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900, color: Colors.white)),
                 ),
               ),
               const SizedBox(height: 24),
@@ -302,7 +398,8 @@ class InventoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _sheetInput(TextEditingController controller, String label, {bool isNumber = false}) {
+  Widget _sheetInput(TextEditingController controller, String label,
+      {bool isNumber = false}) {
     return TextField(
       controller: controller,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
@@ -311,21 +408,30 @@ class InventoryScreen extends ConsumerWidget {
         labelStyle: const TextStyle(color: Colors.white30, fontSize: 12),
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.05),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none),
       ),
     );
   }
 
-  Widget _sheetDropdown<T>({required T value, required List<T> items, required ValueChanged<T?> onChanged}) {
+  Widget _sheetDropdown<T>(
+      {required T value,
+      required List<T> items,
+      required ValueChanged<T?> onChanged}) {
     return DropdownButtonFormField<T>(
       value: value,
       dropdownColor: const Color(0xFF1E293B),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.05),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none),
       ),
-      items: items.map((i) => DropdownMenuItem(value: i, child: Text(i.toString()))).toList(),
+      items: items
+          .map((i) => DropdownMenuItem(value: i, child: Text(i.toString())))
+          .toList(),
       onChanged: onChanged,
     );
   }
@@ -348,7 +454,8 @@ class _SlidableInventoryCard extends StatefulWidget {
   State<_SlidableInventoryCard> createState() => _SlidableInventoryCardState();
 }
 
-class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with SingleTickerProviderStateMixin {
+class _SlidableInventoryCardState extends State<_SlidableInventoryCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   double _dragOffset = 0;
   static const double _actionWidth = 80;
@@ -357,7 +464,8 @@ class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with Sin
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
   }
 
   @override
@@ -403,7 +511,11 @@ class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with Sin
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.edit_rounded, color: Colors.white),
-                      Text('Edit', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                      Text('Edit',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -417,13 +529,19 @@ class _SlidableInventoryCardState extends State<_SlidableInventoryCard> with Sin
                   width: _actionWidth,
                   decoration: const BoxDecoration(
                     color: Colors.redAccent,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(16), bottomRight: Radius.circular(16)),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16),
+                        bottomRight: Radius.circular(16)),
                   ),
                   child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.delete_outline_rounded, color: Colors.white),
-                      Text('Delete', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                      Text('Delete',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),

@@ -33,7 +33,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Theme.of(context).colorScheme.error),
+      SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).colorScheme.error),
     );
   }
 
@@ -74,7 +76,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         _showError(next.error.displayMessage);
       }
     });
-    
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -122,10 +124,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               prefixIcon: const Icon(Icons.lock_outline, size: 20),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  _obscurePassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   size: 20,
                 ),
-                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
               ),
             ),
             const SizedBox(height: T2Spacing.lg),
@@ -137,10 +142,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               prefixIcon: const Icon(Icons.lock_outline, size: 20),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  _obscureConfirmPassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   size: 20,
                 ),
-                onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                onPressed: () => setState(
+                    () => _obscureConfirmPassword = !_obscureConfirmPassword),
               ),
             ),
             const SizedBox(height: T2Spacing.xl),
@@ -183,4 +191,3 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
   }
 }
-

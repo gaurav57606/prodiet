@@ -12,5 +12,6 @@ class WeightEntry with _$WeightEntry {
     required DateTime loggedAt,
   }) = _WeightEntry;
 
-  factory WeightEntry.fromJson(Map<String, dynamic> json) => _$WeightEntryFromJson(json);
+  factory WeightEntry.fromJson(Map<String, dynamic> json) =>
+      _$WeightEntryFromJson(json);
 }

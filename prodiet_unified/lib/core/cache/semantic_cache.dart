@@ -4,9 +4,9 @@ import 'package:prodiet_unified/core/services/analytics_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 enum CacheNamespace {
-  nutrition,    // TTL: 90 days
-  recipe,       // TTL: 30 days
-  mealPlan,     // TTL: 30 days
+  nutrition, // TTL: 90 days
+  recipe, // TTL: 30 days
+  mealPlan, // TTL: 30 days
 }
 
 class SemanticCache {
@@ -15,15 +15,15 @@ class SemanticCache {
   SemanticCache(this._client, this._analytics);
 
   // Returns cached response JSON or null on miss
-  Future<Map<String, dynamic>?> get(
-    CacheNamespace namespace, String query, {String? userId}) async {
+  Future<Map<String, dynamic>?> get(CacheNamespace namespace, String query,
+      {String? userId}) async {
     final hash = _hash(namespace, query);
     try {
       final result = await _client
-        .from('ai_cache')
-        .select('response_json, expires_at')
-        .eq('query_hash', hash)
-        .maybeSingle();
+          .from('ai_cache')
+          .select('response_json, expires_at')
+          .eq('query_hash', hash)
+          .maybeSingle();
       if (result == null) return null;
       // Check expiry
       final expires = DateTime.parse(result['expires_at']);
@@ -36,8 +36,8 @@ class SemanticCache {
 
       if (userId != null) {
         _analytics.logEvent(
-          userId, 
-          AnalyticsService.kAiCacheHit, 
+          userId,
+          AnalyticsService.kAiCacheHit,
           data: {'namespace': namespace.name},
         );
       }
@@ -49,9 +49,8 @@ class SemanticCache {
   }
 
   // Store a response in cache
-  Future<void> put(
-    CacheNamespace namespace, String query,
-    Map<String, dynamic> response) async {
+  Future<void> put(CacheNamespace namespace, String query,
+      Map<String, dynamic> response) async {
     final hash = _hash(namespace, query);
     final ttl = _ttl(namespace);
     try {
@@ -59,10 +58,10 @@ class SemanticCache {
         'namespace': namespace.name,
         'query_hash': hash,
         'response_json': response,
-        'hit_count': 0,           // Start at 0; RPC increments on reads
+        'hit_count': 0, // Start at 0; RPC increments on reads
         'created_at': DateTime.now().toIso8601String(),
         'expires_at': DateTime.now().add(ttl).toIso8601String(),
-      }, onConflict: 'query_hash');   // Explicit conflict target
+      }, onConflict: 'query_hash'); // Explicit conflict target
     } catch (e) {
       // Cache write failure is silent — never block main flow
     }
@@ -78,9 +77,12 @@ class SemanticCache {
 
   Duration _ttl(CacheNamespace ns) {
     switch (ns) {
-      case CacheNamespace.nutrition: return const Duration(days: 90);
-      case CacheNamespace.recipe:    return const Duration(days: 30);
-      case CacheNamespace.mealPlan:  return const Duration(days: 30);
+      case CacheNamespace.nutrition:
+        return const Duration(days: 90);
+      case CacheNamespace.recipe:
+        return const Duration(days: 30);
+      case CacheNamespace.mealPlan:
+        return const Duration(days: 30);
     }
   }
 
