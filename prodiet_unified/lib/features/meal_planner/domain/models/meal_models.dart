@@ -33,10 +33,10 @@ class Meal {
       ingredients: (json['ingredients'] as List? ?? [])
           .map((i) => Ingredient.fromJson(i))
           .toList(),
-      nutritionalValues: NutritionalValues.fromJson(json['nutritional_values'] ?? {}),
-      scheduledTime: DateTime.parse(json['scheduled_time']),
+      nutritionalValues: NutritionalValues.fromJson(json),
+      scheduledTime: DateTime.tryParse(json['scheduled_time']?.toString() ?? '') ?? DateTime.now(),
       status: json['status'],
-      date: DateTime.parse(json['planned_date'] ?? json['scheduled_time']),
+      date: DateTime.tryParse(json['planned_date']?.toString() ?? json['scheduled_time']?.toString() ?? '') ?? DateTime.now(),
     );
   }
 
@@ -48,7 +48,11 @@ class Meal {
       'meal_type': mealType,
       'name': name,
       'ingredients': ingredients.map((i) => i.toJson()).toList(),
-      'nutritional_values': nutritionalValues.toJson(),
+      'calories': nutritionalValues.calories,
+      'protein_g': nutritionalValues.proteinG,
+      'carbs_g': nutritionalValues.carbsG,
+      'fat_g': nutritionalValues.fatG,
+      'fiber_g': nutritionalValues.fiberG,
       'scheduled_time': scheduledTime.toIso8601String(),
       'status': status,
       'planned_date': date.toIso8601String().split('T')[0],

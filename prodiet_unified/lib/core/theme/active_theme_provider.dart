@@ -19,7 +19,7 @@ class ActiveThemeNotifier extends Notifier<ActiveTheme> {
   @override
   ActiveTheme build() => ActiveTheme.t1Dark;
 
-  Future<void> init(WidgetRef ref) async {
+  Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_kThemeKey);
     if (saved != null) {

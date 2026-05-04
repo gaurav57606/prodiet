@@ -14,7 +14,7 @@ class ErrorHandler {
 
     if (error is AuthException) {
       appError = AuthError(
-        message: '$tag${error.message}',
+        message: error.message,
         code: 'AUTH_${error.statusCode ?? "ERR"}',
       );
     } else if (error is PostgrestException) {

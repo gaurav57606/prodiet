@@ -183,22 +183,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> sendPasswordReset(String email) async {
     try {
-      state = const AuthLoading();
       await _repo.sendPasswordReset(email);
-      if (!mounted) return;
-      // Reset back to unauthenticated after success, or just let the screen handle it
-      state = const AuthUnauthenticated();
+      // Do NOT set state here. Screen shows success message locally.
     } catch (e) {
       if (!mounted) return;
-      logger.e('[$_tag] resetPassword error: $e');
       state = AuthFailure(ErrorHandler.handle(e, context: '$_tag.sendPasswordReset'));
     }
   }
 
-  Future<void> completeOnboarding(
-    String userId,
-    Map<String, dynamic> profileData,
-  ) async {
+  Future<void> completeOnboarding(String userId, Map<String, dynamic> profileData) async {
     try {
       state = const AuthLoading();
       await _repo.updateProfile(userId, {
@@ -206,13 +199,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
         'onboarding_complete': true,
       });
       if (!mounted) return;
-
-      // The auth listener will pick up the change if we refetch or if we manually update state
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (!mounted) return;
       final updatedProfile = await _repo.fetchProfile(userId);
       if (!mounted) return;
-      
       if (updatedProfile != null) {
         state = AuthAuthenticated(updatedProfile);
+      } else {
+        state = AuthFailure(const UnknownError(
+          message: 'Could not load your profile after setup. Please restart the app.',
+        ));
       }
     } catch (e) {
       if (!mounted) return;

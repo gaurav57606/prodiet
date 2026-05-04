@@ -43,6 +43,7 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
       case 0: return 'sedentary';
       case 1: return 'light';
       case 2: return 'moderate';
+      case 3: return 'very_active';
       default: return 'light';
     }
   }
@@ -219,7 +220,9 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
                     const SizedBox(height: 12),
                     _buildActivityOption(1, 'Lightly active', '1–3 days exercise / week', theme),
                     const SizedBox(height: 12),
-                    _buildActivityOption(2, 'Very active', 'Hard exercise 6–7 days', theme),
+                    _buildActivityOption(2, 'Moderately active', '3–5 days exercise / week', theme),
+                    const SizedBox(height: 12),
+                    _buildActivityOption(3, 'Very active', 'Hard exercise 6–7 days', theme),
                     const SizedBox(height: 32),
   
                     // BOTTOM INPUTS

@@ -15,8 +15,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
-  bool _emailSent = false;
-  bool _isLoading = false;
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -24,17 +23,30 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  Future<void> _sendReset() async {
+  Future<void> _onSubmit() async {
     final email = _emailController.text.trim();
-    if (email.isEmpty) return;
+    if (email.isEmpty || !email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address')),
+      );
+      return;
+    }
 
-    setState(() => _isLoading = true);
-    await ref.read(authProvider.notifier).sendPasswordReset(email);
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        _emailSent = true;
-      });
+    setState(() => _isSubmitting = true);
+    try {
+      await ref.read(authProvider.notifier).sendPasswordReset(email);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Reset link sent! Check your email inbox.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      context.pop(); // Go back to login after sending
+    } catch (_) {
+      // AuthFailure state will trigger the ref.listen SnackBar
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
@@ -43,7 +55,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final authState = ref.watch(authProvider);
-    final isLoading = authState is AuthLoading;
+    final isLoading = _isSubmitting;
 
     ref.listen<AuthState>(authProvider, (_, next) {
       if (next is AuthFailure) {
@@ -140,18 +152,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     DmButton(
                       label: 'Send Reset Link',
                       isLoading: isLoading,
-                      onPressed: () => _sendReset(),
+                      onPressed: () => _onSubmit(),
                       width: double.infinity,
                     ),
-                    if (_emailSent) ...[
-                      const SizedBox(height: 16),
-                      Center(
-                        child: Text(
-                          '✅ Reset link sent! Check your inbox.',
-                          style: TextStyle(color: Colors.green.shade400, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
                     const SizedBox(height: 40),
                     // Help Card
                     Container(

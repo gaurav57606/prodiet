@@ -16,7 +16,7 @@ class DashboardRepository {
             .from('meals')
             .select()
             .eq('user_id', userId)
-            .eq('date', today),
+            .eq('planned_date', today),
         _supabase
             .from('water_logs')
             .select()
@@ -24,7 +24,7 @@ class DashboardRepository {
             .eq('date', today),
         _supabase
             .from('users')
-            .select('name, daily_calorie_goal, daily_water_goal_ml')
+            .select('name, daily_calorie_target, daily_water_goal_ml')
             .eq('id', userId)
             .single(),
       ]);
@@ -42,11 +42,10 @@ class DashboardRepository {
       for (var meal in mealsData) {
         if (meal['status'] == 'completed') {
           mealsLogged++;
-          final nv = meal['nutritional_values'] as Map<String, dynamic>? ?? {};
-          caloriesConsumed += (nv['calories'] as num? ?? 0).toInt();
-          proteinConsumed += (nv['protein_g'] as num? ?? 0).toInt();
-          carbsConsumed += (nv['carbs_g'] as num? ?? 0).toInt();
-          fatConsumed += (nv['fat_g'] as num? ?? 0).toInt();
+          caloriesConsumed += (meal['calories'] as num? ?? 0).toInt();
+          proteinConsumed += (meal['protein_g'] as num? ?? 0).toInt();
+          carbsConsumed += (meal['carbs_g'] as num? ?? 0).toInt();
+          fatConsumed += (meal['fat_g'] as num? ?? 0).toInt();
         }
       }
 
@@ -55,16 +54,21 @@ class DashboardRepository {
         waterMl += (log['amount_ml'] as num? ?? 0).toInt();
       }
 
+      final calorieGoal = (userData['daily_calorie_target'] as num? ?? 2000).toInt();
+      final proteinGoal = ((calorieGoal * 0.3) / 4).toInt();
+      final carbsGoal = ((calorieGoal * 0.4) / 4).toInt();
+      final fatGoal = ((calorieGoal * 0.3) / 9).toInt();
+
       return DashboardSummary(
         userName: userData['name'] ?? 'User',
         caloriesConsumed: caloriesConsumed,
-        caloriesGoal: (userData['daily_calorie_goal'] as num? ?? 2000).toInt(),
+        caloriesGoal: calorieGoal,
         proteinConsumed: proteinConsumed,
-        proteinGoal: 150, // Default or derived
+        proteinGoal: proteinGoal,
         carbsConsumed: carbsConsumed,
-        carbsGoal: 200, // Default or derived
+        carbsGoal: carbsGoal,
         fatConsumed: fatConsumed,
-        fatGoal: 60, // Default or derived
+        fatGoal: fatGoal,
         waterMl: waterMl,
         waterGoalMl: (userData['daily_water_goal_ml'] as num? ?? 2000).toInt(),
         mealsToday: mealsLogged,

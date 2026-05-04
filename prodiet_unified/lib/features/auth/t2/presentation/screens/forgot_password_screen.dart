@@ -16,7 +16,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
-  bool _isSuccess = false;
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -24,18 +24,30 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  Future<void> _handleReset() async {
+  Future<void> _onSubmit() async {
     final email = _emailController.text.trim();
-    if (email.isEmpty) {
+    if (email.isEmpty || !email.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter your email")),
+        const SnackBar(content: Text('Please enter a valid email address')),
       );
       return;
     }
-    
-    await ref.read(authProvider.notifier).sendPasswordReset(email);
-    if (mounted && ref.read(authProvider) is! AuthFailure) {
-      setState(() => _isSuccess = true);
+
+    setState(() => _isSubmitting = true);
+    try {
+      await ref.read(authProvider.notifier).sendPasswordReset(email);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Reset link sent! Check your email inbox.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      context.pop(); // Go back to login after sending
+    } catch (_) {
+      // AuthFailure state will trigger the ref.listen SnackBar
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
@@ -43,7 +55,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final authState = ref.watch(authProvider);
-    final isLoading = authState is AuthLoading;
+    final isLoading = _isSubmitting;
 
     ref.listen<AuthState>(authProvider, (_, next) {
       if (next is AuthFailure) {
@@ -139,61 +151,39 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
                     // Title
                     RichText(
-                      text: TextSpan(
-                        children: _isSuccess
-                            ? [
-                                const TextSpan(
-                                  text: "Check your ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: "inbox",
-                                  style: TextStyle(
-                                    color: Color(0xFFB06EFF),
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ]
-                            : [
-                                const TextSpan(
-                                  text: "Reset ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: "password",
-                                  style: TextStyle(
-                                    color: Color(0xFFB06EFF),
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ],
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Reset ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "password",
+                            style: TextStyle(
+                              color: Color(0xFFB06EFF),
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 8),
 
                     // Subtitle
-                    Text(
-                      _isSuccess
-                          ? "If an account exists, you'll receive an email shortly."
-                          : "Enter your email and we'll send a reset link",
-                      style: const TextStyle(
+                    const Text(
+                      "Enter your email and we'll send a reset link",
+                      style: TextStyle(
                         color: Color(0xFF888888),
                         fontSize: 13,
                       ),
                     ),
                     const SizedBox(height: 28),
 
-                    if (!_isSuccess) ...[
                       // Email Field
                       const Text(
                         "EMAIL ADDRESS",
@@ -219,36 +209,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         isLoading: isLoading,
                         backgroundColor: const Color(0xFF1A1A2E),
                         textColor: Colors.white,
-                        onPressed: _handleReset,
+                        onPressed: _onSubmit,
                       ),
-                    ] else ...[
-                      // Success State UI
-                      Center(
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF0D2B1A),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Icon(
-                                Icons.check_circle_outline,
-                                color: Color(0xFF4CAF50),
-                                size: 28,
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            DmButton(
-                              label: "Back to Login",
-                              variant: DmButtonVariant.outline,
-                              onPressed: () => context.goNamed(AppRoutes.t2Login),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
 
                     const SizedBox(height: 24),
 
@@ -304,7 +266,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-                      if (isLoading) return;
+                      if (_isSubmitting) return;
                       final email = _emailController.text.trim();
                       if (email.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -313,7 +275,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         return;
                       }
                       await ref.read(authProvider.notifier).sendPasswordReset(email);
-                      if (mounted && ref.read(authProvider) is! AuthFailure) {
+                      if (!context.mounted) return;
+                      if (ref.read(authProvider) is! AuthFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Reset email sent again ✓")),
                         );

@@ -8,11 +8,27 @@ class AuthRepository {
 
   Future<void> signUpWithEmail(String email, String password, String name) async {
     try {
-      await _supabase.auth.signUp(
+      final response = await _supabase.auth.signUp(
         email: email,
         password: password,
         data: {'name': name},
       );
+
+      final userId = response.user?.id;
+      if (userId != null) {
+        // Insert profile row so fetchProfile() never returns null for this user
+        await _supabase.from('users').upsert({
+          'id': userId,
+          'email': email,
+          'name': name,
+          'onboarding_complete': false,
+          'daily_water_goal_ml': 2000,
+          'variety_preference': 'balanced',
+          'allergies': <String>[],
+          'dietary_preferences': <String>[],
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      }
     } catch (e) {
       rethrow;
     }

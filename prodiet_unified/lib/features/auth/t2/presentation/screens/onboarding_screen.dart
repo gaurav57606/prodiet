@@ -29,10 +29,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   static const _activities = [
     ('SEDENTARY', 'Desk job, little exercise'),
     ('LIGHTLY ACTIVE', '1–3 days exercise/week'),
+    ('MODERATELY ACTIVE', '3–5 days exercise/week'),
     ('VERY ACTIVE', 'Hard exercise 6–7 days'),
   ];
   static const _goalKeys = ['lose_weight', 'gain_muscle', 'eat_healthy', 'maintain'];
-  static const _activityKeys = ['sedentary', 'light', 'moderate'];
+  static const _activityKeys = ['sedentary', 'light', 'moderate', 'very_active'];
 
   @override
   void dispose() {
