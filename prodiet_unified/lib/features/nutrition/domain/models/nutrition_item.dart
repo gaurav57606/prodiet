@@ -78,6 +78,15 @@ class NutritionItem {
   }
 
   NutritionalValues calculatePortion(double grams) {
+    if (grams <= 0) {
+      return const NutritionalValues(
+        calories: 0,
+        proteinG: 0,
+        carbsG: 0,
+        fatG: 0,
+        fiberG: 0,
+      );
+    }
     final ratio = grams / 100;
     return NutritionalValues(
       calories: (calories100g * ratio).round(),

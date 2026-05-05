@@ -48,10 +48,8 @@ void main() {
       expect(zeroPortion.calories, 0);
 
       final negativePortion = tNutritionItem.calculatePortion(-100);
-      // Implementation: (52 * -1.0).round() = -52. 
-      // Should we allow negative calories? Probably not.
-      // But let's verify current behavior or suggest a fix.
-      expect(negativePortion.calories, -52);
+      // Bug fix: should return 0 instead of negative calories
+      expect(negativePortion.calories, 0);
     });
 
     test('calculatePortion should handle extremely large portions', () {
