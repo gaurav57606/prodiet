@@ -59,7 +59,7 @@ dependencies:
   # Utilities
   logger: 2.7.0
   cached_network_image: 3.4.1
-  intl: ^0.19.0
+  intl: 0.19.0
   uuid: 4.5.3
   crypto: 3.0.7
   vector_math: 2.1.4
