@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
@@ -12,19 +11,19 @@ class ActivityRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),
       child: Row(
         children: [
-          _buildActivityItem('STEPS', '8,420', Icons.directions_walk, T2Colors.lime),
+          _buildActivityItem(context, 'STEPS', '8,420', Icons.directions_walk, T2Colors.lime),
           const SizedBox(width: 6),
-          _buildActivityItem('ACTIVE', '42 min', Icons.timer, T2Colors.coral),
+          _buildActivityItem(context, 'ACTIVE', '42 min', Icons.timer, T2Colors.coral),
           const SizedBox(width: 6),
-          _buildActivityItem('BURNED', '312 kcal', Icons.whatshot, T2Colors.amber),
+          _buildActivityItem(context, 'BURNED', '312 kcal', Icons.whatshot, T2Colors.amber),
           const SizedBox(width: 6),
-          _buildActivityItem('HEART', '74 bpm', Icons.favorite, T2Colors.purple),
+          _buildActivityItem(context, 'HEART', '74 bpm', Icons.favorite, T2Colors.purple),
         ],
       ),
     );
   }
 
-  Widget _buildActivityItem(String label, String value, IconData iconData, Color tileColor) {
+  Widget _buildActivityItem(BuildContext context, String label, String value, IconData iconData, Color tileColor) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(14),
@@ -55,7 +54,7 @@ class ActivityRow extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: GoogleFonts.barlowCondensed(
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: tileColor,

@@ -32,8 +32,8 @@ class DmLoader extends StatelessWidget {
     }
 
     return Shimmer.fromColors(
-      baseColor: context.colorScheme.surfaceVariant.withOpacity(0.3),
-      highlightColor: context.colorScheme.surfaceVariant.withOpacity(0.1),
+      baseColor: context.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+      highlightColor: context.colorScheme.surfaceVariant.withValues(alpha: 0.1),
       child: Container(
         width: width,
         height: height,

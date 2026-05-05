@@ -50,7 +50,7 @@ class DashboardScreen extends StatelessWidget {
               Text(
                 'Good morning,',
                 style: context.textTheme.labelLarge?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                  color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                 ),
               ),
               Text('Rohan Sharma', style: context.textTheme.titleMedium),

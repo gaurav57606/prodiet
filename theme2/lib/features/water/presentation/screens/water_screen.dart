@@ -198,7 +198,7 @@ class _WaterScreenState extends State<WaterScreen> {
     return Container(
       width: 45,
       decoration: BoxDecoration(
-        color: isFilled ? AppColors.sky.withOpacity(0.2) : AppColors.bgElevated,
+        color: isFilled ? AppColors.sky.withValues(alpha: 0.2) : AppColors.bgElevated,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isFilled ? AppColors.sky : AppColors.border,

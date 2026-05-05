@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
 import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
-import 'package:prodiet_unified/features/meal_planner/domain/daily_meal_summary.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
 
 class MockMealRepository extends Mock implements MealRepository {}

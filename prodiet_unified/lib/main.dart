@@ -28,7 +28,7 @@ void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     ErrorBoundary.setup();
-    GoogleFonts.config.allowRuntimeFetching = false;
+    GoogleFonts.config.allowRuntimeFetching = kDebugMode;
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);

@@ -25,7 +25,7 @@ class DmEmptyState extends StatelessWidget {
             Icon(
               icon,
               size: 64,
-              color: context.colorScheme.onSurfaceVariant.withOpacity(0.3),
+              color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
@@ -37,7 +37,7 @@ class DmEmptyState extends StatelessWidget {
             Text(
               message,
               style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),

@@ -14,8 +14,8 @@ class TodayMealsRow extends StatelessWidget {
 
     return DmCard(
       padding: EdgeInsets.zero,
-      color: isDark ? const Color(0xFFFF8C64).withOpacity(0.08) : const Color(0xFFFFE6D7).withOpacity(0.85),
-      borderSide: BorderSide(color: const Color(0xFFFF8C64).withOpacity(0.18)),
+      color: isDark ? const Color(0xFFFF8C64).withValues(alpha: 0.08) : const Color(0xFFFFE6D7).withValues(alpha: 0.85),
+      borderSide: BorderSide(color: const Color(0xFFFF8C64).withValues(alpha: 0.18)),
       child: Column(
         children: [
           Padding(
@@ -29,7 +29,7 @@ class TodayMealsRow extends StatelessWidget {
                     Text(
                       'LUNCH · 12:30 PM',
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: const Color(0xFFFF8C64).withOpacity(0.6),
+                        color: const Color(0xFFFF8C64).withValues(alpha: 0.6),
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -53,7 +53,7 @@ class TodayMealsRow extends StatelessWidget {
                 Text(
                   '480 kcal · High protein · Easy prep',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.4),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   ),
                 ),
               ],
@@ -62,7 +62,7 @@ class TodayMealsRow extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Colors.white.withOpacity(0.12)),
+                top: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
               ),
             ),
             child: Row(
@@ -114,7 +114,7 @@ class TodayMealsRow extends StatelessWidget {
     return Container(
       width: 1,
       height: 30,
-      color: Colors.white.withOpacity(0.12),
+      color: Colors.white.withValues(alpha: 0.12),
     );
   }
 }

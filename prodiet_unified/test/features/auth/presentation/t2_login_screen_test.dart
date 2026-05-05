@@ -4,12 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/features/auth/t2/presentation/screens/login_screen.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
 
 class MockAuthNotifier extends StateNotifier<AuthState> with Mock implements AuthNotifier {
-  MockAuthNotifier(AuthState state) : super(state);
+  MockAuthNotifier(super.state);
 }
 
 void main() {

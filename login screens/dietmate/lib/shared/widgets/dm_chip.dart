@@ -29,7 +29,7 @@ class DmChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primary : colorScheme.surfaceVariant.withOpacity(0.3),
+          color: isSelected ? colorScheme.primary : colorScheme.surfaceVariant.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? colorScheme.primary : colorScheme.outline,

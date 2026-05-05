@@ -10,13 +10,12 @@ class AppColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFA02030),
     onError: Colors.white,
-    background: Color(0xFFF2ECF9),
-    onBackground: Color(0xFF2A0A50),
-    surface: Color(0x99FFFFFF), // rgba(255,255,255,.6)
+    surface: Color(0xFFF2ECF9),
     onSurface: Color(0xFF2A0A50),
+    surfaceContainer: Color(0x99FFFFFF), // rgba(255,255,255,.6)
     outline: Color(0x1FA064DC), // rgba(160,100,220,.12)
-    surfaceVariant: Color(0xCCFFFFFF), // rgba(255,255,255,.8)
     onSurfaceVariant: Color(0xFF502878), // rgba(80,40,120,.6)
+    surfaceContainerHighest: Color(0xCCFFFFFF), // rgba(255,255,255,.8)
   );
 
   // Dark Scheme (Matches HTML "midnight" body class)
@@ -28,13 +27,12 @@ class AppColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFFF8090),
     onError: Color(0xFF330000),
-    background: Color(0xFF1C1A2E),
-    onBackground: Color(0xFFEDE6FF),
-    surface: Color(0x0FA78BFF), // rgba(167,139,255,.06)
+    surface: Color(0xFF1C1A2E),
     onSurface: Color(0xFFEDE6FF),
+    surfaceContainer: Color(0x0FA78BFF), // rgba(167,139,255,.06)
     outline: Color(0x21A78BFF), // rgba(167,139,255,.13)
-    surfaceVariant: Color(0x12A78BFF), // rgba(167,139,255,.07)
     onSurfaceVariant: Color(0x8CEDE6FF), // rgba(200,185,255,.55)
+    surfaceContainerHighest: Color(0x12A78BFF), // rgba(167,139,255,.07)
   );
 
   // Amoled Scheme (Matches HTML default/dark body class with #000)
@@ -46,13 +44,12 @@ class AppColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFFF8090),
     onError: Color(0xFF330000),
-    background: Colors.black,
-    onBackground: Colors.white,
-    surface: Color(0x0AFFFFFF), // rgba(255,255,255,.04)
+    surface: Colors.black,
     onSurface: Colors.white,
+    surfaceContainer: Color(0x0AFFFFFF), // rgba(255,255,255,.04)
     outline: Color(0x14FFFFFF), // rgba(255,255,255,.08)
-    surfaceVariant: Color(0x0DFFFFFF), // rgba(255,255,255,.05)
     onSurfaceVariant: Color(0x80FFFFFF), // rgba(255,255,255,.5)
+    surfaceContainerHighest: Color(0x0DFFFFFF), // rgba(255,255,255,.05)
   );
 }
 

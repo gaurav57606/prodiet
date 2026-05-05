@@ -17,12 +17,13 @@ class AnalyticsService {
   String? _currentSessionId;
   AnalyticsService(this._client);
 
-  void _reportError(dynamic e, String context) {
+  Null _reportError(dynamic e, String context) {
     logger.w('[AnalyticsService] Error in $context: $e');
     if (e is PostgrestException && !kDebugMode) {
       // Schema mismatch or DB error should go to Crashlytics
       FirebaseCrashlytics.instance.recordError(e, null, reason: 'Analytics DB Failure: $context');
     }
+    return null;
   }
 
   // ── SESSION ──────────────────────────────────────────

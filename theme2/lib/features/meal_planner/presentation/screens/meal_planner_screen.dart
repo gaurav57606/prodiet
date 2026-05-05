@@ -116,7 +116,7 @@ class MealPlannerScreen extends StatelessWidget {
         color: AppColors.bgElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isMissing ? AppColors.coral.withOpacity(0.5) : AppColors.border,
+          color: isMissing ? AppColors.coral.withValues(alpha: 0.5) : AppColors.border,
           width: isMissing ? 1.5 : 1.0,
         ),
       ),
@@ -156,7 +156,7 @@ class MealPlannerScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: AppColors.coral.withOpacity(0.1),
+                              color: AppColors.coral.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(

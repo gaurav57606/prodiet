@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dietmate/core/router/app_router.dart';
 import 'package:dietmate/core/theme/app_spacing.dart';
 import 'package:dietmate/core/utils/extensions.dart';
 import 'package:dietmate/shared/widgets/dm_button.dart';
@@ -83,7 +82,7 @@ class LoginScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: context.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: context.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: context.colorScheme.outline),
       ),
@@ -97,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(11),
                 boxShadow: [
                   BoxShadow(
-                    color: context.colorScheme.primary.withOpacity(0.3),
+                    color: context.colorScheme.primary.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -140,7 +139,7 @@ class LoginScreen extends StatelessWidget {
         Text(
           'Keep me signed in',
           style: context.textTheme.bodySmall?.copyWith(
-            color: context.colorScheme.onSurfaceVariant.withOpacity(0.7),
+            color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -187,7 +186,7 @@ class LoginScreen extends StatelessWidget {
             children: [
               TextSpan(
                 text: "Don't have an account? ",
-                style: TextStyle(color: context.colorScheme.onSurfaceVariant.withOpacity(0.7)),
+                style: TextStyle(color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
               ),
               TextSpan(
                 text: 'Create one',

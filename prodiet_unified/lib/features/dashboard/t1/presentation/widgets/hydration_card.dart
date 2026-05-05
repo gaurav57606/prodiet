@@ -165,12 +165,12 @@ class _HydrationCardState extends State<HydrationCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(12),
-              child: Row(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   _filterPill('On track', 0, const Color(0xFF40D8B8)),
-                  const SizedBox(width: 8),
                   _filterPill('Almost', 1, const Color(0xFFFFB040)),
-                  const SizedBox(width: 8),
                   _filterPill('Overdue', 2, const Color(0xFFFF6080)),
                 ],
               ),

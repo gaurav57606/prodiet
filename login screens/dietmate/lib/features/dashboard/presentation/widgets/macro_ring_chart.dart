@@ -30,7 +30,7 @@ class MacroRingChart extends StatelessWidget {
             const SizedBox(height: 8),
             LinearProgressIndicator(
               value: current / goal,
-              backgroundColor: color.withOpacity(0.1),
+              backgroundColor: color.withValues(alpha: 0.1),
               color: color,
               minHeight: 4,
               borderRadius: BorderRadius.circular(2),

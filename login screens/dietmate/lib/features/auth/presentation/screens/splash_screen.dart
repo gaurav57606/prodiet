@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dietmate/core/router/app_router.dart';
 import 'package:dietmate/core/utils/extensions.dart';
 
 class SplashScreen extends StatefulWidget {

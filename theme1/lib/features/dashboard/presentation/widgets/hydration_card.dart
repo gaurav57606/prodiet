@@ -39,8 +39,8 @@ class _HydrationCardState extends State<HydrationCard> {
     return GestureDetector(
       onTap: () => context.push('/hydration'),
       child: DmCard(
-        color: statusColor.withOpacity(0.06),
-        borderSide: BorderSide(color: statusColor.withOpacity(0.15)),
+        color: statusColor.withValues(alpha: 0.06),
+        borderSide: BorderSide(color: statusColor.withValues(alpha: 0.15)),
         padding: EdgeInsets.zero,
         child: Column(
           children: [
@@ -55,7 +55,7 @@ class _HydrationCardState extends State<HydrationCard> {
                       Text(
                         'HYDRATION',
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: statusColor.withOpacity(0.6),
+                          color: statusColor.withValues(alpha: 0.6),
                           letterSpacing: 1.2,
                           fontWeight: FontWeight.w900,
                         ),
@@ -63,7 +63,7 @@ class _HydrationCardState extends State<HydrationCard> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.12),
+                          color: statusColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -96,7 +96,7 @@ class _HydrationCardState extends State<HydrationCard> {
                       Text(
                         'm',
                         style: theme.textTheme.headlineSmall?.copyWith(
-                          color: statusColor.withOpacity(0.5),
+                          color: statusColor.withValues(alpha: 0.5),
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -106,7 +106,7 @@ class _HydrationCardState extends State<HydrationCard> {
                   Text(
                     'UNTIL YOUR NEXT DRINK',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.35),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.5,
                     ),
@@ -116,7 +116,7 @@ class _HydrationCardState extends State<HydrationCard> {
                     height: 5,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: FractionallySizedBox(
@@ -125,7 +125,7 @@ class _HydrationCardState extends State<HydrationCard> {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [statusColor, statusColor.withOpacity(0.6)],
+                            colors: [statusColor, statusColor.withValues(alpha: 0.6)],
                           ),
                           borderRadius: BorderRadius.circular(3),
                         ),
@@ -141,16 +141,16 @@ class _HydrationCardState extends State<HydrationCard> {
                 vertical: 12,
               ),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 border: Border(
-                  top: BorderSide(color: Colors.white.withOpacity(0.05)),
+                  top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
                 ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildStatItem(theme, 'CONSUMED', '${data.consumed.toInt()} ml', statusColor),
-                  _buildStatItem(theme, 'TARGET', '${data.target.toInt()} ml', theme.colorScheme.onSurface.withOpacity(0.5), textAlign: TextAlign.right),
+                  _buildStatItem(theme, 'TARGET', '${data.target.toInt()} ml', theme.colorScheme.onSurface.withValues(alpha: 0.5), textAlign: TextAlign.right),
                 ],
               ),
             ),
@@ -180,10 +180,10 @@ class _HydrationCardState extends State<HydrationCard> {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isActive ? color.withOpacity(0.15) : Colors.white.withOpacity(0.03),
+          color: isActive ? color.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isActive ? color.withOpacity(0.4) : Colors.white.withOpacity(0.08),
+            color: isActive ? color.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.08),
           ),
         ),
         child: Text(
@@ -192,7 +192,7 @@ class _HydrationCardState extends State<HydrationCard> {
             fontFamily: 'Outfit',
             fontSize: 10,
             fontWeight: FontWeight.w900,
-            color: isActive ? color : Colors.white.withOpacity(0.25),
+            color: isActive ? color : Colors.white.withValues(alpha: 0.25),
             letterSpacing: 0.5,
           ),
         ),
@@ -207,7 +207,7 @@ class _HydrationCardState extends State<HydrationCard> {
         Text(
           label,
           style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.3),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
             fontSize: 8,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.5,

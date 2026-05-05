@@ -3,11 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/main.dart' as app;
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
+import 'package:prodiet_unified/app.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +46,7 @@ void main() {
 
       await tester.enterText(emailField, 'test_e2e@prodiet.com');
       await tester.enterText(passwordField, 'password123');
-      await tester.closeSoftKeyboard();
+      tester.testTextInput.hide();
       await tester.pumpAndSettle();
 
       await tester.tap(loginButton);
@@ -73,7 +72,7 @@ void main() {
       // In integration tests, we can't easily "restart" the process, but we can re-pump the root
       // to see if it preserves session
       debugPrint('--- Verifying persistence ---');
-      await tester.pumpWidget(const ProviderScope(child: app.ProDietApp()));
+      await tester.pumpWidget(const ProviderScope(child: ProDietApp()));
       await tester.pumpAndSettle();
       
       if (isOnboarding) {

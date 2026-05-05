@@ -42,7 +42,7 @@ class DmCard extends StatelessWidget {
         boxShadow: elevation != null && elevation! > 0
             ? [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: elevation! * 2,
                   offset: Offset(0, elevation!),
                 )
@@ -68,7 +68,7 @@ class DmCard extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     Colors.transparent,
-                    isDark ? Colors.white.withOpacity(0.12) : Colors.white.withOpacity(0.9),
+                    isDark ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.9),
                     Colors.transparent,
                   ],
                 ),

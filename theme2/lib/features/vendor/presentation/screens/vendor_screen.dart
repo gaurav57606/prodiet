@@ -33,9 +33,9 @@ class VendorScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(13),
                 decoration: BoxDecoration(
-                  color: purple.withOpacity(0.12),
+                  color: purple.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: purple.withOpacity(0.25)),
+                  border: Border.all(color: purple.withValues(alpha: 0.25)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,8 +76,8 @@ class VendorScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.12),
-                        border: Border(bottom: BorderSide(color: theme.colorScheme.primary.withOpacity(0.15))),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                        border: Border(bottom: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.15))),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +122,7 @@ class VendorScreen extends StatelessWidget {
                   Text(platform, style: theme.textTheme.titleLarge?.copyWith(fontSize: 13, color: platformColor)),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                    decoration: BoxDecoration(color: theme.colorScheme.primary.withOpacity(0.12), borderRadius: BorderRadius.circular(20)),
+                    decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
                     child: Text(match, style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary, fontSize: 10)),
                   ),
                 ],
@@ -170,7 +170,7 @@ class VendorScreen extends StatelessWidget {
           Container(
             width: 28,
             height: 28,
-            decoration: BoxDecoration(color: primary.withOpacity(0.12), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: primary.withValues(alpha: 0.12), shape: BoxShape.circle),
             child: Center(child: Text(av, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: primary))),
           ),
           const SizedBox(width: 8),

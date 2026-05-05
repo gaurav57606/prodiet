@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     'Your intelligent nutrition companion',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Keep me signed in',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 14,
                         ),
                       ),
@@ -232,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'or continue with',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -269,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                       ),
                       GestureDetector(
                         onTap: () => context.pushNamed(AppRoutes.signupName),
@@ -299,7 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

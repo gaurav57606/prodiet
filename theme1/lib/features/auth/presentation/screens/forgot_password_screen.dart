@@ -60,7 +60,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   Text(
                     "Enter your email and we'll send a reset link",
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -107,7 +107,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFF1A1A2E),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withOpacity(0.07)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,14 +117,14 @@ class ForgotPasswordScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white.withOpacity(0.4),
+                            color: Colors.white.withValues(alpha: 0.4),
                             letterSpacing: 1.2,
                           ),
                         ),
                         const SizedBox(height: 8),
                         RichText(
                           text: TextSpan(
-                            style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 13),
+                            style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 13),
                             children: [
                               const TextSpan(text: 'Check spam folder · Wait 2 minutes · '),
                               const TextSpan(
@@ -155,7 +155,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

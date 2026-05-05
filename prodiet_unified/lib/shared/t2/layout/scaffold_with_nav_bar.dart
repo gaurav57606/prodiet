@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/theme/font_config.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
@@ -59,7 +59,7 @@ class ScaffoldWithNavBar extends ConsumerWidget {
               child: Row(
                 children: [
                   const SizedBox(width: 8),
-                  Text('PRODIET', style: GoogleFonts.barlowCondensed(
+                  Text('PRODIET', style: AppFonts.barlowCondensed(
                     fontSize: 22, fontWeight: FontWeight.w900, color: T2Colors.lime)),
                   const Spacer(),
                   IconButton(
@@ -89,7 +89,7 @@ class ScaffoldWithNavBar extends ConsumerWidget {
           children: [
             Icon(isSelected ? activeIcon : icon, color: color, size: 26),
             const SizedBox(height: 4),
-            Text(label, style: GoogleFonts.barlowCondensed(
+            Text(label, style: AppFonts.barlowCondensed(
               color: color, fontSize: 11,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500)),
           ],
@@ -122,7 +122,7 @@ class ScaffoldWithNavBar extends ConsumerWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.logout_rounded, color: Color(0xFFFF5C3A)),
-              title: Text('Sign Out', style: GoogleFonts.barlowCondensed(
+              title: Text('Sign Out', style: AppFonts.barlowCondensed(
                 fontSize: 18, fontWeight: FontWeight.w700,
                 color: const Color(0xFFFF5C3A))),
               onTap: () async {
@@ -141,7 +141,7 @@ class ScaffoldWithNavBar extends ConsumerWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: Icon(icon, color: Colors.white),
-      title: Text(label, style: GoogleFonts.barlowCondensed(
+      title: Text(label, style: AppFonts.barlowCondensed(
         fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white)),
       onTap: () {
         Navigator.pop(sheetCtx);

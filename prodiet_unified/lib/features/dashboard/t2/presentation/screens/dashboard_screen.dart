@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/theme/font_config.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
@@ -56,35 +56,27 @@ class DashboardScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Left Column
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            greeting,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: T2Colors.textSecondary,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              greeting,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: T2Colors.textSecondary,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "EAT",
-                            style: GoogleFonts.barlowCondensed(
-                              fontSize: 56,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              height: 1.0,
+                            const SizedBox(height: 4),
+                            Text(
+                              "EAT",
+                              style: theme.textTheme.displayLarge?.copyWith(fontSize: 56, color: Colors.white),
                             ),
-                          ),
-                          Text(
-                            "RIGHT.",
-                            style: GoogleFonts.barlowCondensed(
-                              fontSize: 56,
-                              fontWeight: FontWeight.w900,
-                              color: T2Colors.lime,
-                              height: 1.0,
+                            Text(
+                              "RIGHT.",
+                              style: theme.textTheme.displayLarge?.copyWith(fontSize: 56, color: T2Colors.lime),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       // Right Column
                       Column(
@@ -101,7 +93,7 @@ class DashboardScreen extends ConsumerWidget {
                           const SizedBox(height: 4),
                           Text(
                             (data.caloriesGoal - data.caloriesConsumed).toString(),
-                            style: GoogleFonts.barlowCondensed(
+                            style: AppFonts.barlowCondensed(
                               fontSize: 56,
                               fontWeight: FontWeight.w900,
                               color: T2Colors.lime,

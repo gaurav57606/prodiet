@@ -4,16 +4,12 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:prodiet_unified/app.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
-import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
+
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
 import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
@@ -37,8 +33,10 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   
   // Mock path_provider for google_fonts
-  const MethodChannel('plugins.flutter.io/path_provider')
-    .setMockMethodCallHandler((MethodCall methodCall) async {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+    .setMockMethodCallHandler(
+        const MethodChannel('plugins.flutter.io/path_provider'),
+        (MethodCall methodCall) async {
       return '.';
     });
 
@@ -58,7 +56,7 @@ void main() {
       createdAt: DateTime.now(),
     );
 
-    final summary = DashboardSummary(
+    const summary = DashboardSummary(
       userName: 'Test User',
       caloriesConsumed: 0,
       caloriesGoal: 2000,
@@ -77,7 +75,7 @@ void main() {
       caloriesBurned: 300,
     );
 
-    supabase.Session _makeSession(String userId, String email) {
+    supabase.Session makeSession(String userId, String email) {
       return supabase.Session(
         accessToken: 'tok_$userId',
         tokenType: 'bearer',
@@ -109,7 +107,7 @@ void main() {
       // Stub FCM
       when(() => mockFcm.initialize(any())).thenAnswer((_) => Future<void>.value());
       
-      final session = _makeSession('u1', 'test@t.com');
+      final session = makeSession('u1', 'test@t.com');
       when(() => mockAuthRepo.authStateChanges())
           .thenAnswer((_) => Stream.value(supabase.AuthState(supabase.AuthChangeEvent.signedIn, session)));
       when(() => mockAuthRepo.currentSession()).thenReturn(session);

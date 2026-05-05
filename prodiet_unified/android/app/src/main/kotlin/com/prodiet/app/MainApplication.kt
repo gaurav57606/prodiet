@@ -1,5 +1,5 @@
 package com.prodiet.app
 
-import io.flutter.app.FlutterApplication
+import io.flutter.embedding.android.FlutterApplication
 
 class MainApplication : FlutterApplication()

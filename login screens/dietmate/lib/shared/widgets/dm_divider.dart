@@ -21,7 +21,7 @@ class DmDivider extends StatelessWidget {
           child: Text(
             label!,
             style: context.textTheme.labelLarge?.copyWith(
-              color: context.colorScheme.onSurfaceVariant.withOpacity(0.5),
+              color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             ),
           ),
         ),

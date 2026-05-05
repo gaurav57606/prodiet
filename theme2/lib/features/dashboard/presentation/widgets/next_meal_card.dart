@@ -44,7 +44,7 @@ class NextMealCard extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             decoration: BoxDecoration(
-                              color: AppColors.lime.withOpacity(0.1),
+                              color: AppColors.lime.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -100,8 +100,8 @@ class NextMealCard extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
-                              color: AppColors.lime.withOpacity(0.1),
-                              border: Border.all(color: AppColors.lime.withOpacity(0.25)),
+                              color: AppColors.lime.withValues(alpha: 0.1),
+                              border: Border.all(color: AppColors.lime.withValues(alpha: 0.25)),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -188,7 +188,7 @@ class NextMealCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isFilled ? color : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
-        border: isFilled ? null : Border.all(color: color.withOpacity(0.3)),
+        border: isFilled ? null : Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(
         label,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
+import 'package:prodiet_unified/core/theme/font_config.dart';
 
 class DmEmptyState extends StatelessWidget {
   final String title;
@@ -43,7 +43,7 @@ class DmEmptyState extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: GoogleFonts.barlowCondensed(
+              style: AppFonts.barlowCondensed(
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,

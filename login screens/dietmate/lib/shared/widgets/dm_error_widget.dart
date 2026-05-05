@@ -37,7 +37,7 @@ class DmErrorWidget extends StatelessWidget {
             Text(
               message,
               style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               ),
               textAlign: TextAlign.center,
             ),

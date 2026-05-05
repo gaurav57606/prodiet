@@ -41,9 +41,9 @@ class DmMacroChip extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withOpacity(0.35), width: 1),
+            border: Border.all(color: color.withValues(alpha: 0.35), width: 1),
           ),
           child: Text(
             value,

@@ -54,7 +54,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   Text(
                     'Enter the 6-digit code',
                     style: context.textTheme.bodySmall?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                      color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
@@ -95,7 +95,7 @@ class _OtpScreenState extends State<OtpScreen> {
               counterText: '',
               contentPadding: EdgeInsets.zero,
               filled: true,
-              fillColor: context.colorScheme.surfaceVariant.withOpacity(0.3),
+              fillColor: context.colorScheme.surfaceVariant.withValues(alpha: 0.3),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: context.colorScheme.outline),
@@ -121,7 +121,7 @@ class _OtpScreenState extends State<OtpScreen> {
         children: [
           TextSpan(
             text: 'Code expires in ',
-            style: TextStyle(color: context.colorScheme.onSurfaceVariant.withOpacity(0.7)),
+            style: TextStyle(color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
           ),
           const TextSpan(
             text: '2:47',
@@ -129,7 +129,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           TextSpan(
             text: ' · ',
-            style: TextStyle(color: context.colorScheme.onSurfaceVariant.withOpacity(0.7)),
+            style: TextStyle(color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
           ),
           TextSpan(
             text: 'Resend',
@@ -147,7 +147,7 @@ class _OtpScreenState extends State<OtpScreen> {
         children: [
           TextSpan(
             text: 'Wrong number? ',
-            style: TextStyle(color: context.colorScheme.onSurfaceVariant.withOpacity(0.7)),
+            style: TextStyle(color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
           ),
           TextSpan(
             text: 'Change it',

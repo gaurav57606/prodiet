@@ -24,7 +24,7 @@ class AuthHero extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            colorScheme.primary.withOpacity(0.15),
+            colorScheme.primary.withValues(alpha: 0.15),
             colorScheme.background,
           ],
           begin: Alignment.topCenter,
@@ -40,13 +40,13 @@ class AuthHero extends StatelessWidget {
               borderRadius: BorderRadius.circular(22),
               gradient: LinearGradient(
                 colors: [
-                  colorScheme.primary.withOpacity(0.2),
-                  colorScheme.primary.withOpacity(0.1),
+                  colorScheme.primary.withValues(alpha: 0.2),
+                  colorScheme.primary.withValues(alpha: 0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              border: Border.all(color: colorScheme.primary.withOpacity(0.3)),
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.3)),
             ),
             child: Icon(Icons.auto_awesome_rounded, color: colorScheme.primary, size: 36),
           ),
@@ -69,7 +69,7 @@ class AuthHero extends StatelessWidget {
           Text(
             subtitle ?? AppConstants.appTagline,
             style: textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant.withOpacity(0.6),
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),

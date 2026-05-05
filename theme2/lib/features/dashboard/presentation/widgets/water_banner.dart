@@ -13,9 +13,9 @@ class WaterBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: skyColor.withOpacity(0.10),
+        color: skyColor.withValues(alpha: 0.10),
         border: Border.symmetric(
-          horizontal: BorderSide(color: skyColor.withOpacity(0.18), width: 1),
+          horizontal: BorderSide(color: skyColor.withValues(alpha: 0.18), width: 1),
         ),
       ),
       child: Row(
@@ -24,7 +24,7 @@ class WaterBanner extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: skyColor.withOpacity(0.2),
+              color: skyColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(9),
             ),
             child: Icon(Icons.water_drop, color: skyColor, size: 16),
@@ -68,7 +68,7 @@ class WaterBanner extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 7,
                   letterSpacing: 1.2,
-                  color: skyColor.withOpacity(0.5),
+                  color: skyColor.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w700,
                 ),
               ),

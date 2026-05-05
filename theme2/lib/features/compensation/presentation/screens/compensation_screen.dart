@@ -55,9 +55,9 @@ class CompensationScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.coral.withOpacity(0.12),
+                  color: AppColors.coral.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.coral.withOpacity(0.5), width: 1.5),
+                  border: Border.all(color: AppColors.coral.withValues(alpha: 0.5), width: 1.5),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +135,7 @@ class CompensationScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.lime.withOpacity(0.05),
+                        color: AppColors.lime.withValues(alpha: 0.05),
                         border: Border(left: BorderSide(color: AppColors.lime, width: 3)),
                       ),
                       child: Row(
@@ -233,9 +233,9 @@ class CompensationScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
         label,

@@ -102,7 +102,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                   Text(
                     'OTP sent to +91 98765 43210',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -129,7 +129,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                   const SizedBox(height: 40),
                   Text(
                     'Enter the 6-digit code',
-                    style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 14),
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 14),
                   ),
                   const SizedBox(height: 24),
                   // OTP INPUT ROW
@@ -145,7 +145,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                           border: Border.all(
                             color: _controllers[index].text.isNotEmpty 
                               ? const Color(0xFF8B5CF6) 
-                              : Colors.white.withOpacity(0.1),
+                              : Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                         child: TextField(
@@ -184,7 +184,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                     children: [
                       Text(
                         'Code expires in ',
-                        style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 13),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 13),
                       ),
                       Text(
                         '0:${_secondsLeft.toString().padLeft(2, '0')}',
@@ -192,14 +192,14 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                       ),
                       Text(
                         ' · ',
-                        style: TextStyle(color: Colors.white.withOpacity(0.2)),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.2)),
                       ),
                       GestureDetector(
                         onTap: _secondsLeft == 0 ? _startTimer : null,
                         child: Text(
                           'Resend',
                           style: TextStyle(
-                            color: _secondsLeft == 0 ? const Color(0xFF8B5CF6) : Colors.white.withOpacity(0.2),
+                            color: _secondsLeft == 0 ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.2),
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                           ),
@@ -220,7 +220,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                     children: [
                       Text(
                         'Wrong number? ',
-                        style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 13),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 13),
                       ),
                       GestureDetector(
                         onTap: () => context.pop(),

@@ -46,10 +46,16 @@ void main() {
     test('calculatePortion should handle zero or negative grams gracefully', () {
       final zeroPortion = tNutritionItem.calculatePortion(0);
       expect(zeroPortion.calories, 0);
+      expect(zeroPortion.proteinG, 0);
+      expect(zeroPortion.carbsG, 0);
+      expect(zeroPortion.fatG, 0);
 
       final negativePortion = tNutritionItem.calculatePortion(-100);
-      // Bug fix: should return 0 instead of negative calories
       expect(negativePortion.calories, 0);
+      expect(negativePortion.proteinG, 0);
+      expect(negativePortion.carbsG, 0);
+      expect(negativePortion.fatG, 0);
+      expect(negativePortion.fiberG, 0);
     });
 
     test('calculatePortion should handle extremely large portions', () {

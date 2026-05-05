@@ -21,8 +21,8 @@ class DmAvatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: context.colorScheme.primary.withOpacity(0.1),
-        border: Border.all(color: context.colorScheme.primary.withOpacity(0.2), width: 1.5),
+        color: context.colorScheme.primary.withValues(alpha: 0.1),
+        border: Border.all(color: context.colorScheme.primary.withValues(alpha: 0.2), width: 1.5),
       ),
       child: ClipOval(
         child: imageUrl != null && imageUrl!.isNotEmpty

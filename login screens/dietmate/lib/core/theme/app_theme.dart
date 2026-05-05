@@ -9,21 +9,21 @@ class AppTheme {
   static ThemeData amoled = _buildTheme(AppColorSchemes.amoledScheme);
 
   static ThemeData _buildTheme(ColorScheme scheme) {
-    final textTheme = AppTextStyles.getTextTheme(scheme.onBackground);
+    final textTheme = AppTextStyles.getTextTheme(scheme.onSurface);
     
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: scheme.background,
+      scaffoldBackgroundColor: scheme.surface,
       fontFamily: AppTextStyles.fontFamily,
       textTheme: textTheme,
       
       appBarTheme: AppBarTheme(
-        backgroundColor: scheme.background,
+        backgroundColor: scheme.surface,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: textTheme.titleLarge,
-        iconTheme: IconThemeData(color: scheme.onBackground),
+        iconTheme: IconThemeData(color: scheme.onSurface),
       ),
       
       cardTheme: CardThemeData(
@@ -38,8 +38,8 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: scheme.surfaceVariant,
-        hintStyle: textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant.withOpacity(0.5)),
+        fillColor: scheme.surfaceContainerHighest,
+        hintStyle: textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant.withValues(alpha: 0.5)),
         contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -51,7 +51,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: scheme.primary.withOpacity(0.4), width: 2),
+          borderSide: BorderSide(color: scheme.primary.withValues(alpha: 0.4), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -78,9 +78,9 @@ class AppTheme {
       ),
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: scheme.background,
+        backgroundColor: scheme.surface,
         selectedItemColor: scheme.primary,
-        unselectedItemColor: scheme.onBackground.withOpacity(0.4),
+        unselectedItemColor: scheme.onSurface.withValues(alpha: 0.4),
         type: BottomNavigationBarType.fixed,
         elevation: 0,
       ),

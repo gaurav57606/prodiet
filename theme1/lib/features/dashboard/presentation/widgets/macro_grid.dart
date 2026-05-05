@@ -81,7 +81,7 @@ class MacroGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         boxShadow: [
           BoxShadow(
-            color: gradient.last.withOpacity(0.2),
+            color: gradient.last.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -97,7 +97,7 @@ class MacroGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Icon(icon, size: 16, color: Colors.white),
@@ -105,7 +105,7 @@ class MacroGrid extends StatelessWidget {
               Text(
                 '${(percentage * 100).toInt()}%',
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -130,7 +130,7 @@ class MacroGrid extends StatelessWidget {
                     fontFamily: 'Outfit',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -140,7 +140,7 @@ class MacroGrid extends StatelessWidget {
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               letterSpacing: 1.0,
               fontWeight: FontWeight.w700,
             ),
@@ -151,7 +151,7 @@ class MacroGrid extends StatelessWidget {
             height: 4,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(2),
             ),
             child: FractionallySizedBox(

@@ -36,10 +36,10 @@ class DayTabs extends StatelessWidget {
       margin: const EdgeInsets.only(right: 5),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: isSelected ? primary.withOpacity(0.12) : theme.colorScheme.surfaceContainerHighest,
+        color: isSelected ? primary.withValues(alpha: 0.12) : theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(9),
         border: Border.all(
-          color: isSelected ? primary.withOpacity(0.3) : theme.colorScheme.outline,
+          color: isSelected ? primary.withValues(alpha: 0.3) : theme.colorScheme.outline,
         ),
       ),
       child: Column(

@@ -15,7 +15,7 @@ class WaterOverdueState extends StatelessWidget {
       child: DmCard(
         padding: const EdgeInsets.all(20),
         backgroundColor: AppColors.coralLight,
-        borderSide: BorderSide(color: AppColors.coral.withOpacity(0.35), width: 1),
+        borderSide: BorderSide(color: AppColors.coral.withValues(alpha: 0.35), width: 1),
         child: Column(
           children: [
             Text(
@@ -40,9 +40,9 @@ class WaterOverdueState extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: coralColor.withOpacity(0.12),
+                color: coralColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(9),
-                border: Border.all(color: coralColor.withOpacity(0.2)),
+                border: Border.all(color: coralColor.withValues(alpha: 0.2)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

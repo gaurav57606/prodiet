@@ -41,7 +41,7 @@ class CalorieSummaryCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    theme.colorScheme.primary.withOpacity(0.2),
+                    theme.colorScheme.primary.withValues(alpha: 0.2),
                     Colors.transparent,
                   ],
                 ),
@@ -55,7 +55,7 @@ class CalorieSummaryCard extends StatelessWidget {
               Text(
                 DashboardMockData.planLabel,
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.primary.withOpacity(0.8),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
                 ),
@@ -82,7 +82,7 @@ class CalorieSummaryCard extends StatelessWidget {
               Text(
                 DashboardMockData.dateString.toUpperCase(),
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                   letterSpacing: 1.0,
                   fontWeight: FontWeight.w700,
                 ),
@@ -108,7 +108,7 @@ class CalorieSummaryCard extends StatelessWidget {
                       Text(
                         'KCAL REMAINING TODAY',
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.0,
                         ),
@@ -121,10 +121,10 @@ class CalorieSummaryCard extends StatelessWidget {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFD070).withOpacity(0.12),
+                      color: const Color(0xFFFFD070).withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: const Color(0xFFFFD070).withOpacity(0.25),
+                        color: const Color(0xFFFFD070).withValues(alpha: 0.25),
                       ),
                     ),
                     child: Column(
@@ -141,7 +141,7 @@ class CalorieSummaryCard extends StatelessWidget {
                         Text(
                           'DAY STREAK',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: const Color(0xFFFFD070).withOpacity(0.6),
+                            color: const Color(0xFFFFD070).withValues(alpha: 0.6),
                             fontSize: 8,
                             letterSpacing: 1.2,
                             fontWeight: FontWeight.w900,

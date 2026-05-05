@@ -7,8 +7,8 @@ import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
+
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 

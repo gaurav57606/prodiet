@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../font_config.dart';
 import 't1_colors.dart';
 import 't1_text_styles.dart';
 import 't1_spacing.dart';
@@ -184,7 +184,7 @@ class T1Theme {
           foregroundColor:  T1ColorsLight.text1,
           elevation:        0,
           iconTheme:        const IconThemeData(color: T1ColorsLight.text1),
-          titleTextStyle: GoogleFonts.outfit(
+          titleTextStyle: AppFonts.outfit(
             fontWeight:  FontWeight.w800,
             fontSize:    20,
             color:       T1ColorsLight.text1,
@@ -192,23 +192,18 @@ class T1Theme {
           ),
         ),
 
-        textTheme: TextTheme(
-          displayLarge:  GoogleFonts.outfit(fontWeight:FontWeight.w800, color:T1ColorsLight.text1),
-          displayMedium: GoogleFonts.outfit(fontWeight:FontWeight.w800, color:T1ColorsLight.text1),
-          displaySmall:  GoogleFonts.outfit(fontWeight:FontWeight.w800, color:T1ColorsLight.text1),
-          headlineLarge: GoogleFonts.outfit(fontWeight:FontWeight.w800, color:T1ColorsLight.text1),
-          headlineMedium:GoogleFonts.outfit(fontWeight:FontWeight.w700, color:T1ColorsLight.text1),
-          headlineSmall: GoogleFonts.outfit(fontWeight:FontWeight.w700, color:T1ColorsLight.text1),
-          titleLarge:    GoogleFonts.outfit(fontWeight:FontWeight.w700, color:T1ColorsLight.text1),
-          titleMedium:   GoogleFonts.outfit(fontWeight:FontWeight.w600, color:T1ColorsLight.text1),
-          titleSmall:    GoogleFonts.outfit(fontWeight:FontWeight.w600, color:T1ColorsLight.text2),
-          bodyLarge:     GoogleFonts.outfit(fontWeight:FontWeight.w500, color:T1ColorsLight.text1),
-          bodyMedium:    GoogleFonts.outfit(fontWeight:FontWeight.w400, color:T1ColorsLight.text2),
-          bodySmall:     GoogleFonts.outfit(fontWeight:FontWeight.w400, color:T1ColorsLight.text3),
-          labelLarge:    GoogleFonts.outfit(fontWeight:FontWeight.w700, color:T1ColorsLight.text1, letterSpacing:0.5),
-          labelMedium:   GoogleFonts.outfit(fontWeight:FontWeight.w600, color:T1ColorsLight.text2, letterSpacing:0.5),
-          labelSmall:    GoogleFonts.outfit(fontWeight:FontWeight.w600, color:T1ColorsLight.text3, letterSpacing:1.0),
-        ),
+        textTheme: T1TextStyles.getTextTheme(const ColorScheme(
+          brightness:               Brightness.light,
+          surface:                  T1ColorsLight.bgPage,
+          onSurface:                T1ColorsLight.text1,
+          primary:                  T1ColorsLight.primary,
+          onPrimary:                Colors.white,
+          secondary:                T1ColorsLight.alertGreen,
+          onSecondary:              Colors.white,
+          error:                    T1ColorsLight.alertAmber,
+          onError:                  Colors.white,
+          outline:                  T1ColorsLight.border,
+        )),
 
         iconTheme: const IconThemeData(color: T1ColorsLight.navIcon),
 
@@ -232,12 +227,12 @@ class T1Theme {
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return TextStyle(
-                fontFamily: GoogleFonts.outfit().fontFamily, fontSize: 8, fontWeight: FontWeight.w700,
+                fontFamily: AppFonts.outfit().fontFamily, fontSize: 8, fontWeight: FontWeight.w700,
                 color: T1ColorsLight.primary,
               );
             }
             return TextStyle(
-              fontFamily: GoogleFonts.outfit().fontFamily, fontSize: 8, fontWeight: FontWeight.w700,
+              fontFamily: AppFonts.outfit().fontFamily, fontSize: 8, fontWeight: FontWeight.w700,
               color: T1ColorsLight.navLabel,
             );
           }),
@@ -258,8 +253,8 @@ class T1Theme {
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: T1ColorsLight.primary, width: 1.5),
           ),
-          hintStyle: TextStyle(color: T1ColorsLight.text3, fontFamily: GoogleFonts.outfit().fontFamily),
-          labelStyle: TextStyle(color: T1ColorsLight.text2, fontFamily: GoogleFonts.outfit().fontFamily),
+          hintStyle: TextStyle(color: T1ColorsLight.text3, fontFamily: AppFonts.outfit().fontFamily),
+          labelStyle: TextStyle(color: T1ColorsLight.text2, fontFamily: AppFonts.outfit().fontFamily),
         ),
 
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -270,7 +265,7 @@ class T1Theme {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            textStyle: GoogleFonts.outfit(fontWeight: FontWeight.w700),
+            textStyle: AppFonts.outfit(fontWeight: FontWeight.w700),
           ),
         ),
 
@@ -281,14 +276,14 @@ class T1Theme {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            textStyle: GoogleFonts.outfit(fontWeight: FontWeight.w700),
+            textStyle: AppFonts.outfit(fontWeight: FontWeight.w700),
           ),
         ),
 
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: T1ColorsLight.primary,
-            textStyle: GoogleFonts.outfit(fontWeight: FontWeight.w700),
+            textStyle: AppFonts.outfit(fontWeight: FontWeight.w700),
           ),
         ),
 
@@ -312,7 +307,7 @@ class T1Theme {
           backgroundColor:   T1ColorsLight.tagNormalBg,
           selectedColor:     T1ColorsLight.primary.withValues(alpha: 0.15),
           disabledColor:     T1ColorsLight.bgCard,
-          labelStyle:        GoogleFonts.outfit(color:T1ColorsLight.text2, fontSize:11),
+          labelStyle:        AppFonts.outfit(color:T1ColorsLight.text2, fontSize:11),
           side:              const BorderSide(color: T1ColorsLight.border),
           shape:             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),

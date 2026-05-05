@@ -53,14 +53,14 @@ class _DmTextFieldState extends State<DmTextField> {
             hintText: widget.hint,
             errorText: widget.errorText,
             prefixIcon: widget.prefixIcon != null 
-                ? Icon(widget.prefixIcon, size: 20, color: context.colorScheme.onSurfaceVariant.withOpacity(0.5)) 
+                ? Icon(widget.prefixIcon, size: 20, color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5)) 
                 : null,
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                       size: 20,
-                      color: context.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                      color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                     ),
                     onPressed: () => setState(() => _obscureText = !_obscureText),
                   )

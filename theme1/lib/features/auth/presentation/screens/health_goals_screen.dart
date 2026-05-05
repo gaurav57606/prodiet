@@ -47,7 +47,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white.withOpacity(0.4),
+                      color: Colors.white.withValues(alpha: 0.4),
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -65,7 +65,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                   Text(
                     'Step 2 of 2 — Personalise your plan',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -78,7 +78,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -182,7 +182,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                       child: Text(
                         '< Back to details',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 14,
                         ),
                       ),
@@ -209,7 +209,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.45)),
+          style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.45)),
         ),
       ],
     );
@@ -225,7 +225,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
           color: const Color(0xFF1A1A2E),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withOpacity(0.07),
+            color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.07),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -244,7 +244,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withOpacity(0.45), fontSize: 11),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.45), fontSize: 11),
                 ),
               ],
             ),
@@ -289,7 +289,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withOpacity(0.2),
+                  color: isSelected ? const Color(0xFF8B5CF6) : Colors.white.withValues(alpha: 0.2),
                   width: isSelected ? 6 : 2,
                 ),
               ),
@@ -308,7 +308,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withOpacity(0.45), fontSize: 12),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.45), fontSize: 12),
                 ),
               ],
             ),
@@ -324,7 +324,7 @@ class _HealthGoalsScreenState extends State<HealthGoalsScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

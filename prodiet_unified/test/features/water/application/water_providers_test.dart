@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/water/application/water_providers.dart';
 import 'package:prodiet_unified/features/water/data/water_repository.dart';
-import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 import 'package:prodiet_unified/features/water/domain/water_log.dart';
 
 class MockWaterRepository extends Mock implements WaterRepository {}

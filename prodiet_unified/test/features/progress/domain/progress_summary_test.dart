@@ -61,5 +61,12 @@ void main() {
       final summary = ProgressSummary.calculate(entries, 75.0, 60.0);
       expect(summary.isGoingRight, isTrue);
     });
+
+    test('calculate should handle zero/empty values without crash', () {
+      final summary = ProgressSummary.calculate([], 0, 0);
+      expect(summary.currentWeightKg, 0);
+      expect(summary.totalChange, 0);
+      expect(summary.isGoingRight, isFalse);
+    });
   });
 }

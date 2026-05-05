@@ -4,12 +4,13 @@ part 'water_log.freezed.dart';
 part 'water_log.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake)
 class WaterLog with _$WaterLog {
   const factory WaterLog({
     required String id,
-    @JsonKey(name: 'user_id') required String userId,
-    @JsonKey(name: 'amount_ml') required int amountMl,
-    @JsonKey(name: 'logged_at') required DateTime loggedAt,
+    required String userId,
+    required int amountMl,
+    required DateTime loggedAt,
     required DateTime date,
   }) = _WaterLog;
 

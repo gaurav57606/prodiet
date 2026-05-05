@@ -38,9 +38,9 @@ class VoiceScreen extends StatelessWidget {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: primary.withOpacity(0.1),
+                          color: primary.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
-                          border: Border.all(color: primary.withOpacity(0.3), width: 2),
+                          border: Border.all(color: primary.withValues(alpha: 0.3), width: 2),
                         ),
                         child: Icon(Icons.mic, color: primary, size: 32),
                       ),
@@ -78,9 +78,9 @@ class VoiceScreen extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(13),
                   decoration: BoxDecoration(
-                    color: primary.withOpacity(0.12),
+                    color: primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: primary.withOpacity(0.2)),
+                    border: Border.all(color: primary.withValues(alpha: 0.2)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

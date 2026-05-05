@@ -1,66 +1,64 @@
-// T1 TEXT STYLES — using google_fonts for runtime fetching
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../font_config.dart';
 
 class T1TextStyles {
   static TextTheme getTextTheme(ColorScheme scheme) {
     return TextTheme(
-      displayLarge: GoogleFonts.outfit(
+      displayLarge: AppFonts.outfit(
         fontSize: 50,
         fontWeight: FontWeight.w800,
         letterSpacing: -2.0,
       ),
-      displayMedium: GoogleFonts.outfit(
+      displayMedium: AppFonts.outfit(
         fontSize: 44,
         fontWeight: FontWeight.w800,
         letterSpacing: -2.0,
       ),
-      headlineLarge: GoogleFonts.outfit(
+      headlineLarge: AppFonts.outfit(
         fontSize: 28,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.3,
       ),
-      headlineMedium: GoogleFonts.outfit(
+      headlineMedium: AppFonts.outfit(
         fontSize: 22,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.3,
       ),
-      headlineSmall: GoogleFonts.outfit(
+      headlineSmall: AppFonts.outfit(
         fontSize: 20,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.3,
       ),
-      titleLarge: GoogleFonts.outfit(
+      titleLarge: AppFonts.outfit(
         fontSize: 18,
         fontWeight: FontWeight.w700,
       ),
-      titleMedium: GoogleFonts.outfit(
+      titleMedium: AppFonts.outfit(
         fontSize: 15,
         fontWeight: FontWeight.w800,
       ),
-      titleSmall: GoogleFonts.outfit(
+      titleSmall: AppFonts.outfit(
         fontSize: 13,
         fontWeight: FontWeight.w700,
       ),
-      bodyLarge: GoogleFonts.outfit(
+      bodyLarge: AppFonts.outfit(
         fontSize: 13,
         fontWeight: FontWeight.w500,
       ),
-      bodyMedium: GoogleFonts.outfit(
+      bodyMedium: AppFonts.outfit(
         fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
-      bodySmall: GoogleFonts.outfit(
+      bodySmall: AppFonts.outfit(
         fontSize: 11,
         fontWeight: FontWeight.w500,
       ),
-      labelLarge: GoogleFonts.outfit(
+      labelLarge: AppFonts.outfit(
         fontSize: 11,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.0,
-        textBaseline: TextBaseline.alphabetic,
       ),
-      labelSmall: GoogleFonts.outfit(
+      labelSmall: AppFonts.outfit(
         fontSize: 10,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.5,
@@ -73,7 +71,7 @@ class T1TextStyles {
 }
 
 class T1TextStyleExtensions {
-  static TextStyle sectionLabel(ColorScheme scheme) => GoogleFonts.outfit(
+  static TextStyle sectionLabel(ColorScheme scheme) => AppFonts.outfit(
     fontSize: 10,
     fontWeight: FontWeight.w700,
     letterSpacing: 1.4,

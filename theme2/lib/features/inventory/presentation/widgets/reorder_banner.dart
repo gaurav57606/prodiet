@@ -14,9 +14,9 @@ class ReorderBanner extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(11),
         decoration: BoxDecoration(
-          color: coralColor.withOpacity(0.12),
+          color: coralColor.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: coralColor.withOpacity(0.25)),
+          border: Border.all(color: coralColor.withValues(alpha: 0.25)),
         ),
         child: Row(
           children: [
@@ -24,7 +24,7 @@ class ReorderBanner extends StatelessWidget {
               width: 28,
               height: 28,
               decoration: BoxDecoration(
-                color: coralColor.withOpacity(0.2),
+                color: coralColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(Icons.warning_amber_rounded, color: coralColor, size: 13),

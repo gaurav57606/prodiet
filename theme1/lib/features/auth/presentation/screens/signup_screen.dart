@@ -84,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Text(
                     'Step 1 of 2 — Personal details',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.45),
+                      color: Colors.white.withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                   ),
@@ -106,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -146,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 0 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -167,7 +167,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   'Create account',
                                   style: TextStyle(
-                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withOpacity(0.4),
+                                    color: _selectedTab == 1 ? Colors.white : Colors.white.withValues(alpha: 0.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -233,7 +233,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -250,7 +250,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: BoxDecoration(
                             color: index < _passwordStrength 
                               ? const Color(0xFF8B5CF6) 
-                              : Colors.white.withOpacity(0.1),
+                              : Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -267,7 +267,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         size: 20,
                       ),
                       onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
@@ -292,7 +292,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 13),
+                            style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 13),
                             children: [
                               const TextSpan(text: 'I agree to the '),
                               TextSpan(
@@ -339,7 +339,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Text(
                       'or sign up with',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         fontSize: 12,
                       ),
                     ),
@@ -384,7 +384,7 @@ class _SignupScreenState extends State<SignupScreen> {
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withOpacity(0.4),
+        color: Colors.white.withValues(alpha: 0.4),
         letterSpacing: 1.2,
       ),
     );

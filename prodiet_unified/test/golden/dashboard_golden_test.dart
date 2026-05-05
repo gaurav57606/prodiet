@@ -6,13 +6,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
 import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1;
 import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2;
+import 'package:prodiet_unified/core/services/analytics_service.dart';
+import 'package:prodiet_unified/core/services/analytics_providers.dart';
+import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
+import 'package:prodiet_unified/core/services/fcm_service.dart';
+import 'package:prodiet_unified/core/theme/t1/t1_theme.dart';
+import 'package:prodiet_unified/core/theme/t2/t2_theme.dart';
 
 class FakeActiveThemeNotifier extends ActiveThemeNotifier {
   final ActiveTheme _mockState;
@@ -21,23 +25,39 @@ class FakeActiveThemeNotifier extends ActiveThemeNotifier {
   ActiveTheme build() => _mockState;
 }
 
-class MockAuthNotifier extends Mock implements AuthNotifier {}
+// Robust mock for AuthRepository to satisfy AuthNotifier constructor
+class MockAuthRepository extends Mock implements AuthRepository {}
+class MockFcmService extends Mock implements FcmService {}
+
+class TestAuthNotifier extends AuthNotifier {
+  TestAuthNotifier(super.repo, {super.fcm, AuthState initialState = const AuthLoading()}) 
+    : super(skipInit: true) {
+    state = initialState;
+  }
+}
+
+class MockAnalyticsService extends Mock implements AnalyticsService {}
 
 void main() {
-  setUpAll(() {
+  setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    
     // Mock path_provider for GoogleFonts
-    const MethodChannel('plugins.flutter.io/path_provider')
-        .setMockMethodCallHandler((methodCall) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+            const MethodChannel('plugins.flutter.io/path_provider'),
+            (methodCall) async {
       return '.';
     });
+
+    // Disable fetching - our themes are now test-aware and will fall back
+    GoogleFonts.config.allowRuntimeFetching = false;
     
-    GoogleFonts.config.allowRuntimeFetching = true; // Allow for tests if mocked correctly
     registerFallbackValue(const AuthLoading());
   });
 
   group('Dashboard Golden Tests', () {
-    final summary = DashboardSummary(
+    const summary = DashboardSummary(
       userName: 'Alex',
       caloriesGoal: 2000,
       caloriesConsumed: 1200,
@@ -72,21 +92,27 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final mockAuth = MockAuthNotifier();
-      when(() => mockAuth.state).thenReturn(authState);
-      when(() => mockAuth.currentUser).thenReturn(testUser);
-      when(() => mockAuth.addListener(any())).thenReturn(() {});
+      final mockRepo = MockAuthRepository();
+      when(() => mockRepo.authStateChanges()).thenAnswer((_) => const Stream.empty());
+      when(() => mockRepo.currentSession()).thenReturn(null);
+
+      final mockAuth = TestAuthNotifier(mockRepo, initialState: authState);
+      final mockAnalytics = MockAnalyticsService();
+      when(() => mockAnalytics.logScreen(any(), any())).thenAnswer((_) async => {});
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             activeThemeProvider.overrideWith(() => FakeActiveThemeNotifier(ActiveTheme.t1Light)),
+            activeThemeInitializedProvider.overrideWith((ref) => true),
             authProvider.overrideWith((ref) => mockAuth),
             dashboardProvider.overrideWith((ref) => summary),
+            analyticsServiceProvider.overrideWithValue(mockAnalytics),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: t1.DashboardScreen(),
+            theme: T1Theme.light,
+            home: const t1.DashboardScreen(),
           ),
         ),
       );
@@ -100,21 +126,27 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final mockAuth = MockAuthNotifier();
-      when(() => mockAuth.state).thenReturn(authState);
-      when(() => mockAuth.currentUser).thenReturn(testUser);
-      when(() => mockAuth.addListener(any())).thenReturn(() {});
+      final mockRepo = MockAuthRepository();
+      when(() => mockRepo.authStateChanges()).thenAnswer((_) => const Stream.empty());
+      when(() => mockRepo.currentSession()).thenReturn(null);
+
+      final mockAuth = TestAuthNotifier(mockRepo, initialState: authState);
+      final mockAnalytics = MockAnalyticsService();
+      when(() => mockAnalytics.logScreen(any(), any())).thenAnswer((_) async => {});
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             activeThemeProvider.overrideWith(() => FakeActiveThemeNotifier(ActiveTheme.t2Dark)),
+            activeThemeInitializedProvider.overrideWith((ref) => true),
             authProvider.overrideWith((ref) => mockAuth),
             dashboardProvider.overrideWith((ref) => summary),
+            analyticsServiceProvider.overrideWithValue(mockAnalytics),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: t2.DashboardScreen(),
+            theme: T2Theme.dark,
+            home: const t2.DashboardScreen(),
           ),
         ),
       );

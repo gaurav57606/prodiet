@@ -186,7 +186,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: selected ? context.colorScheme.primary.withOpacity(0.08) : context.colorScheme.surface,
+        color: selected ? context.colorScheme.primary.withValues(alpha: 0.08) : context.colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: selected ? context.colorScheme.primary : context.colorScheme.outline,
@@ -198,12 +198,12 @@ class _SignupScreenState extends State<SignupScreen> {
           Text(emoji, style: const TextStyle(fontSize: 24)),
           const SizedBox(height: 6),
           Text(title, style: context.textTheme.titleSmall),
-          Text(
-            sub,
-            style: context.textTheme.labelSmall?.copyWith(
-              color: context.colorScheme.onSurfaceVariant.withOpacity(0.6),
+            Text(
+              sub,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -213,7 +213,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: selected ? context.colorScheme.primary.withOpacity(0.08) : context.colorScheme.surface,
+        color: selected ? context.colorScheme.primary.withValues(alpha: 0.08) : context.colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: selected ? context.colorScheme.primary : context.colorScheme.outline,
@@ -238,7 +238,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Text(
                 sub,
                 style: context.textTheme.labelSmall?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                  color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -258,7 +258,7 @@ class _SignupScreenState extends State<SignupScreen> {
             children: [
               TextSpan(
                 text: "Already have an account? ",
-                style: TextStyle(color: context.colorScheme.onSurfaceVariant.withOpacity(0.7)),
+                style: TextStyle(color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
               ),
               TextSpan(
                 text: 'Sign in',

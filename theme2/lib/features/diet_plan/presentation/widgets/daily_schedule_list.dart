@@ -92,14 +92,14 @@ class DailyScheduleList extends StatelessWidget {
       return Container(
         width: 20,
         height: 20,
-        decoration: BoxDecoration(color: primary.withOpacity(0.12), shape: BoxShape.circle),
+        decoration: BoxDecoration(color: primary.withValues(alpha: 0.12), shape: BoxShape.circle),
         child: Icon(Icons.check, size: 10, color: primary),
       );
     } else if (status == 'miss') {
       return Container(
         width: 20,
         height: 20,
-        decoration: BoxDecoration(color: error.withOpacity(0.12), shape: BoxShape.circle),
+        decoration: BoxDecoration(color: error.withValues(alpha: 0.12), shape: BoxShape.circle),
         child: Icon(Icons.close, size: 10, color: error),
       );
     } else {

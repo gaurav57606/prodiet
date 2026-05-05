@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/theme/font_config.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class CalorieStat extends StatelessWidget {
@@ -48,7 +48,7 @@ class CalorieStat extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           value,
-          style: GoogleFonts.barlowCondensed(
+          style: AppFonts.barlowCondensed(
             fontSize: 28,
             fontWeight: FontWeight.w800,
             color: color,

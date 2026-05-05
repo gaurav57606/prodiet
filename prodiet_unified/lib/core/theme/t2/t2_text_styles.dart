@@ -1,73 +1,72 @@
-// T2 TEXT STYLES — BarlowCondensed + DmSans, uses google_fonts
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../font_config.dart';
 
 class T2TextStyles {
   static TextTheme getTextTheme(ColorScheme colorScheme) {
     return TextTheme(
-      displayLarge: GoogleFonts.barlowCondensed(
+      displayLarge: AppFonts.barlowCondensed(
         fontSize: 32,
         fontWeight: FontWeight.w900,
         color: colorScheme.onSurface,
         letterSpacing: 1.0,
       ),
-      displayMedium: GoogleFonts.barlowCondensed(
+      displayMedium: AppFonts.barlowCondensed(
         fontSize: 28,
         fontWeight: FontWeight.w900,
         color: colorScheme.onSurface,
       ),
-      headlineLarge: GoogleFonts.barlowCondensed(
+      headlineLarge: AppFonts.barlowCondensed(
         fontSize: 24,
         fontWeight: FontWeight.w800,
         color: colorScheme.onSurface,
       ),
-      headlineMedium: GoogleFonts.barlowCondensed(
+      headlineMedium: AppFonts.barlowCondensed(
         fontSize: 20,
         fontWeight: FontWeight.w800,
         color: colorScheme.onSurface,
       ),
-      headlineSmall: GoogleFonts.dmSans(
+      headlineSmall: AppFonts.dmSans(
         fontSize: 18,
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurface,
       ),
-      titleLarge: GoogleFonts.dmSans(
+      titleLarge: AppFonts.dmSans(
         fontSize: 16,
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurface,
       ),
-      titleMedium: GoogleFonts.dmSans(
+      titleMedium: AppFonts.dmSans(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: colorScheme.onSurface,
       ),
-      titleSmall: GoogleFonts.dmSans(
+      titleSmall: AppFonts.dmSans(
         fontSize: 12,
         fontWeight: FontWeight.w600,
         color: colorScheme.onSurface,
       ),
-      bodyLarge: GoogleFonts.dmSans(
+      bodyLarge: AppFonts.dmSans(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: colorScheme.onSurface,
       ),
-      bodyMedium: GoogleFonts.dmSans(
+      bodyMedium: AppFonts.dmSans(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: colorScheme.onSurface,
       ),
-      bodySmall: GoogleFonts.dmSans(
+      bodySmall: AppFonts.dmSans(
         fontSize: 10,
         fontWeight: FontWeight.w400,
         color: colorScheme.onSurfaceVariant,
       ),
-      labelLarge: GoogleFonts.dmSans(
+      labelLarge: AppFonts.dmSans(
         fontSize: 11,
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurface,
         letterSpacing: 0.5,
       ),
-      labelSmall: GoogleFonts.dmSans(
+      labelSmall: AppFonts.dmSans(
         fontSize: 9,
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurfaceVariant,
@@ -77,7 +76,7 @@ class T2TextStyles {
   }
 
   static TextStyle sectionLabel(ColorScheme colorScheme) {
-    return GoogleFonts.dmSans(
+    return AppFonts.dmSans(
       fontSize: 10,
       fontWeight: FontWeight.w600,
       color: colorScheme.onSurfaceVariant,

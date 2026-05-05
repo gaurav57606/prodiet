@@ -29,7 +29,7 @@ class InventoryGrid extends StatelessWidget {
   Widget _buildStatCard(BuildContext context, String value, String label, Color color) {
     final theme = Theme.of(context);
     return DmCard(
-      borderSide: BorderSide(color: color.withOpacity(0.3), width: 1.5),
+      borderSide: BorderSide(color: color.withValues(alpha: 0.3), width: 1.5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

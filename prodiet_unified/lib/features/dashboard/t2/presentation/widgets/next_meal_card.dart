@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/theme/font_config.dart';
 import 'package:intl/intl.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
@@ -61,7 +61,7 @@ class NextMealCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                       child: Text(
                         meal!.name,
-                        style: GoogleFonts.barlowCondensed(
+                        style: AppFonts.barlowCondensed(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           color: T2Colors.textPrimary,
@@ -78,7 +78,7 @@ class NextMealCard extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text: meal!.nutritionalValues.calories.toString(),
-                                  style: GoogleFonts.barlowCondensed(
+                                  style: AppFonts.barlowCondensed(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w900,
                                     color: T2Colors.lime,

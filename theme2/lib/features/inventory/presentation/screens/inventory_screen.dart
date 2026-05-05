@@ -109,7 +109,7 @@ class InventoryScreen extends StatelessWidget {
         color: AppColors.bgElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isLow ? AppColors.coral.withOpacity(0.4) : AppColors.border,
+          color: isLow ? AppColors.coral.withValues(alpha: 0.4) : AppColors.border,
           width: isLow ? 1.5 : 1.0,
         ),
       ),
@@ -122,7 +122,7 @@ class InventoryScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: accent.withOpacity(0.1),
+                  color: accent.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(icon, color: accent, size: 20),

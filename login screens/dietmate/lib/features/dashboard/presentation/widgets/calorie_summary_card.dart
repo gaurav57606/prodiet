@@ -20,7 +20,7 @@ class CalorieSummaryCard extends StatelessWidget {
               Text(
                 'CALORIES',
                 style: context.textTheme.labelLarge?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                  color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                 ),
               ),
               const SizedBox(height: AppSpacing.xs),
@@ -38,7 +38,7 @@ class CalorieSummaryCard extends StatelessWidget {
                   Text(
                     '/ ${DashboardMockData.dailyCalorieGoal} kcal',
                     style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant.withOpacity(0.4),
+                      color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
                     ),
                   ),
                 ],

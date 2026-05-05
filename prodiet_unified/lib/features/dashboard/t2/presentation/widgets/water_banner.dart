@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/theme/font_config.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 
 class WaterBanner extends StatelessWidget {
@@ -66,7 +66,7 @@ class WaterBanner extends StatelessWidget {
             children: [
               Text(
                 '${(progress * 100).toInt()}%',
-                style: GoogleFonts.barlowCondensed(
+                style: AppFonts.barlowCondensed(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
                   color: skyColor,

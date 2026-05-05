@@ -137,7 +137,7 @@ class OcrScreen extends StatelessWidget {
               width: 18,
               height: 18,
               decoration: BoxDecoration(
-                color: isUnrecognized ? theme.colorScheme.surfaceContainerHighest : theme.colorScheme.primary.withOpacity(0.12),
+                color: isUnrecognized ? theme.colorScheme.surfaceContainerHighest : theme.colorScheme.primary.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Icon(
