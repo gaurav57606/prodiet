@@ -6,9 +6,9 @@ part 'meal.g.dart';
 enum MealType { breakfast, lunch, dinner, snack }
 enum MealStatus { pending, eaten, skipped }
 
-@Freezed(fromJson: true)
-@JsonSerializable(fieldRename: FieldRename.snake)
+@freezed
 class Meal with _$Meal {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Meal({
     required String id,
     required String userId,

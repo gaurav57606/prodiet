@@ -21,8 +21,11 @@ WaterLog _$WaterLogFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$WaterLog {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'amount_ml')
   int get amountMl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'logged_at')
   DateTime get loggedAt => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
 
@@ -43,9 +46,9 @@ abstract class $WaterLogCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String userId,
-      int amountMl,
-      DateTime loggedAt,
+      @JsonKey(name: 'user_id') String userId,
+      @JsonKey(name: 'amount_ml') int amountMl,
+      @JsonKey(name: 'logged_at') DateTime loggedAt,
       DateTime date});
 }
 
@@ -105,9 +108,9 @@ abstract class _$$WaterLogImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String userId,
-      int amountMl,
-      DateTime loggedAt,
+      @JsonKey(name: 'user_id') String userId,
+      @JsonKey(name: 'amount_ml') int amountMl,
+      @JsonKey(name: 'logged_at') DateTime loggedAt,
       DateTime date});
 }
 
@@ -160,9 +163,9 @@ class __$$WaterLogImplCopyWithImpl<$Res>
 class _$WaterLogImpl implements _WaterLog {
   const _$WaterLogImpl(
       {required this.id,
-      required this.userId,
-      required this.amountMl,
-      required this.loggedAt,
+      @JsonKey(name: 'user_id') required this.userId,
+      @JsonKey(name: 'amount_ml') required this.amountMl,
+      @JsonKey(name: 'logged_at') required this.loggedAt,
       required this.date});
 
   factory _$WaterLogImpl.fromJson(Map<String, dynamic> json) =>
@@ -171,10 +174,13 @@ class _$WaterLogImpl implements _WaterLog {
   @override
   final String id;
   @override
+  @JsonKey(name: 'user_id')
   final String userId;
   @override
+  @JsonKey(name: 'amount_ml')
   final int amountMl;
   @override
+  @JsonKey(name: 'logged_at')
   final DateTime loggedAt;
   @override
   final DateTime date;
@@ -222,9 +228,9 @@ class _$WaterLogImpl implements _WaterLog {
 abstract class _WaterLog implements WaterLog {
   const factory _WaterLog(
       {required final String id,
-      required final String userId,
-      required final int amountMl,
-      required final DateTime loggedAt,
+      @JsonKey(name: 'user_id') required final String userId,
+      @JsonKey(name: 'amount_ml') required final int amountMl,
+      @JsonKey(name: 'logged_at') required final DateTime loggedAt,
       required final DateTime date}) = _$WaterLogImpl;
 
   factory _WaterLog.fromJson(Map<String, dynamic> json) =
@@ -233,10 +239,13 @@ abstract class _WaterLog implements WaterLog {
   @override
   String get id;
   @override
+  @JsonKey(name: 'user_id')
   String get userId;
   @override
+  @JsonKey(name: 'amount_ml')
   int get amountMl;
   @override
+  @JsonKey(name: 'logged_at')
   DateTime get loggedAt;
   @override
   DateTime get date;

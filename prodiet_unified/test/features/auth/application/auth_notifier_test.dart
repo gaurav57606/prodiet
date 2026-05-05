@@ -233,6 +233,7 @@ void main() {
           .thenThrow(Exception('Email not registered'));
 
       authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
+      await Future.delayed(Duration.zero);
       await authNotifier.sendPasswordReset('nobody@t.com');
 
       expect(authNotifier.state, isA<AuthFailure>());

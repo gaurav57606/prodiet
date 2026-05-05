@@ -7,9 +7,9 @@ part 'water_log.g.dart';
 class WaterLog with _$WaterLog {
   const factory WaterLog({
     required String id,
-    required String userId,
-    required int amountMl,
-    required DateTime loggedAt,
+    @JsonKey(name: 'user_id') required String userId,
+    @JsonKey(name: 'amount_ml') required int amountMl,
+    @JsonKey(name: 'logged_at') required DateTime loggedAt,
     required DateTime date,
   }) = _WaterLog;
 

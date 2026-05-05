@@ -8,6 +8,7 @@ import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
+import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 
@@ -218,7 +219,7 @@ void main() {
       final container = _buildContainer(
         themeInitialized: true,
         theme: ActiveTheme.t1Light,
-        authState: const AuthFailure('Session expired'),
+        authState: const AuthFailure(UnknownError(message: 'Session expired')),
         mockRepo: mockRepo,
       );
       expect(redirectLogic(mockContext, mockState, container),
@@ -251,7 +252,7 @@ void main() {
       final container = _buildContainer(
         themeInitialized: true,
         theme: ActiveTheme.t1Light,
-        authState: const AuthProfileMissing(userId: 'u1'),
+        authState: const AuthProfileMissing('u1'),
         mockRepo: mockRepo,
       );
       final result = redirectLogic(mockContext, mockState, container);

@@ -19,37 +19,45 @@ class AnalyticsService {
     required String deviceModel,
     required String osVersion,
     required String appVersion,
-  }) async {
+  }) {
     _currentSessionId = const Uuid().v4();
-    await _client.from('user_sessions').insert({
+    return _client.from('user_sessions').insert({
       'id': _currentSessionId,
       'user_id': userId,
       'device_model': deviceModel,
       'os_version': osVersion,
       'app_version': appVersion,
       'session_start': DateTime.now().toIso8601String(),
+    }).then((_) => _upsertRetentionFlag(userId))
+    .catchError((e) {
+      // Silent fail
     });
-    // Update retention flag
-    await _upsertRetentionFlag(userId);
   }
 
-  Future<void> endSession(String userId) async {
-    if (_currentSessionId == null) return;
+  Future<void> endSession(String userId) {
+    if (_currentSessionId == null) return Future.value();
     final now = DateTime.now();
-    await _client
+    final taskId = _currentSessionId;
+    _currentSessionId = null;
+    return _client
       .from('user_sessions')
       .update({'session_end': now.toIso8601String()})
-      .eq('id', _currentSessionId!);
-    _currentSessionId = null;
+      .eq('id', taskId!)
+      .then((_) => null)
+      .catchError((e) {
+        // Silent fail
+      });
   }
 
   // ── SCREEN VIEWS ──────────────────────────────────────
-  Future<void> logScreen(String userId, String screenName) async {
-    await _client.from('screen_views').insert({
+  Future<void> logScreen(String userId, String screenName) {
+    return _client.from('screen_views').insert({
       'user_id': userId,
       'session_id': _currentSessionId,
       'screen_name': screenName,
       'timestamp': DateTime.now().toIso8601String(),
+    }).then((_) => null).catchError((e) {
+      // Silent fail
     });
   }
 
@@ -59,33 +67,41 @@ class AnalyticsService {
     String eventName, {
     Map<String, dynamic>? data,
     String? screen,
-  }) async {
-    await _client.from('feature_events').insert({
+  }) {
+    return _client.from('feature_events').insert({
       'user_id': userId,
       'session_id': _currentSessionId,
       'event_name': eventName,
       'event_data': data,
       'screen': screen,
       'timestamp': DateTime.now().toIso8601String(),
+    }).then((_) => null).catchError((e) {
+      // Silent fail
     });
   }
 
   // ── ERRORS ─────────────────────────────────────────────
-  Future<void> logError(String userId, String screen, String errorMsg) async {
-    await _client.from('error_logs').insert({
+  Future<void> logError(String userId, String screen, String errorMsg) {
+    return _client.from('error_logs').insert({
       'user_id': userId,
       'screen': screen,
       'error_message': errorMsg,
       'timestamp': DateTime.now().toIso8601String(),
+    }).then((_) => null).catchError((e) {
+      // Silent fail
     });
   }
 
   // ── RETENTION ─────────────────────────────────────────
   Future<void> _upsertRetentionFlag(String userId) async {
-    await _client.from('retention_flags').upsert({
-      'user_id': userId,
-      'last_seen': DateTime.now().toIso8601String(),
-    }, onConflict: 'user_id');
+    try {
+      await _client.from('retention_flags').upsert({
+        'user_id': userId,
+        'last_seen': DateTime.now().toIso8601String(),
+      }, onConflict: 'user_id');
+    } catch (e) {
+      // Silent fail
+    }
   }
 
   // ── PREDEFINED EVENT CONSTANTS ─────────────────────────

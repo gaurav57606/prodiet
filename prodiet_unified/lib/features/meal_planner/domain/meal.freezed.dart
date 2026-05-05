@@ -244,7 +244,8 @@ class __$$MealImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$MealImpl implements _Meal {
   const _$MealImpl(
       {required this.id,

@@ -11,6 +11,9 @@ class MockSupabaseQueryBuilder extends Mock implements SupabaseQueryBuilder {}
 class FakePostgrestFilterBuilder extends Fake
     implements PostgrestFilterBuilder<List<Map<String, dynamic>>> {
   @override
+  PostgrestFilterBuilder<List<Map<String, dynamic>>> eq(String column, Object value) => this;
+
+  @override
   Future<U> then<U>(
     FutureOr<U> Function(List<Map<String, dynamic>>) onValue, {
     Function? onError,
@@ -23,11 +26,14 @@ class FakePostgrestFilterBuilder extends Fake
 class FakePostgrestFilterBuilderThrows extends Fake
     implements PostgrestFilterBuilder<List<Map<String, dynamic>>> {
   @override
+  PostgrestFilterBuilder<List<Map<String, dynamic>>> eq(String column, Object value) => this;
+
+  @override
   Future<U> then<U>(
     FutureOr<U> Function(List<Map<String, dynamic>>) onValue, {
     Function? onError,
-  }) {
-    return Future<U>.error(Exception('Supabase offline'));
+  }) async {
+    throw Exception('Supabase offline');
   }
 }
 
@@ -53,16 +59,6 @@ void main() {
           any(),
           onConflict: any(named: 'onConflict'),
         )).thenAnswer((_) => FakePostgrestFilterBuilder());
-    when(() => mockQueryBuilder.eq(any(), any()))
-        .thenAnswer((_) => mockQueryBuilder);
-    when(() => mockQueryBuilder.order(
-          any(),
-          ascending: any(named: 'ascending'),
-        )).thenAnswer((_) => mockQueryBuilder);
-    when(() => mockQueryBuilder.limit(any()))
-        .thenAnswer((_) => mockQueryBuilder);
-    when(() => mockQueryBuilder.maybeSingle())
-        .thenAnswer((_) async => null);
   });
 
   // ─────────────────────────────────────────────────────────
@@ -78,10 +74,11 @@ void main() {
     test('does not throw when Supabase returns error (silent analytics)', () async {
       when(() => mockQueryBuilder.insert(any()))
           .thenAnswer((_) => FakePostgrestFilterBuilderThrows());
-      await expectLater(
-        analyticsService.logScreen('user_1', 'Home'),
-        completes,
-      );
+      try {
+        await analyticsService.logScreen('user_1', 'Home');
+      } catch (e) {
+        fail('logScreen should have failed silently but threw $e');
+      }
     });
   });
 
@@ -98,10 +95,11 @@ void main() {
     test('does not throw when Supabase returns error', () async {
       when(() => mockQueryBuilder.insert(any()))
           .thenAnswer((_) => FakePostgrestFilterBuilderThrows());
-      await expectLater(
-        analyticsService.logEvent('user_1', 'button_tap'),
-        completes,
-      );
+      try {
+        await analyticsService.logEvent('user_1', 'button_tap');
+      } catch (e) {
+        fail('logEvent should have failed silently but threw $e');
+      }
     });
   });
 
@@ -110,28 +108,29 @@ void main() {
   // ─────────────────────────────────────────────────────────
   group('AnalyticsService — startSession', () {
     test('inserts into sessions table', () async {
-      await analyticsService.startSession('user_1');
-      verify(() => mockSupabase.from('sessions')).called(1);
+      await analyticsService.startSession('user_1', deviceModel: 'iOS', osVersion: '17.0', appVersion: '1.0.0');
+      verify(() => mockSupabase.from('user_sessions')).called(1);
       verify(() => mockQueryBuilder.insert(any())).called(1);
     });
 
     test('does not throw when Supabase returns error', () async {
       when(() => mockQueryBuilder.insert(any()))
           .thenAnswer((_) => FakePostgrestFilterBuilderThrows());
-      await expectLater(
-        analyticsService.startSession('user_1'),
-        completes,
-      );
+      try {
+        await analyticsService.startSession('user_1', deviceModel: 'iOS', osVersion: '17.0', appVersion: '1.0.0');
+      } catch (e) {
+        fail('startSession should have failed silently but threw $e');
+      }
     });
   });
 
   group('AnalyticsService — endSession', () {
     test('calls sessions table when ending active session', () async {
       // start first to seed a session
-      await analyticsService.startSession('user_1');
+      await analyticsService.startSession('user_1', deviceModel: 'iOS', osVersion: '17.0', appVersion: '1.0.0');
       await analyticsService.endSession('user_1');
       // sessions table should be touched at least twice
-      verify(() => mockSupabase.from('sessions'))
+      verify(() => mockSupabase.from('user_sessions'))
           .called(greaterThanOrEqualTo(2));
     });
 

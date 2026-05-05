@@ -1,40 +1,103 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 import 'package:prodiet_unified/features/water/domain/water_log.dart';
+import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 
 void main() {
-  group('WaterSummary', () {
-    test('calculate should return correct total and percent', () {
-      final logs = [
-        WaterLog(id: '1', userId: 'u1', amountMl: 500, loggedAt: DateTime.now(), date: DateTime.now()),
-        WaterLog(id: '2', userId: 'u1', amountMl: 250, loggedAt: DateTime.now(), date: DateTime.now()),
-      ];
+  // Helper to create a WaterLog with a given amount.
+  WaterLog makeLog(int ml) => WaterLog(
+        id: 'id_$ml',
+        userId: 'u1',
+        amountMl: ml,
+        loggedAt: DateTime.now(),
+        date: DateTime.now(),
+      );
 
-      final summary = WaterSummary.calculate(logs, 2000);
-
-      expect(summary.totalMl, 750);
-      expect(summary.targetMl, 2000);
-      expect(summary.glasses, 3); // 750 / 250
-      expect(summary.percentFilled, 0.375);
+  group('WaterSummary.calculate', () {
+    test('empty logs produce zero totals with correct target', () {
+      final s = WaterSummary.calculate([], 2000);
+      expect(s.totalMl,      0);
+      expect(s.targetMl,     2000);
+      expect(s.glasses,      0);
+      expect(s.targetGlasses,8);    // 2000 / 250
+      expect(s.percentFilled,0.0);
+      expect(s.isGoalReached,false);
     });
 
-    test('isGoalReached should be true when total >= target', () {
-      const summary1 = WaterSummary(totalMl: 2000, targetMl: 2000, glasses: 8, targetGlasses: 8);
-      const summary2 = WaterSummary(totalMl: 2100, targetMl: 2000, glasses: 8, targetGlasses: 8);
-      const summary3 = WaterSummary(totalMl: 1900, targetMl: 2000, glasses: 7, targetGlasses: 8);
-
-      expect(summary1.isGoalReached, true);
-      expect(summary2.isGoalReached, true);
-      expect(summary3.isGoalReached, false);
+    test('sums amountMl across multiple logs', () {
+      final logs = [makeLog(250), makeLog(500), makeLog(250)];
+      final s = WaterSummary.calculate(logs, 2000);
+      expect(s.totalMl, 1000);
+      expect(s.glasses,  4);   // 1000 / 250
     });
 
-    test('empty should return zero summary', () {
-      final summary = WaterSummary.empty(1500);
+    test('percentFilled is exactly 0.5 at half goal', () {
+      final s = WaterSummary.calculate([makeLog(1000)], 2000);
+      expect(s.percentFilled, closeTo(0.5, 0.001));
+    });
 
-      expect(summary.totalMl, 0);
-      expect(summary.targetMl, 1500);
-      expect(summary.glasses, 0);
-      expect(summary.targetGlasses, 6);
+    test('percentFilled is clamped to 1.0 when over goal', () {
+      final s = WaterSummary.calculate([makeLog(3000)], 2000);
+      expect(s.percentFilled, 1.0);
+    });
+
+    test('percentFilled is 0.0 when targetMl is 0 (div-by-zero guard)', () {
+      final s = WaterSummary.calculate([], 0);
+      expect(s.percentFilled, 0.0);
+    });
+
+    test('isGoalReached is true exactly at goal', () {
+      final s = WaterSummary.calculate([makeLog(2000)], 2000);
+      expect(s.isGoalReached, true);
+    });
+
+    test('isGoalReached is true when over goal', () {
+      final s = WaterSummary.calculate([makeLog(2500)], 2000);
+      expect(s.isGoalReached, true);
+    });
+
+    test('isGoalReached is false when under goal', () {
+      final s = WaterSummary.calculate([makeLog(1999)], 2000);
+      expect(s.isGoalReached, false);
+    });
+
+    test('targetGlasses rounds down (2500ml target = 10 glasses)', () {
+      final s = WaterSummary.calculate([], 2500);
+      expect(s.targetGlasses, 10);
+    });
+
+    test('single log of exactly one glass', () {
+      final s = WaterSummary.calculate([makeLog(250)], 2000);
+      expect(s.glasses, 1);
+      expect(s.totalMl, 250);
+    });
+  });
+
+  group('WaterSummary.empty', () {
+    test('creates all-zero summary with correct target and glasses', () {
+      final s = WaterSummary.empty(3000);
+      expect(s.totalMl,       0);
+      expect(s.glasses,       0);
+      expect(s.targetMl,      3000);
+      expect(s.targetGlasses, 12);   // 3000 / 250
+      expect(s.isGoalReached, false);
+      expect(s.percentFilled, 0.0);
+    });
+  });
+
+  group('WaterLog.fromJson', () {
+    test('parses all fields correctly', () {
+      final now  = DateTime(2026, 5, 5);
+      final json = <String, dynamic>{
+        'id':         'wl1',
+        'user_id':    'u1',
+        'amount_ml':  300,
+        'logged_at':  now.toIso8601String(),
+        'date':       now.toIso8601String(),
+      };
+      final log = WaterLog.fromJson(json);
+      expect(log.id,       'wl1');
+      expect(log.userId,   'u1');
+      expect(log.amountMl, 300);
     });
   });
 }
