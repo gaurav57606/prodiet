@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
@@ -24,7 +25,14 @@ class MockAuthNotifier extends Mock implements AuthNotifier {}
 
 void main() {
   setUpAll(() {
-    GoogleFonts.config.allowRuntimeFetching = false;
+    TestWidgetsFlutterBinding.ensureInitialized();
+    // Mock path_provider for GoogleFonts
+    const MethodChannel('plugins.flutter.io/path_provider')
+        .setMockMethodCallHandler((methodCall) async {
+      return '.';
+    });
+    
+    GoogleFonts.config.allowRuntimeFetching = true; // Allow for tests if mocked correctly
     registerFallbackValue(const AuthLoading());
   });
 

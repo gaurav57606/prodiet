@@ -12,7 +12,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Initial state
-    expect(container.read(activeThemeProvider), ActiveTheme.t1Light);
+    expect(container.read(activeThemeProvider), ActiveTheme.t1Dark);
 
     // Switch to T2
     container.read(activeThemeProvider.notifier).setTheme(ActiveTheme.t2Dark);

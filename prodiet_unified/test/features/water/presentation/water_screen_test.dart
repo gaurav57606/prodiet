@@ -32,9 +32,15 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pumpAndSettle();
 
-      expect(find.text('WATER', findRichText: true), findsOneWidget);
-      expect(find.textContaining('1,500', findRichText: true), findsWidgets); // With formatter
+      // Check for the headline
+      expect(find.text('WATER'), findsOneWidget);
+      
+      // Check for the progress text (1,500 ml / 2,500 ml)
+      // Since it's in a RichText, we use find.textContaining with findRichText: true
+      expect(find.textContaining('1,500', findRichText: true), findsWidgets);
       expect(find.textContaining('2,500', findRichText: true), findsWidgets);
+      
+      // Check for glasses left today
       expect(find.text('4 glasses left today'), findsOneWidget); // 10 - 6 = 4
     });
 
@@ -49,7 +55,9 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('10 glasses left today'), findsOneWidget);
+      // When totalMl is 0, the screen shows the empty state config
+      expect(find.text('Stay hydrated today'), findsOneWidget);
+      expect(find.text('Log your first glass. Your goal is 8 glasses a day.'), findsOneWidget);
     });
   });
 }

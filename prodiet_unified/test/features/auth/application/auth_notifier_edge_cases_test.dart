@@ -37,6 +37,7 @@ void main() {
     mockFcm  = MockFcmService();
     when(() => mockRepo.currentSession()).thenReturn(null);
     when(() => mockRepo.authStateChanges()).thenAnswer((_) => const Stream.empty());
+    when(() => mockFcm.initialize(any())).thenAnswer((_) => Future<void>.value());
   });
 
   tearDown(() {

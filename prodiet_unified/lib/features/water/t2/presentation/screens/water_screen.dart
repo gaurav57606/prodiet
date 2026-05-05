@@ -47,9 +47,9 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
           IconButton(
             icon: Icon(
               Icons.undo_rounded,
-              color: (_lastSummary?.totalMl ?? 0) > 0 ? Colors.white : T2Colors.textMuted,
+              color: (summaryAsync.valueOrNull?.totalMl ?? 0) > 0 ? Colors.white : T2Colors.textMuted,
             ),
-            onPressed: (_lastSummary?.totalMl ?? 0) > 0
+            onPressed: (summaryAsync.valueOrNull?.totalMl ?? 0) > 0
                 ? () => ref.read(waterRepositoryProvider).deleteLastLog(userId)
                 : null,
           ),
@@ -67,9 +67,6 @@ class _WaterScreenState extends ConsumerState<WaterScreen> {
           onButtonTap: () => ref.read(waterRepositoryProvider).logGlass(userId),
         ),
         builder: (summary) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) setState(() => _lastSummary = summary);
-          });
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

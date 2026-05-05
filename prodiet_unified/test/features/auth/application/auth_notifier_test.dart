@@ -107,6 +107,24 @@ void main() {
       expect(authNotifier.state, isA<AuthProfileMissing>());
       expect((authNotifier.state as AuthProfileMissing).userId, 'u2');
     });
+
+    test('transitions to AuthUnauthenticated when signedOut stream event fires',
+        () async {
+      final controller = StreamController<supabase.AuthState>();
+      when(() => mockRepo.authStateChanges())
+          .thenAnswer((_) => controller.stream);
+
+      authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
+      await Future.delayed(Duration.zero);
+
+      controller.add(supabase.AuthState(
+        supabase.AuthChangeEvent.signedOut,
+        null,
+      ));
+      await Future.delayed(const Duration(milliseconds: 150));
+
+      expect(authNotifier.state, isA<AuthUnauthenticated>());
+    });
   });
 
   // ─────────────────────────────────────────────────────────

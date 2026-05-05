@@ -66,7 +66,7 @@ void main() {
         expect(find.textContaining('GOAL', findRichText: true), findsWidgets);
       } else {
         debugPrint('--- Landing on Dashboard ---');
-        expect(find.text('DASHBOARD'), findsWidgets);
+        expect(find.text('KCAL REMAINING TODAY'), findsWidgets);
       }
 
       // 5. Verify persistence (Restart app simulation)
@@ -79,7 +79,7 @@ void main() {
       if (isOnboarding) {
         expect(find.textContaining('GOAL', findRichText: true), findsWidgets);
       } else {
-        expect(find.text('DASHBOARD'), findsWidgets);
+        expect(find.text('KCAL REMAINING TODAY'), findsWidgets);
       }
     });
   });

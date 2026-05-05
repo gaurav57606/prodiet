@@ -3,6 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:prodiet_unified/app.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
@@ -12,18 +15,40 @@ import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
+import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
+import 'package:prodiet_unified/core/services/fcm_service.dart';
+import 'package:prodiet_unified/core/services/analytics_providers.dart';
+import 'package:prodiet_unified/core/services/analytics_service.dart';
+import 'package:prodiet_unified/core/services/connectivity_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 class MockMealRepository extends Mock implements MealRepository {}
+class MockAnalyticsService extends Mock implements AnalyticsService {}
+class MockFcmService extends Mock implements FcmService {}
+class MockConnectivityNotifier extends ConnectivityNotifier {
+  @override
+  Future<ConnectivityStatus> build() async => ConnectivityStatus.online;
+}
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  
+  // Mock path_provider for google_fonts
+  const MethodChannel('plugins.flutter.io/path_provider')
+    .setMockMethodCallHandler((MethodCall methodCall) async {
+      return '.';
+    });
 
   group('End-to-End Golden Path', () {
+    SharedPreferences.setMockInitialValues({});
+    
     late MockAuthRepository mockAuthRepo;
     late MockMealRepository mockMealRepo;
+    late MockAnalyticsService mockAnalytics;
+    late MockFcmService mockFcm;
     
     final testUser = AppUser(
       id: 'u1',
@@ -37,7 +62,7 @@ void main() {
       userName: 'Test User',
       caloriesConsumed: 0,
       caloriesGoal: 2000,
-      waterMl: 0,
+      waterMl: 250,
       waterGoalMl: 2500,
       proteinConsumed: 0,
       carbsConsumed: 0,
@@ -45,20 +70,49 @@ void main() {
       proteinGoal: 100,
       carbsGoal: 200,
       fatGoal: 60,
-      mealsToday: 0,
+      mealsToday: 1,
       mealsScheduled: 4,
       streakDays: 5,
       stepsToday: 5000,
       caloriesBurned: 300,
     );
 
+    supabase.Session _makeSession(String userId, String email) {
+      return supabase.Session(
+        accessToken: 'tok_$userId',
+        tokenType: 'bearer',
+        user: supabase.User(
+          id: userId,
+          email: email,
+          appMetadata: {},
+          userMetadata: {},
+          aud: 'authenticated',
+          createdAt: DateTime.now().toIso8601String(),
+        ),
+      );
+    }
+
     setUp(() {
       mockAuthRepo = MockAuthRepository();
       mockMealRepo = MockMealRepository();
+      mockAnalytics = MockAnalyticsService();
+      mockFcm = MockFcmService();
+
+      // Stub Analytics
+      when(() => mockAnalytics.startSession(any(), 
+        deviceModel: any(named: 'deviceModel'),
+        osVersion: any(named: 'osVersion'),
+        appVersion: any(named: 'appVersion'))).thenAnswer((_) => Future<void>.value());
+      when(() => mockAnalytics.endSession(any())).thenAnswer((_) => Future<void>.value());
+      when(() => mockAnalytics.logScreen(any(), any())).thenAnswer((_) => Future<void>.value());
       
+      // Stub FCM
+      when(() => mockFcm.initialize(any())).thenAnswer((_) => Future<void>.value());
+      
+      final session = _makeSession('u1', 'test@t.com');
       when(() => mockAuthRepo.authStateChanges())
-          .thenAnswer((_) => Stream.value(testUser));
-      when(() => mockAuthRepo.currentSession()).thenReturn(null);
+          .thenAnswer((_) => Stream.value(supabase.AuthState(supabase.AuthChangeEvent.signedIn, session)));
+      when(() => mockAuthRepo.currentSession()).thenReturn(session);
       when(() => mockAuthRepo.fetchProfile(any()))
           .thenAnswer((_) async => testUser);
     });
@@ -69,8 +123,11 @@ void main() {
           overrides: [
             authRepositoryProvider.overrideWithValue(mockAuthRepo),
             mealRepositoryProvider.overrideWithValue(mockMealRepo),
-            activeThemeProvider.overrideWith((ref) => ActiveTheme.t1Dark),
             dashboardProvider.overrideWith((ref) => summary),
+            analyticsServiceProvider.overrideWithValue(mockAnalytics),
+            fcmServiceProvider.overrideWithValue(mockFcm),
+            connectivityProvider.overrideWith(() => MockConnectivityNotifier()),
+            activeThemeInitializedProvider.overrideWith((ref) => true),
           ],
           child: const ProDietApp(),
         ),
@@ -79,8 +136,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Verify we are on Dashboard
-      expect(find.text('DASHBOARD'), findsWidgets);
-      expect(find.text('2000'), findsWidgets); // Calorie Goal
+      expect(find.text('KCAL REMAINING TODAY'), findsWidgets);
+      expect(find.text('2000'), findsWidgets); // Calorie Goal (Remaining)
+      expect(find.textContaining('Test', findRichText: true), findsWidgets); // User Name in greeting or header
 
       // 2. Navigate to Meal Logging (T1 Today Meals)
       // Assuming there's a button or FAB to add meal
