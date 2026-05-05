@@ -64,30 +64,34 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _handleSession(String userId) async {
     try {
       logger.d('[$_tag] Fetching profile for $userId...');
-      // Add timeout to prevent hanging in loading state forever
+      
+      // Try fetching the profile.
       var profile = await _repo.fetchProfile(userId).timeout(
-        const Duration(seconds: 10),
+        const Duration(seconds: 5), // Reduced timeout for faster failover
         onTimeout: () {
           logger.e('[$_tag] Profile fetch timed out for $userId');
-          throw TimeoutException('Connection timed out while loading profile');
+          throw TimeoutException('Profile fetch timed out');
         },
       );
-      if (!mounted) return;
       
+      if (!mounted) return;
+
+      // If missing, it might be a race condition with DB triggers.
+      // We'll do one very short wait if it's the absolute first time we see this user.
       if (profile == null) {
-        logger.w('[$_tag] Profile null for $userId, retrying once after 800ms...');
-        await Future.delayed(const Duration(milliseconds: 800));
+        logger.w('[$_tag] Profile null for $userId, waiting briefly for DB trigger...');
+        await Future.delayed(const Duration(milliseconds: 500));
         if (!mounted) return;
         profile = await _repo.fetchProfile(userId);
-        if (!mounted) return;
       }
 
       if (profile == null) {
-        logger.w('[$_tag] Profile not found for $userId after retry');
+        logger.w('[$_tag] Profile still missing for $userId. Moving to AuthProfileMissing state.');
         state = AuthProfileMissing(userId);
         return;
       }
-      logger.d('[$_tag] Profile loaded: ${profile.email}, onboardingComplete: ${profile.onboardingComplete}');
+
+      logger.d('[$_tag] Profile loaded successfully for ${profile.email}');
       _handleProfile(profile);
     } catch (e) {
       if (!mounted) return;
@@ -206,7 +210,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (updatedProfile != null) {
         state = AuthAuthenticated(updatedProfile);
       } else {
-        state = AuthFailure(const UnknownError(
+        state = const AuthFailure(UnknownError(
           message: 'Could not load your profile after setup. Please restart the app.',
         ));
       }

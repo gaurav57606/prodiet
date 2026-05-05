@@ -95,6 +95,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       password,
       '$firstName $lastName'.trim(),
     );
+    if (!mounted) return;
     if (context.mounted) {
       context.push(AppRoutes.t1VerifyEmail, extra: email);
     }

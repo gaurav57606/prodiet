@@ -87,6 +87,36 @@ void main() {
       expect(authenticatedState.user.id, 'u1');
       verify(() => mockFcm.initialize('u1')).called(1);
     });
+
+    test('should transition to AuthProfileMissing if profile does not exist after retry', () async {
+      final controller = StreamController<supabase.AuthState>();
+      when(() => mockRepo.authStateChanges()).thenAnswer((_) => controller.stream);
+      when(() => mockRepo.fetchProfile('u2')).thenAnswer((_) async => null);
+
+      authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
+      await Future.delayed(Duration.zero);
+
+      final mockSession = supabase.Session(
+        accessToken: 'abc',
+        tokenType: 'bearer',
+        user: supabase.User(
+          id: 'u2',
+          email: 'u2@test.com',
+          appMetadata: {},
+          userMetadata: {},
+          aud: 'aud',
+          createdAt: DateTime.now().toIso8601String(),
+        ),
+      );
+      
+      controller.add(supabase.AuthState(supabase.AuthChangeEvent.signedIn, mockSession));
+      
+      // Wait for async processing (including the 500ms delay in _handleSession)
+      await Future.delayed(const Duration(milliseconds: 700));
+
+      expect(authNotifier.state, isA<AuthProfileMissing>());
+      expect((authNotifier.state as AuthProfileMissing).userId, 'u2');
+    });
   });
 
   group('Auth Actions', () {

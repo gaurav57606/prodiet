@@ -371,7 +371,7 @@ String? redirectLogic(BuildContext context, GoRouterState state, ProviderContain
     return '/t1/health-goals';
   }
   if (authState is AuthAuthenticated) {
-    if (isPublic && !loc.contains('splash')) {
+    if (isPublic) {
       return isT2 ? '/t2/dashboard' : '/t1/dashboard';
     }
     return null;
