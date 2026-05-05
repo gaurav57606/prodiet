@@ -51,6 +51,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       );
       return;
     }
+
+    if (age < 13 || age > 120) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Age must be between 13 and 120')),
+      );
+      return;
+    }
+
+    if (weight < 30 || weight > 500) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Weight must be between 30 and 500 kg')),
+      );
+      return;
+    }
     final user = ref.read(currentUserProvider);
     if (user == null) return;
     await ref.read(authProvider.notifier).completeOnboarding(user.id, {

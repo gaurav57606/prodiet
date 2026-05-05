@@ -60,6 +60,27 @@ class _HealthGoalsScreenState extends ConsumerState<HealthGoalsScreen> {
       return;
     }
 
+    if (age < 13 || age > 120) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Age must be between 13 and 120')),
+      );
+      return;
+    }
+
+    if (weight < 30 || weight > 500) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Weight must be between 30 and 500 kg')),
+      );
+      return;
+    }
+
+    if (height < 100 || height > 250) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Height must be between 100 and 250 cm')),
+      );
+      return;
+    }
+
     final user = ref.read(currentUserProvider);
     if (user == null) return;
 
