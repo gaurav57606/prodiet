@@ -40,6 +40,10 @@ void main() {
         .thenAnswer((_) => const Stream.empty());
   });
 
+  tearDown(() {
+    authNotifier.dispose();
+  });
+
   // ─────────────────────────────────────────────────────────
   // INITIALIZATION
   // ─────────────────────────────────────────────────────────

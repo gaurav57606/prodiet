@@ -6,6 +6,9 @@
 //   - FCM: push notification delivery (fcm_service.dart)
 // Do NOT add firebase_analytics — it would duplicate Supabase tracking.
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:prodiet_unified/main.dart'; // for logger
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,6 +16,14 @@ class AnalyticsService {
   final SupabaseClient _client;
   String? _currentSessionId;
   AnalyticsService(this._client);
+
+  void _reportError(dynamic e, String context) {
+    logger.w('[AnalyticsService] Error in $context: $e');
+    if (e is PostgrestException && !kDebugMode) {
+      // Schema mismatch or DB error should go to Crashlytics
+      FirebaseCrashlytics.instance.recordError(e, null, reason: 'Analytics DB Failure: $context');
+    }
+  }
 
   // ── SESSION ──────────────────────────────────────────
   Future<void> startSession(String userId, {
@@ -29,9 +40,7 @@ class AnalyticsService {
       'app_version': appVersion,
       'session_start': DateTime.now().toIso8601String(),
     }).then((_) => _upsertRetentionFlag(userId))
-    .catchError((e) {
-      // Silent fail
-    });
+    .catchError((e) => _reportError(e, 'startSession'));
   }
 
   Future<void> endSession(String userId) {
@@ -44,9 +53,7 @@ class AnalyticsService {
       .update({'session_end': now.toIso8601String()})
       .eq('id', taskId!)
       .then((_) => null)
-      .catchError((e) {
-        // Silent fail
-      });
+      .catchError((e) => _reportError(e, 'endSession'));
   }
 
   // ── SCREEN VIEWS ──────────────────────────────────────
@@ -56,9 +63,7 @@ class AnalyticsService {
       'session_id': _currentSessionId,
       'screen_name': screenName,
       'timestamp': DateTime.now().toIso8601String(),
-    }).then((_) => null).catchError((e) {
-      // Silent fail
-    });
+    }).then((_) => null).catchError((e) => _reportError(e, 'logScreen'));
   }
 
   // ── FEATURE EVENTS ─────────────────────────────────────
@@ -75,9 +80,7 @@ class AnalyticsService {
       'event_data': data,
       'screen': screen,
       'timestamp': DateTime.now().toIso8601String(),
-    }).then((_) => null).catchError((e) {
-      // Silent fail
-    });
+    }).then((_) => null).catchError((e) => _reportError(e, 'logEvent'));
   }
 
   // ── ERRORS ─────────────────────────────────────────────
@@ -87,9 +90,7 @@ class AnalyticsService {
       'screen': screen,
       'error_message': errorMsg,
       'timestamp': DateTime.now().toIso8601String(),
-    }).then((_) => null).catchError((e) {
-      // Silent fail
-    });
+    }).then((_) => null).catchError((e) => _reportError(e, 'logError'));
   }
 
   // ── RETENTION ─────────────────────────────────────────
@@ -100,7 +101,7 @@ class AnalyticsService {
         'last_seen': DateTime.now().toIso8601String(),
       }, onConflict: 'user_id');
     } catch (e) {
-      // Silent fail
+      _reportError(e, '_upsertRetentionFlag');
     }
   }
 

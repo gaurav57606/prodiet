@@ -108,40 +108,43 @@ class CalorieSummaryCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$caloriesRemaining',
-                        style: theme.textTheme.displayLarge?.copyWith(
-                          fontSize: 64,
-                          fontWeight: FontWeight.w900,
-                          height: 1,
-                          letterSpacing: -1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'KCAL REMAINING TODAY',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                      if (streakDays > 0)
-                        Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.orange.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$caloriesRemaining',
+                          style: theme.textTheme.displayLarge?.copyWith(
+                            fontSize: 64,
+                            fontWeight: FontWeight.w900,
+                            height: 1,
+                            letterSpacing: -1.5,
                           ),
-                          child: Text('🔥 $streakDays day streak',
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.orange)),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          'KCAL REMAINING TODAY',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        if (streakDays > 0)
+                          Container(
+                            margin: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                            ),
+                            child: Text('🔥 $streakDays day streak',
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.orange)),
+                          ),
+                      ],
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(

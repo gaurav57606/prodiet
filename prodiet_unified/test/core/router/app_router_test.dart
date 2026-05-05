@@ -25,7 +25,7 @@ class FakeActiveThemeNotifier extends ActiveThemeNotifier {
 
 class FakeAuthNotifier extends AuthNotifier {
   final AuthState _mockState;
-  FakeAuthNotifier(this._mockState, AuthRepository repo) : super(repo);
+  FakeAuthNotifier(this._mockState, AuthRepository repo) : super(repo, skipInit: true);
 
   @override
   AuthState get state => _mockState;

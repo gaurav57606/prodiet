@@ -361,14 +361,16 @@ String? redirectLogic(BuildContext context, GoRouterState state, ProviderContain
     }
     return isPublic ? null : (isT2 ? '/t2/login' : '/t1/login');
   }
-  if (authState is AuthProfileMissing) return AppRoutes.t2ProfileRetry;
+  if (authState is AuthProfileMissing) {
+    return (loc == AppRoutes.t2ProfileRetry) ? null : AppRoutes.t2ProfileRetry;
+  }
   if (authState is AuthNeedsOnboarding) {
     if (isT2) {
-      return (loc == '/t2/onboarding') ? null : '/t2/onboarding';
+      return (loc == AppRoutes.t2Onboarding) ? null : AppRoutes.t2Onboarding;
     }
     // Allow both onboarding and health-goals for T1 to prevent loop
-    if (loc == '/t1/onboarding' || loc == '/t1/health-goals') return null;
-    return '/t1/health-goals';
+    if (loc == AppRoutes.t1Onboarding || loc == AppRoutes.t1HealthGoals) return null;
+    return AppRoutes.t1HealthGoals;
   }
   if (authState is AuthAuthenticated) {
     if (isPublic) {

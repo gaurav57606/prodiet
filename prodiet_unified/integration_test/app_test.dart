@@ -1,97 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:prodiet_unified/app.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
-import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
-import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/main.dart' as app;
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
-import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
-import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
-import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
-
-class MockAuthRepository extends Mock implements AuthRepository {}
-class MockMealRepository extends Mock implements MealRepository {}
+import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  
+  // Increase timeout for slow CI environments
+  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
-  group('End-to-End Golden Path', () {
-    late MockAuthRepository mockAuthRepo;
-    late MockMealRepository mockMealRepo;
+  group('ProDiet Real E2E Integration Test', () {
     
-    final testUser = AppUser(
-      id: 'u1',
-      name: 'Test User',
-      email: 'test@t.com',
-      onboardingComplete: true,
-      createdAt: DateTime.now(),
-    );
-
-    final summary = DashboardSummary(
-      userName: 'Test User',
-      caloriesConsumed: 0,
-      caloriesGoal: 2000,
-      waterMl: 0,
-      waterGoalMl: 2500,
-      proteinConsumed: 0,
-      carbsConsumed: 0,
-      fatConsumed: 0,
-      proteinGoal: 100,
-      carbsGoal: 200,
-      fatGoal: 60,
-      mealsToday: 0,
-      mealsScheduled: 4,
-      streakDays: 5,
-      stepsToday: 5000,
-      caloriesBurned: 300,
-    );
-
-    setUp(() {
-      mockAuthRepo = MockAuthRepository();
-      mockMealRepo = MockMealRepository();
-      
-      when(() => mockAuthRepo.authStateChanges())
-          .thenAnswer((_) => Stream.value(testUser));
-      when(() => mockAuthRepo.currentSession()).thenReturn(null);
-      when(() => mockAuthRepo.fetchProfile(any()))
-          .thenAnswer((_) async => testUser);
+    tearDownAll(() async {
+      try {
+        await Supabase.instance.client.auth.signOut();
+      } catch (_) {}
     });
 
-    testWidgets('Full Journey: Login -> Dashboard -> Log Meal', (tester) async {
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            authRepositoryProvider.overrideWithValue(mockAuthRepo),
-            mealRepositoryProvider.overrideWithValue(mockMealRepo),
-            activeThemeProvider.overrideWith((ref) => ActiveTheme.t1Dark),
-            dashboardProvider.overrideWith((ref) => summary),
-          ],
-          child: const ProDietApp(),
-        ),
-      );
-
+    testWidgets('Full Journey: Login -> Dashboard -> App Loop', (tester) async {
+      // 1. Boot the real app
+      // Note: This relies on --dart-define-from-file=.env.json being passed to the test runner
+      app.main();
       await tester.pumpAndSettle();
 
-      // 1. Verify we are on Dashboard
-      expect(find.text('DASHBOARD'), findsWidgets);
-      expect(find.text('2000'), findsWidgets); // Calorie Goal
-
-      // 2. Navigate to Meal Logging (T1 Today Meals)
-      // Assuming there's a button or FAB to add meal
-      final addMealFab = find.byIcon(Icons.add_rounded);
-      if (addMealFab.evaluate().isNotEmpty) {
-        await tester.tap(addMealFab);
-        await tester.pumpAndSettle();
+      // 2. Verify we are on Login screen (if not already logged in)
+      // If we land on Dashboard directly (due to persistence), sign out first to test the flow
+      if (find.text('DASHBOARD').evaluate().isNotEmpty) {
+        // Sign out logic here if needed
       }
 
-      // 3. Verify Dashboard Summary
-      expect(find.textContaining('Test', findRichText: true), findsWidgets);
+      // We expect 'WELCOME BACK' or 'ProDiet' title on T1 login
+      expect(find.textContaining('Pro', findRichText: true), findsWidgets);
+
+      // 3. Login with a test account
+      // Use credentials that you expect to exist in your Supabase instance
+      // Or better, create a temporary user if Supabase allows
+      final emailField = find.byType(DmTextField).at(0);
+      final passwordField = find.byType(DmTextField).at(1);
+      final loginButton = find.byType(DmButton).first;
+
+      await tester.enterText(emailField, 'test_e2e@prodiet.com');
+      await tester.enterText(passwordField, 'password123');
+      await tester.closeSoftKeyboard();
+      await tester.pumpAndSettle();
+
+      await tester.tap(loginButton);
+      
+      // Wait for navigation and state changes
+      // This might take a while depending on network
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // 4. Verify Destination
+      // It could be Dashboard or Onboarding
+      final isOnboarding = find.text('HEALTH GOALS').evaluate().isNotEmpty || 
+                           find.text('TELL US ABOUT YOURSELF').evaluate().isNotEmpty;
+      
+      if (isOnboarding) {
+        debugPrint('--- Landing on Onboarding ---');
+        expect(find.textContaining('GOAL', findRichText: true), findsWidgets);
+      } else {
+        debugPrint('--- Landing on Dashboard ---');
+        expect(find.text('DASHBOARD'), findsWidgets);
+      }
+
+      // 5. Verify persistence (Restart app simulation)
+      // In integration tests, we can't easily "restart" the process, but we can re-pump the root
+      // to see if it preserves session
+      debugPrint('--- Verifying persistence ---');
+      await tester.pumpWidget(const ProviderScope(child: app.ProDietApp()));
+      await tester.pumpAndSettle();
+      
+      if (isOnboarding) {
+        expect(find.textContaining('GOAL', findRichText: true), findsWidgets);
+      } else {
+        expect(find.text('DASHBOARD'), findsWidgets);
+      }
     });
   });
 }

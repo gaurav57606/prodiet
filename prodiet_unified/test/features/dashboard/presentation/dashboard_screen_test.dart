@@ -87,12 +87,13 @@ void main() {
     });
 
     testWidgets('shows empty state when no data', (tester) async {
-      final summary = DashboardSummary.empty();
+      final summary = DashboardSummary.empty(caloriesGoal: 0);
 
       await tester.pumpWidget(createWidgetUnderTest(summary));
       await tester.pumpAndSettle();
 
       expect(find.text('Your day starts here'), findsWidgets);
+      // Ensure no crash from division by zero
     });
   });
 }

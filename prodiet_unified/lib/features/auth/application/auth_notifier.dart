@@ -15,13 +15,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   static const _tag = 'AuthNotifier';
   StreamSubscription? _authSubscription;
 
-  AuthNotifier(this._repo, {FcmService? fcm})
+  AuthNotifier(this._repo, {FcmService? fcm, bool skipInit = false})
       : _fcm = fcm,
         super(const AuthLoading()) {
     addListener((state) {
       logger.i('[$_tag] State changed to: $state');
     });
-    _init();
+    if (!skipInit) _init();
   }
 
   void _init() {
