@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
 import '../domain/diet_meal.dart';
 import '../domain/diet_plan.dart';
+import '../domain/diet_plan_exceptions.dart';
 
 class DietPlanRepository {
   final SupabaseClient _supabase;
@@ -23,6 +24,29 @@ class DietPlanRepository {
   }
 
   Future<DietPlan> generatePlan(String userId) async {
+    // Check last generated_at for rate limiting
+    final lastPlan = await _supabase
+        .from('diet_plans')
+        .select('generated_at')
+        .eq('user_id', userId)
+        .order('generated_at', ascending: false)
+        .limit(1)
+        .maybeSingle();
+
+    if (lastPlan != null) {
+      final lastGenerated = DateTime.tryParse(lastPlan['generated_at'] as String? ?? '');
+      if (lastGenerated != null) {
+        final hoursSince = DateTime.now().difference(lastGenerated).inHours;
+        if (hoursSince < 24) {
+          final hoursRemaining = 24 - hoursSince;
+          throw PlanRateLimitException(
+            'You can generate a new plan in $hoursRemaining hours.',
+            hoursRemaining: hoursRemaining,
+          );
+        }
+      }
+    }
+
     // 1. Fetch user profile
     final profile = await _supabase
         .from('users')
@@ -90,7 +114,7 @@ class DietPlanRepository {
           'meal_type': type.name,
           'ingredients': item.ingredients,
           'status': 'pending',
-          'planned_date': today.toIso8601String(),
+          'planned_date': today.toIso8601String().split('T')[0],
         });
       }
     }

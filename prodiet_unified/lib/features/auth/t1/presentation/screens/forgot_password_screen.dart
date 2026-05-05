@@ -54,7 +54,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final authState = ref.watch(authProvider);
     final isLoading = _isSubmitting;
 
     ref.listen<AuthState>(authProvider, (_, next) {

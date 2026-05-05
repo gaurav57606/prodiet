@@ -58,8 +58,8 @@ class MealPlannerScreen extends ConsumerWidget {
             itemCount: 7,
             separatorBuilder: (_, __) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
-              // Show last 6 days + today
-              final date = DateTime.now().subtract(Duration(days: 6 - index));
+              // Show today + next 6 days
+              final date = DateTime.now().add(Duration(days: index));
               final dateKey = DateFormat('yyyy-MM-dd').format(date);
               final dayMeals = groupedMeals[dateKey] ?? [];
               return _buildDayCard(context, theme, date, dayMeals);
@@ -93,7 +93,7 @@ class MealPlannerScreen extends ConsumerWidget {
       color: isToday ? theme.colorScheme.primary.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.02),
       borderSide: isToday ? BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.3)) : null,
       child: InkWell(
-        onTap: () => context.push('/t1/today-meals'), // For simplicity, go to daily view
+        onTap: () => context.push('/t1/today-meals', extra: date),
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16),

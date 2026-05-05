@@ -20,6 +20,7 @@ import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.da
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 import 'package:prodiet_unified/core/utils/date_utils.dart';
+import 'package:prodiet_unified/features/water/application/water_providers.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -59,120 +60,134 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             headline: EmptyStateConfigs.dashboard.headline,
             subtext: EmptyStateConfigs.dashboard.subtext,
             buttonLabel: EmptyStateConfigs.dashboard.buttonLabel,
-            onButtonTap: () => context.goNamed(AppRoutes.dashboardName),
+            onButtonTap: () => context.goNamed(AppRoutes.mealsName),
           ),
-          builder: (data) => CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                floating: true,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                title: Text(
-                  greeting,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+          builder: (data) => RefreshIndicator(
+            onRefresh: () async => ref.invalidate(dashboardProvider),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverAppBar(
+                  floating: true,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  title: Text(
+                    greeting,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.notifications_none_rounded),
+                      onPressed: () => context.pushNamed(AppRoutes.notificationsName),
+                    ),
+                    const ThemeToggle(),
+                    IconButton(
+                      icon: const Icon(Icons.person_rounded),
+                      onPressed: () => context.pushNamed(AppRoutes.t1Profile),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+                
+                SliverToBoxAdapter(
+                  child: CalorieSummaryCard(
+                    caloriesConsumed: data.caloriesConsumed,
+                    caloriesGoal: data.caloriesGoal,
+                    streakDays: data.streakDays,
+                    activePlanName: data.activeDietPlanName,
                   ),
                 ),
-                actions: [
-                  const ThemeToggle(),
-                  IconButton(
-                    icon: const Icon(Icons.person_rounded),
-                    onPressed: () => context.pushNamed(AppRoutes.t1Profile),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              ),
-              
-              SliverToBoxAdapter(
-                child: CalorieSummaryCard(
-                  caloriesConsumed: data.caloriesConsumed,
-                  caloriesGoal: data.caloriesGoal,
-                  streakDays: data.streakDays,
-                  activePlanName: data.activeDietPlanName,
-                ),
-              ),
-              
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
-                  child: HydrationCard(
-                    consumed: data.waterMl,
-                    target: data.waterGoalMl,
-                    progress: data.waterProgress,
+                
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+                    child: HydrationCard(
+                      consumed: data.waterMl,
+                      target: data.waterGoalMl,
+                      progress: data.waterProgress,
+                      onAddGlass: () async {
+                        final userId = ref.read(currentUserProvider)?.id;
+                        if (userId != null) {
+                          await ref.read(waterRepositoryProvider).logGlass(userId);
+                          ref.invalidate(dashboardProvider);
+                        }
+                      },
+                    ),
                   ),
                 ),
-              ),
-              
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                  child: _SectionHeader(
-                    title: 'Macros Today',
-                    onAction: () => context.goNamed(AppRoutes.mealsName),
+                
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                    child: _SectionHeader(
+                      title: 'Macros Today',
+                      onAction: () => context.goNamed(AppRoutes.mealsName),
+                    ),
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: MacroGrid(
-                  calories: data.caloriesConsumed,
-                  calorieProgress: data.calorieProgress,
-                  protein: data.proteinConsumed,
-                  proteinProgress: data.proteinProgress,
-                  carbs: data.carbsConsumed,
-                  carbsProgress: data.carbsProgress,
-                  fat: data.fatConsumed,
-                  fatProgress: data.fatProgress,
-                ),
-              ),
-              
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                  child: _SectionHeader(
-                    title: 'Next Meal',
-                    onAction: () => context.goNamed(AppRoutes.mealsName),
+                SliverToBoxAdapter(
+                  child: MacroGrid(
+                    calories: data.caloriesConsumed,
+                    calorieProgress: data.calorieProgress,
+                    protein: data.proteinConsumed,
+                    proteinProgress: data.proteinProgress,
+                    carbs: data.carbsConsumed,
+                    carbsProgress: data.carbsProgress,
+                    fat: data.fatConsumed,
+                    fatProgress: data.fatProgress,
                   ),
                 ),
-              ),
-              
-              SliverToBoxAdapter(child: TodayMealsRow(meal: data.nextMeal)),
-              
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                  child: _SectionHeader(
-                    title: 'Activity · Fitband',
-                    onAction: () => context.pushNamed(AppRoutes.activitySyncName),
+                
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                    child: _SectionHeader(
+                      title: 'Next Meal',
+                      onAction: () => context.goNamed(AppRoutes.mealsName),
+                    ),
                   ),
                 ),
-              ),
-              
-              SliverToBoxAdapter(
-                child: ActivityGrid(
-                  steps: data.stepsToday,
-                  caloriesBurned: data.caloriesBurned,
-                  netCalories: data.netCalories,
-                ),
-              ),
-              
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                  child: _SectionHeader(
-                    title: 'Alerts',
+                
+                SliverToBoxAdapter(child: TodayMealsRow(meal: data.nextMeal)),
+                
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                    child: _SectionHeader(
+                      title: 'Activity · Fitband',
+                      onAction: () => context.pushNamed(AppRoutes.activitySyncName),
+                    ),
                   ),
                 ),
-              ),
-              
-              const SliverToBoxAdapter(child: AlertsList()),
-              
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 80,
+                
+                SliverToBoxAdapter(
+                  child: ActivityGrid(
+                    steps: data.stepsToday,
+                    caloriesBurned: data.caloriesBurned,
+                    netCalories: data.netCalories,
+                  ),
                 ),
-              ),
-            ],
+                
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
+                    child: _SectionHeader(
+                      title: 'Alerts',
+                    ),
+                  ),
+                ),
+                
+                const SliverToBoxAdapter(child: AlertsList()),
+                
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom + 80,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

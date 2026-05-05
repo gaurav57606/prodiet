@@ -19,6 +19,9 @@ class ProgressScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Fire-and-forget achievement check
+    ref.watch(streakAchievementProvider);
+    
     final theme = Theme.of(context);
     final summaryAsync = ref.watch(progressSummaryProvider);
     final selectedRange = ref.watch(selectedRangeProvider);
@@ -42,7 +45,7 @@ class ProgressScreen extends ConsumerWidget {
           headline: 'No progress logged yet',
           subtext: 'Log your first weight to start tracking your journey.',
           buttonLabel: 'Log Weight',
-          onButtonTap: () => _showLogWeightSheet(context, ref, userId),
+          onButtonTap: () => _showLogWeightSheet(context, ref, userId, summaryAsync.value ?? ProgressSummary.empty()),
         ),
         builder: (summary) => RefreshIndicator(
           onRefresh: () async => ref.invalidate(progressSummaryProvider),
@@ -86,7 +89,7 @@ class ProgressScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showLogWeightSheet(context, ref, userId),
+        onPressed: () => _showLogWeightSheet(context, ref, userId, summaryAsync.value ?? ProgressSummary.empty()),
         backgroundColor: theme.colorScheme.primary,
         icon: const Icon(Icons.add_rounded, color: Colors.white),
         label: const Text('LOG WEIGHT', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
@@ -309,7 +312,7 @@ class ProgressScreen extends ConsumerWidget {
 
 
 
-  void _showLogWeightSheet(BuildContext context, WidgetRef ref, String userId) {
+  void _showLogWeightSheet(BuildContext context, WidgetRef ref, String userId, ProgressSummary summary) {
     final theme = Theme.of(context);
     final weightController = TextEditingController();
 
@@ -351,6 +354,40 @@ class ProgressScreen extends ConsumerWidget {
                   if (weightController.text.isEmpty) return;
                   final weight = double.tryParse(weightController.text);
                   if (weight == null) return;
+                  
+                  if (weight < 20 || weight > 500) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter a valid weight between 20–500 kg')),
+                    );
+                    return;
+                  }
+
+                  // Check if user already logged weight today
+                  final today = DateTime.now();
+                  final todayDate = DateTime(today.year, today.month, today.day);
+
+                  final existingEntry = summary.entries.where((e) {
+                    final entryDate = DateTime(e.loggedAt.year, e.loggedAt.month, e.loggedAt.day);
+                    return entryDate.isAtSameMomentAs(todayDate);
+                  }).firstOrNull;
+
+                  if (existingEntry != null && context.mounted) {
+                    final shouldUpdate = await showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Update Today\'s Weight?'),
+                        content: Text(
+                          'You already logged ${existingEntry.weightKg}kg today.\n'
+                          'Do you want to update it to ${weight}kg?'
+                        ),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+                          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Update')),
+                        ],
+                      ),
+                    );
+                    if (shouldUpdate != true) return;
+                  }
                   
                   await ref.read(progressRepositoryProvider).logWeight(userId, weight);
                   ref.invalidate(progressSummaryProvider);

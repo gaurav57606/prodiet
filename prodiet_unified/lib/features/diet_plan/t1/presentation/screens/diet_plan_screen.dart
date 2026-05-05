@@ -12,6 +12,7 @@ import 'package:prodiet_unified/features/diet_plan/domain/diet_day.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_meal.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan.dart';
 import 'package:prodiet_unified/features/diet_plan/domain/diet_plan_state.dart';
+import 'package:prodiet_unified/features/diet_plan/domain/diet_plan_exceptions.dart';
 
 class DietPlanScreen extends ConsumerWidget {
   const DietPlanScreen({super.key});
@@ -31,7 +32,21 @@ class DietPlanScreen extends ConsumerWidget {
           headline: 'No Diet Plan Yet',
           subtext: 'Let AI build your personalised 7-day plan based on your goals.',
           buttonLabel: '✨ Create My Plan',
-          onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+          onButtonTap: () async {
+            try {
+              await ref.read(dietPlanProvider.notifier).generate();
+            } on PlanRateLimitException catch (e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(e.message),
+                    backgroundColor: Colors.orange,
+                    duration: const Duration(seconds: 4),
+                  ),
+                );
+              }
+            }
+          },
         ),
       );
     }
@@ -66,7 +81,21 @@ class DietPlanScreen extends ConsumerWidget {
           headline: 'Something went wrong',
           subtext: state.message,
           buttonLabel: 'Try Again',
-          onButtonTap: () => ref.read(dietPlanProvider.notifier).generate(),
+          onButtonTap: () async {
+            try {
+              await ref.read(dietPlanProvider.notifier).generate();
+            } on PlanRateLimitException catch (e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(e.message),
+                    backgroundColor: Colors.orange,
+                    duration: const Duration(seconds: 4),
+                  ),
+                );
+              }
+            }
+          },
         ),
       );
     }
@@ -82,7 +111,21 @@ class DietPlanScreen extends ConsumerWidget {
               TextButton.icon(
                 icon: const Icon(Icons.refresh),
                 label: const Text('Regenerate'),
-                onPressed: () => ref.read(dietPlanProvider.notifier).generate(),
+                onPressed: () async {
+                  try {
+                    await ref.read(dietPlanProvider.notifier).generate();
+                  } on PlanRateLimitException catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.message),
+                          backgroundColor: Colors.orange,
+                          duration: const Duration(seconds: 4),
+                        ),
+                      );
+                    }
+                  }
+                },
               ),
             ],
             bottom: const TabBar(

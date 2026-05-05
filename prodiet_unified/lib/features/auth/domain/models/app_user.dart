@@ -19,6 +19,7 @@ class AppUser {
   // Valid values: 'same' | 'balanced' | 'variety'
   final DateTime createdAt;
   final DateTime? updatedAt;
+  final double? targetWeightKg;
 
   const AppUser({
     required this.id,
@@ -38,6 +39,7 @@ class AppUser {
     this.varietyPreference = 'balanced',
     required this.createdAt,
     this.updatedAt,
+    this.targetWeightKg,
   });
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
@@ -59,8 +61,8 @@ class AppUser {
       fitnessGoal: json['fitness_goal'] as String?,
       activityLevel: json['activity_level'] as String?,
       onboardingComplete: json['onboarding_complete'] as bool? ?? false,
-      dailyWaterGoalMl: json['daily_water_target_ml'] as int? ?? 2000,
-      dailyCalorieGoal: json['daily_calorie_target'] as int?,
+      dailyWaterGoalMl: json['daily_water_goal_ml'] as int? ?? 2000,
+      dailyCalorieGoal: json['daily_calorie_goal'] as int?,
       fcmToken: json['fcm_token'] as String?,
       varietyPreference: json['variety_preference'] as String? ?? 'balanced',
       createdAt: json['created_at'] != null
@@ -69,6 +71,7 @@ class AppUser {
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'] as String)
           : null,
+      targetWeightKg: (json['target_weight_kg'] as num?)?.toDouble(),
     );
   }
 
@@ -77,7 +80,7 @@ class AppUser {
       'id': id,
       'email': email,
       'onboarding_complete': onboardingComplete,
-      'daily_water_target_ml': dailyWaterGoalMl,
+      'daily_water_goal_ml': dailyWaterGoalMl,
       'variety_preference': varietyPreference,
       'created_at': createdAt.toIso8601String(),
     };
@@ -92,9 +95,10 @@ class AppUser {
     }
     if (fitnessGoal != null) map['fitness_goal'] = fitnessGoal;
     if (activityLevel != null) map['activity_level'] = activityLevel;
-    if (dailyCalorieGoal != null) map['daily_calorie_target'] = dailyCalorieGoal;
+    if (dailyCalorieGoal != null) map['daily_calorie_goal'] = dailyCalorieGoal;
     if (fcmToken != null) map['fcm_token'] = fcmToken;
     if (updatedAt != null) map['updated_at'] = updatedAt!.toIso8601String();
+    if (targetWeightKg != null) map['target_weight_kg'] = targetWeightKg;
 
     return map;
   }
@@ -117,6 +121,7 @@ class AppUser {
     String? varietyPreference,
     DateTime? createdAt,
     DateTime? updatedAt,
+    double? targetWeightKg,
   }) {
     return AppUser(
       id: id ?? this.id,
@@ -136,6 +141,7 @@ class AppUser {
       varietyPreference: varietyPreference ?? this.varietyPreference,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      targetWeightKg: targetWeightKg ?? this.targetWeightKg,
     );
   }
 

@@ -10,8 +10,8 @@ class AchievementsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final achievementsAsync = ref.watch(achievementsProvider);
+
 
     return Scaffold(
       appBar: AppBar(

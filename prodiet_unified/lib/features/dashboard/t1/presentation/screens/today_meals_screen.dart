@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_router.dart';
+import 'package:prodiet_unified/core/config/feature_flags.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
@@ -15,17 +17,23 @@ import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.da
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
 
 class TodayMealsScreen extends ConsumerWidget {
-  const TodayMealsScreen({super.key});
+  final DateTime? date;
+  const TodayMealsScreen({super.key, this.date});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final summaryAsync = ref.watch(todayMealsProvider);
+    final selectedDate = date ?? DateTime.now();
+    final isToday = DateUtils.isSameDay(selectedDate, DateTime.now());
+    
+    final summaryAsync = ref.watch(mealsForDateProvider(selectedDate));
     final dashboardAsync = ref.watch(dashboardProvider);
+
+    final title = isToday ? 'Today\'s Meals' : DateFormat('EEEE, d MMM').format(selectedDate);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Today\'s Meals'),
+        title: Text(title),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -35,10 +43,10 @@ class TodayMealsScreen extends ConsumerWidget {
         isEmpty: (s) => s.meals.isEmpty,
         emptyState: ProDietEmptyState(
           icon: EmptyStateConfigs.mealPlanner.icon,
-          headline: 'Nothing logged today',
-          subtext: 'Tap + to log your first meal.',
-          buttonLabel: 'Log a Meal',
-          onButtonTap: () => _showLogMealSheet(context, ref),
+          headline: isToday ? 'Nothing logged today' : 'No meals for this day',
+          subtext: isToday ? 'Tap + to log your first meal.' : 'Planned meals will appear here.',
+          buttonLabel: isToday ? 'Log a Meal' : 'Return to Planner',
+          onButtonTap: () => isToday ? _showLogMealSheet(context, ref) : context.pop(),
         ),
         builder: (summary) => ListView(
           padding: const EdgeInsets.all(T1Spacing.lg),
@@ -71,7 +79,16 @@ class TodayMealsScreen extends ConsumerWidget {
         children: [
           FloatingActionButton.extended(
             heroTag: 'scan_meal',
-            onPressed: () => context.pushNamed(AppRoutes.ocrName),
+            onPressed: FeatureFlags.ocrEnabled
+                ? () => context.pushNamed(AppRoutes.ocrName)
+                : () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('📸 Meal scan coming soon!'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
             backgroundColor: theme.colorScheme.secondary,
             icon: const Icon(Icons.camera_alt_rounded, color: Colors.white),
             label: const Text('SCAN MEAL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
@@ -419,17 +436,36 @@ class TodayMealsScreen extends ConsumerWidget {
                     height: 54,
                     child: FilledButton(
                       onPressed: isLogging ? null : () async {
-                        if (nameController.text.isEmpty || calController.text.isEmpty) return;
+                        final name = nameController.text.trim();
+                        if (name.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Please enter a meal name')),
+                          );
+                          return;
+                        }
+
+                        final cal = int.tryParse(calController.text.trim());
+                        if (cal == null || cal < 0 || cal > 10000) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Enter a valid calorie amount (0–10,000)')),
+                          );
+                          return;
+                        }
+
                         ref.read(isLoggingMealProvider.notifier).state = true;
                         try {
+                          final protein = double.tryParse(protController.text.trim()) ?? 0.0;
+                          final carbs = double.tryParse(carbController.text.trim()) ?? 0.0;
+                          final fat = double.tryParse(fatController.text.trim()) ?? 0.0;
+
                           await ref.read(mealRepositoryProvider).logMeal(
                             userId,
-                            name: nameController.text,
+                            name: name,
                             mealType: selectedType,
-                            calories: double.parse(calController.text),
-                            proteinG: double.tryParse(protController.text) ?? 0,
-                            carbsG: double.tryParse(carbController.text) ?? 0,
-                            fatG: double.tryParse(fatController.text) ?? 0,
+                            calories: cal.toDouble(),
+                            proteinG: protein.clamp(0.0, 1000.0),
+                            carbsG: carbs.clamp(0.0, 1000.0),
+                            fatG: fat.clamp(0.0, 1000.0),
                           );
                           if (context.mounted) Navigator.pop(context);
                         } finally {

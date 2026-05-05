@@ -2,28 +2,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/cache/cache_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import '../data/nutrition_repository.dart';
-import '../domain/models/nutrition_item.dart';
+import '../domain/daily_macro_summary.dart';
+import '../domain/top_food_item.dart';
 
-final nutritionRepositoryProvider = Provider<NutritionRepository>((ref) {
-  return NutritionRepository(
-    ref.watch(supabaseClientProvider),
-    ref.watch(semanticCacheProvider),
-  );
+final nutritionRepositoryProvider = Provider((ref) =>
+    NutritionRepository(
+      ref.watch(supabaseClientProvider),
+      ref.watch(semanticCacheProvider),
+    ));
+
+final weeklyMacrosProvider = FutureProvider.autoDispose<List<DailyMacroSummary>>((ref) {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId.isEmpty) return [];
+  return ref.read(nutritionRepositoryProvider).getWeeklyMacros(userId);
 });
 
-final nutritionSearchProvider =
-    FutureProvider.family.autoDispose<List<NutritionItem>, String>((ref, query) async {
-  if (query.trim().length < 2) return [];
-  
-  final userId = ref.watch(currentUserProvider)?.id;
-  if (userId == null) return [];
-
-  final result = await ref.watch(nutritionRepositoryProvider).searchByName(userId, query);
-  return result.fold((e) => [], (items) => items);
-});
-
-final barcodeLookupProvider =
-    FutureProvider.family.autoDispose<NutritionItem?, String>((ref, barcode) async {
-  final result = await ref.watch(nutritionRepositoryProvider).lookupByBarcode(barcode);
-  return result.fold((e) => null, (item) => item);
+final topProteinSourcesProvider = FutureProvider.autoDispose<List<TopFoodItem>>((ref) {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId.isEmpty) return [];
+  return ref.read(nutritionRepositoryProvider).getTopProteinSources(userId);
 });

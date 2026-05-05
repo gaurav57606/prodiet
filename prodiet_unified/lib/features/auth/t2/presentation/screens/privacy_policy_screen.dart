@@ -7,7 +7,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     
     return Scaffold(
       backgroundColor: T2Colors.bgDefault,

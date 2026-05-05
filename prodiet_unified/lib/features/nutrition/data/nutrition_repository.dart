@@ -6,6 +6,8 @@ import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../domain/models/nutrition_item.dart';
+import '../domain/daily_macro_summary.dart';
+import '../domain/top_food_item.dart';
 
 class NutritionRepository {
   final SupabaseClient _client;
@@ -17,7 +19,8 @@ class NutritionRepository {
   NutritionRepository(this._client, this._cache, [http.Client? httpClient])
       : _httpClient = httpClient ?? http.Client();
 
-  Future<Either<AppError, NutritionItem>> lookupByBarcode(String barcode) async {
+  Future<Either<AppError, NutritionItem>> lookupByBarcode(
+      String barcode) async {
     try {
       // 1. Check local Supabase nutrition table (exact barcode)
       final localResult = await _client
@@ -39,7 +42,7 @@ class NutritionRepository {
         if (data['status'] == 1) {
           final product = data['product'];
           final item = _mapOFFToNutritionItem(product, barcode);
-          
+
           // Store result in local nutrition table
           await _saveToLocal(item);
           return Right(item);
@@ -64,10 +67,12 @@ class NutritionRepository {
     }
   }
 
-  Future<Either<AppError, List<NutritionItem>>> searchByName(String userId, String query) async {
+  Future<Either<AppError, List<NutritionItem>>> searchByName(
+      String userId, String query) async {
     try {
       // 1. Check SemanticCache
-      final cached = await _cache.get(CacheNamespace.nutrition, query, userId: userId);
+      final cached =
+          await _cache.get(CacheNamespace.nutrition, query, userId: userId);
       if (cached != null) {
         final items = (cached['items'] as List)
             .map((i) => NutritionItem.fromJson(i))
@@ -83,14 +88,14 @@ class NutritionRepository {
           .limit(10);
 
       if (localResults.isNotEmpty) {
-        final items = localResults
-            .map((i) => NutritionItem.fromJson(i))
-            .toList();
+        final items =
+            localResults.map((i) => NutritionItem.fromJson(i)).toList();
         return Right(items);
       }
 
       // 3. Search Open Food Facts
-      final offUrl = Uri.parse('$_offBaseUrl/cgi/search.pl?search_terms=$query&json=1');
+      final offUrl =
+          Uri.parse('$_offBaseUrl/cgi/search.pl?search_terms=$query&json=1');
       final response = await _httpClient.get(offUrl);
 
       if (response.statusCode == 200) {
@@ -100,7 +105,7 @@ class NutritionRepository {
           final items = products
               .map((p) => _mapOFFToNutritionItem(p, p['code'] as String?))
               .toList();
-          
+
           // Cache and save (limit to top results)
           final topItems = items.take(5).toList();
           await _cache.put(CacheNamespace.nutrition, query, {
@@ -109,7 +114,7 @@ class NutritionRepository {
           for (var item in topItems) {
             await _saveToLocal(item);
           }
-          
+
           return Right(items);
         }
       }
@@ -124,7 +129,8 @@ class NutritionRepository {
         // Edge function might return a single item or a list
         final List<NutritionItem> items = [];
         if (edgeResult.data is List) {
-          items.addAll((edgeResult.data as List).map((i) => NutritionItem.fromJson(i)));
+          items.addAll(
+              (edgeResult.data as List).map((i) => NutritionItem.fromJson(i)));
         } else {
           items.add(NutritionItem.fromJson(edgeResult.data));
         }
@@ -150,10 +156,13 @@ class NutritionRepository {
     return item.calculatePortion(grams);
   }
 
-  NutritionItem _mapOFFToNutritionItem(Map<String, dynamic> product, [String? barcode]) {
+  NutritionItem _mapOFFToNutritionItem(Map<String, dynamic> product,
+      [String? barcode]) {
     final nutriments = product['nutriments'] ?? {};
     return NutritionItem(
-      id: product['_id'] ?? product['id'] ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      id: product['_id'] ??
+          product['id'] ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
       productName: product['product_name'] ?? 'Unknown Product',
       brand: product['brands'],
       barcode: barcode ?? product['code'],
@@ -183,5 +192,53 @@ class NutritionRepository {
         .replaceAll('\\', '\\\\')
         .replaceAll('%', '\\%')
         .replaceAll('_', '\\_');
+  }
+
+  /// Returns last 7 days of daily macro totals.
+  Future<List<DailyMacroSummary>> getWeeklyMacros(String userId) async {
+    final sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7))
+        .toIso8601String().split('T')[0];
+    
+    final data = await _client
+        .from('meals')
+        .select('planned_date, calories, protein_g, carbs_g, fat_g, status')
+        .eq('user_id', userId)
+        .eq('status', 'eaten')
+        .gte('planned_date', sevenDaysAgo)
+        .order('planned_date');
+
+    // Group by date
+    final Map<String, DailyMacroSummary> grouped = {};
+    for (final row in data as List<dynamic>) {
+      final date = row['planned_date'] as String;
+      final existing = grouped[date] ?? DailyMacroSummary(date: date);
+      grouped[date] = existing.copyWith(
+        calories: existing.calories + (row['calories'] as num? ?? 0).toInt(),
+        protein: existing.protein + (row['protein_g'] as num? ?? 0).toInt(),
+        carbs: existing.carbs + (row['carbs_g'] as num? ?? 0).toInt(),
+        fat: existing.fat + (row['fat_g'] as num? ?? 0).toInt(),
+      );
+    }
+    return grouped.values.toList()..sort((a, b) => a.date.compareTo(b.date));
+  }
+  
+  /// Returns top 5 most eaten meal names (protein ranking).
+  Future<List<TopFoodItem>> getTopProteinSources(String userId) async {
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30))
+        .toIso8601String().split('T')[0];
+    
+    final data = await _client
+        .from('meals')
+        .select('name, protein_g')
+        .eq('user_id', userId)
+        .eq('status', 'eaten')
+        .gte('planned_date', thirtyDaysAgo)
+        .order('protein_g', ascending: false)
+        .limit(5);
+    
+    return (data as List<dynamic>).map((row) => TopFoodItem(
+      name: row['name'] as String? ?? '',
+      proteinG: (row['protein_g'] as num? ?? 0).toInt(),
+    )).toList();
   }
 }

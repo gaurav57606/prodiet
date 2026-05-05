@@ -362,10 +362,10 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
           width: 1.5,
         ),
       ),
-      child: RawKeyboardListener(
+      child: KeyboardListener(
         focusNode: FocusNode(), // Dummy node for listener
-        onKey: (event) {
-          if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
+        onKeyEvent: (event) {
+          if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
             if (_otpControllers[index].text.isEmpty && index > 0) {
               FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
             }

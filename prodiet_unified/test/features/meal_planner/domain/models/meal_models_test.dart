@@ -37,13 +37,11 @@ void main() {
         'ingredients': [
           {'name': 'Oats', 'quantity': 50.0, 'unit': 'g', 'calories_per_100g': 389}
         ],
-        'nutritional_values': {
-          'calories': 195,
-          'protein_g': 7,
-          'carbs_g': 33,
-          'fat_g': 3,
-          'fiber_g': 5,
-        },
+        'calories': 195,
+        'protein_g': 7,
+        'carbs_g': 33,
+        'fat_g': 3,
+        'fiber_g': 5,
         'scheduled_time': '2024-01-01T08:00:00Z',
         'status': 'pending',
       };

@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prodiet_unified/core/router/app_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t2/widgets/dm_text_field.dart';
@@ -54,7 +53,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final authState = ref.watch(authProvider);
     final isLoading = _isSubmitting;
 
     ref.listen<AuthState>(authProvider, (_, next) {

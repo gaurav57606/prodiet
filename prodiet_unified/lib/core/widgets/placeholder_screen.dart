@@ -14,7 +14,6 @@ class PlaceholderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isT2 = theme.brightness == Brightness.dark && theme.colorScheme.primary.value == 0xFFD4F263;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,

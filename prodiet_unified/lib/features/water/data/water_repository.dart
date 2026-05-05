@@ -81,9 +81,9 @@ class WaterRepository {
     return _supabase
         .from('water_logs')
         .stream(primaryKey: ['id'])
-        .eq('date', today)                    // Server-side date filter
+        .eq('user_id', userId)          // Server-side user filter (fixes privacy leak)
         .map((data) => data
-            .where((row) => row['user_id'] == userId) // Client-side user filter
+            .where((row) => row['date'] == today)   // client-side date filter
             .map((row) => WaterLog.fromJson(row))
             .toList()
             ..sort((a, b) => b.loggedAt.compareTo(a.loggedAt)));

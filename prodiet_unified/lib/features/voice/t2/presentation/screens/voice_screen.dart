@@ -194,6 +194,7 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen> with SingleTickerProv
                           userId, name: text, quantity: 1, unit: 'pcs', category: 'Other');
                         setState(() => _detectedText = '"$text"');
                         _typeController.clear();
+                        if (!context.mounted) return;
                         FocusScope.of(context).unfocus();
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
