@@ -53,3 +53,6 @@ test_results.txt
 dashboard_test_log.txt
 dashboard_test_log_utf8.txt
 test_output.txt
+
+# Scratch/Temporary scripts
+scratch/

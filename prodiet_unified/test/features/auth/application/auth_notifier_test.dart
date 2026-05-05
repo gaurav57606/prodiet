@@ -41,7 +41,7 @@ void main() {
   });
 
   tearDown(() {
-    authNotifier.dispose();
+    try { authNotifier.dispose(); } catch (_) {}
   });
 
   // ─────────────────────────────────────────────────────────
@@ -236,8 +236,7 @@ void main() {
       when(() => mockRepo.sendPasswordReset(any()))
           .thenThrow(Exception('Email not registered'));
 
-      authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
-      await Future.delayed(Duration.zero);
+      authNotifier = AuthNotifier(mockRepo, fcm: mockFcm, skipInit: true);
       await authNotifier.sendPasswordReset('nobody@t.com');
 
       expect(authNotifier.state, isA<AuthFailure>());

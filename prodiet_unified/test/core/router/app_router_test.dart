@@ -256,8 +256,19 @@ void main() {
         mockRepo: mockRepo,
       );
       final result = redirectLogic(mockContext, mockState, container);
-      expect(result, isNotNull);
-      expect(result, contains('profile'));
+      expect(result, AppRoutes.t2ProfileRetry);
+    });
+
+    test('does NOT redirect if already on profile-retry screen (prevents loop)', () {
+      when(() => mockState.matchedLocation).thenReturn(AppRoutes.t2ProfileRetry);
+      final container = _buildContainer(
+        themeInitialized: true,
+        theme: ActiveTheme.t1Light,
+        authState: const AuthProfileMissing('u1'),
+        mockRepo: mockRepo,
+      );
+      final result = redirectLogic(mockContext, mockState, container);
+      expect(result, isNull);
     });
   });
 }
