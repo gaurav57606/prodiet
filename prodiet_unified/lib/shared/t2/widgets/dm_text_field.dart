@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
+import 'package:prodiet_unified/shared/widgets/base_text_field.dart';
 
 class DmTextField extends StatelessWidget {
   final String? label;
@@ -28,44 +29,33 @@ class DmTextField extends StatelessWidget {
     this.onChanged,
     this.focusNode,
   });
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (label != null) ...[
-          Text(
-            label!,
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: T2Spacing.xs),
-        ],
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          validator: validator,
-          maxLength: maxLength,
-          onChanged: onChanged,
-          focusNode: focusNode,
-          style: theme.textTheme.bodyLarge,
-          decoration: InputDecoration(
-            hintText: hint,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-            counterText: '',
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: T2Spacing.md,
-              horizontal: T2Spacing.md,
-            ),
-          ),
+    return BaseTextField(
+      label: label,
+      hint: hint,
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      validator: validator,
+      maxLength: maxLength,
+      onChanged: onChanged,
+      focusNode: focusNode,
+      labelStyle: theme.textTheme.titleSmall?.copyWith(
+        color: theme.colorScheme.onSurfaceVariant,
+      ),
+      textStyle: theme.textTheme.bodyLarge,
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+          vertical: T2Spacing.md,
+          horizontal: T2Spacing.md,
         ),
-      ],
+      ),
+      labelSpacing: T2Spacing.xs,
     );
   }
 }

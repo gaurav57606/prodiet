@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/water/application/water_providers.dart';
 import 'package:prodiet_unified/features/water/domain/water_summary.dart';
-import 'package:prodiet_unified/features/water/t2/presentation/screens/water_screen.dart';
+import 'package:prodiet_unified/features/water/presentation/t2/screens/water_screen.dart';
 
 void main() {
   const testSummary = WaterSummary(
@@ -61,3 +60,4 @@ void main() {
     });
   });
 }
+

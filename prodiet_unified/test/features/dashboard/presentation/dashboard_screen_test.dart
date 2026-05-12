@@ -9,7 +9,7 @@ import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/t1/screens/dashboard_screen.dart';
 
 class MockAuthNotifier extends StateNotifier<AuthState> with Mock implements AuthNotifier {
   MockAuthNotifier(super.state);
@@ -73,7 +73,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check User Name
-      expect(find.textContaining('Test'), findsWidgets);
+      expect(find.textContaining('Test', findRichText: true), findsWidgets);
 
       // Check remaining calories (2000 - 1000 = 1000)
       expect(find.text('1000'), findsWidgets);
@@ -94,3 +94,4 @@ void main() {
     });
   });
 }
+

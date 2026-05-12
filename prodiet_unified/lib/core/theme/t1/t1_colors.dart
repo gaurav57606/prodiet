@@ -1,4 +1,3 @@
-// T1 COLORS — exact copy of theme1 color files
 import 'package:flutter/material.dart';
 
 // DO NOT import from t2/ files

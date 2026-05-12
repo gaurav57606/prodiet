@@ -1,4 +1,3 @@
-// T1 SPACING — exact copy of theme1/app_spacing.dart
 class T1Spacing {
   static const double xs = 4.0;
   static const double sm = 8.0;

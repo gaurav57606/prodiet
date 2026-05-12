@@ -134,7 +134,7 @@ void main() {
 
         expect(authNotifier.state, isA<AuthAuthenticated>());
         
-        controller.add(supabase.AuthState(supabase.AuthChangeEvent.signedOut, null));
+        controller.add(const supabase.AuthState(supabase.AuthChangeEvent.signedOut, null));
         async.flushMicrotasks();
         
         expect(authNotifier.state, const AuthUnauthenticated());

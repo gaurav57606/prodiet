@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_card.dart';
-import '../../../../shared/widgets/dm_chip.dart';
 import '../mock/dashboard_mock.dart';
 
 class HydrationCard extends StatefulWidget {

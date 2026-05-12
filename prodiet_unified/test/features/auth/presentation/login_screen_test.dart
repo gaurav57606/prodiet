@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/login_screen.dart';
+import 'package:prodiet_unified/features/auth/presentation/t1/screens/login_screen.dart';
 
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
@@ -84,3 +84,4 @@ void main() {
     });
   });
 }
+

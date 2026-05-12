@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
+import 'package:prodiet_unified/shared/widgets/base_card.dart';
 
 class DmCard extends StatelessWidget {
   final Widget child;
@@ -23,28 +24,14 @@ class DmCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor ?? theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(borderRadius ?? T2Spacing.radiusLarge),
-        border: borderSide != null 
-          ? Border.fromBorderSide(borderSide!) 
-          : Border.all(color: theme.colorScheme.outline, width: 1),
-        boxShadow: boxShadow,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(borderRadius ?? T2Spacing.radiusLarge),
-          child: Padding(
-            padding: padding ?? const EdgeInsets.all(T2Spacing.md),
-            child: child,
-          ),
-        ),
-      ),
+    return BaseCard(
+      color: backgroundColor,
+      borderRadius: borderRadius ?? T2Spacing.radiusLarge,
+      borderSide: borderSide ?? BorderSide(color: Theme.of(context).colorScheme.outline, width: 1),
+      boxShadow: boxShadow,
+      padding: padding ?? const EdgeInsets.all(T2Spacing.md),
+      onTap: onTap,
+      child: child,
     );
   }
 }

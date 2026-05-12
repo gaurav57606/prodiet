@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/shared/widgets/base_button.dart';
 
 enum DmButtonVariant { primary, secondary, outline, ghost, danger }
 
@@ -29,6 +30,7 @@ class DmButton extends StatelessWidget {
     Color backgroundColor;
     Color foregroundColor;
     BorderSide borderSide = BorderSide.none;
+    double elevation = 2;
 
     switch (variant) {
       case DmButtonVariant.primary:
@@ -43,10 +45,12 @@ class DmButton extends StatelessWidget {
         backgroundColor = Colors.transparent;
         foregroundColor = colorScheme.primary;
         borderSide = BorderSide(color: colorScheme.primary, width: 1.5);
+        elevation = 0;
         break;
       case DmButtonVariant.ghost:
         backgroundColor = Colors.transparent;
         foregroundColor = colorScheme.primary;
+        elevation = 0;
         break;
       case DmButtonVariant.danger:
         backgroundColor = colorScheme.error.withValues(alpha: 0.1);
@@ -55,49 +59,26 @@ class DmButton extends StatelessWidget {
         break;
     }
 
-    return SizedBox(
+    return BaseButton(
+      label: label,
+      onPressed: onPressed,
+      icon: icon,
+      isLoading: isLoading,
       width: width,
       height: 48,
-      child: ElevatedButton(
-        onPressed: isLoading ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          elevation: variant == DmButtonVariant.ghost || variant == DmButtonVariant.outline ? 0 : 2,
-          shadowColor: backgroundColor.withValues(alpha: 0.4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(T1Spacing.radiusMd),
-            side: borderSide,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+      style: BaseButtonStyle(
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        elevation: elevation,
+        shadowColor: backgroundColor.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(T1Spacing.radiusMd),
+        borderSide: borderSide,
+        padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+        textStyle: theme.textTheme.titleSmall?.copyWith(
+          fontWeight: FontWeight.w700,
         ),
-        child: isLoading
-            ? SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(foregroundColor),
-                ),
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: 18),
-                    const SizedBox(width: T1Spacing.sm),
-                  ],
-                  Text(
-                    label,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      color: foregroundColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
       ),
     );
   }
 }
+

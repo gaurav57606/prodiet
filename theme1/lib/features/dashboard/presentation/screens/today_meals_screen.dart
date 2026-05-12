@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/dm_card.dart';
-import '../../../../shared/widgets/dm_macro_chip.dart';
 
 class TodayMealsScreen extends StatelessWidget {
   const TodayMealsScreen({super.key});

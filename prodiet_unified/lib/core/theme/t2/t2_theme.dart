@@ -1,4 +1,3 @@
-// T2 THEME — exact copy of theme2/app_theme.dart
 import 'package:flutter/material.dart';
 import 't2_colors.dart';
 import 't2_text_styles.dart';

@@ -9,8 +9,8 @@ import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1;
-import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2;
+import 'package:prodiet_unified/features/dashboard/presentation/t1/screens/dashboard_screen.dart' as t1;
+import 'package:prodiet_unified/features/dashboard/presentation/t2/screens/dashboard_screen.dart' as t2;
 import 'package:prodiet_unified/core/services/analytics_service.dart';
 import 'package:prodiet_unified/core/services/analytics_providers.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
@@ -155,3 +155,4 @@ void main() {
     });
   });
 }
+

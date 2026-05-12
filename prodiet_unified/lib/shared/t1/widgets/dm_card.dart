@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/shared/widgets/base_card.dart';
 
 class DmCard extends StatelessWidget {
   final Widget child;
@@ -32,32 +33,32 @@ class DmCard extends StatelessWidget {
     final shape = theme.cardTheme.shape;
     final BorderSide side = borderSide ?? (shape is RoundedRectangleBorder ? shape.side : BorderSide.none);
 
-    Widget cardContent = Container(
-      margin: margin,
-      padding: padding ?? const EdgeInsets.all(T1Spacing.md),
-      decoration: BoxDecoration(
-        color: color ?? theme.cardTheme.color,
-        borderRadius: BorderRadius.circular(borderRadius ?? T1Spacing.radiusXl),
-        border: Border.fromBorderSide(side),
-        boxShadow: elevation != null && elevation! > 0
-            ? [
-                BoxShadow(
-                  color: theme.colorScheme.shadow.withValues(alpha: 0.1),
-                  blurRadius: elevation! * 2,
-                  offset: Offset(0, elevation!),
-                )
-              ]
-            : null,
-      ),
-      child: child,
-    );
+    final List<BoxShadow>? effectiveBoxShadow = elevation != null && elevation! > 0
+        ? [
+            BoxShadow(
+              color: theme.colorScheme.shadow.withValues(alpha: 0.1),
+              blurRadius: elevation! * 2,
+              offset: Offset(0, elevation!),
+            )
+          ]
+        : null;
 
-    // Add glass effect shine overlay similar to HTML ::before
-    cardContent = ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius ?? T1Spacing.radiusXl),
+    final effectiveRadius = borderRadius ?? T1Spacing.radiusXl;
+
+    return BaseCard(
+      color: color ?? theme.cardTheme.color,
+      borderRadius: effectiveRadius,
+      borderSide: side,
+      boxShadow: effectiveBoxShadow,
+      margin: margin,
+      padding: EdgeInsets.zero, // Padding handled by internal child
+      onTap: onTap,
       child: Stack(
         children: [
-          cardContent,
+          Padding(
+            padding: padding ?? const EdgeInsets.all(T1Spacing.md),
+            child: child,
+          ),
           Positioned(
             top: 0,
             left: 0,
@@ -78,15 +79,5 @@ class DmCard extends StatelessWidget {
         ],
       ),
     );
-
-    if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(borderRadius ?? T1Spacing.radiusXl),
-        child: cardContent,
-      );
-    }
-
-    return cardContent;
   }
 }

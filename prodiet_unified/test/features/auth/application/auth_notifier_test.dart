@@ -133,7 +133,7 @@ void main() {
         authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
         async.flushMicrotasks();
 
-        controller.add(supabase.AuthState(
+        controller.add(const supabase.AuthState(
           supabase.AuthChangeEvent.signedOut,
           null,
         ));

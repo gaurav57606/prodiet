@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/theme/font_config.dart';
-import 'package:prodiet_unified/core/router/app_router.dart';
+import 'package:prodiet_unified/core/router/app_routes.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 
@@ -168,3 +168,5 @@ class ScaffoldWithNavBar extends ConsumerWidget {
     }
   }
 }
+
+

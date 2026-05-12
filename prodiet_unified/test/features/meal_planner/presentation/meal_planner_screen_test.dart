@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/daily_meal_summary.dart';
-import 'package:prodiet_unified/features/meal_planner/t1/presentation/screens/meal_planner_screen.dart';
+import 'package:prodiet_unified/features/meal_planner/presentation/t1/screens/meal_planner_screen.dart';
 
 void main() {
   final testMeals = [
@@ -69,3 +68,4 @@ void main() {
     });
   });
 }
+

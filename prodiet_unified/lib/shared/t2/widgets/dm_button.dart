@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
+import 'package:prodiet_unified/shared/widgets/base_button.dart';
 
 enum DmButtonVariant { primary, secondary, outline, ghost, danger }
 
@@ -61,46 +62,23 @@ class DmButton extends StatelessWidget {
     if (this.backgroundColor != null) backgroundColor = this.backgroundColor!;
     if (textColor != null) foregroundColor = textColor!;
 
-    final buttonStyle = ElevatedButton.styleFrom(
-      backgroundColor: backgroundColor,
-      foregroundColor: foregroundColor,
-      side: borderSide,
-      elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: T2Spacing.md, horizontal: T2Spacing.lg),
-      shape: RoundedRectangleBorder(
+    return BaseButton(
+      label: label,
+      onPressed: onPressed,
+      icon: icon,
+      isLoading: isLoading,
+      isFullWidth: isFullWidth,
+      loadingSize: 18,
+      style: BaseButtonStyle(
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        elevation: 0,
         borderRadius: BorderRadius.circular(T2Spacing.radiusMedium),
-      ),
-    );
-
-    Widget content = Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (icon != null && !isLoading) ...[
-          Icon(icon, size: 18),
-          const SizedBox(width: T2Spacing.sm),
-        ],
-        if (isLoading)
-          SizedBox(
-            width: 18,
-            height: 18,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(foregroundColor),
-            ),
-          )
-        else
-          Text(label, style: theme.textTheme.titleMedium?.copyWith(color: foregroundColor)),
-      ],
-    );
-
-    return SizedBox(
-      width: isFullWidth ? double.infinity : null,
-      child: ElevatedButton(
-        onPressed: isLoading ? null : onPressed,
-        style: buttonStyle,
-        child: content,
+        borderSide: borderSide,
+        padding: const EdgeInsets.symmetric(vertical: T2Spacing.md, horizontal: T2Spacing.lg),
+        textStyle: theme.textTheme.titleMedium,
       ),
     );
   }
 }
+

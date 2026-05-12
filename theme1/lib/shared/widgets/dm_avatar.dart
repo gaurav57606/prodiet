@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_spacing.dart';
 
 class DmAvatar extends StatelessWidget {
   final String? imageUrl;

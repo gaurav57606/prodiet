@@ -5,7 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/services/analytics_providers.dart';
-import 'core/router/app_router.dart';
+import 'package:prodiet_unified/core/router/app_router.dart';
 import 'core/theme/active_theme_provider.dart';
 import 'core/theme/t1/t1_theme.dart';
 import 'core/theme/t2/t2_theme.dart';
@@ -29,8 +29,16 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       onPause: _onAppPause,
     );
     // Await theme init so the correct theme is active before first redirect
-    ref.read(activeThemeProvider.notifier).init().then((_) {
-      // Notify router to re-evaluate redirect after theme is loaded
+    ref.read(activeThemeProvider.notifier).init().timeout(
+      const Duration(seconds: 3),
+      onTimeout: () {
+        // Force-mark as initialized with default theme so app can proceed
+        ref.read(activeThemeInitializedProvider.notifier).state = true;
+      },
+    ).catchError((e) {
+      // On any error, force-mark as initialized with default theme
+      ref.read(activeThemeInitializedProvider.notifier).state = true;
+    }).whenComplete(() {
       if (mounted) setState(() {});
     });
   }
@@ -128,7 +136,11 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
           child: Column(
             children: [
               const _ConnectivityBanner(),
-              Expanded(child: child ?? const SizedBox.shrink()),
+              Expanded(
+                child: child ?? const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                ),
+              ),
             ],
           ),
         );
@@ -144,12 +156,13 @@ class _ConnectivityBanner extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(connectivityProvider);
     final isOffline = status.valueOrNull == ConnectivityStatus.offline;
+    final topPadding = MediaQuery.maybeOf(context)?.padding.top ?? 0.0;
     
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      height: isOffline ? 32 + MediaQuery.of(context).padding.top : 0,
+      height: isOffline ? 32 + topPadding : 0,
       color: const Color(0xFFFF6B35),
-      padding: EdgeInsets.only(top: isOffline ? MediaQuery.of(context).padding.top : 0),
+      padding: EdgeInsets.only(top: isOffline ? topPadding : 0),
       child: isOffline
           ? const Center(
               child: Text(
@@ -165,3 +178,4 @@ class _ConnectivityBanner extends ConsumerWidget {
     );
   }
 }
+

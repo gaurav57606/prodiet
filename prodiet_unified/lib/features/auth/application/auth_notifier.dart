@@ -14,6 +14,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final FcmService? _fcm;
   static const _tag = 'AuthNotifier';
   StreamSubscription? _authSubscription;
+  bool _sessionInitialized = false;
 
   AuthNotifier(this._repo, {FcmService? fcm, bool skipInit = false})
       : _fcm = fcm,
@@ -26,6 +27,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void _init() {
     _authSubscription?.cancel();
+    _sessionInitialized = false;
     logger.i('[$_tag] Initializing AuthNotifier...');
 
     // Wrap in microtask to ensure listeners are ready
@@ -45,11 +47,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
         if (!mounted) return;
         logger.e('[$_tag] Init error: $e', error: e, stackTrace: st);
         state = AuthFailure(ErrorHandler.handle(e, context: '$_tag._init'));
+      } finally {
+        _sessionInitialized = true;
       }
     });
 
     // Still subscribe for future changes
     _authSubscription = _repo.authStateChanges().listen((data) async {
+      // Skip stream events until initial session check is done
+      if (!_sessionInitialized) return;
       final session = data.session;
       logger.i('[$_tag] Auth state change detected. Event: ${data.event}, Session: ${session?.user.id}');
       if (session == null) {

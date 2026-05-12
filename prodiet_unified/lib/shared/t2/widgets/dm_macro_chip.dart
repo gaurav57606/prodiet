@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
+import 'package:prodiet_unified/shared/widgets/base_macro_stat.dart';
 
 enum MacroType { protein, carbs, fat, fibre, calories }
 
@@ -29,39 +30,29 @@ class DmMacroChip extends StatelessWidget {
         return T2Colors.lime;
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final color = _getColor();
     final theme = Theme.of(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withValues(alpha: 0.35), width: 1),
-          ),
-          child: Text(
-            value,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: T2Colors.textSecondary,
-            fontSize: 9,
-          ),
-        ),
-      ],
+    return BaseMacroStat(
+      value: value,
+      label: label,
+      valueStyle: theme.textTheme.labelLarge?.copyWith(
+        color: color,
+        fontWeight: FontWeight.bold,
+      ),
+      labelStyle: theme.textTheme.labelSmall?.copyWith(
+        color: T2Colors.textSecondary,
+        fontSize: 9,
+      ),
+      valueDecoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.35), width: 1),
+      ),
+      valuePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      spacing: 4,
     );
   }
 }

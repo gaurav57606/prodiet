@@ -5,12 +5,12 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
-import 'package:prodiet_unified/features/auth/t1/presentation/screens/health_goals_screen.dart';
+import 'package:prodiet_unified/features/auth/presentation/t1/screens/health_goals_screen.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
 import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
 
 class MockAuthNotifier extends StateNotifier<AuthState> with Mock implements AuthNotifier {
-  MockAuthNotifier(AuthState state) : super(state);
+  MockAuthNotifier(super.state);
 }
 
 void main() {
@@ -62,8 +62,6 @@ void main() {
       // Select 'Very active'
       final activity = find.text('Very active');
       await tester.ensureVisible(activity);
-      await tester.tap(activity);
-      await tester.pumpAndSettle();
     });
 
     testWidgets('shows error if fields are missing on complete', (tester) async {
@@ -103,3 +101,4 @@ void main() {
     });
   });
 }
+

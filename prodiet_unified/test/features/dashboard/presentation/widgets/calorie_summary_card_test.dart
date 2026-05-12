@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
-import 'package:prodiet_unified/features/dashboard/t1/presentation/widgets/calorie_summary_card.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/t1/widgets/calorie_summary_card.dart';
 
 class MockAppUser extends Mock implements AppUser {}
 
@@ -73,3 +73,4 @@ void main() {
     });
   });
 }
+

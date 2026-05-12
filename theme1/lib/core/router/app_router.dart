@@ -9,7 +9,6 @@ import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../../features/dashboard/presentation/screens/hydration_screen.dart';
 import '../../features/dashboard/presentation/screens/today_meals_screen.dart';
-import '../../features/diet_plan/presentation/screens/diet_plan_screen.dart';
 import '../../features/meal_planner/presentation/screens/meal_planner_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/progress/presentation/screens/progress_screen.dart';

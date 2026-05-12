@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
+import 'package:prodiet_unified/shared/widgets/base_macro_stat.dart';
 
 enum MacroType { calories, protein, carbs, fat, fibre }
 
@@ -24,33 +25,29 @@ class DmMacroChip extends StatelessWidget {
     MacroType.fat      => s.secondary,
     MacroType.fibre    => T1ColorSchemes.accentTeal,
   };
-
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final color = _colorFor(type, scheme);
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: large ? 20 : 15,
-            fontWeight: FontWeight.w800,
-            color: color,
-            fontFamily: 'Outfit',
-          ),
-        ),
-        Text(
-          label.toUpperCase(),
-          style: TextStyle(
-            fontSize: 8,
-            fontWeight: FontWeight.w700,
-            color: scheme.onSurface.withValues(alpha: 0.45),
-            letterSpacing: 0.8,
-            fontFamily: 'Outfit',
-          ),
-        ),
-      ],
+
+    return BaseMacroStat(
+      value: value,
+      label: label.toUpperCase(),
+      valueStyle: TextStyle(
+        fontSize: large ? 20 : 15,
+        fontWeight: FontWeight.w800,
+        color: color,
+        fontFamily: 'Outfit',
+      ),
+      labelStyle: TextStyle(
+        fontSize: 8,
+        fontWeight: FontWeight.w700,
+        color: scheme.onSurface.withValues(alpha: 0.45),
+        letterSpacing: 0.8,
+        fontFamily: 'Outfit',
+      ),
+      spacing: 0,
     );
   }
 }

@@ -1,4 +1,3 @@
-// T2 SPACING — exact copy of theme2/app_spacing.dart
 class T2Spacing {
   static const double xs = 4;
   static const double sm = 8;

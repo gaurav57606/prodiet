@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:prodiet_unified/offline/offline_providers.dart';
+import 'package:prodiet_unified/core/data/local/offline_providers.dart';
 
 enum ConnectivityStatus { online, offline }
 
@@ -45,3 +45,4 @@ class ConnectivityNotifier extends AsyncNotifier<ConnectivityStatus> {
 final connectivityProvider = AsyncNotifierProvider<ConnectivityNotifier, ConnectivityStatus>(
   ConnectivityNotifier.new,
 );
+

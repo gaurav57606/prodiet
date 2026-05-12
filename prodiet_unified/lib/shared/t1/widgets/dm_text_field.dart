@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/shared/widgets/base_text_field.dart';
 
 class DmTextField extends StatelessWidget {
   final String? label;
@@ -33,40 +34,29 @@ class DmTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (label != null) ...[
-          Text(
-            label!,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-            ),
-          ),
-          const SizedBox(height: T1Spacing.xs),
-        ],
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          validator: validator,
-          maxLength: maxLength,
-          onChanged: onChanged,
-          focusNode: focusNode,
-          style: theme.textTheme.bodyLarge,
-          decoration: InputDecoration(
-            hintText: hintText,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-            counterText: '',
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: T1Spacing.md,
-              vertical: T1Spacing.md,
-            ),
-          ),
+    return BaseTextField(
+      label: label,
+      hint: hintText,
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType ?? TextInputType.text,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      validator: validator,
+      maxLength: maxLength,
+      onChanged: onChanged,
+      focusNode: focusNode,
+      labelStyle: theme.textTheme.labelLarge?.copyWith(
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+      ),
+      textStyle: theme.textTheme.bodyLarge,
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: T1Spacing.md,
+          vertical: T1Spacing.md,
         ),
-      ],
+      ),
+      labelSpacing: T1Spacing.xs,
     );
   }
 }

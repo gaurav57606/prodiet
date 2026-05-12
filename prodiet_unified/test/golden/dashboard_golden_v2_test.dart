@@ -9,14 +9,15 @@ import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
-import 'package:prodiet_unified/features/dashboard/t1/presentation/screens/dashboard_screen.dart' as t1;
-import 'package:prodiet_unified/features/dashboard/t2/presentation/screens/dashboard_screen.dart' as t2;
+import 'package:prodiet_unified/features/dashboard/presentation/t1/screens/dashboard_screen.dart' as t1;
+import 'package:prodiet_unified/features/dashboard/presentation/t2/screens/dashboard_screen.dart' as t2;
 import 'package:prodiet_unified/core/services/analytics_service.dart';
 import 'package:prodiet_unified/core/services/analytics_providers.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/core/services/fcm_service.dart';
 import 'package:prodiet_unified/core/theme/t1/t1_theme.dart';
 import 'package:prodiet_unified/core/theme/t2/t2_theme.dart';
+import 'package:prodiet_unified/core/utils/date_providers.dart';
 
 class FakeActiveThemeNotifier extends ActiveThemeNotifier {
   final ActiveTheme _mockState;
@@ -77,11 +78,13 @@ void main() {
       caloriesBurned: 312,
     );
 
+    final fixedDate = DateTime(2024, 5, 12, 10, 30); // 10:30 AM on a fixed day
+
     final testUser = AppUser(
       id: 'test-123',
       email: 'test@example.com',
       name: 'Alex',
-      createdAt: DateTime.now(),
+      createdAt: fixedDate,
     );
 
     final authState = AuthAuthenticated(testUser);
@@ -110,6 +113,7 @@ void main() {
             authProvider.overrideWith((ref) => mockAuth),
             dashboardProvider.overrideWith((ref) => summary),
             analyticsServiceProvider.overrideWithValue(mockAnalytics),
+            nowProvider.overrideWithValue(fixedDate),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -146,6 +150,7 @@ void main() {
             authProvider.overrideWith((ref) => mockAuth),
             dashboardProvider.overrideWith((ref) => summary),
             analyticsServiceProvider.overrideWithValue(mockAnalytics),
+            nowProvider.overrideWithValue(fixedDate),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
