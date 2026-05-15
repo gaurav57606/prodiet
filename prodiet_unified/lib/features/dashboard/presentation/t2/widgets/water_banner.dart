@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/font_config.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
 
 class WaterBanner extends StatelessWidget {
   final int consumed;
@@ -16,7 +16,9 @@ class WaterBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const skyColor = T2Colors.sky;
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
+    final skyColor = ext.water;
     
     return Container(
       width: double.infinity,
@@ -36,14 +38,14 @@ class WaterBanner extends StatelessWidget {
               color: skyColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(9),
             ),
-            child: const Icon(Icons.water_drop, color: skyColor, size: 16),
+            child: Icon(Icons.water_drop, color: skyColor, size: 16),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Almost time — prepare',
                   style: TextStyle(
                     fontSize: 14,
@@ -53,9 +55,9 @@ class WaterBanner extends StatelessWidget {
                 ),
                 Text(
                   '${(consumed / 1000).toStringAsFixed(1)}L of ${(target / 1000).toStringAsFixed(1)}L · On track',
-                  style: const TextStyle(
+                  style: theme.textTheme.labelSmall?.copyWith(
                     fontSize: 12,
-                    color: T2Colors.textSecondary,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],

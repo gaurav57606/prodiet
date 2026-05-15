@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_colors.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/utils/date_providers.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +23,7 @@ class CalorieSummaryCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final ext = theme.extension<ProDietThemeExtension>()!;
     final user = ref.watch(currentUserProvider);
     final now = ref.watch(nowProvider);
     
@@ -33,20 +33,9 @@ class CalorieSummaryCard extends ConsumerWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: scheme.brightness == Brightness.light
-            ? T1ColorSchemes.heroGradientLightMode
-            : T1ColorSchemes.heroGradient,
-        ),
+        gradient: ext.heroGradient,
       ),
-      padding: const EdgeInsets.fromLTRB(
-        T1Spacing.lg,
-        T1Spacing.lg,
-        T1Spacing.lg,
-        T1Spacing.lg,
-      ),
+      padding: const EdgeInsets.all(20),
       child: Stack(
         children: [
           Positioned(

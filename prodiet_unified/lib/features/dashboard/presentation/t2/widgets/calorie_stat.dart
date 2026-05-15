@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/font_config.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
 
 class CalorieStat extends StatelessWidget {
   final int consumed;
@@ -16,33 +16,43 @@ class CalorieStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      color: T2Colors.bgElevated,
+      decoration: BoxDecoration(
+        color: theme.brightness == Brightness.dark 
+            ? const Color(0xFF1E1E1A) 
+            : theme.colorScheme.surfaceContainerHighest,
+        border: Border.symmetric(
+          horizontal: BorderSide(color: theme.colorScheme.outline, width: 1),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _statCell('CONSUMED', consumed.toString(), T2Colors.lime),
-          _vDivider(),
-          _statCell('BURNED', burned.toString(), T2Colors.coral),
-          _vDivider(),
-          _statCell('NET', net.toString(), T2Colors.textPrimary),
+          _statCell(theme, 'CONSUMED', consumed.toString(), ext.macroCalories),
+          _vDivider(theme),
+          _statCell(theme, 'BURNED', burned.toString(), ext.macroProtein),
+          _vDivider(theme),
+          _statCell(theme, 'NET', net.toString(), theme.colorScheme.onSurface),
         ],
       ),
     );
   }
 
-  Widget _statCell(String label, String value, Color color) {
+  Widget _statCell(ThemeData theme, String label, String value, Color color) {
     return Column(
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: theme.textTheme.labelSmall?.copyWith(
             fontSize: 8,
             letterSpacing: 1.4,
-            color: T2Colors.textMuted,
-            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: 2),
@@ -58,11 +68,11 @@ class CalorieStat extends StatelessWidget {
     );
   }
 
-  Widget _vDivider() {
+  Widget _vDivider(ThemeData theme) {
     return Container(
       height: 36,
       width: 1,
-      color: T2Colors.border,
+      color: theme.colorScheme.outline,
     );
   }
 }

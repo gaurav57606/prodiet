@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/widgets/macro_components.dart';
 
 class MacroRingChart extends StatelessWidget {
   final double calorieProgress;
@@ -25,51 +26,66 @@ class MacroRingChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
+
     return Row(
       children: [
-        _buildMacroItem(context, "${(calorieProgress * 100).toInt()}%", "$calories kcal", "Cals", T2Colors.lime, calorieProgress),
+        _buildMacroItem(
+          context, 
+          "${(calorieProgress * 100).toInt()}%", 
+          "$calories kcal", 
+          "Cals", 
+          ext.macroCalories, 
+          calorieProgress,
+        ),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "${(proteinProgress * 100).toInt()}%", "${protein}g", "Protein", T2Colors.coral, proteinProgress),
+        _buildMacroItem(
+          context, 
+          "${(proteinProgress * 100).toInt()}%", 
+          "${protein}g", 
+          "Protein", 
+          ext.macroProtein, 
+          proteinProgress,
+        ),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "${(carbsProgress * 100).toInt()}%", "${carbs}g", "Carbs", T2Colors.amber, carbsProgress),
+        _buildMacroItem(
+          context, 
+          "${(carbsProgress * 100).toInt()}%", 
+          "${carbs}g", 
+          "Carbs", 
+          ext.macroCarbs, 
+          carbsProgress,
+        ),
         const SizedBox(width: 6),
-        _buildMacroItem(context, "${(fatProgress * 100).toInt()}%", "${fat}g", "Fat", T2Colors.purple, fatProgress),
+        _buildMacroItem(
+          context, 
+          "${(fatProgress * 100).toInt()}%", 
+          "${fat}g", 
+          "Fat", 
+          ext.macroFat, 
+          fatProgress,
+        ),
       ],
     );
   }
 
   Widget _buildMacroItem(BuildContext context, String percentStr, String gramStr, String label, Color color, double percent) {
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
+    
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         decoration: BoxDecoration(
-          color: T2Colors.bgElevated,
+          color: ext.cardBackground,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           children: [
-            SizedBox(
-              width: 44,
-              height: 44,
-              child: Stack(
-                children: [
-                  const Center(
-                    child: CircularProgressIndicator(
-                      value: 1,
-                      strokeWidth: 5,
-                      color: Color(0xFF252520),
-                    ),
-                  ),
-                  Center(
-                    child: CircularProgressIndicator(
-                      value: percent,
-                      strokeWidth: 5,
-                      color: color,
-                      strokeCap: StrokeCap.round,
-                    ),
-                  ),
-                ],
-              ),
+            AppMacroRing(
+              progress: percent,
+              color: color,
             ),
             const SizedBox(height: 6),
             Text(
@@ -82,18 +98,17 @@ class MacroRingChart extends StatelessWidget {
             ),
             Text(
               gramStr,
-              style: const TextStyle(
+              style: theme.textTheme.labelSmall?.copyWith(
                 fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: T2Colors.textSecondary,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
             Text(
               label.toUpperCase(),
-              style: const TextStyle(
+              style: theme.textTheme.labelSmall?.copyWith(
                 fontSize: 8,
                 letterSpacing: 1.2,
-                color: T2Colors.textMuted,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                 fontWeight: FontWeight.w700,
               ),
             ),

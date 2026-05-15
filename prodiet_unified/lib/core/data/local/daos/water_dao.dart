@@ -31,5 +31,11 @@ class WaterDao extends DatabaseAccessor<AppDatabase> with _$WaterDaoMixin {
   Future<void> markSynced(List<String> ids) =>
     (update(localWaterLogs)..where((w) => w.id.isIn(ids)))
       .write(const LocalWaterLogsCompanion(isSynced: Value(true)));
+
+  Stream<List<LocalWaterLog>> watchTodayLogs(String userId, String date) =>
+    (select(localWaterLogs)
+      ..where((w) => w.userId.equals(userId) & w.loggedAt.like('$date%'))
+      ..orderBy([(w) => OrderingTerm.desc(w.loggedAt)]))
+      .watch();
 }
 

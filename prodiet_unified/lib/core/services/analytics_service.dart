@@ -1,124 +1,31 @@
-// Analytics Architecture:
-// ALL product analytics (sessions, screen views, events, errors, retention)
-// are tracked via Supabase tables — NOT via Firebase Analytics.
-// Firebase is used ONLY for:
-//   - Crashlytics: unhandled exception capture (main.dart)
-//   - FCM: push notification delivery (fcm_service.dart)
-// Do NOT add firebase_analytics — it would duplicate Supabase tracking.
-
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:prodiet_unified/main.dart'; // for logger
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AnalyticsService {
-  final SupabaseClient _client;
-  String? _currentSessionId;
-  AnalyticsService(this._client);
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
 
-  Null _reportError(dynamic e, String context) {
-    logger.w('[AnalyticsService] Error in $context: $e');
-    if (e is PostgrestException && !kDebugMode) {
-      // Schema mismatch or DB error should go to Crashlytics
-      FirebaseCrashlytics.instance.recordError(e, null, reason: 'Analytics DB Failure: $context');
-    }
-    return null;
+  Future<void> logEvent(String name, {Map<String, Object>? parameters}) async {
+    if (kIsWeb) return;
+    await _analytics.logEvent(name: name, parameters: parameters);
   }
 
-  // ── SESSION ──────────────────────────────────────────
-  Future<void> startSession(String userId, {
-    required String deviceModel,
-    required String osVersion,
-    required String appVersion,
-  }) {
-    _currentSessionId = const Uuid().v4();
-    return _client.from('user_sessions').insert({
-      'id': _currentSessionId,
-      'user_id': userId,
-      'device_model': deviceModel,
-      'os_version': osVersion,
-      'app_version': appVersion,
-      'session_start': DateTime.now().toIso8601String(),
-    }).then((_) => _upsertRetentionFlag(userId))
-    .catchError((e) => _reportError(e, 'startSession'));
+  Future<void> logScreen(String name) async {
+    if (kIsWeb) return;
+    await _analytics.logScreenView(screenName: name);
   }
 
-  Future<void> endSession(String userId) {
-    if (_currentSessionId == null) return Future.value();
-    final now = DateTime.now();
-    final taskId = _currentSessionId;
-    _currentSessionId = null;
-    return _client
-      .from('user_sessions')
-      .update({'session_end': now.toIso8601String()})
-      .eq('id', taskId!)
-      .then((_) => null)
-      .catchError((e) => _reportError(e, 'endSession'));
+  Future<void> setUserId(String id) async {
+    if (kIsWeb) return;
+    await _analytics.setUserId(id: id);
   }
 
-  // ── SCREEN VIEWS ──────────────────────────────────────
-  Future<void> logScreen(String userId, String screenName) {
-    return _client.from('screen_views').insert({
-      'user_id': userId,
-      'session_id': _currentSessionId,
-      'screen_name': screenName,
-      'timestamp': DateTime.now().toIso8601String(),
-    }).then((_) => null).catchError((e) => _reportError(e, 'logScreen'));
+  Future<void> setUserProperty(String name, String value) async {
+    if (kIsWeb) return;
+    await _analytics.setUserProperty(name: name, value: value);
   }
-
-  // ── FEATURE EVENTS ─────────────────────────────────────
-  Future<void> logEvent(
-    String userId,
-    String eventName, {
-    Map<String, dynamic>? data,
-    String? screen,
-  }) {
-    return _client.from('feature_events').insert({
-      'user_id': userId,
-      'session_id': _currentSessionId,
-      'event_name': eventName,
-      'event_data': data,
-      'screen': screen,
-      'timestamp': DateTime.now().toIso8601String(),
-    }).then((_) => null).catchError((e) => _reportError(e, 'logEvent'));
-  }
-
-  // ── ERRORS ─────────────────────────────────────────────
-  Future<void> logError(String userId, String screen, String errorMsg) {
-    return _client.from('error_logs').insert({
-      'user_id': userId,
-      'screen': screen,
-      'error_message': errorMsg,
-      'timestamp': DateTime.now().toIso8601String(),
-    }).then((_) => null).catchError((e) => _reportError(e, 'logError'));
-  }
-
-  // ── RETENTION ─────────────────────────────────────────
-  Future<void> _upsertRetentionFlag(String userId) async {
-    try {
-      await _client.from('retention_flags').upsert({
-        'user_id': userId,
-        'last_seen': DateTime.now().toIso8601String(),
-      }, onConflict: 'user_id');
-    } catch (e) {
-      _reportError(e, '_upsertRetentionFlag');
-    }
-  }
-
-  // ── PREDEFINED EVENT CONSTANTS ─────────────────────────
-  static const String kMealLogged       = 'meal_logged';
-  static const String kMealSkipped      = 'meal_skipped';
-  static const String kWaterLogged      = 'water_logged';
-  static const String kOcrScanStarted   = 'ocr_scan_started';
-  static const String kOcrScanSuccess   = 'ocr_scan_success';
-  static const String kOcrScanFailed    = 'ocr_scan_failed';
-  static const String kAiPlanGenerated  = 'ai_plan_generated';
-  static const String kAiCacheHit       = 'ai_cache_hit';
-  static const String kCompensationUsed = 'compensation_used';
-  static const String kVendorRedirect   = 'vendor_redirect';
-  static const String kProgressLogged   = 'progress_logged';
-  static const String kAchievementEarned= 'achievement_earned';
-  static const String kInventoryUpdated = 'inventory_updated';
-  static const String kSyncCompleted    = 'sync_completed';
 }
+
+final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
+  return AnalyticsService();
+});

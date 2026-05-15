@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/core/router/app_routes.dart';
 import 'package:prodiet_unified/core/services/analytics_providers.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_text_styles.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/dashboard/domain/models/dashboard_summary.dart';
 import 'package:prodiet_unified/features/dashboard/presentation/t1/widgets/calorie_summary_card.dart';
@@ -13,12 +11,12 @@ import 'package:prodiet_unified/features/dashboard/presentation/t1/widgets/macro
 import 'package:prodiet_unified/features/dashboard/presentation/t1/widgets/today_meals_row.dart';
 import 'package:prodiet_unified/features/dashboard/presentation/t1/widgets/activity_grid.dart';
 import 'package:prodiet_unified/features/dashboard/presentation/t1/widgets/alerts_list.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/widgets/dashboard_components.dart';
 import 'package:prodiet_unified/core/widgets/theme_toggle.dart';
 import 'package:prodiet_unified/core/widgets/async_value_widget.dart';
 import 'package:prodiet_unified/core/widgets/skeletons/dashboard_skeleton.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart';
 import 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart';
-
 import 'package:prodiet_unified/features/water/application/water_providers.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -43,8 +41,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Removed greeting to match original T1
-
     return Scaffold(
       body: SafeArea(
         top: true,
@@ -86,7 +82,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: HydrationCard(
                       consumed: data.waterMl,
                       target: data.waterGoalMl,
@@ -104,8 +100,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                    child: _SectionHeader(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: AppSectionHeader(
                       title: 'Macros Today',
                       onAction: () => context.goNamed(AppRoutes.mealsName),
                     ),
@@ -126,8 +122,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                    child: _SectionHeader(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: AppSectionHeader(
                       title: 'Next Meal',
                       onAction: () => context.goNamed(AppRoutes.mealsName),
                     ),
@@ -138,8 +134,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                    child: _SectionHeader(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: AppSectionHeader(
                       title: 'Activity · Fitband',
                       onAction: () => context.pushNamed(AppRoutes.activitySyncName),
                     ),
@@ -156,8 +152,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 
                 const SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: T1Spacing.lg, vertical: T1Spacing.sm),
-                    child: _SectionHeader(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: AppSectionHeader(
                       title: 'Alerts',
                     ),
                   ),
@@ -175,40 +171,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  final String title;
-  final VoidCallback? onAction;
-
-  const _SectionHeader({required this.title, this.onAction});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title.toUpperCase(),
-          style: T1TextStyleExtensions.sectionLabel(scheme),
-        ),
-        if (onAction != null)
-          GestureDetector(
-            onTap: onAction,
-            child: Text(
-              'Full view ›',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-      ],
     );
   }
 }

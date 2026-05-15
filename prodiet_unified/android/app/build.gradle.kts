@@ -74,8 +74,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Uses release keystore if local.properties has KEYSTORE_PATH,
-            // falls back to debug keystore for CI without a keystore.
+            // Uses release keystore if local.properties has KEYSTORE_PATH
             val releaseConfig = signingConfigs.getByName("release")
             signingConfig = if (releaseConfig.storeFile != null &&
                                 releaseConfig.storeFile!!.exists())

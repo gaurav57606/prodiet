@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/design_system/dimensions.dart';
-import 'package:prodiet_unified/core/design_system/spacing.dart';
+import 'package:prodiet_unified/design_system/dimensions.dart';
+import 'package:prodiet_unified/design_system/spacing.dart';
 
 /// Style configuration for [BaseButton].
 class BaseButtonStyle {

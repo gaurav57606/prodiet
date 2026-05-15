@@ -1,18 +1,26 @@
-/// Feature flags — toggle features on/off without a new release.
-/// In production, these should come from Supabase remote config or Firebase RC.
-/// For now they are compile-time constants that can be toggled per build.
+import 'package:flutter/foundation.dart';
+import '../observability/logger/app_logger.dart';
+
+enum AppEnvironment { dev, staging, prod }
+
 class FeatureFlags {
-  FeatureFlags._();
-  
-  /// Set to true when `ocr-pipeline` Edge Function is confirmed deployed and tested.
-  static const bool ocrEnabled = bool.fromEnvironment('FEATURE_OCR', defaultValue: false);
-  
-  /// Set to true when voice logging is implemented for T1.
-  static const bool voiceLogEnabled = bool.fromEnvironment('FEATURE_VOICE', defaultValue: false);
-  
-  /// Set to true when micronutrient data integration is complete.
-  static const bool micronutrientsEnabled = bool.fromEnvironment('FEATURE_MICRONUTRIENTS', defaultValue: false);
-  
-  /// Set to true when AI plan generation Edge Function is confirmed live.
-  static const bool aiPlanEnabled = bool.fromEnvironment('FEATURE_AI_PLAN', defaultValue: true);
+  static AppEnvironment environment = kDebugMode ? AppEnvironment.dev : AppEnvironment.prod;
+
+  /// In-memory cache for dynamic flags
+  static final Map<String, bool> _dynamicFlags = {};
+
+  static void updateFlags(Map<String, bool> newFlags) {
+    _dynamicFlags.addAll(newFlags);
+    AppLogger.info('Feature flags updated: $_dynamicFlags');
+  }
+
+  static bool isEnabled(String flag, {bool defaultValue = false}) {
+    return _dynamicFlags[flag] ?? defaultValue;
+  }
+
+  // Static keys for type-safe access
+  static bool get ocrEnabled => isEnabled('ocr_enabled', defaultValue: kDebugMode);
+  static bool get aiPlanEnabled => isEnabled('ai_plan_enabled', defaultValue: true);
+  static bool get voiceLogEnabled => isEnabled('voice_log_enabled', defaultValue: false);
+  static bool get premiumDashboard => isEnabled('premium_dashboard', defaultValue: environment != AppEnvironment.dev);
 }

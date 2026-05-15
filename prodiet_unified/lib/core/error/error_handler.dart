@@ -1,66 +1,58 @@
 import 'package:flutter/foundation.dart';
+import 'package:prodiet_unified/core/error/app_error.dart';
+import 'package:logger/logger.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'app_error.dart';
 
 class ErrorHandler {
-  ErrorHandler._();
+  static final _logger = Logger(
+    printer: PrettyPrinter(methodCount: 0),
+  );
 
-  /// Maps any exception to a typed [AppError] AND logs it to Crashlytics
-  /// as a non-fatal event with context tags for dashboard filtering.
+  /// Centralized error handling for the entire app.
+  /// Maps errors to user-friendly [AppError] and logs to Crashlytics in production.
   static AppError handle(Object error, {String? context}) {
-    final tag = context != null ? '[$context] ' : '';
-    final AppError appError;
+    final AppError appError = _mapToAppError(error, context);
 
-    if (error is AuthException) {
-      appError = AuthError(
-        message: error.message,
-        code: 'AUTH_${error.statusCode ?? "ERR"}',
-      );
-    } else if (error is PostgrestException) {
-      appError = DatabaseError(message: '$tag${error.message}');
-    } else if (error is StorageException) {
-      appError = ServerError(message: '$tag${error.message}');
-    } else if (error is AppError) {
-      appError = error;
-    } else {
-      appError = UnknownError(message: '$tag${error.toString()}');
+    // 1. Log to console (Debug only)
+    if (kDebugMode) {
+      _logger.e('Error Context: $context\nMessage: ${appError.message}', error: error);
     }
 
-    // Log non-fatal to Crashlytics with context for dashboard filtering
-    _logToCrashlytics(error, appError, context: context);
+    // 2. Log to Crashlytics (Release only)
+    if (!kDebugMode && !kIsWeb) {
+      _logToCrashlytics(error, appError, context);
+    }
 
     return appError;
   }
 
-  static void _logToCrashlytics(
-    Object originalError,
-    AppError appError, {
-    String? context,
-  }) {
-    if (kIsWeb) return; // Crashlytics not initialized on Web
+  static AppError _mapToAppError(Object error, String? context) {
+    final prefix = context != null ? '[$context] ' : '';
+
+    if (error is AuthException) {
+      return AuthError(message: error.message, code: error.statusCode);
+    } else if (error is PostgrestException) {
+      return DatabaseError(message: '$prefix${error.message}');
+    } else if (error is AppError) {
+      return error;
+    }
+    
+    return UnknownError(message: '$prefix${error.toString()}');
+  }
+
+  static void _logToCrashlytics(Object error, AppError appError, String? context) {
     try {
-      // Add key-value context tags visible in Crashlytics dashboard
-      final crashlytics = FirebaseCrashlytics.instance;
-
-      crashlytics.setCustomKey('error_type', appError.runtimeType.toString());
-      if (context != null) {
-        crashlytics.setCustomKey('error_context', context);
-      }
-      if (appError is AuthError) {
-        crashlytics.setCustomKey('auth_error_code', appError.code);
-      }
-
-      // Record as non-fatal — shows in "Non-fatals" tab in Crashlytics
-      crashlytics.recordError(
-        originalError,
-        originalError is Error ? originalError.stackTrace : null,
+      final crash = FirebaseCrashlytics.instance;
+      crash.setCustomKey('error_context', context ?? 'unknown');
+      crash.setCustomKey('app_error_type', appError.runtimeType.toString());
+      
+      crash.recordError(
+        error, 
+        error is Error ? error.stackTrace : StackTrace.current,
         reason: appError.message,
         fatal: false,
-        printDetails: false, // avoid double-logging since logger already prints
       );
-    } catch (_) {
-      // Never let Crashlytics logging crash the app
-    }
+    } catch (_) {}
   }
 }

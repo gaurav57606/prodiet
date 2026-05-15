@@ -1,11 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
+import 'package:prodiet_unified/core/services/sync_worker.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/water/data/water_repository.dart';
 import 'package:prodiet_unified/features/water/domain/water_summary.dart';
 import '../domain/water_log.dart';
 
 final waterRepositoryProvider = Provider<WaterRepository>((ref) {
-  return WaterRepository(ref.watch(supabaseClientProvider));
+  return WaterRepository(
+    ref.watch(supabaseServiceProvider),
+    ref.watch(appDatabaseProvider),
+    ref.watch(syncWorkerProvider),
+  );
 });
 
 final userWaterTargetProvider = Provider.autoDispose<int>((ref) {

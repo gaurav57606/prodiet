@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/design_system/radius.dart';
-import 'package:prodiet_unified/core/design_system/spacing.dart';
+import 'package:prodiet_unified/design_system/radius.dart';
+import 'package:prodiet_unified/design_system/spacing.dart';
 
 class BaseChip extends StatelessWidget {
   final String label;

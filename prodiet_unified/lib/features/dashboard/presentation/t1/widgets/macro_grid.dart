@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/widgets/macro_components.dart';
 
 class MacroGrid extends StatelessWidget {
   final int calories;
@@ -25,8 +26,11 @@ class MacroGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.lg),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: GridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -41,7 +45,7 @@ class MacroGrid extends StatelessWidget {
             '$calories',
             'kcal',
             calorieProgress,
-            [const Color(0xFF3B1FA8), const Color(0xFF6B35FF)],
+            ext.macroCaloriesGradient,
             Icons.local_fire_department_rounded,
           ),
           _buildMacroTile(
@@ -50,7 +54,7 @@ class MacroGrid extends StatelessWidget {
             '$protein',
             'g',
             proteinProgress,
-            [const Color(0xFFFF3060), const Color(0xFFFF6B9D)],
+            ext.macroProteinGradient,
             Icons.favorite_rounded,
           ),
           _buildMacroTile(
@@ -59,7 +63,7 @@ class MacroGrid extends StatelessWidget {
             '$carbs',
             'g',
             carbsProgress,
-            [const Color(0xFFFF8C30), const Color(0xFFFFB870)],
+            ext.macroCarbsGradient,
             Icons.bolt_rounded,
           ),
           _buildMacroTile(
@@ -68,7 +72,7 @@ class MacroGrid extends StatelessWidget {
             '$fat',
             'g',
             fatProgress,
-            [const Color(0xFF108070), const Color(0xFF40D8B8)],
+            ext.macroFatGradient,
             Icons.water_drop_rounded,
           ),
         ],
@@ -88,14 +92,14 @@ class MacroGrid extends StatelessWidget {
     final theme = Theme.of(context);
     
     return Container(
-      padding: const EdgeInsets.all(T1Spacing.md),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: gradient,
         ),
-        borderRadius: BorderRadius.circular(T1Spacing.radiusLg),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: gradient.last.withValues(alpha: 0.2),
@@ -143,11 +147,10 @@ class MacroGrid extends StatelessWidget {
                 ),
                 TextSpan(
                   text: ' $unit',
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: Colors.white70,
                   ),
                 ),
               ],
@@ -163,23 +166,9 @@ class MacroGrid extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            height: 4,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(2),
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: percentage.clamp(0.0, 1.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
+          AppMacroLinearBar(
+            progress: percentage,
+            color: Colors.white,
           ),
         ],
       ),

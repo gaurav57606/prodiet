@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_card.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_chip.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_macro_chip.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/widgets/macro_components.dart';
+import 'package:prodiet_unified/shared/widgets/app_card.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
 import 'package:prodiet_unified/core/utils/date_providers.dart';
 import 'package:intl/intl.dart';
@@ -23,11 +21,11 @@ class TodayMealsRow extends ConsumerWidget {
     final now = ref.watch(nowProvider);
 
     if (meal == null) {
-      return DmCard(
+      return AppCard(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: T1Spacing.xl),
+            padding: const EdgeInsets.symmetric(vertical: 32),
             child: Column(
               children: [
                 Icon(
@@ -57,14 +55,14 @@ class TodayMealsRow extends ConsumerWidget {
     final minutesUntil = timeUntil.inMinutes % 60;
     final timeUntilStr = hoursUntil > 0 ? '${hoursUntil}h ${minutesUntil}m' : '${minutesUntil}m';
 
-    return DmCard(
+    return AppCard(
       padding: EdgeInsets.zero,
       color: isDark ? const Color(0xFFFF8C64).withValues(alpha: 0.08) : const Color(0xFFFFE6D7).withValues(alpha: 0.85),
       borderSide: BorderSide(color: const Color(0xFFFF8C64).withValues(alpha: 0.18)),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(T1Spacing.md),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -78,11 +76,20 @@ class TodayMealsRow extends ConsumerWidget {
                         letterSpacing: 0.8,
                       ),
                     ),
-                    DmChip(
-                      label: timeUntil.isNegative ? 'Now' : 'In $timeUntilStr',
-                      isSelected: true,
-                      backgroundColor: const Color(0x2EFF965A),
-                      textColor: const Color(0xFFFFB870),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0x2EFF965A),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        timeUntil.isNegative ? 'Now' : 'In $timeUntilStr',
+                        style: const TextStyle(
+                          color: Color(0xFFFFB870),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -107,7 +114,7 @@ class TodayMealsRow extends ConsumerWidget {
           Container(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
+                top: BorderSide(color: theme.colorScheme.onSurface.withValues(alpha: 0.05)),
               ),
             ),
             child: Row(
@@ -116,49 +123,49 @@ class TodayMealsRow extends ConsumerWidget {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(
+                      child: AppMacroChip(
                         value: '${meal!.nutritionalValues.proteinG.toInt()}g',
                         label: 'PROT',
-                        type: MacroType.protein,
+                        type: AppMacroType.protein,
                       ),
                     ),
                   ),
                 ),
-                _buildDivider(),
+                _buildDivider(theme),
                 Expanded(
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(
+                      child: AppMacroChip(
                         value: '${meal!.nutritionalValues.carbsG.toInt()}g',
                         label: 'CARB',
-                        type: MacroType.carbs,
+                        type: AppMacroType.carbs,
                       ),
                     ),
                   ),
                 ),
-                _buildDivider(),
+                _buildDivider(theme),
                 Expanded(
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(
+                      child: AppMacroChip(
                         value: '${meal!.nutritionalValues.fatG.toInt()}g',
                         label: 'FAT',
-                        type: MacroType.fat,
+                        type: AppMacroType.fat,
                       ),
                     ),
                   ),
                 ),
-                _buildDivider(),
+                _buildDivider(theme),
                 Expanded(
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: DmMacroChip(
+                      child: AppMacroChip(
                         value: '${meal!.nutritionalValues.fiberG}g',
                         label: 'FIBRE',
-                        type: MacroType.fibre,
+                        type: AppMacroType.fibre,
                       ),
                     ),
                   ),
@@ -171,11 +178,11 @@ class TodayMealsRow extends ConsumerWidget {
     );
   }
 
-  Widget _buildDivider() {
+  Widget _buildDivider(ThemeData theme) {
     return Container(
       width: 1,
       height: 30,
-      color: Colors.white.withValues(alpha: 0.12),
+      color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
     );
   }
 }

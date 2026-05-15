@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/theme/font_config.dart';
 import 'package:intl/intl.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_spacing.dart';
-import 'package:prodiet_unified/core/theme/t2/t2_colors.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/widgets/macro_components.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
-import 'package:prodiet_unified/shared/t2/widgets/dm_macro_chip.dart';
+import 'package:prodiet_unified/shared/widgets/app_card.dart';
 
 class NextMealCard extends StatelessWidget {
   final Meal? meal;
@@ -13,29 +13,32 @@ class NextMealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
+
     if (meal == null) {
-      return const Padding(
-        padding: EdgeInsets.all(20),
-        child: Center(child: Text("No more meals today!", style: TextStyle(color: Colors.white70))),
+      return Padding(
+        padding: const EdgeInsets.all(20),
+        child: Center(
+          child: Text(
+            "No more meals today!", 
+            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+          ),
+        ),
       );
     }
 
     final timeStr = DateFormat('HH:mm').format(meal!.scheduledTime);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: T2Spacing.lg, vertical: T2Spacing.md),
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: T2Colors.bgElevated,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: T2Colors.border),
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      child: AppCard(
+        padding: EdgeInsets.zero,
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(width: 3, color: T2Colors.lime),
+              Container(width: 3, color: ext.macroCalories),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,11 +50,11 @@ class NextMealCard extends StatelessWidget {
                         children: [
                           Text(
                             "${meal!.mealType.toUpperCase()} · $timeStr",
-                            style: const TextStyle(
+                            style: theme.textTheme.labelSmall?.copyWith(
                               fontSize: 8,
                               letterSpacing: 1.2,
-                              color: T2Colors.textMuted,
-                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
@@ -64,7 +67,7 @@ class NextMealCard extends StatelessWidget {
                         style: AppFonts.barlowCondensed(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
-                          color: T2Colors.textPrimary,
+                          color: theme.colorScheme.onSurface,
                           height: 1.1,
                         ),
                       ),
@@ -81,14 +84,14 @@ class NextMealCard extends StatelessWidget {
                                   style: AppFonts.barlowCondensed(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w900,
-                                    color: T2Colors.lime,
+                                    color: ext.macroCalories,
                                   ),
                                 ),
-                                const TextSpan(
+                                TextSpan(
                                   text: ' kcal',
-                                  style: TextStyle(
+                                  style: theme.textTheme.labelLarge?.copyWith(
                                     fontSize: 14,
-                                    color: T2Colors.textSecondary,
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                   ),
                                 ),
                               ],
@@ -99,40 +102,40 @@ class NextMealCard extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        border: Border(top: BorderSide(color: T2Colors.border)),
+                      decoration: BoxDecoration(
+                        border: Border(top: BorderSide(color: theme.colorScheme.outline)),
                       ),
                       child: Row(
                         children: [
                           Expanded(
-                            child: DmMacroChip(
+                            child: AppMacroChip(
                               value: "${meal!.nutritionalValues.proteinG}g",
                               label: "Protein",
-                              type: MacroType.protein,
+                              type: AppMacroType.protein,
                             ),
                           ),
                           const SizedBox(width: 5),
                           Expanded(
-                            child: DmMacroChip(
+                            child: AppMacroChip(
                               value: "${meal!.nutritionalValues.carbsG}g",
                               label: "Carbs",
-                              type: MacroType.carbs,
+                              type: AppMacroType.carbs,
                             ),
                           ),
                           const SizedBox(width: 5),
                           Expanded(
-                            child: DmMacroChip(
+                            child: AppMacroChip(
                               value: "${meal!.nutritionalValues.fatG}g",
                               label: "Fat",
-                              type: MacroType.fat,
+                              type: AppMacroType.fat,
                             ),
                           ),
                           const SizedBox(width: 5),
                           Expanded(
-                            child: DmMacroChip(
+                            child: AppMacroChip(
                               value: "${meal!.nutritionalValues.fiberG}g",
                               label: "Fibre",
-                              type: MacroType.fibre,
+                              type: AppMacroType.fibre,
                             ),
                           ),
                         ],

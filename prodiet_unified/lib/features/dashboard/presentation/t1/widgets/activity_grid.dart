@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/t1/t1_spacing.dart';
+import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
 import 'package:intl/intl.dart';
 
 class ActivityGrid extends StatelessWidget {
@@ -17,9 +17,11 @@ class ActivityGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stepFormat = NumberFormat('#,###');
+    final theme = Theme.of(context);
+    final ext = theme.extension<ProDietThemeExtension>()!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: T1Spacing.md),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           _buildActivityTile(
@@ -28,29 +30,29 @@ class ActivityGrid extends StatelessWidget {
             'STEPS',
             null,
             Colors.white,
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF3A1060), Color(0xFF5020A0)],
+              colors: ext.activityGradient,
             ),
           ),
-          const SizedBox(width: T1Spacing.sm),
+          const SizedBox(width: 8),
           _buildActivityTile(
             context,
             '$caloriesBurned',
             'BURNED',
-            const Color(0xFFFF5082).withValues(alpha: 0.08),
-            const Color(0xFFFF90B0),
-            border: Border.all(color: const Color(0xFFFF5082).withValues(alpha: 0.15)),
+            ext.macroProtein.withValues(alpha: 0.08),
+            ext.macroProtein,
+            border: Border.all(color: ext.macroProtein.withValues(alpha: 0.15)),
           ),
-          const SizedBox(width: T1Spacing.sm),
+          const SizedBox(width: 8),
           _buildActivityTile(
             context,
             '$netCalories',
             'NET KCAL',
-            const Color(0xFF00C8B4).withValues(alpha: 0.07),
-            const Color(0xFF40D8C0),
-            border: Border.all(color: const Color(0xFF00C8B4).withValues(alpha: 0.13)),
+            ext.macroFat.withValues(alpha: 0.07),
+            ext.macroFat,
+            border: Border.all(color: ext.macroFat.withValues(alpha: 0.13)),
           ),
         ],
       ),
@@ -70,11 +72,11 @@ class ActivityGrid extends StatelessWidget {
     
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: T1Spacing.md),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: bgColor,
           gradient: gradient,
-          borderRadius: BorderRadius.circular(T1Spacing.radiusLg),
+          borderRadius: BorderRadius.circular(24),
           border: border,
         ),
         child: Column(
@@ -84,6 +86,7 @@ class ActivityGrid extends StatelessWidget {
               style: theme.textTheme.headlineSmall?.copyWith(
                 color: textColor,
                 fontSize: 20,
+                fontWeight: FontWeight.w900,
               ),
             ),
             const SizedBox(height: 2),
@@ -92,6 +95,7 @@ class ActivityGrid extends StatelessWidget {
               style: theme.textTheme.labelSmall?.copyWith(
                 color: textColor.withValues(alpha: 0.4),
                 letterSpacing: 0.4,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
