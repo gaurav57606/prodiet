@@ -27,9 +27,12 @@ class ActiveThemeNotifier extends Notifier<ActiveTheme> {
         (e) => e.name == saved,
         orElse: () => ActiveTheme.t1Dark,
       );
+      // Set state FIRST so RouterNotifier picks up the correct theme
       state = match;
     }
-    // Mark as initialized
+    // Mark initialized AFTER state is set
+    // This ordering ensures the router reads the correct theme
+    // when it re-evaluates the redirect
     ref.read(activeThemeInitializedProvider.notifier).state = true;
   }
 

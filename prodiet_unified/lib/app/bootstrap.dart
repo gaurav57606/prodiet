@@ -66,15 +66,24 @@ class Bootstrap {
 
     // Initialize Supabase and Firebase in parallel
     await Future.wait([
-      Supabase.initialize(
+      _initSupabaseSafely(),
+      if (!kIsWeb) _initFirebase(),
+    ]);
+  }
+
+  static Future<void> _initSupabaseSafely() async {
+    try {
+      await Supabase.initialize(
         url: AppConfig.supabaseUrl,
         anonKey: AppConfig.supabaseAnonKey,
         authOptions: const FlutterAuthClientOptions(
           localStorage: SecureSupabaseStorage(),
         ),
-      ),
-      if (!kIsWeb) _initFirebase(),
-    ]);
+      );
+    } catch (e, stack) {
+      logger.e('Supabase initialization network/offline exception caught: $e', error: e, stackTrace: stack);
+      // Absorb exception to allow offline fallback boot
+    }
   }
 
   static Future<void> _initFirebase() async {

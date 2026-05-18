@@ -138,28 +138,48 @@ final routerProvider = Provider<GoRouter>((ref) {
 
 String? redirectLogic(BuildContext context, GoRouterState state, dynamic ref) {
   final isInitialized = ref.read(activeThemeInitializedProvider);
-  if (!isInitialized) return '/';
-
   final authState = ref.read(authProvider);
   final loc = state.matchedLocation;
-  
-  if (loc == '/') return AppRoutes.dashboard;
+
+  // Hold on '/' loading screen until BOTH theme AND auth are ready
+  if (!isInitialized || authState is AuthLoading) {
+    return loc == '/' ? null : '/';
+  }
 
   const publicRoutes = {
-    AppRoutes.authSplash, AppRoutes.authLogin, AppRoutes.authSignup,
-    AppRoutes.authForgotPassword, AppRoutes.authOnboarding, AppRoutes.authHealthGoals,
-    AppRoutes.authVerifyPhone, AppRoutes.authVerifyEmail, AppRoutes.authPrivacyPolicy, AppRoutes.authTerms,
+    AppRoutes.authSplash,
+    AppRoutes.authLogin,
+    AppRoutes.authSignup,
+    AppRoutes.authForgotPassword,
+    AppRoutes.authOnboarding,
+    AppRoutes.authHealthGoals,
+    AppRoutes.authVerifyPhone,
+    AppRoutes.authVerifyEmail,
+    AppRoutes.authPrivacyPolicy,
+    AppRoutes.authTerms,
   };
 
   final isPublic = publicRoutes.contains(loc);
 
-  if (authState is AuthLoading) return isPublic ? null : AppRoutes.authSplash;
-  if (authState is AuthFailure) return isPublic ? null : AppRoutes.authSplash;
-  if (authState is AuthUnauthenticated) return isPublic ? null : AppRoutes.authLogin;
-  if (authState is AuthProfileMissing) return (loc == AppRoutes.authProfileRetry) ? null : AppRoutes.authProfileRetry;
-  if (authState is AuthNeedsOnboarding) return (loc == AppRoutes.authOnboarding || loc == AppRoutes.authHealthGoals) ? null : AppRoutes.authHealthGoals;
-  if (authState is AuthAuthenticated) return isPublic ? AppRoutes.dashboard : null;
-  
+  if (authState is AuthFailure) {
+    return isPublic ? null : AppRoutes.authSplash;
+  }
+  if (authState is AuthUnauthenticated) {
+    return isPublic ? null : AppRoutes.authLogin;
+  }
+  if (authState is AuthProfileMissing) {
+    return (loc == AppRoutes.authProfileRetry) ? null : AppRoutes.authProfileRetry;
+  }
+  if (authState is AuthNeedsOnboarding) {
+    return (loc == AppRoutes.authOnboarding || loc == AppRoutes.authHealthGoals)
+        ? null
+        : AppRoutes.authHealthGoals;
+  }
+  if (authState is AuthAuthenticated) {
+    if (loc == '/' || isPublic) return AppRoutes.dashboard;
+    return null;
+  }
+
   return null;
 }
 

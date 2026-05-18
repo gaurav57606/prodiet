@@ -46,23 +46,35 @@ android {
 
     signingConfigs {
         create("release") {
-            // Reads from local.properties — never hardcode here
-            val props = Properties()
-            val localPropsFile = rootProject.file("local.properties")
-            if (localPropsFile.exists()) {
-                localPropsFile.inputStream().use { props.load(it) }
-            }
-            
-            val keystorePath = props.getProperty("KEYSTORE_PATH")
-            if (keystorePath != null) {
-                storeFile = file(keystorePath)
+            val envKeystorePath = System.getenv("KEYSTORE_PATH")
+            val envKeyAlias = System.getenv("KEY_ALIAS")
+            val envKeyPassword = System.getenv("KEY_PASSWORD")
+            val envStorePassword = System.getenv("STORE_PASSWORD")
+
+            if (envKeystorePath != null && envKeyAlias != null && envKeyPassword != null && envStorePassword != null) {
+                storeFile = file(envKeystorePath)
+                storePassword = envStorePassword
+                keyAlias = envKeyAlias
+                keyPassword = envKeyPassword
             } else {
-                storeFile = signingConfigs.getByName("debug").storeFile
+                // Fallback to local.properties — never hardcode here
+                val props = Properties()
+                val localPropsFile = rootProject.file("local.properties")
+                if (localPropsFile.exists()) {
+                    localPropsFile.inputStream().use { props.load(it) }
+                }
+                
+                val keystorePath = props.getProperty("KEYSTORE_PATH")
+                if (keystorePath != null) {
+                    storeFile = file(keystorePath)
+                } else {
+                    storeFile = signingConfigs.getByName("debug").storeFile
+                }
+                
+                storePassword = props.getProperty("KEYSTORE_PASSWORD") ?: ""
+                keyAlias     = props.getProperty("KEY_ALIAS") ?: ""
+                keyPassword  = props.getProperty("KEY_PASSWORD") ?: ""
             }
-            
-            storePassword = props.getProperty("KEYSTORE_PASSWORD") ?: ""
-            keyAlias     = props.getProperty("KEY_ALIAS") ?: ""
-            keyPassword  = props.getProperty("KEY_PASSWORD") ?: ""
         }
     }
 
@@ -74,10 +86,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Uses release keystore if local.properties has KEYSTORE_PATH
+            // Uses release keystore if env vars are defined, or local.properties has a valid storeFile
             val releaseConfig = signingConfigs.getByName("release")
-            signingConfig = if (releaseConfig.storeFile != null &&
-                                releaseConfig.storeFile!!.exists())
+            val hasEnvVars = System.getenv("KEYSTORE_PATH") != null &&
+                             System.getenv("KEY_ALIAS") != null &&
+                             System.getenv("KEY_PASSWORD") != null &&
+                             System.getenv("STORE_PASSWORD") != null
+                             
+            signingConfig = if (hasEnvVars || (releaseConfig.storeFile != null && releaseConfig.storeFile!!.exists()))
                 releaseConfig
             else
                 signingConfigs.getByName("debug")

@@ -9,6 +9,7 @@ class RouterNotifier extends ChangeNotifier {
   RouterNotifier(Ref ref) {
     _listenToAuth(ref);
     _listenToTheme(ref);
+    _listenToThemeInitialized(ref);  // ← ADD THIS LINE ONLY
   }
 
   void _listenToAuth(Ref ref) {
@@ -22,6 +23,14 @@ class RouterNotifier extends ChangeNotifier {
   void _listenToTheme(Ref ref) {
     ref.listen<ActiveTheme>(
       activeThemeProvider,
+      (_, __) => notifyListeners(),
+      fireImmediately: true,
+    );
+  }
+
+  void _listenToThemeInitialized(Ref ref) {
+    ref.listen<bool>(
+      activeThemeInitializedProvider,
       (_, __) => notifyListeners(),
       fireImmediately: true,
     );
