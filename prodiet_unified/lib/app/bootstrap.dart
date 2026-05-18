@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +9,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:prodiet_unified/core/config/app_config.dart';
 import 'package:prodiet_unified/core/widgets/error_boundary.dart';
+import 'package:prodiet_unified/core/security/secure_supabase_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:prodiet_unified/core/observability/monitoring/app_health_monitor.dart';
 
 final logger = Logger(
   printer: PrettyPrinter(
@@ -32,7 +34,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class Bootstrap {
-  static Future<void> run(Widget Function() builder) async {
+  static Future<void> run(FutureOr<Widget> Function() builder) async {
+    AppHealthMonitor.markStartupStart();
     await runZonedGuarded(() async {
       WidgetsFlutterBinding.ensureInitialized();
       
@@ -42,7 +45,7 @@ class Bootstrap {
         _initBackend(),
       ]);
 
-      runApp(builder());
+      runApp(await builder());
     }, (Object error, StackTrace stack) {
       _handleGlobalError(error, stack);
     });
@@ -66,6 +69,9 @@ class Bootstrap {
       Supabase.initialize(
         url: AppConfig.supabaseUrl,
         anonKey: AppConfig.supabaseAnonKey,
+        authOptions: const FlutterAuthClientOptions(
+          localStorage: SecureSupabaseStorage(),
+        ),
       ),
       if (!kIsWeb) _initFirebase(),
     ]);

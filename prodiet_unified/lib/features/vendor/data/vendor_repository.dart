@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/core/error/error_handler.dart';
@@ -7,7 +7,7 @@ import 'package:prodiet_unified/core/utils/deep_link_builder.dart';
 import 'package:prodiet_unified/core/services/analytics_service.dart';
 
 class VendorRepository {
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
   final AnalyticsService _analytics;
 
   VendorRepository(this._supabase, this._analytics);
@@ -39,19 +39,24 @@ class VendorRepository {
           ));
       }
 
-      await _supabase.from('vendor_searches').insert({
-        'user_id': userId,
-        'query': ingredient,
-        'platform': platform,
-        'type': 'ingredient',
-        'created_at': DateTime.now().toIso8601String(),
-      });
+      await _supabase.perform((client) async {
+        await client.from('vendor_searches').insert({
+          'user_id': userId,
+          'query': ingredient,
+          'platform': platform,
+          'type': 'ingredient',
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      }, context: 'vendor.searchIngredient');
 
       _analytics.logEvent(
-        userId, 
-        AnalyticsService.kVendorRedirect,
-        data: {'platform': platform, 'ingredient': ingredient},
-        screen: 'shopping_list',
+        'vendor_redirect',
+        parameters: {
+          'user_id': userId,
+          'platform': platform,
+          'ingredient': ingredient,
+          'screen': 'shopping_list',
+        },
       );
 
       // 2. Launch URL
@@ -87,19 +92,25 @@ class VendorRepository {
           ));
       }
 
-      await _supabase.from('vendor_searches').insert({
-        'user_id': userId,
-        'query': dishQuery,
-        'platform': platform,
-        'type': 'food_order',
-        'created_at': DateTime.now().toIso8601String(),
-      });
+      await _supabase.perform((client) async {
+        await client.from('vendor_searches').insert({
+          'user_id': userId,
+          'query': dishQuery,
+          'platform': platform,
+          'type': 'food_order',
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      }, context: 'vendor.orderFood');
 
       _analytics.logEvent(
-        userId, 
-        AnalyticsService.kVendorRedirect,
-        data: {'platform': platform, 'dish': dishQuery, 'type': 'food_order'},
-        screen: 'food_order_screen',
+        'vendor_redirect',
+        parameters: {
+          'user_id': userId,
+          'platform': platform,
+          'dish': dishQuery,
+          'type': 'food_order',
+          'screen': 'food_order_screen',
+        },
       );
 
       // 2. Launch URL

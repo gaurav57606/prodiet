@@ -2,9 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/services/fitband_service.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 
 final fitbandServiceProvider = Provider<FitbandService>((ref) {
-  final supabase = ref.watch(supabaseClientProvider);
+  final supabase = ref.watch(supabaseServiceProvider);
   return FitbandService(supabase);
 });
 

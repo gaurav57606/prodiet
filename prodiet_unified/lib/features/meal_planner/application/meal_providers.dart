@@ -1,12 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
+import 'package:prodiet_unified/core/data/local/offline_providers.dart';
+import 'package:prodiet_unified/core/sync/sync_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/daily_meal_summary.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
 
 final mealRepositoryProvider = Provider<MealRepository>((ref) {
-  return MealRepository(ref.watch(supabaseClientProvider));
+  return MealRepository(
+    ref.watch(supabaseServiceProvider),
+    ref.watch(appDatabaseProvider),
+    ref.watch(syncQueueRepositoryProvider),
+  );
 });
 
 final todayMealsProvider = StreamProvider.autoDispose<DailyMealSummary>((ref) {

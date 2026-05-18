@@ -4,9 +4,9 @@ import 'package:integration_test/integration_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/main.dart' as app;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
-import 'package:prodiet_unified/app.dart';
+import 'package:prodiet_unified/core/design_system/components/app_button.dart';
+import 'package:prodiet_unified/core/design_system/components/app_text_field.dart';
+import 'package:prodiet_unified/app/app.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -40,9 +40,9 @@ void main() {
       // 3. Login with a test account
       // Use credentials that you expect to exist in your Supabase instance
       // Or better, create a temporary user if Supabase allows
-      final emailField = find.byType(DmTextField).at(0);
-      final passwordField = find.byType(DmTextField).at(1);
-      final loginButton = find.byType(DmButton).first;
+      final emailField = find.byType(AppTextField).at(0);
+      final passwordField = find.byType(AppTextField).at(1);
+      final loginButton = find.byType(AppButton).first;
 
       await tester.enterText(emailField, 'test_e2e@prodiet.com');
       await tester.enterText(passwordField, 'password123');

@@ -1,7 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/core/services/analytics_service.dart';
+import 'package:prodiet_unified/core/observability/analytics/analytics_manager.dart';
+import 'package:prodiet_unified/core/services/remote_config_service.dart';
 
-final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
-  return AnalyticsService(ref.watch(supabaseClientProvider));
+final analyticsManagerProvider = Provider<AnalyticsManager>((ref) {
+  return AnalyticsManager();
+});
+
+final remoteConfigServiceProvider = Provider<RemoteConfigService>((ref) {
+  return RemoteConfigService();
 });

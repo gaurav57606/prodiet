@@ -4,7 +4,7 @@ part 'scanned_item.freezed.dart';
 part 'scanned_item.g.dart';
 
 @freezed
-class ScannedItem with _$ScannedItem {
+abstract class ScannedItem with _$ScannedItem {
   const factory ScannedItem({
     required String name,
     required double quantity,

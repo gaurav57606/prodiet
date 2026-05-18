@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'active_theme_provider.dart';
-import 'theme_tokens.dart';
+import '../design_system/tokens/app_theme_tokens.dart';
 import 't1/t1_tokens.dart';
 import 't2/t2_tokens.dart';
 import 'pro_diet_theme_extension.dart';
@@ -55,7 +55,7 @@ class AppTheme {
           color: tokens.colors.onSurface,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: tokens.colors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -77,6 +77,7 @@ class AppTheme {
         ),
       ),
       extensions: [
+        tokens,
         ProDietThemeExtension(
           cardRadius: tokens.radius.lg,
           buttonRadius: tokens.radius.sm,

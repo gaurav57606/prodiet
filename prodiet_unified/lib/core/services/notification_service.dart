@@ -22,7 +22,7 @@ class NotificationService {
     );
 
     await _notifications.initialize(
-      initSettings,
+      settings: initSettings,
       onDidReceiveNotificationResponse: (details) {
         // Handle notification tap
       },
@@ -54,11 +54,11 @@ class NotificationService {
     if (reminderTime.isBefore(DateTime.now())) return;
 
     await _notifications.zonedSchedule(
-      mealName.hashCode,
-      'Upcoming Meal: $mealName',
-      'It\'s almost time for your scheduled meal. Get ready!',
-      tz.TZDateTime.from(reminderTime, tz.local),
-      const NotificationDetails(
+      id: mealName.hashCode,
+      title: 'Upcoming Meal: $mealName',
+      body: 'It\'s almost time for your scheduled meal. Get ready!',
+      scheduledDate: tz.TZDateTime.from(reminderTime, tz.local),
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'meal_reminders',
           'Meal Reminders',
@@ -68,23 +68,22 @@ class NotificationService {
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       payload: 'meal|$mealName',
     );
   }
 
   Future<void> scheduleWaterReminder(int intervalHours) async {
     // Cancel any existing water reminder first
-    await _notifications.cancel(999);
+    await _notifications.cancel(id: 999);
 
     final scheduledTime = tz.TZDateTime.now(tz.local).add(Duration(hours: intervalHours));
 
     await _notifications.zonedSchedule(
-      999,
-      'Time to hydrate! 💧',
-      'Drink a glass of water to stay on track with your goal.',
-      scheduledTime,
-      const NotificationDetails(
+      id: 999,
+      title: 'Time to hydrate! 💧',
+      body: 'Drink a glass of water to stay on track with your goal.',
+      scheduledDate: scheduledTime,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'prodiet_reminders',
           'ProDiet Reminders',
@@ -94,8 +93,6 @@ class NotificationService {
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       payload: 'water|reminder',
     );
@@ -109,10 +106,10 @@ class NotificationService {
     Importance importance = Importance.high,
   }) async {
     await _notifications.show(
-      id,
-      title,
-      body,
-      NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           'prodiet_reminders',
           'ProDiet Reminders',

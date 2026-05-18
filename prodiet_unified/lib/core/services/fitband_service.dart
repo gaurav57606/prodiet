@@ -1,5 +1,5 @@
 import 'package:health/health.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:logger/logger.dart';
 
 class ActivityData {
@@ -21,7 +21,7 @@ class ActivityData {
 }
 
 class FitbandService {
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
   final _health = Health();
   final _logger = Logger();
 
@@ -95,15 +95,17 @@ class FitbandService {
     try {
       final today = DateTime.now().toIso8601String().split('T')[0];
       
-      await _supabase.from('activity_logs').upsert({
-        'user_id': userId,
-        'steps': data.steps,
-        'calories_burned': data.caloriesBurned,
-        'active_minutes': data.activeMinutes,
-        'date': today,
-        'source': 'fitband',
-        'updated_at': DateTime.now().toIso8601String(),
-      }, onConflict: 'user_id, date');
+      await _supabase.perform((client) async {
+        await client.from('activity_logs').upsert({
+          'user_id': userId,
+          'steps': data.steps,
+          'calories_burned': data.caloriesBurned,
+          'active_minutes': data.activeMinutes,
+          'date': today,
+          'source': 'fitband',
+          'updated_at': DateTime.now().toIso8601String(),
+        });
+      }, context: 'fitband.syncToSupabase');
       
       _logger.i('Synced activity data for $userId');
     } catch (e) {

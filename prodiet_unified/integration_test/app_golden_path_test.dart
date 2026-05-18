@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:prodiet_unified/main.dart' as app;
-import 'package:prodiet_unified/shared/t1/widgets/dm_button.dart';
-import 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart';
+import 'package:prodiet_unified/core/design_system/components/app_button.dart';
+import 'package:prodiet_unified/core/design_system/components/app_text_field.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +16,9 @@ void main() {
 
       // 2. Login
       // Note: In a real CI environment, you'd use test credentials
-      final emailField = find.byType(DmTextField).at(0);
-      final passwordField = find.byType(DmTextField).at(1);
-      final loginButton = find.byType(DmButton).first;
+      final emailField = find.byType(AppTextField).at(0);
+      final passwordField = find.byType(AppTextField).at(1);
+      final loginButton = find.byType(AppButton).first;
 
       await tester.enterText(emailField, 'test_e2e@prodiet.com');
       await tester.enterText(passwordField, 'password123');

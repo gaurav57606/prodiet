@@ -1,11 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:prodiet_unified/core/data/local/app_database.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 
 class SyncService {
   final AppDatabase _db;
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
   final Connectivity _connectivity;
   final _logger = Logger();
   static const _tag = 'SyncService';
@@ -37,7 +37,9 @@ class SyncService {
       'name': m.name, 'meal_type': m.mealType,
       'status': m.status, 'date': m.date,
     }).toList();
-    await _supabase.from('meals').upsert(rows);
+    await _supabase.perform((client) async {
+      await client.from('meals').upsert(rows);
+    }, context: 'syncService.syncMeals');
     await _db.mealDao.markSynced(unsynced.map((m) => m.id).toList());
     await _db.mealDao.pruneOldSynced();
   }
@@ -50,7 +52,9 @@ class SyncService {
       'ingredient_name': i.ingredientName,
       'quantity': i.quantity, 'unit': i.unit,
     }).toList();
-    await _supabase.from('inventory').upsert(rows);
+    await _supabase.perform((client) async {
+      await client.from('inventory').upsert(rows);
+    }, context: 'syncService.syncInventory');
     await _db.inventoryDao.markSynced(unsynced.map((i) => i.id).toList());
   }
 
@@ -61,7 +65,9 @@ class SyncService {
       'id': w.id, 'user_id': w.userId,
       'amount_ml': w.amountMl, 'logged_at': w.loggedAt,
     }).toList();
-    await _supabase.from('water_logs').upsert(rows);
+    await _supabase.perform((client) async {
+      await client.from('water_logs').upsert(rows);
+    }, context: 'syncService.syncWater');
     await _db.waterDao.markSynced(unsynced.map((w) => w.id).toList());
   }
 

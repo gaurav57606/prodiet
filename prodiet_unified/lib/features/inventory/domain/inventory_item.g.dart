@@ -6,8 +6,8 @@ part of 'inventory_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$InventoryItemImpl _$$InventoryItemImplFromJson(Map<String, dynamic> json) =>
-    _$InventoryItemImpl(
+_InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
+    _InventoryItem(
       id: json['id'] as String,
       userId: json['userId'] as String,
       ingredientName: json['ingredientName'] as String,
@@ -18,7 +18,7 @@ _$InventoryItemImpl _$$InventoryItemImplFromJson(Map<String, dynamic> json) =>
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$$InventoryItemImplToJson(_$InventoryItemImpl instance) =>
+Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,

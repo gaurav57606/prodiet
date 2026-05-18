@@ -6,8 +6,7 @@ part of 'diet_meal.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DietMealImpl _$$DietMealImplFromJson(Map<String, dynamic> json) =>
-    _$DietMealImpl(
+_DietMeal _$DietMealFromJson(Map<String, dynamic> json) => _DietMeal(
       name: json['name'] as String,
       calories: (json['calories'] as num).toDouble(),
       proteinG: (json['proteinG'] as num).toDouble(),
@@ -18,8 +17,7 @@ _$DietMealImpl _$$DietMealImplFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$DietMealImplToJson(_$DietMealImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$DietMealToJson(_DietMeal instance) => <String, dynamic>{
       'name': instance.name,
       'calories': instance.calories,
       'proteinG': instance.proteinG,

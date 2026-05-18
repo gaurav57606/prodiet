@@ -1,110 +1,111 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:prodiet_unified/core/services/notification_service.dart';
-import 'package:logger/logger.dart';
+import 'package:prodiet_unified/core/services/notification_providers.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class FcmService {
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
   final NotificationService _localNotifications;
-  final _logger = Logger();
+  final FirebaseMessaging _fcm;
 
-  FirebaseMessaging get _fcm => FirebaseMessaging.instance;
-
-  FcmService(this._supabase, this._localNotifications);
+  FcmService(
+    this._supabase,
+    this._localNotifications, {
+    FirebaseMessaging? fcm,
+  }) : _fcm = fcm ?? FirebaseMessaging.instance;
 
   Future<void> initialize(String userId) async {
     if (kIsWeb) return;
 
-    // 1. Request permissions
-    final settings = await _fcm.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    try {
+      // 1. Request permissions with structured flow
+      final settings = await _fcm.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
 
-    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-      _logger.w('[FCM] Notifications not authorized');
-      return;
+      final bool capability = settings.authorizationStatus == AuthorizationStatus.authorized ||
+                              settings.authorizationStatus == AuthorizationStatus.provisional;
+
+      if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        AppLogger.warning('[FCM] Notifications denied by user');
+      }
+
+      // 2. Initial Registration
+      await _registerDevice(userId, capability);
+
+      // 3. Listen for token refreshes
+      _fcm.onTokenRefresh.listen((newToken) async {
+        AppLogger.info('[FCM] Token refreshed, updating backend');
+        await _saveToken(userId, newToken, capability);
+      });
+
+      // 4. Foreground handling
+      FirebaseMessaging.onMessage.listen((message) {
+        AppLogger.info('[FCM] Foreground notification received');
+        _showLocalNotification(message);
+      });
+    } catch (e, st) {
+      AppLogger.error('[FCM] Failed to initialize service', error: e, stack: st, feature: 'fcm');
     }
-
-    // 2. Register device and token
-    await _registerDevice(userId);
-
-    // 3. Setup listeners
-    _setupMessageHandlers();
-
-    // 4. Token refresh listener
-    _fcm.onTokenRefresh.listen((newToken) async {
-      await _saveToken(userId, newToken);
-    });
   }
 
-  Future<void> _registerDevice(String userId) async {
-    final token = await _fcm.getToken();
-    if (token != null) {
-      await _saveToken(userId, token);
+  Future<void> _registerDevice(String userId, bool capability) async {
+    try {
+      final token = await _fcm.getToken();
+      if (token != null) {
+        await _saveToken(userId, token, capability);
+      }
+    } catch (e, st) {
+      AppLogger.error('[FCM] Failed to get token', error: e, stack: st, feature: 'fcm');
     }
   }
 
-  Future<void> _saveToken(String userId, String token) async {
+  Future<void> _saveToken(String userId, String token, bool capability) async {
     try {
       final deviceInfo = DeviceInfoPlugin();
+      final packageInfo = await PackageInfo.fromPlatform();
+      
       String deviceId = 'unknown';
-      String deviceName = 'unknown_device';
-
+      String platform = Platform.isAndroid ? 'android' : 'ios';
+      
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         deviceId = androidInfo.id;
-        deviceName = '${androidInfo.manufacturer} ${androidInfo.model}';
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
         deviceId = iosInfo.identifierForVendor ?? 'ios_unknown';
-        deviceName = iosInfo.name;
       }
 
-      // Hardened: Using user_devices table for multi-device support
-      // Fallback to users table if user_devices doesn't exist yet
-      try {
-        await _supabase.from('user_devices').upsert({
+      // Enterprise Hardening: User Devices Registry with Notification Capabilities
+      await _supabase.perform((client) async {
+        await client.from('user_devices').upsert({
           'user_id': userId,
           'device_id': deviceId,
-          'device_name': deviceName,
           'fcm_token': token,
-          'last_seen_at': DateTime.now().toIso8601String(),
+          'platform': platform,
+          'app_version': packageInfo.version,
+          'last_seen': DateTime.now().toIso8601String(),
+          'is_active': true,
+          'notification_capability': capability,
         });
-      } catch (_) {
-        // Legacy fallback
-        await _supabase.from('users').update({
-          'fcm_token': token,
-          'updated_at': DateTime.now().toIso8601String(),
-        }).eq('id', userId);
-      }
-      
-      _logger.i('[FCM] Token registered successfully');
-    } catch (e) {
-      _logger.e('[FCM] Registration failed: $e');
+      }, context: 'fcm.saveToken');
+
+      AppLogger.info('[FCM] Device registry updated successfully');
+    } catch (e, st) {
+      AppLogger.error('[FCM] Failed to save token to registry', error: e, stack: st, feature: 'fcm');
     }
   }
 
-  void _setupMessageHandlers() {
-    FirebaseMessaging.onMessage.listen((message) {
-      _logger.i('[FCM] Foreground message received');
-      _handleForegroundMessage(message);
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      _logger.i('[FCM] Notification opened app');
-      _handleNavigation(message);
-    });
-  }
-
-  void _handleForegroundMessage(RemoteMessage message) {
+  void _showLocalNotification(RemoteMessage message) {
     if (message.notification == null) return;
     
     _localNotifications.showNotification(
@@ -115,24 +116,44 @@ class FcmService {
     );
   }
 
-  void _handleNavigation(RemoteMessage message) {
-    final route = message.data['route'] as String?;
-    if (route != null && route.isNotEmpty) {
-      AppRouterNavigator.navigateTo(route);
+  /// Clean up stale tokens for this device on logout
+  Future<void> signOut(String userId) async {
+    try {
+      final deviceInfo = DeviceInfoPlugin();
+      String deviceId = 'unknown';
+      
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        deviceId = androidInfo.id;
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        deviceId = iosInfo.identifierForVendor ?? 'ios_unknown';
+      }
+      
+      // Invalidate token locally
+      await _fcm.deleteToken();
+      
+      // Mark device as inactive in registry to stop future push routing
+      await _supabase.perform((client) async {
+        await client.from('user_devices').upsert({
+          'user_id': userId,
+          'device_id': deviceId,
+          'is_active': false,
+          'last_seen': DateTime.now().toIso8601String(),
+        });
+      }, context: 'fcm.signOutInactivate');
+
+      AppLogger.info('[FCM] Device marked inactive successfully on logout');
+    } catch (e, st) {
+      AppLogger.error('[FCM] Sign out cleanup failed', error: e, stack: st, feature: 'fcm');
     }
   }
 }
 
 final fcmServiceProvider = Provider<FcmService?>((ref) {
   if (kIsWeb) return null;
-  final supabase = ref.watch(supabaseClientProvider);
-  final notifications = ref.watch(notificationServiceProvider);
-  return FcmService(supabase, notifications);
+  return FcmService(
+    ref.watch(supabaseServiceProvider),
+    ref.watch(notificationServiceProvider),
+  );
 });
-
-// AppRouterNavigator remains as is for now, but should be integrated better with GoRouter in Phase 4
-class AppRouterNavigator {
-  static GoRouter? _router;
-  static void setRouter(GoRouter router) => _router = router;
-  static void navigateTo(String route) => _router?.push(route);
-}

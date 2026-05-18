@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/theme/pro_diet_theme_extension.dart';
+import 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart';
 
 class AppMacroRing extends StatelessWidget {
   final double progress;
@@ -17,7 +17,7 @@ class AppMacroRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final tokens = context.tokens;
     
     return SizedBox(
       width: size,
@@ -28,9 +28,7 @@ class AppMacroRing extends StatelessWidget {
             child: CircularProgressIndicator(
               value: 1,
               strokeWidth: strokeWidth,
-              color: theme.brightness == Brightness.dark 
-                  ? const Color(0xFF252520) 
-                  : theme.colorScheme.outline.withValues(alpha: 0.5),
+              color: tokens.colors.surfaceContainerHighest.withValues(alpha: 0.2),
             ),
           ),
           Center(
@@ -61,11 +59,12 @@ class AppMacroLinearBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tokens = context.tokens;
     return Container(
       height: height,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.1),
+        color: tokens.colors.onSurface.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(height / 2),
       ),
       child: FractionallySizedBox(
@@ -100,15 +99,14 @@ class AppMacroChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final ext = theme.extension<ProDietThemeExtension>()!;
+    final tokens = context.tokens;
 
     final color = switch (type) {
-      AppMacroType.calories => ext.macroCalories,
-      AppMacroType.protein => ext.macroProtein,
-      AppMacroType.carbs => ext.macroCarbs,
-      AppMacroType.fat => ext.macroFat,
-      AppMacroType.fibre => ext.water,
+      AppMacroType.calories => tokens.colors.primary,
+      AppMacroType.protein => const Color(0xFFC6FF00),
+      AppMacroType.carbs => const Color(0xFF00E5FF),
+      AppMacroType.fat => const Color(0xFFFF4081),
+      AppMacroType.fibre => const Color(0xFF7C4DFF),
     };
 
     return Column(
@@ -116,7 +114,7 @@ class AppMacroChip extends StatelessWidget {
       children: [
         Text(
           value,
-          style: theme.textTheme.titleMedium?.copyWith(
+          style: tokens.typography.titleMedium.copyWith(
             fontSize: large ? 20 : 16,
             fontWeight: FontWeight.w900,
             color: color,
@@ -124,10 +122,10 @@ class AppMacroChip extends StatelessWidget {
         ),
         Text(
           label.toUpperCase(),
-          style: theme.textTheme.labelSmall?.copyWith(
+          style: tokens.typography.labelSmall.copyWith(
             fontSize: 8,
             fontWeight: FontWeight.w800,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            color: tokens.colors.onSurface.withValues(alpha: 0.4),
             letterSpacing: 1.0,
           ),
         ),

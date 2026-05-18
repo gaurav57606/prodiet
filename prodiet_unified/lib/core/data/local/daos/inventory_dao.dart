@@ -9,7 +9,14 @@ class InventoryDao extends DatabaseAccessor<AppDatabase>
     with _$InventoryDaoMixin {
   InventoryDao(super.db);
 
+  Stream<List<LocalInventoryData>> watchInventory(String userId) =>
+    (select(localInventory)
+      ..where((i) => i.userId.equals(userId))
+      ..orderBy([(i) => OrderingTerm.asc(i.ingredientName)]))
+      .watch();
+
   Future<List<LocalInventoryData>> getAll(String userId) =>
+
     (select(localInventory)
       ..where((i) => i.userId.equals(userId)))
       .get();
@@ -22,11 +29,12 @@ class InventoryDao extends DatabaseAccessor<AppDatabase>
 
   Future<List<LocalInventoryData>> getUnsynced(String userId) =>
     (select(localInventory)
-      ..where((i) => i.userId.equals(userId) & i.isSynced.equals(false)))
+      ..where((i) => i.userId.equals(userId) & i.isDirty.equals(true)))
       .get();
 
   Future<void> markSynced(List<String> ids) =>
     (update(localInventory)..where((i) => i.id.isIn(ids)))
-      .write(const LocalInventoryCompanion(isSynced: Value(true)));
+      .write(const LocalInventoryCompanion(isDirty: Value(false)));
+
 }
 

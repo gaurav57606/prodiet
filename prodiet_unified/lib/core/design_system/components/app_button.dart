@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:prodiet_unified/core/design_system/tokens/design_tokens.dart';
+import '../tokens/app_theme_tokens.dart';
 
-enum AppButtonVariant { primary, secondary, outline, ghost }
+enum AppButtonVariant { primary, secondary, outline, ghost, danger }
 
 class AppButton extends StatelessWidget {
   final String label;
@@ -10,6 +10,10 @@ class AppButton extends StatelessWidget {
   final IconData? icon;
   final bool isLoading;
   final double? width;
+  final double? height;
+  final bool isFullWidth;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const AppButton({
     super.key,
@@ -19,6 +23,10 @@ class AppButton extends StatelessWidget {
     this.icon,
     this.isLoading = false,
     this.width,
+    this.height,
+    this.isFullWidth = false,
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
@@ -47,19 +55,31 @@ class AppButton extends StatelessWidget {
         bgColor = Colors.transparent;
         fgColor = tokens.colors.primary;
         break;
+      case AppButtonVariant.danger:
+        bgColor = tokens.colors.error.withValues(alpha: 0.1);
+        fgColor = tokens.colors.error;
+        border = BorderSide(color: tokens.colors.error.withValues(alpha: 0.2));
+        break;
     }
 
+    if (backgroundColor != null) bgColor = backgroundColor!;
+    if (textColor != null) fgColor = textColor!;
+
+    final effectiveWidth = isFullWidth ? double.infinity : width;
+
     return SizedBox(
-      width: width,
-      height: 52,
+      width: effectiveWidth,
+      height: height ?? 52,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: bgColor,
           foregroundColor: fgColor,
+          disabledBackgroundColor: bgColor.withValues(alpha: 0.5),
+          disabledForegroundColor: fgColor.withValues(alpha: 0.5),
           elevation: variant == AppButtonVariant.primary ? 2 : 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(tokens.radius.md),
+            borderRadius: BorderRadius.circular(tokens.radius.button),
             side: border ?? BorderSide.none,
           ),
           padding: EdgeInsets.symmetric(horizontal: tokens.spacing.lg),
@@ -83,10 +103,9 @@ class AppButton extends StatelessWidget {
                   ],
                   Text(
                     label,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: tokens.typography.labelLarge.copyWith(
+                      color: fgColor,
                       fontWeight: FontWeight.w700,
-                      letterSpacing: -0.2,
                     ),
                   ),
                 ],
@@ -95,3 +114,4 @@ class AppButton extends StatelessWidget {
     );
   }
 }
+

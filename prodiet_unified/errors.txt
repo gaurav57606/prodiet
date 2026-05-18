@@ -1,0 +1,601 @@
+﻿  error - Undefined name 'analyticsServiceProvider' - lib\app\app.dart:82:20 - undefined_identifier
+  error - Undefined name 'analyticsServiceProvider' - lib\app\app.dart:96:16 - undefined_identifier
+  error - The named parameter 'errorBuilder' isn't defined - lib\app\app.dart:115:7 - undefined_named_parameter
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<ConnectivityStatus>' - lib\app\app.dart:147:30 - undefined_getter
+  error - The getter 't1Login' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:15:69 - undefined_getter
+  error - The getter 't1Signup' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:16:70 - undefined_getter
+  error - The getter 't1Onboarding' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:17:74 - undefined_getter
+  error - The getter 't1ForgotPassword' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:18:80 - undefined_getter
+  error - The getter 't1VerifyPhone' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:19:77 - undefined_getter
+  error - The getter 't1VerifyEmail' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:20:91 - undefined_getter
+  error - The getter 't1HealthGoals' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:21:75 - undefined_getter
+  error - The getter 't2PrivacyPolicy' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:55:37 - undefined_getter
+  error - The getter 't1PrivacyPolicy' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:55:65 - undefined_getter
+  error - The getter 't2TermsOfService' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:57:37 - undefined_getter
+  error - The getter 't1Terms' isn't defined for the type 'AppRoutes' - lib\app\app_navigator.dart:57:66 - undefined_getter
+  error - Undefined name 'AppRouterNavigator' - lib\app\router.dart:138:3 - undefined_identifier
+  error - Undefined name 'analyticsServiceProvider' - lib\core\cache\cache_providers.dart:9:15 - undefined_identifier
+  error - Undefined name 'color' - lib\core\design_system\components\app_chip.dart:30:28 - undefined_identifier
+  error - Undefined name 'leading' - lib\core\design_system\components\app_chip.dart:57:17 - undefined_identifier
+  error - Undefined name 'leading' - lib\core\design_system\components\app_chip.dart:58:15 - undefined_identifier
+  error - Target of URI doesn't exist: '../../theme/theme_tokens.dart' - lib\core\design_system\motion\app_animations.dart:2:8 - uri_does_not_exist
+  error - The getter 'tokens' isn't defined for the type 'BuildContext' - lib\core\design_system\motion\app_animations.dart:11:28 - undefined_getter
+  error - The getter 'tokens' isn't defined for the type 'BuildContext' - lib\core\design_system\motion\app_animations.dart:32:28 - undefined_getter
+  error - The getter 'tokens' isn't defined for the type 'BuildContext' - lib\core\design_system\motion\app_animations.dart:52:28 - undefined_getter
+  error - The argument type 'String?' can't be assigned to the parameter type 'String'.  - lib\core\error\error_handler.dart:34:54 - argument_type_not_assignable
+  error - The getter 't1Login' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:15:69 - undefined_getter
+  error - The getter 't1Signup' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:16:70 - undefined_getter
+  error - The getter 't1Onboarding' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:17:74 - undefined_getter
+  error - The getter 't1ForgotPassword' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:18:80 - undefined_getter
+  error - The getter 't1VerifyPhone' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:19:77 - undefined_getter
+  error - The getter 't1VerifyEmail' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:20:91 - undefined_getter
+  error - The getter 't1HealthGoals' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:21:75 - undefined_getter
+  error - The getter 't2PrivacyPolicy' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:55:37 - undefined_getter
+  error - The getter 't1PrivacyPolicy' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:55:65 - undefined_getter
+  error - The getter 't2TermsOfService' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:57:37 - undefined_getter
+  error - The getter 't1Terms' isn't defined for the type 'AppRoutes' - lib\core\navigation\app_navigator.dart:57:66 - undefined_getter
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:13:56 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:14:63 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:15:61 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:16:50 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:19:55 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:20:64 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:21:60 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:22:55 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:25:51 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:26:54 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:27:56 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:28:54 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:31:55 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:32:61 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:35:60 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:36:60 - instantiate_abstract_class
+  error - Abstract classes can't be instantiated - lib\core\observability\analytics\analytics_manager.dart:37:65 - instantiate_abstract_class
+  error - The named parameter 'settings' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:24:26 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\core\services\notification_service.dart:25:7 - extra_positional_arguments_could_be_named
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:56:26 - missing_required_argument
+  error - The named parameter 'notificationDetails' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:56:26 - missing_required_argument
+  error - The named parameter 'scheduledDate' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:56:26 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 5 found - lib\core\services\notification_service.dart:57:7 - extra_positional_arguments_could_be_named
+  error - The named parameter 'uiLocalNotificationDateInterpretation' isn't defined - lib\core\services\notification_service.dart:71:7 - undefined_named_parameter
+  error - Undefined name 'UILocalNotificationDateInterpretation' - lib\core\services\notification_service.dart:71:46 - undefined_identifier
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:78:26 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\core\services\notification_service.dart:78:33 - extra_positional_arguments_could_be_named
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:82:26 - missing_required_argument
+  error - The named parameter 'notificationDetails' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:82:26 - missing_required_argument
+  error - The named parameter 'scheduledDate' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:82:26 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 5 found - lib\core\services\notification_service.dart:83:7 - extra_positional_arguments_could_be_named
+  error - The named parameter 'uiLocalNotificationDateInterpretation' isn't defined - lib\core\services\notification_service.dart:97:7 - undefined_named_parameter
+  error - Undefined name 'UILocalNotificationDateInterpretation' - lib\core\services\notification_service.dart:98:11 - undefined_identifier
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:111:26 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\core\services\notification_service.dart:112:7 - extra_positional_arguments_could_be_named
+  error - Classes can only extend other classes - lib\core\sync\application\connection_monitor.dart:7:33 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\core\sync\application\connection_monitor.dart:11:49 - extra_positional_arguments
+  error - Undefined name 'state' - lib\core\sync\application\connection_monitor.dart:18:9 - undefined_identifier
+  error - Undefined name 'state' - lib\core\sync\application\connection_monitor.dart:21:9 - undefined_identifier
+  error - The function 'StateNotifierProvider' isn't defined - lib\core\sync\application\connection_monitor.dart:33:35 - undefined_function
+  error - The argument type 'Null' can't be assigned to the parameter type 'DateTime'.  - lib\core\sync\application\sync_manager.dart:122:9 - argument_type_not_assignable
+  error - Missing concrete implementations of 'getter mixin _$SyncTask on Object.createdAt', 'getter mixin _$SyncTask on Object.id', 'getter mixin _$SyncTask on Object.lastError', 'getter mixin _$SyncTask on Object.nextRetryAt', and 7 more - lib\core\sync\domain\sync_task.dart:21:7 - non_abstract_class_inherits_abstract_member
+  error - The method 'clamp' isn't defined for the type 'Duration' - lib\core\sync\retry_policy.dart:28:61 - undefined_method
+  error - The method 'clamp' isn't defined for the type 'Duration' - lib\core\sync\retry_policy.dart:31:50 - undefined_method
+  error - The method 'addListener' isn't defined for the type 'ConnectionMonitor' - lib\core\sync\sync_scheduler.dart:22:31 - undefined_method
+  error - The function 'StateProvider' isn't defined - lib\core\theme\active_theme_provider.dart:44:40 - undefined_function
+  error - The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  - lib\core\theme\app_theme.dart:58:18 - argument_type_not_assignable
+  error - There's no constant named 't1' in 'AppDashboardLayout' - lib\core\theme\t1\t1_tokens.dart:16:41 - undefined_enum_constant
+  error - The named parameter 'onSurfaceVariant' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'outline' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainer' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHigh' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHighest' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLow' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLowest' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:17:13 - missing_required_argument
+  error - There's no constant named 't1' in 'AppDashboardLayout' - lib\core\theme\t1\t1_tokens.dart:88:41 - undefined_enum_constant
+  error - The named parameter 'onSurfaceVariant' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'outline' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainer' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHigh' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHighest' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLow' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLowest' is required, but there's no corresponding argument - lib\core\theme\t1\t1_tokens.dart:89:13 - missing_required_argument
+  error - The method 'copyWith' isn't defined for the type 'AppColors' - lib\core\theme\t1\t1_tokens.dart:160:25 - undefined_method
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\core\theme\t2\t2_tokens.dart:16:41 - undefined_enum_constant
+  error - The named parameter 'onSurfaceVariant' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'outline' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainer' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHigh' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHighest' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLow' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLowest' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:17:13 - missing_required_argument
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\core\theme\t2\t2_tokens.dart:88:41 - undefined_enum_constant
+  error - The named parameter 'onSurfaceVariant' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'outline' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainer' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHigh' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerHighest' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLow' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The named parameter 'surfaceContainerLowest' is required, but there's no corresponding argument - lib\core\theme\t2\t2_tokens.dart:89:13 - missing_required_argument
+  error - The method 'copyWith' isn't defined for the type 'AppColors' - lib\core\theme\t2\t2_tokens.dart:160:25 - undefined_method
+  error - Undefined name 'currentUserIdProvider' - lib\features\achievements\application\achievement_providers.dart:9:28 - undefined_identifier
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\achievements\application\achievement_providers.dart:12:40 - undefined_getter
+  error - Undefined name 'authProvider' - lib\features\achievements\application\achievement_providers.dart:40:31 - undefined_identifier
+  error - The name 'AuthAuthenticated' isn't defined, so it can't be used in an 'is' expression - lib\features\achievements\application\achievement_providers.dart:41:21 - type_test_with_undefined_name
+  error - Undefined name 'authProvider' - lib\features\achievements\application\achievement_providers.dart:53:31 - undefined_identifier
+  error - The name 'AuthAuthenticated' isn't defined, so it can't be used in an 'is' expression - lib\features\achievements\application\achievement_providers.dart:54:21 - type_test_with_undefined_name
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\achievements\application\achievement_providers.dart:65:36 - undefined_function
+  error - Classes can only extend other classes - lib\features\achievements\application\achievement_providers.dart:69:42 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\achievements\application\achievement_providers.dart:73:67 - extra_positional_arguments
+  error - Undefined name 'authProvider' - lib\features\achievements\application\achievement_providers.dart:82:33 - undefined_identifier
+  error - The name 'AuthAuthenticated' isn't defined, so it can't be used in an 'is' expression - lib\features\achievements\application\achievement_providers.dart:83:23 - type_test_with_undefined_name
+  error - Undefined name 'state' - lib\features\achievements\application\achievement_providers.dart:90:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\achievements\application\achievement_providers.dart:100:14 - undefined_identifier
+  error - Undefined name 'state' - lib\features\achievements\application\achievement_providers.dart:102:9 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_empty_state.dart' - lib\features\achievements\presentation\screens\achievements_screen.dart:7:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\achievements\presentation\screens\achievements_screen.dart:16:63 - undefined_enum_constant
+  error - Invalid constant value - lib\features\achievements\presentation\screens\achievements_screen.dart:40:22 - invalid_constant
+  error - The method 'DmEmptyState' isn't defined for the type 'AchievementsScreen' - lib\features\achievements\presentation\screens\achievements_screen.dart:40:22 - undefined_method
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\achievements\presentation\widgets\adaptive_achievement_widgets.dart:25:63 - undefined_enum_constant
+  error - Classes can only extend other classes - lib\features\auth\application\auth_notifier.dart:12:28 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\auth\application\auth_notifier.dart:21:15 - extra_positional_arguments
+  error - The method 'addListener' isn't defined for the type 'AuthNotifier' - lib\features\auth\application\auth_notifier.dart:22:5 - undefined_method
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:23:7 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:31:5 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:36:9 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:39:11 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:41:16 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:43:11 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:44:11 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:47:14 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:48:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:49:9 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:60:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:62:9 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:65:14 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:72:7 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:78:11 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:83:12 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:88:9 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:90:14 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:95:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:96:9 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:100:7 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:103:12 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:104:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:105:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:111:7 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:113:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:116:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:122:7 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:124:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:126:12 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:127:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:133:7 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:135:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:137:12 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:138:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:144:7 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:146:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:148:12 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:149:7 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:156:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:158:12 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:159:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:166:5 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:171:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:175:14 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:181:9 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:183:14 - undefined_identifier
+  error - Undefined name 'logger' - lib\features\auth\application\auth_notifier.dart:184:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:189:5 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:199:12 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:200:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:206:7 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:211:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:213:12 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:215:12 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:217:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:219:9 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\auth\application\auth_notifier.dart:224:12 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:225:7 - undefined_identifier
+  error - The method 'dispose' isn't defined in a superclass of 'AuthNotifier' - lib\features\auth\application\auth_notifier.dart:232:11 - undefined_super_member
+  error - Undefined name 'state' - lib\features\auth\application\auth_notifier.dart:236:15 - undefined_identifier
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\auth\application\auth_providers.dart:21:22 - undefined_function
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\forgot_password_screen.dart:58:63 - undefined_enum_constant
+  error - The named parameter 'hintText' isn't defined - lib\features\auth\presentation\screens\forgot_password_screen.dart:118:15 - undefined_named_parameter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\health_goals_screen.dart:90:63 - undefined_enum_constant
+  error - The named parameter 'hintText' isn't defined - lib\features\auth\presentation\screens\health_goals_screen.dart:152:23 - undefined_named_parameter
+  error - The named parameter 'hintText' isn't defined - lib\features\auth\presentation\screens\health_goals_screen.dart:160:23 - undefined_named_parameter
+  error - The named parameter 'hintText' isn't defined - lib\features\auth\presentation\screens\health_goals_screen.dart:168:23 - undefined_named_parameter
+  error - Target of URI doesn't exist: 'package:prodiet_unified/core/router/app_routes.dart' - lib\features\auth\presentation\screens\login_screen.dart:4:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\login_screen.dart:38:63 - undefined_enum_constant
+  error - Undefined name 'AppRoutes' - lib\features\auth\presentation\screens\login_screen.dart:75:58 - undefined_identifier
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\login_screen.dart:85:31 - argument_type_not_assignable
+  error - Undefined name 'AppRoutes' - lib\features\auth\presentation\screens\login_screen.dart:102:54 - undefined_identifier
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\login_screen.dart:118:31 - argument_type_not_assignable
+  error - Undefined name 'AppRoutes' - lib\features\auth\presentation\screens\login_screen.dart:138:39 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\auth\presentation\screens\login_screen.dart:163:50 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\onboarding_screen.dart:44:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'ActiveTheme' - lib\features\auth\presentation\screens\profile_screen.dart:80:33 - undefined_enum_constant
+  error - There's no constant named 't2' in 'ActiveTheme' - lib\features\auth\presentation\screens\profile_screen.dart:81:48 - undefined_enum_constant
+  error - The getter 'healthGoals' isn't defined for the type 'AppRoutes' - lib\features\auth\presentation\screens\profile_screen.dart:108:57 - undefined_getter
+  error - Target of URI doesn't exist: 'package:prodiet_unified/core/router/app_routes.dart' - lib\features\auth\presentation\screens\signup_screen.dart:5:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\signup_screen.dart:67:63 - undefined_enum_constant
+  error - Undefined name 'AppRoutes' - lib\features\auth\presentation\screens\signup_screen.dart:99:51 - undefined_identifier
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\signup_screen.dart:110:37 - argument_type_not_assignable
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\signup_screen.dart:120:37 - argument_type_not_assignable
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\signup_screen.dart:131:31 - argument_type_not_assignable
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\signup_screen.dart:140:31 - argument_type_not_assignable
+  error - The argument type 'IconData?' can't be assigned to the parameter type 'Widget?'.  - lib\features\auth\presentation\screens\signup_screen.dart:158:31 - argument_type_not_assignable
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\verify_email_screen.dart:16:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\screens\verify_phone_screen.dart:157:63 - undefined_enum_constant
+  error - The named parameter 'hintText' isn't defined - lib\features\auth\presentation\screens\verify_phone_screen.dart:201:17 - undefined_named_parameter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\widgets\adaptive_auth_widgets.dart:13:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\widgets\adaptive_auth_widgets.dart:133:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\widgets\adaptive_auth_widgets.dart:224:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\widgets\adaptive_auth_widgets.dart:293:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\widgets\adaptive_profile_widgets.dart:18:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\auth\presentation\widgets\adaptive_profile_widgets.dart:129:63 - undefined_enum_constant
+  error - Undefined name 'analyticsServiceProvider' - lib\features\compensation\application\compensation_providers.dart:13:15 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\compensation\presentation\screens\compensation_screen.dart:17:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\compensation\presentation\screens\compensation_screen.dart:197:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\compensation\presentation\screens\compensation_screen.dart:211:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:18:63 - undefined_enum_constant
+  error - The getter 'errorContainer' isn't defined for the type 'AppColors' - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:70:30 - undefined_getter
+  error - The getter 'onErrorContainer' isn't defined for the type 'AppColors' - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:79:36 - undefined_getter
+  error - The getter 'onErrorContainer' isn't defined for the type 'AppColors' - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:87:36 - undefined_getter
+  error - The getter 'onErrorContainer' isn't defined for the type 'AppColors' - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:95:36 - undefined_getter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:121:63 - undefined_enum_constant
+  error - Classes can only extend other classes - lib\features\dashboard\application\notification_providers.dart:34:44 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\dashboard\application\notification_providers.dart:35:42 - extra_positional_arguments
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:46:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:55:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:55:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:61:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:61:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:67:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:67:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:73:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\dashboard\application\notification_providers.dart:73:13 - undefined_identifier
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\dashboard\application\notification_providers.dart:80:5 - undefined_function
+  error - Undefined name 'currentUserIdProvider' - lib\features\dashboard\application\notification_providers.dart:85:28 - undefined_identifier
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\dashboard\presentation\screens\dashboard_screen.dart:24:19 - undefined_getter
+  error - Invalid constant value - lib\features\dashboard\presentation\screens\dashboard_screen.dart:109:24 - invalid_constant
+  error - The method 'AdaptiveNextMeal' isn't defined for the type 'DashboardScreen' - lib\features\dashboard\presentation\screens\dashboard_screen.dart:109:24 - undefined_method
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\screens\notifications_screen.dart:18:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\screens\notifications_screen.dart:103:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\screens\notifications_screen.dart:150:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\screens\notifications_screen.dart:194:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\screens\notifications_screen.dart:237:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\screens\today_meals_screen.dart:25:63 - undefined_enum_constant
+  error - The getter 'ocrName' isn't defined for the type 'AppRoutes' - lib\features\dashboard\presentation\screens\today_meals_screen.dart:140:53 - undefined_getter
+  error - Undefined name 'currentUserIdProvider' - lib\features\dashboard\presentation\screens\today_meals_screen.dart:233:29 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:prodiet_unified/features/dashboard/presentation/widgets/t1_dashboard_header.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:14:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:prodiet_unified/features/dashboard/presentation/widgets/t2_dashboard_header.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:15:8 - uri_does_not_exist
+  error - The name 'T2DashboardHeader' isn't a class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:24:20 - creation_with_non_type
+  error - The name 'T1DashboardHeader' isn't a class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:26:18 - creation_with_non_type
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:35:50 - undefined_getter
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:54:50 - undefined_getter
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:70:50 - undefined_getter
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:90:50 - undefined_getter
+  error - The getter 'valueOrNull' isn't defined for the type 'AsyncValue<DashboardSummary>' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets.dart:105:51 - undefined_getter
+  error - Target of URI doesn't exist: 'package:prodiet_unified/features/auth/presentation/providers/auth_provider.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:6:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'calorie_summary_card.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:9:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'hydration_card.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:10:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'macro_grid.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:11:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'today_meals_row.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:12:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'activity_grid.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:13:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'macro_ring_chart.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:15:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'water_banner.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:16:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'next_meal_card.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:17:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'activity_row.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:18:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'alert_strip.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:19:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'calorie_stat.dart' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:20:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:31:54 - undefined_enum_constant
+  error - Undefined name 'authProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:32:30 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:89:32 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:89:106 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:99:37 - undefined_identifier
+  error - 'data' isn't a field in the enclosing class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:133:45 - initializing_formal_for_non_existent_field
+  error - 'AdaptiveCalorieProgress.build' ('Widget Function(BuildContext, WidgetRef)') isn't a valid override of 'StatelessWidget.build' ('Widget Function(BuildContext)') - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:136:10 - invalid_override
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:138:54 - undefined_enum_constant
+  error - The method 'CalorieStat' isn't defined for the type 'AdaptiveCalorieProgress' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:139:14 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:140:29 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:141:27 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:142:24 - undefined_identifier
+  error - The method 'CalorieSummaryCard' isn't defined for the type 'AdaptiveCalorieProgress' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:145:12 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:146:35 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:147:31 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:148:29 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:149:33 - undefined_identifier
+  error - 'data' isn't a field in the enclosing class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:157:43 - initializing_formal_for_non_existent_field
+  error - 'AdaptiveHydrationCard.build' ('Widget Function(BuildContext, WidgetRef)') isn't a valid override of 'StatelessWidget.build' ('Widget Function(BuildContext)') - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:160:10 - invalid_override
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:162:54 - undefined_enum_constant
+  error - The method 'WaterBanner' isn't defined for the type 'AdaptiveHydrationCard' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:163:14 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:164:29 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:165:27 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:166:29 - undefined_identifier
+  error - The method 'HydrationCard' isn't defined for the type 'AdaptiveHydrationCard' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:171:14 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:172:29 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:173:27 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:174:29 - undefined_identifier
+  error - 'data' isn't a field in the enclosing class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:183:42 - initializing_formal_for_non_existent_field
+  error - 'AdaptiveMacroSection.build' ('Widget Function(BuildContext, WidgetRef)') isn't a valid override of 'StatelessWidget.build' ('Widget Function(BuildContext)') - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:186:10 - invalid_override
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:188:54 - undefined_enum_constant
+  error - The method 'MacroRingChart' isn't defined for the type 'AdaptiveMacroSection' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:191:16 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:192:38 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:193:31 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:194:38 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:195:30 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:196:36 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:197:28 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:198:34 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:199:26 - undefined_identifier
+  error - The method 'MacroGrid' isn't defined for the type 'AdaptiveMacroSection' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:203:12 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:204:27 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:205:34 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:206:26 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:207:34 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:208:24 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:209:32 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:210:22 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:211:30 - undefined_identifier
+  error - 'data' isn't a field in the enclosing class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:218:38 - initializing_formal_for_non_existent_field
+  error - 'AdaptiveNextMeal.build' ('Widget Function(BuildContext, WidgetRef)') isn't a valid override of 'StatelessWidget.build' ('Widget Function(BuildContext)') - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:221:10 - invalid_override
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:223:54 - undefined_enum_constant
+  error - The method 'NextMealCard' isn't defined for the type 'AdaptiveNextMeal' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:224:14 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:224:43 - undefined_identifier
+  error - The method 'TodayMealsRow' isn't defined for the type 'AdaptiveNextMeal' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:226:12 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:226:42 - undefined_identifier
+  error - 'data' isn't a field in the enclosing class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:232:45 - initializing_formal_for_non_existent_field
+  error - 'AdaptiveActivitySection.build' ('Widget Function(BuildContext, WidgetRef)') isn't a valid override of 'StatelessWidget.build' ('Widget Function(BuildContext)') - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:235:10 - invalid_override
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:237:54 - undefined_enum_constant
+  error - The name 'ActivityRow' isn't a class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:238:20 - creation_with_non_type
+  error - The method 'ActivityGrid' isn't defined for the type 'AdaptiveActivitySection' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:240:12 - undefined_method
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:241:24 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:242:33 - undefined_identifier
+  error - Undefined name 'dashboardProvider' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:243:30 - undefined_identifier
+  error - 'data' isn't a field in the enclosing class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:250:43 - initializing_formal_for_non_existent_field
+  error - 'AdaptiveAlertsSection.build' ('Widget Function(BuildContext, WidgetRef)') isn't a valid override of 'StatelessWidget.build' ('Widget Function(BuildContext)') - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:253:10 - invalid_override
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:255:54 - undefined_enum_constant
+  error - The name 'AlertStrip' isn't a class - lib\features\dashboard\presentation\widgets\adaptive_dashboard_widgets_v2.dart:256:20 - creation_with_non_type
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_notification_widgets.dart:24:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_today_meals_widgets.dart:21:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\dashboard\presentation\widgets\adaptive_today_meals_widgets.dart:174:63 - undefined_enum_constant
+  error - The getter 'tertiary' isn't defined for the type 'AppColors' - lib\features\dashboard\presentation\widgets\adaptive_today_meals_widgets.dart:318:53 - undefined_getter
+  error - The named parameter 'backgroundColor' isn't defined - lib\features\dashboard\presentation\widgets\alerts_list.dart:55:7 - undefined_named_parameter
+  error - The named parameter 'borderColor' isn't defined - lib\features\dashboard\presentation\widgets\alerts_list.dart:56:7 - undefined_named_parameter
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient?'.  - lib\features\dashboard\presentation\widgets\unified_activity_section.dart:40:98 - argument_type_not_assignable
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient?'.  - lib\features\dashboard\presentation\widgets\unified_calorie_section.dart:48:19 - argument_type_not_assignable
+  error - The named parameter 'backgroundColor' isn't defined - lib\features\dashboard\presentation\widgets\unified_hydration_card.dart:50:7 - undefined_named_parameter
+  error - The named parameter 'borderColor' isn't defined - lib\features\dashboard\presentation\widgets\unified_hydration_card.dart:51:7 - undefined_named_parameter
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient'.  - lib\features\dashboard\presentation\widgets\unified_macro_section.dart:46:90 - argument_type_not_assignable
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient'.  - lib\features\dashboard\presentation\widgets\unified_macro_section.dart:48:85 - argument_type_not_assignable
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient'.  - lib\features\dashboard\presentation\widgets\unified_macro_section.dart:54:79 - argument_type_not_assignable
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient'.  - lib\features\dashboard\presentation\widgets\unified_macro_section.dart:56:73 - argument_type_not_assignable
+  error - The named parameter 'backgroundColor' isn't defined - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:49:7 - undefined_named_parameter
+  error - The named parameter 'backgroundColor' isn't defined - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:90:7 - undefined_named_parameter
+  error - The named parameter 'borderColor' isn't defined - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:91:7 - undefined_named_parameter
+  error - The argument type 'int' can't be assigned to the parameter type 'double'.  - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:152:42 - argument_type_not_assignable
+  error - The argument type 'int' can't be assigned to the parameter type 'double'.  - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:154:42 - argument_type_not_assignable
+  error - The argument type 'int' can't be assigned to the parameter type 'double'.  - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:156:42 - argument_type_not_assignable
+  error - The argument type 'int' can't be assigned to the parameter type 'double'.  - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:158:42 - argument_type_not_assignable
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\diet_plan\application\diet_plan_providers.dart:12:26 - undefined_function
+  error - Classes can only extend other classes - lib\features\diet_plan\application\diet_plan_providers.dart:17:32 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\diet_plan\application\diet_plan_providers.dart:21:54 - extra_positional_arguments
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:27:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:30:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:32:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:40:23 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:41:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:45:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:47:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:49:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\diet_plan\application\diet_plan_providers.dart:56:15 - undefined_identifier
+  error - Missing concrete implementations of 'getter mixin _$DietDay on Object.breakfast', 'getter mixin _$DietDay on Object.dayNumber', 'getter mixin _$DietDay on Object.dinner', 'getter mixin _$DietDay on Object.lunch', and 3 more - lib\features\diet_plan\domain\diet_day.dart:8:7 - non_abstract_class_inherits_abstract_member
+  error - Missing concrete implementations of 'getter mixin _$DietMeal on Object.calories', 'getter mixin _$DietMeal on Object.carbsG', 'getter mixin _$DietMeal on Object.fatG', 'getter mixin _$DietMeal on Object.ingredients', and 3 more - lib\features\diet_plan\domain\diet_meal.dart:7:7 - non_abstract_class_inherits_abstract_member
+  error - Missing concrete implementations of 'getter mixin _$DietPlan on Object.days', 'getter mixin _$DietPlan on Object.generatedAt', 'getter mixin _$DietPlan on Object.id', 'getter mixin _$DietPlan on Object.isActive', and 6 more - lib\features\diet_plan\domain\diet_plan.dart:8:7 - non_abstract_class_inherits_abstract_member
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\diet_plan\presentation\screens\diet_plan_detail_screen.dart:23:63 - undefined_enum_constant
+  error - The getter 'tertiary' isn't defined for the type 'AppColors' - lib\features\diet_plan\presentation\screens\diet_plan_detail_screen.dart:68:97 - undefined_getter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\diet_plan\presentation\widgets\adaptive_diet_plan_widgets.dart:18:63 - undefined_enum_constant
+  error - The argument type 'List<Color>' can't be assigned to the parameter type 'Gradient?'.  - lib\features\diet_plan\presentation\widgets\adaptive_diet_plan_widgets.dart:73:19 - argument_type_not_assignable
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\diet_plan\presentation\widgets\adaptive_diet_plan_widgets.dart:182:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\diet_plan\presentation\widgets\adaptive_diet_plan_widgets.dart:227:63 - undefined_enum_constant
+  error - Classes can only extend other classes - lib\features\fitband\application\fitband_providers.dart:38:31 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\fitband\application\fitband_providers.dart:41:48 - extra_positional_arguments
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:44:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:44:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:46:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:46:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:53:10 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:55:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:55:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:61:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:61:15 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:68:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\fitband\application\fitband_providers.dart:68:15 - undefined_identifier
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\fitband\application\fitband_providers.dart:73:25 - undefined_function
+  error - 3 positional arguments expected by 'InventoryRepository.new', but 1 found - lib\features\inventory\application\inventory_providers.dart:8:63 - not_enough_positional_arguments
+  error - The function 'StateProvider' isn't defined - lib\features\inventory\application\inventory_providers.dart:23:41 - undefined_function
+  error - The named parameter 'updatedAt' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:18:35 - missing_required_argument
+  error - The named parameter 'shelfLifeDays' isn't defined - lib\features\inventory\data\inventory_repository.dart:26:9 - undefined_named_parameter
+  error - The named parameter 'lastRestocked' isn't defined - lib\features\inventory\data\inventory_repository.dart:27:9 - undefined_named_parameter
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:56:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:56:30 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:85:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:85:30 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:99:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\inventory\data\inventory_repository.dart:99:30 - missing_required_argument
+  error - Missing concrete implementations of 'getter mixin _$InventoryItem on Object.category', 'getter mixin _$InventoryItem on Object.id', 'getter mixin _$InventoryItem on Object.ingredientName', 'getter mixin _$InventoryItem on Object.quantity', and 5 more - lib\features\inventory\domain\inventory_item.dart:7:7 - non_abstract_class_inherits_abstract_member
+  error - Target of URI doesn't exist: 'package:prodiet_unified/core/router/app_routes.dart' - lib\features\inventory\presentation\screens\inventory_screen.dart:5:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\inventory\presentation\screens\inventory_screen.dart:28:63 - undefined_enum_constant
+  error - Undefined name 'currentUserIdProvider' - lib\features\inventory\presentation\screens\inventory_screen.dart:32:30 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\inventory\presentation\screens\inventory_screen.dart:47:48 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\inventory\presentation\screens\inventory_screen.dart:80:56 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\inventory\presentation\screens\inventory_screen.dart:142:68 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\inventory\presentation\screens\inventory_screen.dart:189:60 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\inventory\presentation\screens\inventory_screen.dart:341:66 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\inventory\presentation\widgets\adaptive_inventory_widgets.dart:23:63 - undefined_enum_constant
+  error - The getter 'tertiary' isn't defined for the type 'AppColors' - lib\features\inventory\presentation\widgets\adaptive_inventory_widgets.dart:161:43 - undefined_getter
+  error - The function 'StateProvider' isn't defined - lib\features\meal_planner\application\meal_providers.dart:26:31 - undefined_function
+  error - The method 'watchMealsForDate' isn't defined for the type 'MealDao' - lib\features\meal_planner\data\meal_repository.dart:24:24 - undefined_method
+  error - The named parameter 'calories' isn't defined - lib\features\meal_planner\data\meal_repository.dart:61:7 - undefined_named_parameter
+  error - The named parameter 'proteinG' isn't defined - lib\features\meal_planner\data\meal_repository.dart:62:7 - undefined_named_parameter
+  error - The named parameter 'carbsG' isn't defined - lib\features\meal_planner\data\meal_repository.dart:63:7 - undefined_named_parameter
+  error - The named parameter 'fatG' isn't defined - lib\features\meal_planner\data\meal_repository.dart:64:7 - undefined_named_parameter
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:74:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:74:30 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:99:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:99:30 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:114:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:114:30 - missing_required_argument
+  error - The method 'deleteMeal' isn't defined for the type 'MealDao' - lib\features\meal_planner\data\meal_repository.dart:126:23 - undefined_method
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:128:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\meal_planner\data\meal_repository.dart:128:30 - missing_required_argument
+  error - Missing concrete implementations of 'getter mixin _$Meal on Object.calories', 'getter mixin _$Meal on Object.carbsG', 'getter mixin _$Meal on Object.createdAt', 'getter mixin _$Meal on Object.fatG', and 9 more - lib\features\meal_planner\domain\meal.dart:10:7 - non_abstract_class_inherits_abstract_member
+  error - Target of URI doesn't exist: 'package:prodiet_unified/core/router/app_routes.dart' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:6:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:22:63 - undefined_enum_constant
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:42:50 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:42:73 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:56:50 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:56:73 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:95:62 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:95:85 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:118:43 - undefined_identifier
+  error - Undefined name 'AppRoutes' - lib\features\meal_planner\presentation\screens\meal_planner_screen.dart:126:43 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\meal_planner\presentation\widgets\adaptive_meal_planner_widgets.dart:22:63 - undefined_enum_constant
+  error - The argument type 'Border' can't be assigned to the parameter type 'BorderSide?'.  - lib\features\meal_planner\presentation\widgets\adaptive_meal_planner_widgets.dart:31:15 - argument_type_not_assignable
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_card.dart' - lib\features\nutrition\presentation\screens\nutrition_screen.dart:11:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_empty_state.dart' - lib\features\nutrition\presentation\screens\nutrition_screen.dart:12:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\nutrition\presentation\screens\nutrition_screen.dart:22:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\nutrition\presentation\screens\nutrition_screen.dart:100:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\nutrition\presentation\screens\nutrition_screen.dart:176:63 - undefined_enum_constant
+  error - The name 'DmEmptyState' isn't a class - lib\features\nutrition\presentation\screens\nutrition_screen.dart:181:25 - creation_with_non_type
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\nutrition\presentation\widgets\adaptive_nutrition_widgets.dart:21:63 - undefined_enum_constant
+  error - Classes can only extend other classes - lib\features\ocr_scanner\application\ocr_notifier.dart:42:27 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\ocr_scanner\application\ocr_notifier.dart:54:15 - extra_positional_arguments
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:65:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:68:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:70:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:75:21 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:83:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:87:21 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:93:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:106:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:108:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\ocr_scanner\application\ocr_notifier.dart:115:5 - undefined_identifier
+  error - The argument type 'Provider<SupabaseClient>' can't be assigned to the parameter type 'ProviderListenable<OcrService>'.  - lib\features\ocr_scanner\application\ocr_providers.dart:8:34 - argument_type_not_assignable
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\ocr_scanner\application\ocr_providers.dart:11:29 - undefined_function
+  error - Missing concrete implementations of 'getter mixin _$ScannedItem on Object.category', 'getter mixin _$ScannedItem on Object.isSelected', 'getter mixin _$ScannedItem on Object.name', 'getter mixin _$ScannedItem on Object.quantity', and 2 more - lib\features\ocr_scanner\domain\scanned_item.dart:7:7 - non_abstract_class_inherits_abstract_member
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\ocr_scanner\presentation\screens\ocr_scanner_screen.dart:25:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\ocr_scanner\presentation\screens\ocr_scanner_screen.dart:90:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\ocr_scanner\presentation\screens\ocr_scanner_screen.dart:131:63 - undefined_enum_constant
+  error - The argument type 'double' can't be assigned to the parameter type 'String'.  - lib\features\ocr_scanner\presentation\screens\ocr_scanner_screen.dart:156:27 - argument_type_not_assignable
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\ocr_scanner\presentation\screens\ocr_scanner_screen.dart:172:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\ocr_scanner\presentation\widgets\adaptive_ocr_widgets.dart:20:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\ocr_scanner\presentation\widgets\adaptive_ocr_widgets.dart:84:63 - undefined_enum_constant
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_button.dart' - lib\features\preferences\presentation\screens\preferences_screen.dart:9:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\preferences\presentation\screens\preferences_screen.dart:45:63 - undefined_enum_constant
+  error - The method 'DmButton' isn't defined for the type '_PreferencesScreenState' - lib\features\preferences\presentation\screens\preferences_screen.dart:182:13 - undefined_method
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\preferences\presentation\screens\preferences_screen.dart:216:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\preferences\presentation\widgets\adaptive_preference_widgets.dart:18:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\preferences\presentation\widgets\adaptive_preference_widgets.dart:64:63 - undefined_enum_constant
+  error - The named parameter 'color' isn't defined - lib\features\preferences\presentation\widgets\adaptive_preference_widgets.dart:151:7 - undefined_named_parameter
+  error - The function 'StateProvider' isn't defined - lib\features\progress\application\progress_providers.dart:11:31 - undefined_function
+  error - Missing concrete implementations of 'getter mixin _$WeightEntry on Object.id', 'getter mixin _$WeightEntry on Object.loggedAt', 'getter mixin _$WeightEntry on Object.userId', 'getter mixin _$WeightEntry on Object.weightKg', and 1 more - lib\features\progress\domain\weight_entry.dart:7:7 - non_abstract_class_inherits_abstract_member
+  error - Undefined name 'appThemeTokensProvider' - lib\features\progress\presentation\screens\activity_sync_screen.dart:27:29 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\screens\activity_sync_screen.dart:28:54 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\screens\activity_sync_screen.dart:36:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\screens\progress_screen.dart:15:63 - undefined_enum_constant
+  error - The getter 'currentWeight' isn't defined for the type 'ProgressSummary' - lib\features\progress\presentation\screens\progress_screen.dart:60:44 - undefined_getter
+  error - The getter 'weightChange' isn't defined for the type 'ProgressSummary' - lib\features\progress\presentation\screens\progress_screen.dart:69:44 - undefined_getter
+  error - The getter 'weightChange' isn't defined for the type 'ProgressSummary' - lib\features\progress\presentation\screens\progress_screen.dart:69:75 - undefined_getter
+  error - The getter 'weightChange' isn't defined for the type 'ProgressSummary' - lib\features\progress\presentation\screens\progress_screen.dart:69:100 - undefined_getter
+  error - The getter 'weightChange' isn't defined for the type 'ProgressSummary' - lib\features\progress\presentation\screens\progress_screen.dart:71:44 - undefined_getter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\screens\progress_screen.dart:105:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\widgets\adaptive_activity_widgets.dart:22:63 - undefined_enum_constant
+  error - The argument type 'Border' can't be assigned to the parameter type 'BorderSide?'.  - lib\features\progress\presentation\widgets\adaptive_activity_widgets.dart:27:15 - argument_type_not_assignable
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\widgets\adaptive_activity_widgets.dart:79:63 - undefined_enum_constant
+  error - The argument type 'Border?' can't be assigned to the parameter type 'BorderSide?'.  - lib\features\progress\presentation\widgets\adaptive_activity_widgets.dart:84:15 - argument_type_not_assignable
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\widgets\adaptive_progress_widgets.dart:22:63 - undefined_enum_constant
+  error - The argument type 'Border' can't be assigned to the parameter type 'BorderSide?'.  - lib\features\progress\presentation\widgets\adaptive_progress_widgets.dart:27:15 - argument_type_not_assignable
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\progress\presentation\widgets\adaptive_progress_widgets.dart:79:63 - undefined_enum_constant
+  error - The argument type 'Border' can't be assigned to the parameter type 'BorderSide?'.  - lib\features\progress\presentation\widgets\adaptive_progress_widgets.dart:84:15 - argument_type_not_assignable
+  error - The named parameter 'color' isn't defined - lib\features\recipe\presentation\screens\recipe_screen.dart:105:66 - undefined_named_parameter
+  error - The named parameter 'color' isn't defined - lib\features\recipe\presentation\screens\recipe_screen.dart:106:65 - undefined_named_parameter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\recipe\presentation\widgets\adaptive_recipe_widgets.dart:23:63 - undefined_enum_constant
+  error - The argument type 'Border?' can't be assigned to the parameter type 'BorderSide?'.  - lib\features\recipe\presentation\widgets\adaptive_recipe_widgets.dart:32:15 - argument_type_not_assignable
+  error - The named parameter 'color' isn't defined - lib\features\recipe\presentation\widgets\adaptive_recipe_widgets.dart:55:25 - undefined_named_parameter
+  error - The named parameter 'isCompact' isn't defined - lib\features\recipe\presentation\widgets\adaptive_recipe_widgets.dart:56:25 - undefined_named_parameter
+  error - 3 positional arguments expected by 'ShoppingRepository.new', but 1 found - lib\features\shopping_list\application\shopping_providers.dart:8:53 - not_enough_positional_arguments
+  error - The method 'getList' isn't defined for the type 'ShoppingRepository' - lib\features\shopping_list\application\shopping_providers.dart:16:35 - undefined_method
+  error - The function 'StateNotifierProvider' isn't defined - lib\features\shopping_list\application\shopping_providers.dart:29:33 - undefined_function
+  error - Classes can only extend other classes - lib\features\shopping_list\application\shopping_providers.dart:33:39 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\shopping_list\application\shopping_providers.dart:37:64 - extra_positional_arguments
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:40:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:43:14 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:45:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:52:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:55:14 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:57:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:64:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:67:14 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:69:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:79:5 - undefined_identifier
+  error - The method 'clearPurchased' isn't defined for the type 'ShoppingRepository' - lib\features\shopping_list\application\shopping_providers.dart:80:38 - undefined_method
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:82:14 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:84:9 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:94:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:97:14 - undefined_identifier
+  error - Undefined name 'state' - lib\features\shopping_list\application\shopping_providers.dart:99:9 - undefined_identifier
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\shopping_list\data\shopping_repository.dart:53:32 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\shopping_list\data\shopping_repository.dart:53:32 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\shopping_list\data\shopping_repository.dart:83:32 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\shopping_list\data\shopping_repository.dart:83:32 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\shopping_list\data\shopping_repository.dart:103:32 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\shopping_list\data\shopping_repository.dart:103:32 - missing_required_argument
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_button.dart' - lib\features\shopping_list\presentation\screens\shopping_list_screen.dart:7:8 - uri_does_not_exist
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\shopping_list\presentation\screens\shopping_list_screen.dart:16:63 - undefined_enum_constant
+  error - The method 'DmButton' isn't defined for the type 'ShoppingListScreen' - lib\features\shopping_list\presentation\screens\shopping_list_screen.dart:81:24 - undefined_method
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\shopping_list\presentation\screens\shopping_list_screen.dart:103:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\shopping_list\presentation\widgets\adaptive_shopping_widgets.dart:19:63 - undefined_enum_constant
+  error - Undefined name 'analyticsServiceProvider' - lib\features\vendor\application\vendor_providers.dart:9:31 - undefined_identifier
+  error - Too many positional arguments: 1 expected, but 2 found - lib\features\vendor\data\vendor_repository.dart:52:9 - extra_positional_arguments
+  error - The getter 'kVendorRedirect' isn't defined for the type 'AnalyticsService' - lib\features\vendor\data\vendor_repository.dart:52:26 - undefined_getter
+  error - The named parameter 'data' isn't defined - lib\features\vendor\data\vendor_repository.dart:53:9 - undefined_named_parameter
+  error - The named parameter 'screen' isn't defined - lib\features\vendor\data\vendor_repository.dart:54:9 - undefined_named_parameter
+  error - Too many positional arguments: 1 expected, but 2 found - lib\features\vendor\data\vendor_repository.dart:100:9 - extra_positional_arguments
+  error - The getter 'kVendorRedirect' isn't defined for the type 'AnalyticsService' - lib\features\vendor\data\vendor_repository.dart:100:26 - undefined_getter
+  error - The named parameter 'data' isn't defined - lib\features\vendor\data\vendor_repository.dart:101:9 - undefined_named_parameter
+  error - The named parameter 'screen' isn't defined - lib\features\vendor\data\vendor_repository.dart:102:9 - undefined_named_parameter
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\screens\vendor_screen.dart:25:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\screens\vendor_screen.dart:125:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\screens\vendor_screen.dart:160:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\screens\vendor_screen.dart:174:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\screens\vendor_screen.dart:216:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\widgets\adaptive_vendor_widgets.dart:22:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\vendor\presentation\widgets\adaptive_vendor_widgets.dart:93:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:42:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:106:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:157:63 - undefined_enum_constant
+  error - Undefined name 'currentUserIdProvider' - lib\features\voice\presentation\screens\voice_screen.dart:208:29 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:220:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:243:63 - undefined_enum_constant
+  error - Undefined name 'currentUserIdProvider' - lib\features\voice\presentation\screens\voice_screen.dart:289:29 - undefined_identifier
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:305:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\screens\voice_screen.dart:355:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\widgets\adaptive_voice_widgets.dart:18:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\voice\presentation\widgets\adaptive_voice_widgets.dart:65:63 - undefined_enum_constant
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\water\data\water_repository.dart:58:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\water\data\water_repository.dart:58:30 - missing_required_argument
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\features\water\data\water_repository.dart:78:30 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\features\water\data\water_repository.dart:78:30 - missing_required_argument
+  error - Missing concrete implementations of 'getter mixin _$WaterLog on Object.amountMl', 'getter mixin _$WaterLog on Object.date', 'getter mixin _$WaterLog on Object.id', 'getter mixin _$WaterLog on Object.loggedAt', and 2 more - lib\features\water\domain\water_log.dart:7:7 - non_abstract_class_inherits_abstract_member
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\water\presentation\screens\water_screen.dart:35:63 - undefined_enum_constant
+  error - Undefined name 'currentUserIdProvider' - lib\features\water\presentation\screens\water_screen.dart:38:30 - undefined_identifier
+  error - The method 'deleteLastLog' isn't defined for the type 'WaterRepository' - lib\features\water\presentation\screens\water_screen.dart:61:64 - undefined_method
+  error - The method 'logGlass' isn't defined for the type 'WaterRepository' - lib\features\water\presentation\screens\water_screen.dart:74:64 - undefined_method
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\water\presentation\screens\water_screen.dart:122:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\water\presentation\screens\water_screen.dart:184:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\water\presentation\screens\water_screen.dart:246:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\water\presentation\widgets\adaptive_water_widgets.dart:21:63 - undefined_enum_constant
+  error - There's no constant named 't2' in 'AppDashboardLayout' - lib\features\water\presentation\widgets\adaptive_water_widgets.dart:148:63 - undefined_enum_constant
+  error - The argument type 'Future<UncontrolledProviderScope> Function()' can't be assigned to the parameter type 'Widget Function()'.  - lib\main.dart:18:23 - argument_type_not_assignable

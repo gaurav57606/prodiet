@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prodiet_unified/features/inventory/data/inventory_repository.dart';
 import 'package:prodiet_unified/features/ocr_scanner/data/ocr_repository.dart';
@@ -53,20 +54,34 @@ class OcrNotifier extends StateNotifier<OcrState> {
         super(const OcrIdle());
 
   Future<void> pickImage(ImageSource source) async {
+    File? tempFile;
     try {
       final picked = await ImagePicker().pickImage(
         source: source,
-        imageQuality: 80,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 70,
       );
       
       if (picked == null) return;
       
+      tempFile = File(picked.path);
       state = const OcrScanning();
       
-      final result = await _ocrRepo.scanImage(File(picked.path));
+      final result = await _ocrRepo.scanImage(tempFile);
       state = OcrResults(result.items);
     } catch (e) {
       state = OcrError(e.toString());
+    } finally {
+      if (tempFile != null) {
+        try {
+          if (await tempFile.exists()) {
+            await tempFile.delete();
+          }
+        } catch (_) {
+          // Silent catch to prevent UI interruption
+        }
+      }
     }
   }
 
@@ -100,6 +115,8 @@ class OcrNotifier extends StateNotifier<OcrState> {
       }).toList();
 
       await _inventoryRepo.addItemsFromOcr(_userId, itemsData);
+      PaintingBinding.instance.imageCache.clear();
+      PaintingBinding.instance.imageCache.clearLiveImages();
       state = const OcrSaved();
     } catch (e) {
       state = OcrError(e.toString());
@@ -107,6 +124,8 @@ class OcrNotifier extends StateNotifier<OcrState> {
   }
 
   void clearResults() {
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
     state = const OcrIdle();
   }
 }

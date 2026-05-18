@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:prodiet_unified/core/cache/semantic_cache.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/models/meal_models.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../domain/models/nutrition_item.dart';
 import '../domain/daily_macro_summary.dart';
 import '../domain/top_food_item.dart';
 
 class NutritionRepository {
-  final SupabaseClient _client;
+  final SupabaseService _client;
   final SemanticCache _cache;
   final http.Client _httpClient;
 
@@ -23,11 +23,13 @@ class NutritionRepository {
       String barcode) async {
     try {
       // 1. Check local Supabase nutrition table (exact barcode)
-      final localResult = await _client
-          .from('nutrition')
-          .select()
-          .eq('barcode', barcode)
-          .maybeSingle();
+      final localResult = await _client.perform((client) async {
+        return await client
+            .from('nutrition')
+            .select()
+            .eq('barcode', barcode)
+            .maybeSingle();
+      }, context: 'nutrition.lookupByBarcodeLocal');
 
       if (localResult != null) {
         return Right(NutritionItem.fromJson(localResult));
@@ -50,10 +52,12 @@ class NutritionRepository {
       }
 
       // 3. Call Supabase Edge Function 'nutrition-lookup'
-      final edgeResult = await _client.functions.invoke(
-        'nutrition-lookup',
-        body: {'barcode': barcode},
-      );
+      final edgeResult = await _client.perform((client) async {
+        return await client.functions.invoke(
+          'nutrition-lookup',
+          body: {'barcode': barcode},
+        );
+      }, context: 'nutrition.lookupByBarcodeEdge');
 
       if (edgeResult.status == 200 && edgeResult.data != null) {
         final item = NutritionItem.fromJson(edgeResult.data);
@@ -81,15 +85,17 @@ class NutritionRepository {
       }
 
       // 2. Check local Supabase nutrition table
-      final localResults = await _client
-          .from('nutrition')
-          .select()
-          .ilike('product_name', '%${_escapeLike(query)}%')
-          .limit(10);
+      final localResults = await _client.perform((client) async {
+        return await client
+            .from('nutrition')
+            .select()
+            .ilike('product_name', '%${_escapeLike(query)}%')
+            .limit(10);
+      }, context: 'nutrition.searchByNameLocal');
 
       if (localResults.isNotEmpty) {
         final items =
-            localResults.map((i) => NutritionItem.fromJson(i)).toList();
+            (localResults as List).map((i) => NutritionItem.fromJson(i)).toList();
         return Right(items);
       }
 
@@ -120,10 +126,12 @@ class NutritionRepository {
       }
 
       // 4. Call Supabase Edge Function 'nutrition-lookup'
-      final edgeResult = await _client.functions.invoke(
-        'nutrition-lookup',
-        body: {'query': query},
-      );
+      final edgeResult = await _client.perform((client) async {
+        return await client.functions.invoke(
+          'nutrition-lookup',
+          body: {'query': query},
+        );
+      }, context: 'nutrition.searchByNameEdge');
 
       if (edgeResult.status == 200 && edgeResult.data != null) {
         // Edge function might return a single item or a list
@@ -181,7 +189,9 @@ class NutritionRepository {
 
   Future<void> _saveToLocal(NutritionItem item) async {
     try {
-      await _client.from('nutrition').upsert(item.toJson());
+      await _client.perform((client) async {
+        await client.from('nutrition').upsert(item.toJson());
+      }, context: 'nutrition.saveToLocal');
     } catch (e) {
       // Silent fail for background storage
     }
@@ -199,13 +209,15 @@ class NutritionRepository {
     final sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7))
         .toIso8601String().split('T')[0];
     
-    final data = await _client
-        .from('meals')
-        .select('planned_date, calories, protein_g, carbs_g, fat_g, status')
-        .eq('user_id', userId)
-        .eq('status', 'eaten')
-        .gte('planned_date', sevenDaysAgo)
-        .order('planned_date');
+    final data = await _client.perform((client) async {
+      return await client
+          .from('meals')
+          .select('planned_date, calories, protein_g, carbs_g, fat_g, status')
+          .eq('user_id', userId)
+          .eq('status', 'eaten')
+          .gte('planned_date', sevenDaysAgo)
+          .order('planned_date');
+    }, context: 'nutrition.getWeeklyMacros');
 
     // Group by date
     final Map<String, DailyMacroSummary> grouped = {};
@@ -227,14 +239,16 @@ class NutritionRepository {
     final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30))
         .toIso8601String().split('T')[0];
     
-    final data = await _client
-        .from('meals')
-        .select('name, protein_g')
-        .eq('user_id', userId)
-        .eq('status', 'eaten')
-        .gte('planned_date', thirtyDaysAgo)
-        .order('protein_g', ascending: false)
-        .limit(5);
+    final data = await _client.perform((client) async {
+      return await client
+          .from('meals')
+          .select('name, protein_g')
+          .eq('user_id', userId)
+          .eq('status', 'eaten')
+          .gte('planned_date', thirtyDaysAgo)
+          .order('protein_g', ascending: false)
+          .limit(5);
+    }, context: 'nutrition.getTopProteinSources');
     
     return (data as List<dynamic>).map((row) => TopFoodItem(
       name: row['name'] as String? ?? '',

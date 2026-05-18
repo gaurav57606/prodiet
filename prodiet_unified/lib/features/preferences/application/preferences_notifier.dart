@@ -3,11 +3,16 @@ import '../data/preferences_repository.dart';
 import '../domain/user_preferences.dart';
 import 'preferences_state.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
+import 'preferences_providers.dart';
 
-class PreferencesNotifier extends StateNotifier<PreferencesState> {
-  final PreferencesRepository _repository;
+class PreferencesNotifier extends Notifier<PreferencesState> {
+  late final PreferencesRepository _repository;
 
-  PreferencesNotifier(this._repository) : super(const PreferencesInitial());
+  @override
+  PreferencesState build() {
+    _repository = ref.watch(preferencesRepositoryProvider);
+    return const PreferencesInitial();
+  }
 
   Future<void> loadPreferences(String userId) async {
     state = const PreferencesLoading();

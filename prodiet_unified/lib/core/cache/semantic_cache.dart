@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:prodiet_unified/core/services/analytics_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 
 enum CacheNamespace {
   nutrition,    // TTL: 90 days
@@ -10,7 +10,7 @@ enum CacheNamespace {
 }
 
 class SemanticCache {
-  final SupabaseClient _client;
+  final SupabaseService _client;
   final AnalyticsService _analytics;
   SemanticCache(this._client, this._analytics);
 
@@ -19,11 +19,13 @@ class SemanticCache {
     CacheNamespace namespace, String query, {String? userId}) async {
     final hash = _hash(namespace, query);
     try {
-      final result = await _client
-        .from('ai_cache')
-        .select('response_json, expires_at')
-        .eq('query_hash', hash)
-        .maybeSingle();
+      final result = await _client.perform((client) async {
+        return await client
+          .from('ai_cache')
+          .select('response_json, expires_at')
+          .eq('query_hash', hash)
+          .maybeSingle();
+      }, context: 'cache.get');
       if (result == null) return null;
       // Check expiry
       final expires = DateTime.parse(result['expires_at']);
@@ -36,9 +38,8 @@ class SemanticCache {
 
       if (userId != null) {
         _analytics.logEvent(
-          userId, 
-          AnalyticsService.kAiCacheHit, 
-          data: {'namespace': namespace.name},
+          'ai_cache_hit', 
+          parameters: {'namespace': namespace.name, 'user_id': userId},
         );
       }
 
@@ -55,14 +56,16 @@ class SemanticCache {
     final hash = _hash(namespace, query);
     final ttl = _ttl(namespace);
     try {
-      await _client.from('ai_cache').upsert({
-        'namespace': namespace.name,
-        'query_hash': hash,
-        'response_json': response,
-        'hit_count': 0,           // Start at 0; RPC increments on reads
-        'created_at': DateTime.now().toIso8601String(),
-        'expires_at': DateTime.now().add(ttl).toIso8601String(),
-      }, onConflict: 'query_hash');   // Explicit conflict target
+      await _client.perform((client) async {
+        await client.from('ai_cache').upsert({
+          'namespace': namespace.name,
+          'query_hash': hash,
+          'response_json': response,
+          'hit_count': 0,           // Start at 0; RPC increments on reads
+          'created_at': DateTime.now().toIso8601String(),
+          'expires_at': DateTime.now().add(ttl).toIso8601String(),
+        });
+      }, context: 'cache.put');
     } catch (e) {
       // Cache write failure is silent — never block main flow
     }
@@ -85,12 +88,20 @@ class SemanticCache {
   }
 
   Future<void> _delete(String hash) async {
-    await _client.from('ai_cache').delete().eq('query_hash', hash);
+    try {
+      await _client.perform((client) async {
+        await client.from('ai_cache').delete().eq('query_hash', hash);
+      }, context: 'cache.delete');
+    } catch (e) {
+      // Ignore delete failure
+    }
   }
 
   Future<void> _incrementHit(String hash) async {
     try {
-      await _client.rpc('increment_cache_hit', params: {'hash': hash});
+      await _client.perform((client) async {
+        await client.rpc('increment_cache_hit', params: {'hash': hash});
+      }, context: 'cache.incrementHit');
     } catch (e) {
       // Ignore RPC failure
     }

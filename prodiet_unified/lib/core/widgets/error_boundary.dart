@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 
 class ErrorBoundary extends StatefulWidget {
   const ErrorBoundary({required this.child, super.key});
   final Widget child;
 
   static void reportError(Object error, StackTrace stack) {
-    debugPrint('ErrorBoundary caught: $error\n$stack');
+    AppLogger.critical('ErrorBoundary caught uncaught exception', error: error, stack: stack, feature: 'widget_boundary');
   }
 
   // Static setup — call this once before runApp
   static void setup() {
     ErrorWidget.builder = (FlutterErrorDetails details) {
-      debugPrint('ErrorWidget triggered: ${details.exception}');
+      AppLogger.critical('ErrorWidget rendering boundary triggered', error: details.exception, stack: details.stack, feature: 'widget_render');
       return const _FallbackErrorWidget();
     };
   }
@@ -74,4 +75,3 @@ class _FallbackErrorWidget extends StatelessWidget {
     );
   }
 }
-

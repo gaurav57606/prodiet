@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,106 +9,59 @@ part of 'diet_meal.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-DietMeal _$DietMealFromJson(Map<String, dynamic> json) {
-  return _DietMeal.fromJson(json);
-}
 
 /// @nodoc
 mixin _$DietMeal {
-  String get name => throw _privateConstructorUsedError;
-  double get calories => throw _privateConstructorUsedError;
-  double get proteinG => throw _privateConstructorUsedError;
-  double get carbsG => throw _privateConstructorUsedError;
-  double get fatG => throw _privateConstructorUsedError;
-  List<String> get ingredients => throw _privateConstructorUsedError;
-
-  /// Serializes this DietMeal to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get name;
+  double get calories;
+  double get proteinG;
+  double get carbsG;
+  double get fatG;
+  List<String> get ingredients;
 
   /// Create a copy of DietMeal
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $DietMealCopyWith<DietMeal> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $DietMealCopyWith<$Res> {
-  factory $DietMealCopyWith(DietMeal value, $Res Function(DietMeal) then) =
-      _$DietMealCopyWithImpl<$Res, DietMeal>;
-  @useResult
-  $Res call(
-      {String name,
-      double calories,
-      double proteinG,
-      double carbsG,
-      double fatG,
-      List<String> ingredients});
-}
-
-/// @nodoc
-class _$DietMealCopyWithImpl<$Res, $Val extends DietMeal>
-    implements $DietMealCopyWith<$Res> {
-  _$DietMealCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of DietMeal
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $DietMealCopyWith<DietMeal> get copyWith =>
+      _$DietMealCopyWithImpl<DietMeal>(this as DietMeal, _$identity);
+
+  /// Serializes this DietMeal to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? name = null,
-    Object? calories = null,
-    Object? proteinG = null,
-    Object? carbsG = null,
-    Object? fatG = null,
-    Object? ingredients = null,
-  }) {
-    return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      calories: null == calories
-          ? _value.calories
-          : calories // ignore: cast_nullable_to_non_nullable
-              as double,
-      proteinG: null == proteinG
-          ? _value.proteinG
-          : proteinG // ignore: cast_nullable_to_non_nullable
-              as double,
-      carbsG: null == carbsG
-          ? _value.carbsG
-          : carbsG // ignore: cast_nullable_to_non_nullable
-              as double,
-      fatG: null == fatG
-          ? _value.fatG
-          : fatG // ignore: cast_nullable_to_non_nullable
-              as double,
-      ingredients: null == ingredients
-          ? _value.ingredients
-          : ingredients // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is DietMeal &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.calories, calories) ||
+                other.calories == calories) &&
+            (identical(other.proteinG, proteinG) ||
+                other.proteinG == proteinG) &&
+            (identical(other.carbsG, carbsG) || other.carbsG == carbsG) &&
+            (identical(other.fatG, fatG) || other.fatG == fatG) &&
+            const DeepCollectionEquality()
+                .equals(other.ingredients, ingredients));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, name, calories, proteinG, carbsG,
+      fatG, const DeepCollectionEquality().hash(ingredients));
+
+  @override
+  String toString() {
+    return 'DietMeal(name: $name, calories: $calories, proteinG: $proteinG, carbsG: $carbsG, fatG: $fatG, ingredients: $ingredients)';
   }
 }
 
 /// @nodoc
-abstract class _$$DietMealImplCopyWith<$Res>
-    implements $DietMealCopyWith<$Res> {
-  factory _$$DietMealImplCopyWith(
-          _$DietMealImpl value, $Res Function(_$DietMealImpl) then) =
-      __$$DietMealImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $DietMealCopyWith<$Res> {
+  factory $DietMealCopyWith(DietMeal value, $Res Function(DietMeal) _then) =
+      _$DietMealCopyWithImpl;
   @useResult
   $Res call(
       {String name,
@@ -120,12 +73,11 @@ abstract class _$$DietMealImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$DietMealImplCopyWithImpl<$Res>
-    extends _$DietMealCopyWithImpl<$Res, _$DietMealImpl>
-    implements _$$DietMealImplCopyWith<$Res> {
-  __$$DietMealImplCopyWithImpl(
-      _$DietMealImpl _value, $Res Function(_$DietMealImpl) _then)
-      : super(_value, _then);
+class _$DietMealCopyWithImpl<$Res> implements $DietMealCopyWith<$Res> {
+  _$DietMealCopyWithImpl(this._self, this._then);
+
+  final DietMeal _self;
+  final $Res Function(DietMeal) _then;
 
   /// Create a copy of DietMeal
   /// with the given fields replaced by the non-null parameter values.
@@ -139,39 +91,205 @@ class __$$DietMealImplCopyWithImpl<$Res>
     Object? fatG = null,
     Object? ingredients = null,
   }) {
-    return _then(_$DietMealImpl(
+    return _then(_self.copyWith(
       name: null == name
-          ? _value.name
+          ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       calories: null == calories
-          ? _value.calories
+          ? _self.calories
           : calories // ignore: cast_nullable_to_non_nullable
               as double,
       proteinG: null == proteinG
-          ? _value.proteinG
+          ? _self.proteinG
           : proteinG // ignore: cast_nullable_to_non_nullable
               as double,
       carbsG: null == carbsG
-          ? _value.carbsG
+          ? _self.carbsG
           : carbsG // ignore: cast_nullable_to_non_nullable
               as double,
       fatG: null == fatG
-          ? _value.fatG
+          ? _self.fatG
           : fatG // ignore: cast_nullable_to_non_nullable
               as double,
       ingredients: null == ingredients
-          ? _value._ingredients
+          ? _self.ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
 }
 
+/// Adds pattern-matching-related methods to [DietMeal].
+extension DietMealPatterns on DietMeal {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_DietMeal value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _DietMeal() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_DietMeal value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _DietMeal():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_DietMeal value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _DietMeal() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String name, double calories, double proteinG,
+            double carbsG, double fatG, List<String> ingredients)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _DietMeal() when $default != null:
+        return $default(_that.name, _that.calories, _that.proteinG,
+            _that.carbsG, _that.fatG, _that.ingredients);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String name, double calories, double proteinG,
+            double carbsG, double fatG, List<String> ingredients)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _DietMeal():
+        return $default(_that.name, _that.calories, _that.proteinG,
+            _that.carbsG, _that.fatG, _that.ingredients);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(String name, double calories, double proteinG,
+            double carbsG, double fatG, List<String> ingredients)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _DietMeal() when $default != null:
+        return $default(_that.name, _that.calories, _that.proteinG,
+            _that.carbsG, _that.fatG, _that.ingredients);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 @JsonSerializable()
-class _$DietMealImpl implements _DietMeal {
-  const _$DietMealImpl(
+class _DietMeal implements DietMeal {
+  const _DietMeal(
       {required this.name,
       required this.calories,
       required this.proteinG,
@@ -179,9 +297,8 @@ class _$DietMealImpl implements _DietMeal {
       required this.fatG,
       required final List<String> ingredients})
       : _ingredients = ingredients;
-
-  factory _$DietMealImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DietMealImplFromJson(json);
+  factory _DietMeal.fromJson(Map<String, dynamic> json) =>
+      _$DietMealFromJson(json);
 
   @override
   final String name;
@@ -201,16 +318,26 @@ class _$DietMealImpl implements _DietMeal {
     return EqualUnmodifiableListView(_ingredients);
   }
 
+  /// Create a copy of DietMeal
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'DietMeal(name: $name, calories: $calories, proteinG: $proteinG, carbsG: $carbsG, fatG: $fatG, ingredients: $ingredients)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$DietMealCopyWith<_DietMeal> get copyWith =>
+      __$DietMealCopyWithImpl<_DietMeal>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$DietMealToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DietMealImpl &&
+            other is _DietMeal &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.calories, calories) ||
                 other.calories == calories) &&
@@ -227,51 +354,74 @@ class _$DietMealImpl implements _DietMeal {
   int get hashCode => Object.hash(runtimeType, name, calories, proteinG, carbsG,
       fatG, const DeepCollectionEquality().hash(_ingredients));
 
-  /// Create a copy of DietMeal
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$DietMealImplCopyWith<_$DietMealImpl> get copyWith =>
-      __$$DietMealImplCopyWithImpl<_$DietMealImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DietMealImplToJson(
-      this,
-    );
+  String toString() {
+    return 'DietMeal(name: $name, calories: $calories, proteinG: $proteinG, carbsG: $carbsG, fatG: $fatG, ingredients: $ingredients)';
   }
 }
 
-abstract class _DietMeal implements DietMeal {
-  const factory _DietMeal(
-      {required final String name,
-      required final double calories,
-      required final double proteinG,
-      required final double carbsG,
-      required final double fatG,
-      required final List<String> ingredients}) = _$DietMealImpl;
+/// @nodoc
+abstract mixin class _$DietMealCopyWith<$Res>
+    implements $DietMealCopyWith<$Res> {
+  factory _$DietMealCopyWith(_DietMeal value, $Res Function(_DietMeal) _then) =
+      __$DietMealCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String name,
+      double calories,
+      double proteinG,
+      double carbsG,
+      double fatG,
+      List<String> ingredients});
+}
 
-  factory _DietMeal.fromJson(Map<String, dynamic> json) =
-      _$DietMealImpl.fromJson;
+/// @nodoc
+class __$DietMealCopyWithImpl<$Res> implements _$DietMealCopyWith<$Res> {
+  __$DietMealCopyWithImpl(this._self, this._then);
 
-  @override
-  String get name;
-  @override
-  double get calories;
-  @override
-  double get proteinG;
-  @override
-  double get carbsG;
-  @override
-  double get fatG;
-  @override
-  List<String> get ingredients;
+  final _DietMeal _self;
+  final $Res Function(_DietMeal) _then;
 
   /// Create a copy of DietMeal
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DietMealImplCopyWith<_$DietMealImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? name = null,
+    Object? calories = null,
+    Object? proteinG = null,
+    Object? carbsG = null,
+    Object? fatG = null,
+    Object? ingredients = null,
+  }) {
+    return _then(_DietMeal(
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      calories: null == calories
+          ? _self.calories
+          : calories // ignore: cast_nullable_to_non_nullable
+              as double,
+      proteinG: null == proteinG
+          ? _self.proteinG
+          : proteinG // ignore: cast_nullable_to_non_nullable
+              as double,
+      carbsG: null == carbsG
+          ? _self.carbsG
+          : carbsG // ignore: cast_nullable_to_non_nullable
+              as double,
+      fatG: null == fatG
+          ? _self.fatG
+          : fatG // ignore: cast_nullable_to_non_nullable
+              as double,
+      ingredients: null == ingredients
+          ? _self._ingredients
+          : ingredients // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
 }
+
+// dart format on

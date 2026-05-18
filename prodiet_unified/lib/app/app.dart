@@ -4,31 +4,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/core/services/analytics_providers.dart';
+import 'package:prodiet_unified/core/services/analytics_service.dart';
 import 'package:prodiet_unified/app/router.dart';
 import 'package:prodiet_unified/core/services/connectivity_service.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/core/theme/app_theme.dart';
-import 'package:prodiet_unified/core/theme/theme_tokens.dart';
 import 'package:prodiet_unified/shared/components/production_error_screen.dart';
 
+import 'package:prodiet_unified/core/observability/monitoring/app_health_monitor.dart';
+
 class ProDietApp extends ConsumerStatefulWidget {
-  const ProDietApp({super.key});
+  final bool isTest;
+  const ProDietApp({super.key, this.isTest = false});
 
   @override
   ConsumerState<ProDietApp> createState() => _ProDietAppState();
 }
 
-class _ProDietAppState extends ConsumerState<ProDietApp> {
+class _ProDietAppState extends ConsumerState<ProDietApp> with WidgetsBindingObserver {
   late final AppLifecycleListener _listener;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _listener = AppLifecycleListener(
       onResume: _onAppResume,
       onPause: _onAppPause,
     );
+    if (!widget.isTest) {
+      ErrorWidget.builder = (FlutterErrorDetails details) {
+        return ProductionErrorScreen(error: details.exception);
+      };
+    }
     // Await theme init so the correct theme is active before first redirect
     ref.read(activeThemeProvider.notifier).init().timeout(
       const Duration(seconds: 3),
@@ -40,14 +48,28 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       // On any error, force-mark as initialized with default theme
       ref.read(activeThemeInitializedProvider.notifier).state = true;
     }).whenComplete(() {
-      if (mounted) setState(() {});
+      if (mounted) {
+        setState(() {});
+        if (!widget.isTest) {
+          ref.read(appHealthMonitorProvider).recordStartupComplete();
+        }
+      }
     });
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _listener.dispose();
     super.dispose();
+  }
+
+  @override
+  void didHaveMemoryPressure() {
+    super.didHaveMemoryPressure();
+    if (!widget.isTest) {
+      ref.read(appHealthMonitorProvider).recordMemoryPressure('critical');
+    }
   }
 
   Future<Map<String, String>> _getDeviceInfo() async {
@@ -111,8 +133,6 @@ class _ProDietAppState extends ConsumerState<ProDietApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.buildTheme(tokens, brightness),
       routerConfig: ref.watch(routerProvider),
-      // Hardened: Show premium error screen instead of red screen in production
-      errorBuilder: (context, error) => ProductionErrorScreen(error: error),
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(context);
         final clamped = mediaQuery.textScaler.clamp(
@@ -144,7 +164,7 @@ class _ConnectivityBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(connectivityProvider);
-    final isOffline = status.valueOrNull == ConnectivityStatus.offline;
+    final isOffline = status.value == ConnectivityStatus.offline;
     final topPadding = MediaQuery.maybeOf(context)?.padding.top ?? 0.0;
     
     return AnimatedContainer(

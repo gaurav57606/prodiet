@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:prodiet_unified/core/error/app_error.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/core/services/analytics_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 
 class AiRepository {
-  final SupabaseClient _client;
+  final SupabaseService _client;
   final AnalyticsService _analytics;
 
   AiRepository(this._client, this._analytics);
@@ -15,17 +15,19 @@ class AiRepository {
     int days = 7,
   }) async {
     try {
-      final response = await _client.functions.invoke(
-        'ai-meal-plan',
-        body: {
-          'user_id': user.id,
-          'fitness_goal': user.fitnessGoal ?? 'maintain',
-          'activity_level': user.activityLevel ?? 'moderate',
-          'dietary_preferences': user.dietaryPreferences.join(', '),
-          'allergies': user.allergies.join(', '),
-          'days': days,
-        },
-      );
+      final response = await _client.perform((client) async {
+        return await client.functions.invoke(
+          'ai-meal-plan',
+          body: {
+            'user_id': user.id,
+            'fitness_goal': user.fitnessGoal ?? 'maintain',
+            'activity_level': user.activityLevel ?? 'moderate',
+            'dietary_preferences': user.dietaryPreferences.join(', '),
+            'allergies': user.allergies.join(', '),
+            'days': days,
+          },
+        );
+      }, context: 'ai.generateMealPlan');
 
       if (response.status != 200) {
         return Left(ServerError(message: 'AI Meal Plan generation failed: ${response.status}'));
@@ -35,10 +37,8 @@ class AiRepository {
       final isCacheHit = data['cached'] == true;
 
       _analytics.logEvent(
-        user.id, 
-        AnalyticsService.kAiPlanGenerated,
-        data: {'cached': isCacheHit, 'days': days},
-        screen: 'ai_meal_plan',
+        'ai_plan_generated',
+        parameters: {'cached': isCacheHit.toString(), 'days': days, 'user_id': user.id},
       );
 
       return Right(data);
@@ -53,14 +53,16 @@ class AiRepository {
     List<String> availableIngredients,
   ) async {
     try {
-      final response = await _client.functions.invoke(
-        'ai-chat',
-        body: {
-          'user_id': userId,
-          'question': question,
-          'ingredients': availableIngredients,
-        },
-      );
+      final response = await _client.perform((client) async {
+        return await client.functions.invoke(
+          'ai-chat',
+          body: {
+            'user_id': userId,
+            'question': question,
+            'ingredients': availableIngredients,
+          },
+        );
+      }, context: 'ai.askKitchenAssistant');
 
       if (response.status != 200) {
         return Left(ServerError(message: 'Kitchen Assistant failed: ${response.status}'));
@@ -78,14 +80,16 @@ class AiRepository {
     Map<String, dynamic> remainingMacros,
   ) async {
     try {
-      final response = await _client.functions.invoke(
-        'ai-compensate',
-        body: {
-          'user_id': userId,
-          'missed_meal_id': missedMealId,
-          'remaining_macros': remainingMacros,
-        },
-      );
+      final response = await _client.perform((client) async {
+        return await client.functions.invoke(
+          'ai-compensate',
+          body: {
+            'user_id': userId,
+            'missed_meal_id': missedMealId,
+            'remaining_macros': remainingMacros,
+          },
+        );
+      }, context: 'ai.generateCompensation');
 
       if (response.status != 200) {
         return Left(ServerError(message: 'AI Compensation failed: ${response.status}'));

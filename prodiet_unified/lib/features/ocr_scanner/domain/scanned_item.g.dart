@@ -6,8 +6,7 @@ part of 'scanned_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ScannedItemImpl _$$ScannedItemImplFromJson(Map<String, dynamic> json) =>
-    _$ScannedItemImpl(
+_ScannedItem _$ScannedItemFromJson(Map<String, dynamic> json) => _ScannedItem(
       name: json['name'] as String,
       quantity: (json['quantity'] as num).toDouble(),
       unit: json['unit'] as String,
@@ -15,7 +14,7 @@ _$ScannedItemImpl _$$ScannedItemImplFromJson(Map<String, dynamic> json) =>
       isSelected: json['isSelected'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$$ScannedItemImplToJson(_$ScannedItemImpl instance) =>
+Map<String, dynamic> _$ScannedItemToJson(_ScannedItem instance) =>
     <String, dynamic>{
       'name': instance.name,
       'quantity': instance.quantity,

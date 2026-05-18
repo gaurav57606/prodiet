@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import '../domain/models/achievement.dart';
 import '../data/achievement_repository.dart';
 
@@ -9,7 +11,7 @@ final streakAchievementProvider = FutureProvider.autoDispose<void>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return;
 
-  final dashboardData = dashboardAsync.valueOrNull;
+  final dashboardData = dashboardAsync.asData?.value;
   if (dashboardData == null) return;
 
   final streak = dashboardData.streakDays;

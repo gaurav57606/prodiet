@@ -1,12 +1,21 @@
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:prodiet_unified/core/services/fcm_service.dart';
-import '../../../main.dart'; // for logger
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 import '../../../core/error/error_handler.dart';
 import '../data/auth_repository.dart';
 import '../domain/models/app_user.dart';
 import 'auth_state.dart';
 import '../../../core/error/app_error.dart';
+
+const logger = _AuthLogger();
+class _AuthLogger {
+  const _AuthLogger();
+  void i(String message) => AppLogger.info(message);
+  void d(String message) => AppLogger.debug(message);
+  void w(String message) => AppLogger.warning(message);
+  void e(String message, {Object? error, StackTrace? stackTrace}) => AppLogger.error(message, error: error, stack: stackTrace, feature: 'auth');
+}
 
 
 class AuthNotifier extends StateNotifier<AuthState> {

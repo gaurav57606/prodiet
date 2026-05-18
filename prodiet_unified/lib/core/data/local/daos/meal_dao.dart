@@ -14,6 +14,16 @@ class MealDao extends DatabaseAccessor<AppDatabase> with _$MealDaoMixin {
       ..where((m) => m.userId.equals(userId) & m.date.equals(date)))
       .get();
 
+  // Watch meals for userId and date
+  Stream<List<LocalMeal>> watchMealsForDate(String userId, String date) =>
+    (select(localMeals)
+      ..where((m) => m.userId.equals(userId) & m.date.equals(date)))
+      .watch();
+
+  // Delete a meal by id
+  Future<int> deleteMeal(String id) =>
+    (delete(localMeals)..where((m) => m.id.equals(id))).go();
+
   // Insert or update a meal
   Future<void> upsertMeal(LocalMealsCompanion entry) =>
     into(localMeals).insertOnConflictUpdate(entry);
@@ -26,22 +36,23 @@ class MealDao extends DatabaseAccessor<AppDatabase> with _$MealDaoMixin {
   // Get all unsynced meals
   Future<List<LocalMeal>> getUnsynced(String userId) =>
     (select(localMeals)
-      ..where((m) => m.userId.equals(userId) & m.isSynced.equals(false)))
+      ..where((m) => m.userId.equals(userId) & m.isDirty.equals(true)))
       .get();
 
   // Mark as synced after upload
   Future<void> markSynced(List<String> ids) =>
     (update(localMeals)..where((m) => m.id.isIn(ids)))
-      .write(const LocalMealsCompanion(isSynced: Value(true)));
+      .write(const LocalMealsCompanion(isDirty: Value(false)));
 
   // Delete synced records older than 7 days to keep DB lean
   Future<void> pruneOldSynced() {
     final cutoff = DateTime.now().subtract(const Duration(days: 7));
     return (delete(localMeals)
       ..where((m) =>
-        m.isSynced.equals(true) &
+        m.isDirty.equals(false) &
         m.date.isSmallerThanValue(cutoff.toIso8601String())))
       .go();
   }
+
 }
 

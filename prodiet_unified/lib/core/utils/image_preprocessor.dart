@@ -3,7 +3,14 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 
+import 'package:flutter/painting.dart';
+
 class ImagePreprocessor {
+  /// Enforces cache bounds on the Flutter image cache to prevent memory pressure
+  static void enforceCacheBounds({int maxMegabytes = 50}) {
+    PaintingBinding.instance.imageCache.maximumSizeBytes = maxMegabytes * 1024 * 1024;
+    PaintingBinding.instance.imageCache.maximumSize = 100; // max 100 images
+  }
   /// Compresses and encodes image to Base64 in a background isolate if possible
   static Future<String> processForOcr(File file) async {
     return compute(_processImage, file.path);

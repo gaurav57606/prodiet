@@ -5,7 +5,7 @@ part 'diet_day.freezed.dart';
 part 'diet_day.g.dart';
 
 @freezed
-class DietDay with _$DietDay {
+abstract class DietDay with _$DietDay {
   const DietDay._();
 
   const factory DietDay({

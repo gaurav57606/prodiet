@@ -1,23 +1,25 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:prodiet_unified/features/meal_planner/domain/meal.dart';
 import '../domain/diet_meal.dart';
 import '../domain/diet_plan.dart';
 import '../domain/diet_plan_exceptions.dart';
 
 class DietPlanRepository {
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
 
   DietPlanRepository(this._supabase);
 
   Future<DietPlan?> getActivePlan(String userId) async {
-    final response = await _supabase
-        .from('diet_plans')
-        .select()
-        .eq('user_id', userId)
-        .eq('is_active', true)
-        .order('generated_at', ascending: false)
-        .limit(1)
-        .maybeSingle();
+    final response = await _supabase.perform((client) async {
+      return await client
+          .from('diet_plans')
+          .select()
+          .eq('user_id', userId)
+          .eq('is_active', true)
+          .order('generated_at', ascending: false)
+          .limit(1)
+          .maybeSingle();
+    }, context: 'diet_plans.getActivePlan');
 
     if (response == null) return null;
     return DietPlan.fromJson(response);
@@ -25,13 +27,15 @@ class DietPlanRepository {
 
   Future<DietPlan> generatePlan(String userId) async {
     // Check last generated_at for rate limiting
-    final lastPlan = await _supabase
-        .from('diet_plans')
-        .select('generated_at')
-        .eq('user_id', userId)
-        .order('generated_at', ascending: false)
-        .limit(1)
-        .maybeSingle();
+    final lastPlan = await _supabase.perform((client) async {
+      return await client
+          .from('diet_plans')
+          .select('generated_at')
+          .eq('user_id', userId)
+          .order('generated_at', ascending: false)
+          .limit(1)
+          .maybeSingle();
+    }, context: 'diet_plans.checkRateLimit');
 
     if (lastPlan != null) {
       final lastGenerated = DateTime.tryParse(lastPlan['generated_at'] as String? ?? '');
@@ -48,23 +52,27 @@ class DietPlanRepository {
     }
 
     // 1. Fetch user profile
-    final profile = await _supabase
-        .from('users')
-        .select('age,weight_kg,height_cm,fitness_goal,activity_level,dietary_preferences,allergies,daily_calorie_goal')
-        .eq('id', userId)
-        .single();
+    final profile = await _supabase.perform((client) async {
+      return await client
+          .from('users')
+          .select('age,weight_kg,height_cm,fitness_goal,activity_level,dietary_preferences,allergies,daily_calorie_goal')
+          .eq('id', userId)
+          .single();
+    }, context: 'diet_plans.getUserProfile');
 
     // 2. Deactivate all previous plans
     await deactivateAllPlans(userId);
 
-    // 3. Call Edge Function
-    final response = await _supabase.functions.invoke(
-      'generate-diet-plan',
-      body: {
-        'userId': userId,
-        'profile': profile,
-      },
-    );
+    // 3. Call Edge Function inside perform block for standard error catching
+    final response = await _supabase.perform((client) async {
+      return await client.functions.invoke(
+        'generate-diet-plan',
+        body: {
+          'userId': userId,
+          'profile': profile,
+        },
+      );
+    }, context: 'diet_plans.generatePlanEdgeFunction');
 
     if (response.status != 200) {
       throw Exception('Failed to generate AI Diet Plan: ${response.data}');
@@ -80,11 +88,13 @@ class DietPlanRepository {
     };
 
     // 5. INSERT into database
-    final inserted = await _supabase
-        .from('diet_plans')
-        .insert(planData)
-        .select()
-        .single();
+    final inserted = await _supabase.perform((client) async {
+      return await client
+          .from('diet_plans')
+          .insert(planData)
+          .select()
+          .single();
+    }, context: 'diet_plans.insertNewPlan');
 
     return DietPlan.fromJson(inserted);
   }
@@ -125,14 +135,18 @@ class DietPlanRepository {
     addMeals(todayPlan.snacks, MealType.snack);
 
     if (mealsToInsert.isNotEmpty) {
-      await _supabase.from('meals').insert(mealsToInsert);
+      await _supabase.perform((client) async {
+        await client.from('meals').insert(mealsToInsert);
+      }, context: 'diet_plans.savePlanMealsToToday');
     }
   }
 
   Future<void> deactivateAllPlans(String userId) async {
-    await _supabase
-        .from('diet_plans')
-        .update({'is_active': false})
-        .eq('user_id', userId);
+    await _supabase.perform((client) async {
+      await client
+          .from('diet_plans')
+          .update({'is_active': false})
+          .eq('user_id', userId);
+    }, context: 'diet_plans.deactivateAllPlans');
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import '../data/diet_plan_repository.dart';
 import '../domain/diet_plan_state.dart';
 import '../domain/diet_plan_exceptions.dart';
 
 final dietPlanRepositoryProvider = Provider<DietPlanRepository>((ref) {
-  return DietPlanRepository(ref.watch(supabaseClientProvider));
+  return DietPlanRepository(ref.watch(supabaseServiceProvider));
 });
 
 final dietPlanProvider = StateNotifierProvider<DietPlanNotifier, DietPlanState>((ref) {
@@ -18,18 +19,18 @@ class DietPlanNotifier extends StateNotifier<DietPlanState> {
   final DietPlanRepository _repo;
   final String _userId;
 
-  DietPlanNotifier(this._repo, this._userId) : super(const DietPlanInitial()) {
+  DietPlanNotifier(this._repo, this._userId) : super(const DietPlanState.initial()) {
     _loadActivePlan();
   }
 
   Future<void> _loadActivePlan() async {
     if (_userId.isEmpty) return;
-    state = const DietPlanLoading();
+    state = const DietPlanState.loading();
     try {
       final plan = await _repo.getActivePlan(_userId);
-      state = plan != null ? DietPlanLoaded(plan) : const DietPlanInitial();
+      state = plan != null ? DietPlanState.loaded(plan) : const DietPlanState.initial();
     } catch (e) {
-      state = DietPlanError(e.toString());
+      state = DietPlanState.error(e.toString());
     }
   }
 
@@ -38,13 +39,13 @@ class DietPlanNotifier extends StateNotifier<DietPlanState> {
     
     // Save current state to restore if rate limited
     final prevState = state;
-    state = const DietPlanLoading();
+    state = const DietPlanState.loading();
     
     try {
       final plan = await _repo.generatePlan(_userId);
-      state = DietPlanLoaded(plan);
+      state = DietPlanState.loaded(plan);
     } catch (e) {
-      state = DietPlanError(e.toString());
+      state = DietPlanState.error(e.toString());
       if (e is PlanRateLimitException) {
         state = prevState; // Restore previous state instead of error screen
         rethrow;

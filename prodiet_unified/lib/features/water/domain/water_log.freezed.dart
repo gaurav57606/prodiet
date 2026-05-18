@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,192 +9,32 @@ part of 'water_log.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-WaterLog _$WaterLogFromJson(Map<String, dynamic> json) {
-  return _WaterLog.fromJson(json);
-}
 
 /// @nodoc
 mixin _$WaterLog {
-  String get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'user_id')
-  String get userId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'amount_ml')
-  int get amountMl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'logged_at')
-  DateTime get loggedAt => throw _privateConstructorUsedError;
-  DateTime get date => throw _privateConstructorUsedError;
-
-  /// Serializes this WaterLog to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get id;
+  String get userId;
+  int get amountMl;
+  DateTime get loggedAt;
+  DateTime get date;
 
   /// Create a copy of WaterLog
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $WaterLogCopyWith<WaterLog> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+      _$WaterLogCopyWithImpl<WaterLog>(this as WaterLog, _$identity);
 
-/// @nodoc
-abstract class $WaterLogCopyWith<$Res> {
-  factory $WaterLogCopyWith(WaterLog value, $Res Function(WaterLog) then) =
-      _$WaterLogCopyWithImpl<$Res, WaterLog>;
-  @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'amount_ml') int amountMl,
-      @JsonKey(name: 'logged_at') DateTime loggedAt,
-      DateTime date});
-}
-
-/// @nodoc
-class _$WaterLogCopyWithImpl<$Res, $Val extends WaterLog>
-    implements $WaterLogCopyWith<$Res> {
-  _$WaterLogCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of WaterLog
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? userId = null,
-    Object? amountMl = null,
-    Object? loggedAt = null,
-    Object? date = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      amountMl: null == amountMl
-          ? _value.amountMl
-          : amountMl // ignore: cast_nullable_to_non_nullable
-              as int,
-      loggedAt: null == loggedAt
-          ? _value.loggedAt
-          : loggedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$WaterLogImplCopyWith<$Res>
-    implements $WaterLogCopyWith<$Res> {
-  factory _$$WaterLogImplCopyWith(
-          _$WaterLogImpl value, $Res Function(_$WaterLogImpl) then) =
-      __$$WaterLogImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'amount_ml') int amountMl,
-      @JsonKey(name: 'logged_at') DateTime loggedAt,
-      DateTime date});
-}
-
-/// @nodoc
-class __$$WaterLogImplCopyWithImpl<$Res>
-    extends _$WaterLogCopyWithImpl<$Res, _$WaterLogImpl>
-    implements _$$WaterLogImplCopyWith<$Res> {
-  __$$WaterLogImplCopyWithImpl(
-      _$WaterLogImpl _value, $Res Function(_$WaterLogImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of WaterLog
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? userId = null,
-    Object? amountMl = null,
-    Object? loggedAt = null,
-    Object? date = null,
-  }) {
-    return _then(_$WaterLogImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      amountMl: null == amountMl
-          ? _value.amountMl
-          : amountMl // ignore: cast_nullable_to_non_nullable
-              as int,
-      loggedAt: null == loggedAt
-          ? _value.loggedAt
-          : loggedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$WaterLogImpl implements _WaterLog {
-  const _$WaterLogImpl(
-      {required this.id,
-      @JsonKey(name: 'user_id') required this.userId,
-      @JsonKey(name: 'amount_ml') required this.amountMl,
-      @JsonKey(name: 'logged_at') required this.loggedAt,
-      required this.date});
-
-  factory _$WaterLogImpl.fromJson(Map<String, dynamic> json) =>
-      _$$WaterLogImplFromJson(json);
-
-  @override
-  final String id;
-  @override
-  @JsonKey(name: 'user_id')
-  final String userId;
-  @override
-  @JsonKey(name: 'amount_ml')
-  final int amountMl;
-  @override
-  @JsonKey(name: 'logged_at')
-  final DateTime loggedAt;
-  @override
-  final DateTime date;
-
-  @override
-  String toString() {
-    return 'WaterLog(id: $id, userId: $userId, amountMl: $amountMl, loggedAt: $loggedAt, date: $date)';
-  }
+  /// Serializes this WaterLog to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WaterLogImpl &&
+            other is WaterLog &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.amountMl, amountMl) ||
@@ -209,51 +49,353 @@ class _$WaterLogImpl implements _WaterLog {
   int get hashCode =>
       Object.hash(runtimeType, id, userId, amountMl, loggedAt, date);
 
-  /// Create a copy of WaterLog
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$WaterLogImplCopyWith<_$WaterLogImpl> get copyWith =>
-      __$$WaterLogImplCopyWithImpl<_$WaterLogImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$WaterLogImplToJson(
-      this,
-    );
+  String toString() {
+    return 'WaterLog(id: $id, userId: $userId, amountMl: $amountMl, loggedAt: $loggedAt, date: $date)';
   }
 }
 
-abstract class _WaterLog implements WaterLog {
-  const factory _WaterLog(
-      {required final String id,
-      @JsonKey(name: 'user_id') required final String userId,
-      @JsonKey(name: 'amount_ml') required final int amountMl,
-      @JsonKey(name: 'logged_at') required final DateTime loggedAt,
-      required final DateTime date}) = _$WaterLogImpl;
+/// @nodoc
+abstract mixin class $WaterLogCopyWith<$Res> {
+  factory $WaterLogCopyWith(WaterLog value, $Res Function(WaterLog) _then) =
+      _$WaterLogCopyWithImpl;
+  @useResult
+  $Res call(
+      {String id,
+      String userId,
+      int amountMl,
+      DateTime loggedAt,
+      DateTime date});
+}
 
-  factory _WaterLog.fromJson(Map<String, dynamic> json) =
-      _$WaterLogImpl.fromJson;
+/// @nodoc
+class _$WaterLogCopyWithImpl<$Res> implements $WaterLogCopyWith<$Res> {
+  _$WaterLogCopyWithImpl(this._self, this._then);
+
+  final WaterLog _self;
+  final $Res Function(WaterLog) _then;
+
+  /// Create a copy of WaterLog
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? userId = null,
+    Object? amountMl = null,
+    Object? loggedAt = null,
+    Object? date = null,
+  }) {
+    return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _self.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      amountMl: null == amountMl
+          ? _self.amountMl
+          : amountMl // ignore: cast_nullable_to_non_nullable
+              as int,
+      loggedAt: null == loggedAt
+          ? _self.loggedAt
+          : loggedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      date: null == date
+          ? _self.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [WaterLog].
+extension WaterLogPatterns on WaterLog {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_WaterLog value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _WaterLog() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_WaterLog value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _WaterLog():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_WaterLog value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _WaterLog() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String id, String userId, int amountMl, DateTime loggedAt,
+            DateTime date)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _WaterLog() when $default != null:
+        return $default(
+            _that.id, _that.userId, _that.amountMl, _that.loggedAt, _that.date);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String id, String userId, int amountMl, DateTime loggedAt,
+            DateTime date)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _WaterLog():
+        return $default(
+            _that.id, _that.userId, _that.amountMl, _that.loggedAt, _that.date);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(String id, String userId, int amountMl, DateTime loggedAt,
+            DateTime date)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _WaterLog() when $default != null:
+        return $default(
+            _that.id, _that.userId, _that.amountMl, _that.loggedAt, _that.date);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _WaterLog implements WaterLog {
+  const _WaterLog(
+      {required this.id,
+      required this.userId,
+      required this.amountMl,
+      required this.loggedAt,
+      required this.date});
+  factory _WaterLog.fromJson(Map<String, dynamic> json) =>
+      _$WaterLogFromJson(json);
 
   @override
-  String get id;
+  final String id;
   @override
-  @JsonKey(name: 'user_id')
-  String get userId;
+  final String userId;
   @override
-  @JsonKey(name: 'amount_ml')
-  int get amountMl;
+  final int amountMl;
   @override
-  @JsonKey(name: 'logged_at')
-  DateTime get loggedAt;
+  final DateTime loggedAt;
   @override
-  DateTime get date;
+  final DateTime date;
 
   /// Create a copy of WaterLog
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$WaterLogImplCopyWith<_$WaterLogImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$WaterLogCopyWith<_WaterLog> get copyWith =>
+      __$WaterLogCopyWithImpl<_WaterLog>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$WaterLogToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _WaterLog &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.amountMl, amountMl) ||
+                other.amountMl == amountMl) &&
+            (identical(other.loggedAt, loggedAt) ||
+                other.loggedAt == loggedAt) &&
+            (identical(other.date, date) || other.date == date));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, userId, amountMl, loggedAt, date);
+
+  @override
+  String toString() {
+    return 'WaterLog(id: $id, userId: $userId, amountMl: $amountMl, loggedAt: $loggedAt, date: $date)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$WaterLogCopyWith<$Res>
+    implements $WaterLogCopyWith<$Res> {
+  factory _$WaterLogCopyWith(_WaterLog value, $Res Function(_WaterLog) _then) =
+      __$WaterLogCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String userId,
+      int amountMl,
+      DateTime loggedAt,
+      DateTime date});
+}
+
+/// @nodoc
+class __$WaterLogCopyWithImpl<$Res> implements _$WaterLogCopyWith<$Res> {
+  __$WaterLogCopyWithImpl(this._self, this._then);
+
+  final _WaterLog _self;
+  final $Res Function(_WaterLog) _then;
+
+  /// Create a copy of WaterLog
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = null,
+    Object? userId = null,
+    Object? amountMl = null,
+    Object? loggedAt = null,
+    Object? date = null,
+  }) {
+    return _then(_WaterLog(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _self.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      amountMl: null == amountMl
+          ? _self.amountMl
+          : amountMl // ignore: cast_nullable_to_non_nullable
+              as int,
+      loggedAt: null == loggedAt
+          ? _self.loggedAt
+          : loggedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      date: null == date
+          ? _self.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+// dart format on

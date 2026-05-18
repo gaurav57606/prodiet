@@ -1,3 +1,5 @@
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
+
 // ignore_for_file: do_not_use_environment
 class AppConfig {
   AppConfig._();
@@ -36,8 +38,7 @@ class AppConfig {
   static void assertValid() {
     final error = validate();
     if (error != null) {
-      // ignore: avoid_print
-      print('[AppConfig] WARNING: $error');
+      AppLogger.warning('[AppConfig] WARNING: $error');
     }
   }
 }

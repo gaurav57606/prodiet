@@ -1,23 +1,26 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import '../domain/models/app_user.dart';
 
 class AuthRepository {
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
 
   AuthRepository(this._supabase);
 
   Future<void> signUpWithEmail(String email, String password, String name) async {
-    try {
-      final response = await _supabase.auth.signUp(
+    final response = await _supabase.perform((client) async {
+      return await client.auth.signUp(
         email: email,
         password: password,
         data: {'name': name},
       );
+    }, context: 'auth.signUpWithEmail');
 
-      final userId = response.user?.id;
-      if (userId != null) {
-        // Insert profile row so fetchProfile() never returns null for this user
-        await _supabase.from('users').upsert({
+    final userId = response.user?.id;
+    if (userId != null) {
+      // Insert profile row so fetchProfile() never returns null for this user
+      await _supabase.perform((client) async {
+        await client.from('users').upsert({
           'id': userId,
           'email': email,
           'name': name,
@@ -30,52 +33,42 @@ class AuthRepository {
           'dietary_preferences': <String>[],
           'created_at': DateTime.now().toIso8601String(),
         });
-      }
-    } catch (e) {
-      rethrow;
+      }, context: 'auth.signUpUpsertProfile');
     }
   }
 
   Future<void> signInWithEmail(String email, String password) async {
-    try {
-      await _supabase.auth.signInWithPassword(
+    await _supabase.perform((client) async {
+      await client.auth.signInWithPassword(
         email: email,
         password: password,
       );
-    } catch (e) {
-      rethrow;
-    }
+    }, context: 'auth.signInWithEmail');
   }
 
   Future<void> signInWithGoogle() async {
-    try {
-      await _supabase.auth.signInWithOAuth(
+    await _supabase.perform((client) async {
+      await client.auth.signInWithOAuth(
         OAuthProvider.google,
         redirectTo: 'com.prodiet.app://login-callback',
       );
-    } catch (e) {
-      rethrow;
-    }
+    }, context: 'auth.signInWithGoogle');
   }
 
   Future<void> signOut() async {
-    try {
-      await _supabase.auth.signOut();
-    } catch (e) {
-      rethrow;
-    }
+    await _supabase.perform((client) async {
+      await client.auth.signOut();
+    }, context: 'auth.signOut');
   }
 
   Future<void> sendPasswordReset(String email) async {
-    try {
-      await _supabase.auth.resetPasswordForEmail(email);
-    } catch (e) {
-      rethrow;
-    }
+    await _supabase.perform((client) async {
+      await client.auth.resetPasswordForEmail(email);
+    }, context: 'auth.sendPasswordReset');
   }
 
   Stream<AuthState> authStateChanges() {
-    return _supabase.auth.onAuthStateChange;
+    return _supabase.authStateChanges;
   }
 
   /// Returns the current active session synchronously.
@@ -86,45 +79,38 @@ class AuthRepository {
   }
 
   Future<AppUser?> fetchProfile(String userId) async {
-    try {
-      final data = await _supabase
+    final data = await _supabase.perform((client) async {
+      return await client
           .from('users')
           .select()
           .eq('id', userId)
           .maybeSingle();
-      if (data == null) return null;
-      return AppUser.fromJson(data);
-    } catch (e) {
-      rethrow;
-    }
+    }, context: 'auth.fetchProfile');
+    
+    if (data == null) return null;
+    return AppUser.fromJson(data);
   }
 
   Future<void> updateProfile(String userId, Map<String, dynamic> data) async {
-    try {
-      data['updated_at'] = DateTime.now().toIso8601String();
-      await _supabase.from('users').update(data).eq('id', userId);
-    } catch (e) {
-      rethrow;
-    }
+    data['updated_at'] = DateTime.now().toIso8601String();
+    await _supabase.perform((client) async {
+      await client.from('users').update(data).eq('id', userId);
+    }, context: 'auth.updateProfile');
   }
 
   Future<void> sendPhoneOtp(String phoneWithCountryCode) async {
-    try {
-      await _supabase.auth.signInWithOtp(phone: phoneWithCountryCode);
-    } catch (e) {
-      rethrow;
-    }
+    await _supabase.perform((client) async {
+      await client.auth.signInWithOtp(phone: phoneWithCountryCode);
+    }, context: 'auth.sendPhoneOtp');
   }
 
   Future<void> verifyPhoneOtp(String phoneWithCountryCode, String token) async {
-    try {
-      await _supabase.auth.verifyOTP(
+    await _supabase.perform((client) async {
+      await client.auth.verifyOTP(
         phone: phoneWithCountryCode,
         token: token,
         type: OtpType.sms,
       );
-    } catch (e) {
-      rethrow;
-    }
+    }, context: 'auth.verifyPhoneOtp');
   }
 }

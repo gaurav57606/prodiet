@@ -40,7 +40,7 @@ class SyncManager {
       await _syncService.syncAll(_userId);
       _updateStatus(SyncStatus.idle);
     } catch (e, stack) {
-      AppLogger.error('Sync failed', e, stack);
+      AppLogger.error('Sync failed', error: e, stack: stack);
       _updateStatus(SyncStatus.failed);
     }
   }

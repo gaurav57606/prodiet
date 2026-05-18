@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:prodiet_unified/core/services/health_service.dart';
 
 final healthServiceProvider = Provider<HealthService>((ref) => HealthService());

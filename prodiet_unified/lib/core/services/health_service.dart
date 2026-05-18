@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:health/health.dart';
 import 'package:flutter/foundation.dart';
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 
 class HealthService {
   final Health _health = Health();
@@ -17,8 +18,8 @@ class HealthService {
     
     try {
       return await _health.requestAuthorization(_types);
-    } catch (e) {
-      debugPrint('Health permission error: $e');
+    } catch (e, st) {
+      AppLogger.error('[HealthService] Health permission error', error: e, stack: st, feature: 'health_connect');
       return false;
     }
   }
@@ -32,8 +33,8 @@ class HealthService {
     try {
       final steps = await _health.getTotalStepsInInterval(midnight, now);
       return steps ?? 0;
-    } catch (e) {
-      debugPrint('Error fetching steps: $e');
+    } catch (e, st) {
+      AppLogger.error('[HealthService] Error fetching steps', error: e, stack: st, feature: 'health_connect');
       return 0;
     }
   }
@@ -55,8 +56,8 @@ class HealthService {
         total += double.tryParse(point.value.toString()) ?? 0.0;
       }
       return total;
-    } catch (e) {
-      debugPrint('Error fetching calories: $e');
+    } catch (e, st) {
+      AppLogger.error('[HealthService] Error fetching calories', error: e, stack: st, feature: 'health_connect');
       return 0;
     }
   }
@@ -78,8 +79,8 @@ class HealthService {
       // Sort by date to get the latest
       data.sort((a, b) => b.dateTo.compareTo(a.dateTo));
       return int.tryParse(data.first.value.toString());
-    } catch (e) {
-      debugPrint('Error fetching heart rate: $e');
+    } catch (e, st) {
+      AppLogger.error('[HealthService] Error fetching heart rate', error: e, stack: st, feature: 'health_connect');
       return null;
     }
   }

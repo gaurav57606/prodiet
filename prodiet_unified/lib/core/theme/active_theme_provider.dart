@@ -40,8 +40,18 @@ class ActiveThemeNotifier extends Notifier<ActiveTheme> {
   }
 }
 
+class ActiveThemeInitializedNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  @override
+  set state(bool value) => super.state = value;
+}
+
 /// False until SharedPreferences has been read.
-final activeThemeInitializedProvider = StateProvider<bool>((ref) => false);
+final activeThemeInitializedProvider = NotifierProvider<ActiveThemeInitializedNotifier, bool>(
+  ActiveThemeInitializedNotifier.new,
+);
 
 /// Default: t1Dark — persisted to SharedPreferences across restarts.
 final activeThemeProvider = NotifierProvider<ActiveThemeNotifier, ActiveTheme>(

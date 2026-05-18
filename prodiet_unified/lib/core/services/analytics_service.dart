@@ -1,28 +1,46 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/core/observability/analytics/analytics_manager.dart';
 
 class AnalyticsService {
-  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+  final AnalyticsManager _manager;
+
+  AnalyticsService({AnalyticsManager? manager})
+      : _manager = manager ?? AnalyticsManager();
 
   Future<void> logEvent(String name, {Map<String, Object>? parameters}) async {
-    if (kIsWeb) return;
-    await _analytics.logEvent(name: name, parameters: parameters);
+    await _manager.logRawEvent(name, parameters);
   }
 
   Future<void> logScreen(String name) async {
-    if (kIsWeb) return;
-    await _analytics.logScreenView(screenName: name);
+    await _manager.logScreen(name);
   }
 
   Future<void> setUserId(String id) async {
-    if (kIsWeb) return;
-    await _analytics.setUserId(id: id);
+    await _manager.setUserId(id);
   }
 
   Future<void> setUserProperty(String name, String value) async {
+    await _manager.setUserProperty(name, value);
+  }
+
+  Future<void> startSession(
+    String userId, {
+    required String deviceModel,
+    required String osVersion,
+    required String appVersion,
+  }) async {
     if (kIsWeb) return;
-    await _analytics.setUserProperty(name: name, value: value);
+    await setUserId(userId);
+    await setUserProperty('device_model', deviceModel);
+    await setUserProperty('os_version', osVersion);
+    await setUserProperty('app_version', appVersion);
+    await _manager.logEvent(const AppAnalyticsEvent('auth.login.success', {'method': 'session_restore'}));
+  }
+
+  Future<void> endSession(String userId) async {
+    if (kIsWeb) return;
+    await _manager.logEvent(const AppAnalyticsEvent('auth.logout'));
   }
 }
 

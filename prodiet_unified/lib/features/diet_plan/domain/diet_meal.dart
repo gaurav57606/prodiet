@@ -4,7 +4,7 @@ part 'diet_meal.freezed.dart';
 part 'diet_meal.g.dart';
 
 @freezed
-class DietMeal with _$DietMeal {
+abstract class DietMeal with _$DietMeal {
   const factory DietMeal({
     required String name,
     required double calories,

@@ -10,7 +10,9 @@ class LocalInventory extends Table {
   IntColumn get shelfLifeDays => integer().nullable()();
   TextColumn get category => text().nullable()();
   TextColumn get lastRestocked => text().nullable()(); // ISO datetime
-  BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
+  BoolColumn get isDirty => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+  DateTimeColumn get clientUpdatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
   Set<Column> get primaryKey => {id};

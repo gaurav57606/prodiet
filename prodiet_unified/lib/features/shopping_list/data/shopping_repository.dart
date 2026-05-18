@@ -1,68 +1,98 @@
 import 'package:dartz/dartz.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:drift/drift.dart';
+import 'package:prodiet_unified/core/data/local/app_database.dart';
+import 'package:prodiet_unified/core/sync/sync_queue.dart';
+import 'package:prodiet_unified/core/sync/sync_task.dart';
+import 'package:uuid/uuid.dart';
 import '../../../core/error/app_error.dart';
 import '../../../core/error/error_handler.dart';
 import '../domain/models/shopping_item.dart';
 
 class ShoppingRepository {
-  final SupabaseClient _supabase;
+  final AppDatabase _db;
+  final SyncQueueRepository _syncQueue;
   static const String _tag = 'ShoppingRepository';
 
-  ShoppingRepository(this._supabase);
+  ShoppingRepository(this._db, this._syncQueue);
 
-  Future<Either<AppError, List<ShoppingItem>>> getList(String userId) async {
-    try {
-      final response = await _supabase
-          .from('shopping_list')
-          .select()
-          .eq('user_id', userId);
-      
-      final items = (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
-      return Right(items);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getList'));
-    }
+  Stream<List<ShoppingItem>> watchList(String userId) {
+    return _db.shoppingDao.watchList(userId).map((localData) {
+      return localData.map((l) => ShoppingItem(
+        id: l.id,
+        userId: l.userId,
+        ingredientName: l.ingredientName,
+        quantity: l.quantity,
+        unit: l.unit,
+        isPurchased: l.isPurchased,
+        source: l.source,
+      )).toList();
+    });
   }
 
-  Future<Either<AppError, List<ShoppingItem>>> getUnpurchased(String userId) async {
+  Future<Either<AppError, void>> addItem(ShoppingItem item) async {
     try {
-      final response = await _supabase
-          .from('shopping_list')
-          .select()
-          .eq('user_id', userId)
-          .eq('is_purchased', false);
+      final now = DateTime.now();
+      final id = item.id.isEmpty ? const Uuid().v4() : item.id;
       
-      final items = (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
-      return Right(items);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e, context: '$_tag.getUnpurchased'));
-    }
-  }
+      // 1. Local Write
+      await _db.shoppingDao.upsertItem(LocalShoppingListCompanion.insert(
+        id: id,
+        userId: item.userId,
+        ingredientName: item.ingredientName,
+        quantity: item.quantity,
+        unit: item.unit,
+        isPurchased: Value(item.isPurchased),
+        source: Value(item.source),
+        isDirty: const Value(true),
+        clientUpdatedAt: Value(now),
+      ));
 
-  Future<Either<AppError, ShoppingItem>> addItem(ShoppingItem item) async {
-    try {
-      final response = await _supabase
-          .from('shopping_list')
-          .insert(item.toJson())
-          .select()
-          .single();
+      // 2. Sync
+      await _syncQueue.enqueue(SyncTask(
+        id: 0,
+        createdAt: now,
+        operation: SyncOperation.insert,
+        target: SyncTarget.shopping_list,
+        recordId: id,
+        payload: {
+          ...item.toJson(),
+          'id': id,
+          'client_updated_at': now.toIso8601String(),
+        },
+      ));
       
-      return Right(ShoppingItem.fromJson(response));
+      return const Right(null);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.addItem'));
     }
   }
 
-  Future<Either<AppError, ShoppingItem>> markPurchased(String itemId, bool isPurchased) async {
+  Future<Either<AppError, void>> markPurchased(String itemId, bool isPurchased) async {
     try {
-      final response = await _supabase
-          .from('shopping_list')
-          .update({'is_purchased': isPurchased})
-          .eq('id', itemId)
-          .select()
-          .single();
+      final now = DateTime.now();
       
-      return Right(ShoppingItem.fromJson(response));
+      // Optimistic
+      await (_db.update(_db.localShoppingList)..where((t) => t.id.equals(itemId))).write(
+        LocalShoppingListCompanion(
+          isPurchased: Value(isPurchased),
+          isDirty: const Value(true),
+          clientUpdatedAt: Value(now),
+        ),
+      );
+      
+      await _syncQueue.enqueue(SyncTask(
+        id: 0,
+        createdAt: now,
+        operation: SyncOperation.update,
+        target: SyncTarget.shopping_list,
+        recordId: itemId,
+        payload: {
+          'is_purchased': isPurchased,
+          'client_updated_at': now.toIso8601String(),
+        },
+      ));
+      
+      return const Right(null);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.markPurchased'));
     }
@@ -70,58 +100,87 @@ class ShoppingRepository {
 
   Future<Either<AppError, void>> deleteItem(String itemId) async {
     try {
-      await _supabase.from('shopping_list').delete().eq('id', itemId);
+      await _db.shoppingDao.deleteItem(itemId);
+      
+      await _syncQueue.enqueue(SyncTask(
+        id: 0,
+        createdAt: DateTime.now(),
+        operation: SyncOperation.delete,
+        target: SyncTarget.shopping_list,
+        recordId: itemId,
+        payload: {},
+      ));
+      
       return const Right(null);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.deleteItem'));
     }
   }
 
+  Future<Either<AppError, List<ShoppingItem>>> getList(String userId) async {
+    try {
+      final localData = await (_db.select(_db.localShoppingList)
+        ..where((s) => s.userId.equals(userId))
+        ..orderBy([(s) => OrderingTerm.asc(s.ingredientName)]))
+        .get();
+      final items = localData.map((l) => ShoppingItem(
+        id: l.id,
+        userId: l.userId,
+        ingredientName: l.ingredientName,
+        quantity: l.quantity,
+        unit: l.unit,
+        isPurchased: l.isPurchased,
+        source: l.source,
+      )).toList();
+      return Right(items);
+    } catch (e) {
+      return Left(ErrorHandler.handle(e, context: '$_tag.getList'));
+    }
+  }
+
   Future<Either<AppError, void>> clearPurchased(String userId) async {
     try {
-      await _supabase
-          .from('shopping_list')
-          .delete()
-          .eq('user_id', userId)
-          .eq('is_purchased', true);
+      final purchased = await (_db.select(_db.localShoppingList)
+        ..where((s) => s.userId.equals(userId) & s.isPurchased.equals(true)))
+        .get();
+
+      for (var item in purchased) {
+        await _db.shoppingDao.deleteItem(item.id);
+        await _syncQueue.enqueue(SyncTask(
+          id: 0,
+          createdAt: DateTime.now(),
+          operation: SyncOperation.delete,
+          target: SyncTarget.shopping_list,
+          recordId: item.id,
+          payload: {},
+        ));
+      }
       return const Right(null);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.clearPurchased'));
     }
   }
 
-  Future<Either<AppError, List<ShoppingItem>>> generateFromLowStock(String userId) async {
+  Future<Either<AppError, void>> generateFromLowStock(String userId) async {
     try {
-      // 1. Get low stock items from inventory
-      final inventoryResponse = await _supabase
-          .from('inventory')
-          .select()
-          .eq('user_id', userId);
-      
-      final lowStockItems = (inventoryResponse as List)
-          .where((i) => (i['quantity'] as num) <= (i['reorder_threshold'] as num))
-          .toList();
-      
-      if (lowStockItems.isEmpty) return const Right([]);
+      // Logic for generation would still involve checking inventory
+      // In a true offline app, we check local inventory.
+      final lowStock = await _db.inventoryDao.getAll(userId);
+      final itemsToRefill = lowStock.where((i) => i.quantity <= (i.reorderThreshold ?? 0));
 
-      // 2. Map to shopping items
-      final newShoppingItems = lowStockItems.map((i) => {
-        'user_id': userId,
-        'ingredient_name': i['ingredient_name'],
-        'quantity': (i['reorder_threshold'] as num) * 2, // Arbitrary refill amount
-        'unit': i['unit'],
-        'is_purchased': false,
-        'source': 'auto',
-      }).toList();
-
-      // 3. Insert into shopping_list
-      final response = await _supabase
-          .from('shopping_list')
-          .insert(newShoppingItems)
-          .select();
+      for (var i in itemsToRefill) {
+        await addItem(ShoppingItem(
+          id: '',
+          userId: userId,
+          ingredientName: i.ingredientName,
+          quantity: (i.reorderThreshold ?? 50) * 2,
+          unit: i.unit,
+          isPurchased: false,
+          source: 'auto',
+        ));
+      }
       
-      final items = (response as List).map((i) => ShoppingItem.fromJson(i)).toList();
-      return Right(items);
+      return const Right(null);
     } catch (e) {
       return Left(ErrorHandler.handle(e, context: '$_tag.generateFromLowStock'));
     }

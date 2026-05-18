@@ -1,0 +1,73 @@
+name: ProDiet Unified CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, release/*, dev ]
+  pull_request:
+    branches: [ main, master, release/*, dev ]
+
+jobs:
+  validate-and-test:
+    name: Format, Analyze, and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check code formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Static code analysis
+        run: flutter analyze
+
+      - name: Run unit, widget, and integration tests
+        run: flutter test --coverage
+
+      - name: Upload code coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage
+          path: coverage/lcov.info
+
+  dry-run-build:
+    name: Dry-Run Build Verification
+    needs: validate-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Android App Bundle (Dry Run)
+        run: flutter build appbundle --debug

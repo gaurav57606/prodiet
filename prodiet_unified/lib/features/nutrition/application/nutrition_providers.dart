@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import 'package:prodiet_unified/core/cache/cache_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import '../data/nutrition_repository.dart';
@@ -7,7 +8,7 @@ import '../domain/top_food_item.dart';
 
 final nutritionRepositoryProvider = Provider((ref) =>
     NutritionRepository(
-      ref.watch(supabaseClientProvider),
+      ref.watch(supabaseServiceProvider),
       ref.watch(semanticCacheProvider),
     ));
 

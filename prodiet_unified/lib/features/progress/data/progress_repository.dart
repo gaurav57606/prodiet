@@ -9,47 +9,57 @@
 // CREATE POLICY "own_weight" ON public.weight_logs
 //   FOR ALL USING (auth.uid() = user_id);
 
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import '../domain/weight_entry.dart';
 import '../domain/progress_summary.dart';
 
 class ProgressRepository {
-  final SupabaseClient _supabase;
+  final SupabaseService _supabase;
 
   ProgressRepository(this._supabase);
 
   Future<List<WeightEntry>> getWeightHistory(String userId, {int days = 30}) async {
     final startDate = DateTime.now().subtract(Duration(days: days)).toIso8601String();
     
-    final response = await _supabase
-        .from('weight_logs')
-        .select()
-        .eq('user_id', userId)
-        .gte('logged_at', startDate)
-        .order('logged_at', ascending: true);
+    final response = await _supabase.perform((client) async {
+      return await client
+          .from('weight_logs')
+          .select()
+          .eq('user_id', userId)
+          .gte('logged_at', startDate)
+          .order('logged_at', ascending: true);
+    }, context: 'progress.getWeightHistory');
     
     return (response as List).map((row) => WeightEntry.fromJson(row)).toList();
   }
 
   Future<void> logWeight(String userId, double weightKg) async {
-    // 1. Insert into history
-    await _supabase.from('weight_logs').insert({
-      'user_id': userId,
-      'weight_kg': weightKg,
-      'logged_at': DateTime.now().toIso8601String(),
-    });
+    await _supabase.perform((client) async {
+      // 1. Insert into history
+      await client.from('weight_logs').insert({
+        'user_id': userId,
+        'weight_kg': weightKg,
+        'logged_at': DateTime.now().toIso8601String(),
+      });
 
-    // 2. Update current weight in users table
-    await _supabase
-        .from('users')
-        .update({'weight_kg': weightKg})
-        .eq('id', userId);
+      // 2. Update current weight in users table
+      await client
+          .from('users')
+          .update({'weight_kg': weightKg})
+          .eq('id', userId);
+    }, context: 'progress.logWeight');
   }
 
   Future<ProgressSummary> getProgressSummary(String userId, {int days = 30}) async {
     final results = await Future.wait<dynamic>([
       getWeightHistory(userId, days: days),
-      _supabase.from('users').select('target_weight_kg, weight_kg').eq('id', userId).single(),
+      _supabase.perform((client) async {
+        return await client
+            .from('users')
+            .select('target_weight_kg, weight_kg')
+            .eq('id', userId)
+            .single();
+      }, context: 'progress.getUserProfileTarget'),
     ]);
 
     final entries = results[0] as List<WeightEntry>;

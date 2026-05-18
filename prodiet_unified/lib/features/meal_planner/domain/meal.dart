@@ -7,8 +7,7 @@ enum MealType { breakfast, lunch, dinner, snack }
 enum MealStatus { pending, eaten, skipped }
 
 @freezed
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Meal with _$Meal {
+abstract class Meal with _$Meal {
   const factory Meal({
     required String id,
     required String userId,

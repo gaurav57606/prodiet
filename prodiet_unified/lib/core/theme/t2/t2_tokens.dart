@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
-import '../theme_tokens.dart';
+import '../../design_system/tokens/app_theme_tokens.dart';
+import '../../design_system/tokens/app_colors.dart';
+import '../../design_system/tokens/app_typography.dart';
+import '../../design_system/tokens/app_spacing.dart';
+import '../../design_system/tokens/app_radius.dart';
+import '../../design_system/tokens/app_shadows.dart';
+import '../../design_system/tokens/app_gradients.dart';
+import '../../design_system/tokens/app_motion.dart';
 import '../font_config.dart';
 import 't2_colors.dart';
 import 't2_spacing.dart';
 
 class T2Tokens {
   static AppThemeTokens get light => AppThemeTokens(
-    colors: AppColorTokens(
+    dashboardLayout: AppDashboardLayout.t2,
+    colors: AppColors(
       primary: t2LightScheme.primary,
       secondary: t2LightScheme.secondary,
       background: t2LightScheme.surface,
@@ -17,17 +25,33 @@ class T2Tokens {
       onBackground: t2LightScheme.onSurface,
       onSurface: t2LightScheme.onSurface,
       onError: t2LightScheme.onError,
+      surfaceContainerLowest: Colors.white,
+      surfaceContainerLow: const Color(0xFFF5F5F0),
+      surfaceContainer: const Color(0xFFECECE6),
+      surfaceContainerHigh: const Color(0xFFE2E2DC),
+      surfaceContainerHighest: const Color(0xFFFFFFFF),
+      onSurfaceVariant: t2LightScheme.onSurfaceVariant,
+      outline: t2LightScheme.outline,
       calories: T2Colors.lime,
       protein: T2Colors.purple,
       carbs: T2Colors.amber,
       fat: T2Colors.green,
       water: T2Colors.sky,
       activity: T2Colors.purple,
+      waterOk: const Color(0xFF00E5FF),
+      waterWarning: const Color(0xFFFFB040),
+      waterDanger: const Color(0xFFFF6080),
     ),
-    typography: AppTypographyTokens(
+    typography: AppTypography(
+      displayLarge: AppFonts.dmSans(fontSize: 64, fontWeight: FontWeight.w900, letterSpacing: -1.5),
+      displayMedium: AppFonts.dmSans(fontSize: 45, fontWeight: FontWeight.w400),
+      displaySmall: AppFonts.dmSans(fontSize: 36, fontWeight: FontWeight.w400),
       headlineLarge: AppFonts.barlowCondensed(fontSize: 24, fontWeight: FontWeight.w800),
       headlineMedium: AppFonts.barlowCondensed(fontSize: 20, fontWeight: FontWeight.w800),
       headlineSmall: AppFonts.dmSans(fontSize: 18, fontWeight: FontWeight.w700),
+      titleLarge: AppFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w400),
+      titleMedium: AppFonts.dmSans(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      titleSmall: AppFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
       bodyLarge: AppFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w400),
       bodyMedium: AppFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w400),
       bodySmall: AppFonts.dmSans(fontSize: 10, fontWeight: FontWeight.w400),
@@ -35,7 +59,7 @@ class T2Tokens {
       labelMedium: AppFonts.dmSans(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.5),
       labelSmall: AppFonts.dmSans(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 0.4),
     ),
-    spacing: const AppSpacingTokens(
+    spacing: const AppSpacing(
       xs: T2Spacing.xs,
       sm: T2Spacing.sm,
       md: T2Spacing.md,
@@ -43,14 +67,16 @@ class T2Tokens {
       xl: T2Spacing.xl,
       xxl: T2Spacing.xxl,
     ),
-    radius: const AppRadiusTokens(
+    radius: const AppRadius(
       xs: T2Spacing.radiusSmall,
       sm: T2Spacing.radiusMedium,
       md: T2Spacing.radiusLarge,
       lg: T2Spacing.radiusExtraLarge,
       xl: T2Spacing.radiusExtraLarge,
+      button: T2Spacing.radiusMedium,
+      card: T2Spacing.radiusExtraLarge,
     ),
-    gradients: AppGradientTokens(
+    gradients: AppGradients(
       brand: [t2LightScheme.primary, t2LightScheme.primary.withValues(alpha: 0.8)],
       calories: [T2Colors.lime, T2Colors.limeDark],
       protein: [T2Colors.purple, T2Colors.purple.withValues(alpha: 0.8)],
@@ -60,15 +86,17 @@ class T2Tokens {
       activity: [T2Colors.purple, T2Colors.purple.withValues(alpha: 0.8)],
       hero: [t2LightScheme.surface, t2LightScheme.surfaceContainerHighest],
     ),
-    shadows: const AppShadowTokens(
+    shadows: const AppShadows(
       low: [BoxShadow(color: Color(0x0D000000), offset: Offset(0, 2), blurRadius: 4)],
       medium: [BoxShadow(color: Color(0x1A000000), offset: Offset(0, 4), blurRadius: 8)],
       high: [BoxShadow(color: Color(0x26000000), offset: Offset(0, 8), blurRadius: 16)],
     ),
+    motion: AppMotion.standard_motion,
   );
 
   static AppThemeTokens get dark => AppThemeTokens(
-    colors: AppColorTokens(
+    dashboardLayout: AppDashboardLayout.t2,
+    colors: AppColors(
       primary: t2DarkScheme.primary,
       secondary: t2DarkScheme.secondary,
       background: t2DarkScheme.surface,
@@ -79,17 +107,33 @@ class T2Tokens {
       onBackground: t2DarkScheme.onSurface,
       onSurface: t2DarkScheme.onSurface,
       onError: t2DarkScheme.onError,
+      surfaceContainerLowest: T2Colors.bgDefault,
+      surfaceContainerLow: T2Colors.bgSurface,
+      surfaceContainer: T2Colors.bgElevated,
+      surfaceContainerHigh: T2Colors.bgDeep,
+      surfaceContainerHighest: t2DarkScheme.surfaceContainerHighest,
+      onSurfaceVariant: t2DarkScheme.onSurfaceVariant,
+      outline: t2DarkScheme.outline,
       calories: T2Colors.lime,
       protein: T2Colors.purple,
       carbs: T2Colors.amber,
       fat: T2Colors.green,
       water: T2Colors.sky,
       activity: T2Colors.purple,
+      waterOk: const Color(0xFF00E5FF),
+      waterWarning: const Color(0xFFFFB040),
+      waterDanger: const Color(0xFFFF6080),
     ),
-    typography: AppTypographyTokens(
+    typography: AppTypography(
+      displayLarge: AppFonts.dmSans(fontSize: 64, fontWeight: FontWeight.w900, letterSpacing: -1.5),
+      displayMedium: AppFonts.dmSans(fontSize: 45, fontWeight: FontWeight.w400),
+      displaySmall: AppFonts.dmSans(fontSize: 36, fontWeight: FontWeight.w400),
       headlineLarge: AppFonts.barlowCondensed(fontSize: 24, fontWeight: FontWeight.w800),
       headlineMedium: AppFonts.barlowCondensed(fontSize: 20, fontWeight: FontWeight.w800),
       headlineSmall: AppFonts.dmSans(fontSize: 18, fontWeight: FontWeight.w700),
+      titleLarge: AppFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w400),
+      titleMedium: AppFonts.dmSans(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      titleSmall: AppFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
       bodyLarge: AppFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w400),
       bodyMedium: AppFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w400),
       bodySmall: AppFonts.dmSans(fontSize: 10, fontWeight: FontWeight.w400),
@@ -97,7 +141,7 @@ class T2Tokens {
       labelMedium: AppFonts.dmSans(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.5),
       labelSmall: AppFonts.dmSans(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 0.4),
     ),
-    spacing: const AppSpacingTokens(
+    spacing: const AppSpacing(
       xs: T2Spacing.xs,
       sm: T2Spacing.sm,
       md: T2Spacing.md,
@@ -105,14 +149,16 @@ class T2Tokens {
       xl: T2Spacing.xl,
       xxl: T2Spacing.xxl,
     ),
-    radius: const AppRadiusTokens(
+    radius: const AppRadius(
       xs: T2Spacing.radiusSmall,
       sm: T2Spacing.radiusMedium,
       md: T2Spacing.radiusLarge,
       lg: T2Spacing.radiusExtraLarge,
       xl: T2Spacing.radiusExtraLarge,
+      button: T2Spacing.radiusMedium,
+      card: T2Spacing.radiusExtraLarge,
     ),
-    gradients: AppGradientTokens(
+    gradients: AppGradients(
       brand: [t2DarkScheme.primary, t2DarkScheme.primary.withValues(alpha: 0.8)],
       calories: [T2Colors.lime, T2Colors.limeDark],
       protein: [T2Colors.purple, T2Colors.purple.withValues(alpha: 0.8)],
@@ -122,15 +168,16 @@ class T2Tokens {
       activity: [T2Colors.purple, T2Colors.purple.withValues(alpha: 0.8)],
       hero: [T2Colors.bgDefault, T2Colors.bgSurface],
     ),
-    shadows: const AppShadowTokens(
+    shadows: const AppShadows(
       low: [BoxShadow(color: Colors.black45, offset: Offset(0, 4), blurRadius: 12)],
       medium: [BoxShadow(color: Colors.black54, offset: Offset(0, 8), blurRadius: 24)],
       high: [BoxShadow(color: Colors.black87, offset: Offset(0, 12), blurRadius: 36)],
     ),
+    motion: AppMotion.standard_motion,
   );
 
   static AppThemeTokens get amoled => dark.copyWith(
-    colors: AppColorTokens(
+    colors: dark.colors.copyWith(
       primary: t2AmoledScheme.primary,
       secondary: t2AmoledScheme.secondary,
       background: t2AmoledScheme.surface,
@@ -141,12 +188,7 @@ class T2Tokens {
       onBackground: t2AmoledScheme.onSurface,
       onSurface: t2AmoledScheme.onSurface,
       onError: t2AmoledScheme.onError,
-      calories: T2Colors.lime,
-      protein: T2Colors.purple,
-      carbs: T2Colors.amber,
-      fat: T2Colors.green,
-      water: T2Colors.sky,
-      activity: T2Colors.purple,
     ),
   );
 }
+

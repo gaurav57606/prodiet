@@ -18,36 +18,41 @@ class ProDietEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 64, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
-            const SizedBox(height: 16),
-            Text(
-              headline,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 64, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
+              const SizedBox(height: 16),
+              Text(
+                headline,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtext,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              const SizedBox(height: 8),
+              Text(
+                subtext,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            if (buttonLabel != null && onButtonTap != null) ...[
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: onButtonTap,
-                child: Text(buttonLabel!),
-              ),
+              if (buttonLabel != null && onButtonTap != null) ...[
+                const SizedBox(height: 24),
+                SizedBox(
+                  height: 48,
+                  child: FilledButton(
+                    onPressed: onButtonTap,
+                    child: Text(buttonLabel!),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

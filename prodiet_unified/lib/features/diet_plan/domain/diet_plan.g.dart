@@ -6,8 +6,7 @@ part of 'diet_plan.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DietPlanImpl _$$DietPlanImplFromJson(Map<String, dynamic> json) =>
-    _$DietPlanImpl(
+_DietPlan _$DietPlanFromJson(Map<String, dynamic> json) => _DietPlan(
       id: json['id'] as String,
       userId: json['userId'] as String,
       generatedAt: DateTime.parse(json['generatedAt'] as String),
@@ -21,8 +20,7 @@ _$DietPlanImpl _$$DietPlanImplFromJson(Map<String, dynamic> json) =>
       isActive: json['isActive'] as bool,
     );
 
-Map<String, dynamic> _$$DietPlanImplToJson(_$DietPlanImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$DietPlanToJson(_DietPlan instance) => <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
       'generatedAt': instance.generatedAt.toIso8601String(),

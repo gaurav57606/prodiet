@@ -4,8 +4,7 @@ part 'water_log.freezed.dart';
 part 'water_log.g.dart';
 
 @freezed
-@JsonSerializable(fieldRename: FieldRename.snake)
-class WaterLog with _$WaterLog {
+abstract class WaterLog with _$WaterLog {
   const factory WaterLog({
     required String id,
     required String userId,

@@ -1,11 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:prodiet_unified/core/data/local/offline_providers.dart';
+import 'package:prodiet_unified/core/sync/sync_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import '../domain/models/shopping_item.dart';
 import '../data/shopping_repository.dart';
 
 final shoppingRepositoryProvider = Provider<ShoppingRepository>((ref) {
-  return ShoppingRepository(Supabase.instance.client);
+  return ShoppingRepository(
+    ref.watch(appDatabaseProvider),
+    ref.watch(syncQueueRepositoryProvider),
+  );
 });
 
 final shoppingListProvider = FutureProvider.autoDispose<List<ShoppingItem>>((ref) async {

@@ -1,30 +1,26 @@
-import 'package:flutter/foundation.dart';
-import '../logger/app_logger.dart';
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 
 class AppHealthMonitor {
-  static final Stopwatch _appStartupStopwatch = Stopwatch();
+  static final Map<String, DateTime> _timers = {};
 
-  /// Start tracking app bootstrap time
-  static void startStartupTimer() {
-    _appStartupStopwatch.start();
+  static void startTrace(String key) {
+    _timers[key] = DateTime.now();
+    AppLogger.info('[Health] Started trace: $key');
   }
 
-  /// Record bootstrap completion
-  static void recordStartupComplete() {
-    _appStartupStopwatch.stop();
-    final durationMs = _appStartupStopwatch.elapsedMilliseconds;
-    AppLogger.info('App Startup Complete: ${durationMs}ms');
-    
-    // In production, we'd log this to Analytics/Performance monitoring
-    if (!kDebugMode) {
-      // AnalyticsManager.logEvent(name: 'app_startup_time', parameters: {'duration_ms': durationMs});
+  static void stopTrace(String key, {Map<String, dynamic>? metadata}) {
+    final startTime = _timers.remove(key);
+    if (startTime != null) {
+      final duration = DateTime.now().difference(startTime);
+      AppLogger.info('[Health] Trace completed: $key in ${duration.inMilliseconds}ms');
+      
+      // In production, this would send to Firebase Analytics / Performance
+      // AnalyticsManager().logPerformance(key, duration, metadata);
     }
   }
 
-  /// Monitor memory usage (basic implementation)
-  static void logMemoryUsage() {
-    // Note: Dart/Flutter memory reporting is limited without native plugins
-    // This serves as a placeholder for enterprise-grade monitoring integration
-    AppLogger.debug('Memory snapshot requested (Monitor placeholder)');
+  static void trackMemoryPressure() {
+    // Basic memory usage tracking for production diagnostics
+    AppLogger.warning('[Health] High memory pressure detected');
   }
 }

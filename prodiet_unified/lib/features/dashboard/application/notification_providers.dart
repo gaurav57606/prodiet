@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
+import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 
 class NotificationSettings {
   final bool meals;

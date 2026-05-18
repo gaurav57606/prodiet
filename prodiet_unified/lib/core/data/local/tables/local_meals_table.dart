@@ -12,7 +12,9 @@ class LocalMeals extends Table {
   TextColumn get ingredientsJson => text().nullable()(); // JSON string
   TextColumn get nutritionalValuesJson => text().nullable()(); // JSON string
   TextColumn get scheduledTime => text().nullable()(); // HH:mm string
-  BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
+  BoolColumn get isDirty => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get updatedAt => dateTime().nullable()(); // Server timestamp
+  DateTimeColumn get clientUpdatedAt => dateTime().withDefault(currentDateAndTime)(); // Local timestamp
   TextColumn get createdAt => text()();
 
   @override

@@ -4,7 +4,7 @@ part 'weight_entry.freezed.dart';
 part 'weight_entry.g.dart';
 
 @freezed
-class WeightEntry with _$WeightEntry {
+abstract class WeightEntry with _$WeightEntry {
   const factory WeightEntry({
     required String id,
     required String userId,

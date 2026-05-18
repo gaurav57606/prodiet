@@ -87,4 +87,48 @@ class DashboardSummary {
       caloriesBurned: 0,
     );
   }
+
+  DashboardSummary copyWith({
+    String? userName,
+    int? caloriesConsumed,
+    int? caloriesGoal,
+    int? proteinConsumed,
+    int? proteinGoal,
+    int? carbsConsumed,
+    int? carbsGoal,
+    int? fatConsumed,
+    int? fatGoal,
+    int? waterMl,
+    int? waterGoalMl,
+    int? mealsToday,
+    int? mealsScheduled,
+    double? currentWeightKg,
+    String? activeDietPlanName,
+    int? streakDays,
+    int? stepsToday,
+    int? caloriesBurned,
+    Meal? nextMeal,
+  }) {
+    return DashboardSummary(
+      userName: userName ?? this.userName,
+      caloriesConsumed: caloriesConsumed ?? this.caloriesConsumed,
+      caloriesGoal: caloriesGoal ?? this.caloriesGoal,
+      proteinConsumed: proteinConsumed ?? this.proteinConsumed,
+      proteinGoal: proteinGoal ?? this.proteinGoal,
+      carbsConsumed: carbsConsumed ?? this.carbsConsumed,
+      carbsGoal: carbsGoal ?? this.carbsGoal,
+      fatConsumed: fatConsumed ?? this.fatConsumed,
+      fatGoal: fatGoal ?? this.fatGoal,
+      waterMl: waterMl ?? this.waterMl,
+      waterGoalMl: waterGoalMl ?? this.waterGoalMl,
+      mealsToday: mealsToday ?? this.mealsToday,
+      mealsScheduled: mealsScheduled ?? this.mealsScheduled,
+      currentWeightKg: currentWeightKg ?? this.currentWeightKg,
+      activeDietPlanName: activeDietPlanName ?? this.activeDietPlanName,
+      streakDays: streakDays ?? this.streakDays,
+      stepsToday: stepsToday ?? this.stepsToday,
+      caloriesBurned: caloriesBurned ?? this.caloriesBurned,
+      nextMeal: nextMeal ?? this.nextMeal,
+    );
+  }
 }

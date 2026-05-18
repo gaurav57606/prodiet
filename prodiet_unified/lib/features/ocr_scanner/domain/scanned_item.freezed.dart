@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,188 +9,32 @@ part of 'scanned_item.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-ScannedItem _$ScannedItemFromJson(Map<String, dynamic> json) {
-  return _ScannedItem.fromJson(json);
-}
 
 /// @nodoc
 mixin _$ScannedItem {
-  String get name => throw _privateConstructorUsedError;
-  double get quantity => throw _privateConstructorUsedError;
-  String get unit => throw _privateConstructorUsedError;
-  String get category => throw _privateConstructorUsedError;
-  bool get isSelected => throw _privateConstructorUsedError;
-
-  /// Serializes this ScannedItem to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get name;
+  double get quantity;
+  String get unit;
+  String get category;
+  bool get isSelected;
 
   /// Create a copy of ScannedItem
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $ScannedItemCopyWith<ScannedItem> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+      _$ScannedItemCopyWithImpl<ScannedItem>(this as ScannedItem, _$identity);
 
-/// @nodoc
-abstract class $ScannedItemCopyWith<$Res> {
-  factory $ScannedItemCopyWith(
-          ScannedItem value, $Res Function(ScannedItem) then) =
-      _$ScannedItemCopyWithImpl<$Res, ScannedItem>;
-  @useResult
-  $Res call(
-      {String name,
-      double quantity,
-      String unit,
-      String category,
-      bool isSelected});
-}
-
-/// @nodoc
-class _$ScannedItemCopyWithImpl<$Res, $Val extends ScannedItem>
-    implements $ScannedItemCopyWith<$Res> {
-  _$ScannedItemCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ScannedItem
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? quantity = null,
-    Object? unit = null,
-    Object? category = null,
-    Object? isSelected = null,
-  }) {
-    return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      quantity: null == quantity
-          ? _value.quantity
-          : quantity // ignore: cast_nullable_to_non_nullable
-              as double,
-      unit: null == unit
-          ? _value.unit
-          : unit // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      isSelected: null == isSelected
-          ? _value.isSelected
-          : isSelected // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$ScannedItemImplCopyWith<$Res>
-    implements $ScannedItemCopyWith<$Res> {
-  factory _$$ScannedItemImplCopyWith(
-          _$ScannedItemImpl value, $Res Function(_$ScannedItemImpl) then) =
-      __$$ScannedItemImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String name,
-      double quantity,
-      String unit,
-      String category,
-      bool isSelected});
-}
-
-/// @nodoc
-class __$$ScannedItemImplCopyWithImpl<$Res>
-    extends _$ScannedItemCopyWithImpl<$Res, _$ScannedItemImpl>
-    implements _$$ScannedItemImplCopyWith<$Res> {
-  __$$ScannedItemImplCopyWithImpl(
-      _$ScannedItemImpl _value, $Res Function(_$ScannedItemImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ScannedItem
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? quantity = null,
-    Object? unit = null,
-    Object? category = null,
-    Object? isSelected = null,
-  }) {
-    return _then(_$ScannedItemImpl(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      quantity: null == quantity
-          ? _value.quantity
-          : quantity // ignore: cast_nullable_to_non_nullable
-              as double,
-      unit: null == unit
-          ? _value.unit
-          : unit // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      isSelected: null == isSelected
-          ? _value.isSelected
-          : isSelected // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ScannedItemImpl implements _ScannedItem {
-  const _$ScannedItemImpl(
-      {required this.name,
-      required this.quantity,
-      required this.unit,
-      required this.category,
-      this.isSelected = true});
-
-  factory _$ScannedItemImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ScannedItemImplFromJson(json);
-
-  @override
-  final String name;
-  @override
-  final double quantity;
-  @override
-  final String unit;
-  @override
-  final String category;
-  @override
-  @JsonKey()
-  final bool isSelected;
-
-  @override
-  String toString() {
-    return 'ScannedItem(name: $name, quantity: $quantity, unit: $unit, category: $category, isSelected: $isSelected)';
-  }
+  /// Serializes this ScannedItem to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ScannedItemImpl &&
+            other is ScannedItem &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
@@ -206,48 +50,357 @@ class _$ScannedItemImpl implements _ScannedItem {
   int get hashCode =>
       Object.hash(runtimeType, name, quantity, unit, category, isSelected);
 
-  /// Create a copy of ScannedItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ScannedItemImplCopyWith<_$ScannedItemImpl> get copyWith =>
-      __$$ScannedItemImplCopyWithImpl<_$ScannedItemImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ScannedItemImplToJson(
-      this,
-    );
+  String toString() {
+    return 'ScannedItem(name: $name, quantity: $quantity, unit: $unit, category: $category, isSelected: $isSelected)';
   }
 }
 
-abstract class _ScannedItem implements ScannedItem {
-  const factory _ScannedItem(
-      {required final String name,
-      required final double quantity,
-      required final String unit,
-      required final String category,
-      final bool isSelected}) = _$ScannedItemImpl;
+/// @nodoc
+abstract mixin class $ScannedItemCopyWith<$Res> {
+  factory $ScannedItemCopyWith(
+          ScannedItem value, $Res Function(ScannedItem) _then) =
+      _$ScannedItemCopyWithImpl;
+  @useResult
+  $Res call(
+      {String name,
+      double quantity,
+      String unit,
+      String category,
+      bool isSelected});
+}
 
-  factory _ScannedItem.fromJson(Map<String, dynamic> json) =
-      _$ScannedItemImpl.fromJson;
+/// @nodoc
+class _$ScannedItemCopyWithImpl<$Res> implements $ScannedItemCopyWith<$Res> {
+  _$ScannedItemCopyWithImpl(this._self, this._then);
+
+  final ScannedItem _self;
+  final $Res Function(ScannedItem) _then;
+
+  /// Create a copy of ScannedItem
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? quantity = null,
+    Object? unit = null,
+    Object? category = null,
+    Object? isSelected = null,
+  }) {
+    return _then(_self.copyWith(
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      quantity: null == quantity
+          ? _self.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as double,
+      unit: null == unit
+          ? _self.unit
+          : unit // ignore: cast_nullable_to_non_nullable
+              as String,
+      category: null == category
+          ? _self.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String,
+      isSelected: null == isSelected
+          ? _self.isSelected
+          : isSelected // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [ScannedItem].
+extension ScannedItemPatterns on ScannedItem {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_ScannedItem value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ScannedItem() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_ScannedItem value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ScannedItem():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_ScannedItem value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ScannedItem() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String name, double quantity, String unit, String category,
+            bool isSelected)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ScannedItem() when $default != null:
+        return $default(_that.name, _that.quantity, _that.unit, _that.category,
+            _that.isSelected);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String name, double quantity, String unit, String category,
+            bool isSelected)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ScannedItem():
+        return $default(_that.name, _that.quantity, _that.unit, _that.category,
+            _that.isSelected);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(String name, double quantity, String unit,
+            String category, bool isSelected)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ScannedItem() when $default != null:
+        return $default(_that.name, _that.quantity, _that.unit, _that.category,
+            _that.isSelected);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _ScannedItem implements ScannedItem {
+  const _ScannedItem(
+      {required this.name,
+      required this.quantity,
+      required this.unit,
+      required this.category,
+      this.isSelected = true});
+  factory _ScannedItem.fromJson(Map<String, dynamic> json) =>
+      _$ScannedItemFromJson(json);
 
   @override
-  String get name;
+  final String name;
   @override
-  double get quantity;
+  final double quantity;
   @override
-  String get unit;
+  final String unit;
   @override
-  String get category;
+  final String category;
   @override
-  bool get isSelected;
+  @JsonKey()
+  final bool isSelected;
 
   /// Create a copy of ScannedItem
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ScannedItemImplCopyWith<_$ScannedItemImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$ScannedItemCopyWith<_ScannedItem> get copyWith =>
+      __$ScannedItemCopyWithImpl<_ScannedItem>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ScannedItemToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _ScannedItem &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.quantity, quantity) ||
+                other.quantity == quantity) &&
+            (identical(other.unit, unit) || other.unit == unit) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
+            (identical(other.isSelected, isSelected) ||
+                other.isSelected == isSelected));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, name, quantity, unit, category, isSelected);
+
+  @override
+  String toString() {
+    return 'ScannedItem(name: $name, quantity: $quantity, unit: $unit, category: $category, isSelected: $isSelected)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$ScannedItemCopyWith<$Res>
+    implements $ScannedItemCopyWith<$Res> {
+  factory _$ScannedItemCopyWith(
+          _ScannedItem value, $Res Function(_ScannedItem) _then) =
+      __$ScannedItemCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String name,
+      double quantity,
+      String unit,
+      String category,
+      bool isSelected});
+}
+
+/// @nodoc
+class __$ScannedItemCopyWithImpl<$Res> implements _$ScannedItemCopyWith<$Res> {
+  __$ScannedItemCopyWithImpl(this._self, this._then);
+
+  final _ScannedItem _self;
+  final $Res Function(_ScannedItem) _then;
+
+  /// Create a copy of ScannedItem
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? name = null,
+    Object? quantity = null,
+    Object? unit = null,
+    Object? category = null,
+    Object? isSelected = null,
+  }) {
+    return _then(_ScannedItem(
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      quantity: null == quantity
+          ? _self.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as double,
+      unit: null == unit
+          ? _self.unit
+          : unit // ignore: cast_nullable_to_non_nullable
+              as String,
+      category: null == category
+          ? _self.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String,
+      isSelected: null == isSelected
+          ? _self.isSelected
+          : isSelected // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+// dart format on

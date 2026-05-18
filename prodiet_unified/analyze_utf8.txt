@@ -1,0 +1,146 @@
+﻿Analyzing prodiet_unified...                                    
+
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_button.dart' - integration_test\app_golden_path_test.dart:5:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart' - integration_test\app_golden_path_test.dart:6:8 - uri_does_not_exist
+  error - Undefined name 'DmTextField' - integration_test\app_golden_path_test.dart:19:38 - undefined_identifier
+  error - Undefined name 'DmTextField' - integration_test\app_golden_path_test.dart:20:41 - undefined_identifier
+  error - Undefined name 'DmButton' - integration_test\app_golden_path_test.dart:21:39 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_button.dart' - integration_test\app_test.dart:7:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:prodiet_unified/shared/t1/widgets/dm_text_field.dart' - integration_test\app_test.dart:8:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:prodiet_unified/app.dart' - integration_test\app_test.dart:9:8 - uri_does_not_exist
+  error - Undefined name 'DmTextField' - integration_test\app_test.dart:43:38 - undefined_identifier
+  error - Undefined name 'DmTextField' - integration_test\app_test.dart:44:41 - undefined_identifier
+  error - Undefined name 'DmButton' - integration_test\app_test.dart:45:39 - undefined_identifier
+  error - Invalid constant value - integration_test\app_test.dart:75:58 - invalid_constant
+  error - The function 'ProDietApp' isn't defined - integration_test\app_test.dart:75:58 - undefined_function
+warning - Unused import: 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart' - lib\app\app.dart:12:8 - unused_import
+warning - Unused import: 'package:flutter_riverpod/flutter_riverpod.dart' - lib\app\bootstrap.dart:4:8 - unused_import
+warning - Unused import: 'package:google_fonts/google_fonts.dart' - lib\app\router.dart:4:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/app/app_navigator.dart' - lib\app\router.dart:46:8 - unused_import
+warning - The value of the local variable 'scheme' isn't used - lib\app\router.dart:173:11 - unused_local_variable
+warning - Unused import: 'package:prodiet_unified/features/auth/application/auth_providers.dart' - lib\core\cache\cache_providers.dart:2:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/auth/application/auth_providers.dart' - lib\core\data\local\offline_providers.dart:3:8 - unused_import
+  error - Too many positional arguments: 1 expected, but 3 found - lib\core\data\sync\sync_manager.dart:43:38 - extra_positional_arguments_could_be_named
+   info - 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead - lib\core\design_system\motion\app_animations.dart:57:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\design_system\shadows\app_shadows.dart:18:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\design_system\shadows\app_shadows.dart:25:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\design_system\shadows\app_shadows.dart:32:31 - deprecated_member_use
+   info - The constant name 'standard_motion' isn't a lowerCamelCase identifier - lib\core\design_system\tokens\app_motion.dart:25:16 - constant_identifier_names
+warning - Unused import: 'dart:ui' - lib\core\design_system\tokens\app_radius.dart:1:8 - unused_import
+warning - Unused import: 'dart:ui' - lib\core\design_system\tokens\app_spacing.dart:1:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart' - lib\core\observability\monitoring\app_health_monitor.dart:1:8 - unused_import
+warning - Unused import: 'package:firebase_analytics/firebase_analytics.dart' - lib\core\services\analytics_service.dart:1:8 - unused_import
+warning - Unused import: 'package:supabase_flutter/supabase_flutter.dart' - lib\core\services\fcm_service.dart:3:8 - unused_import
+  error - Undefined name 'supabaseServiceProvider' - lib\core\services\fitband_providers.dart:7:30 - undefined_identifier
+warning - Unnecessary cast - lib\core\sync\sync_manager.dart:116:69 - unnecessary_cast
+warning - Unused import: 'package:prodiet_unified/features/auth/application/auth_providers.dart' - lib\core\sync\sync_providers.dart:3:8 - unused_import
+   info - The constant name 'water_logs' isn't a lowerCamelCase identifier - lib\core\sync\sync_task.dart:10:3 - constant_identifier_names
+   info - The constant name 'shopping_list' isn't a lowerCamelCase identifier - lib\core\sync\sync_task.dart:11:3 - constant_identifier_names
+   info - The member 'state' overrides an inherited member but isn't annotated with '@override' - lib\core\theme\active_theme_provider.dart:47:7 - annotate_overrides
+   info - Use 'const' with the constructor to improve performance - lib\core\theme\t1\t1_tokens.dart:76:16 - prefer_const_constructors
+warning - Unused import: 'package:prodiet_unified/features/auth/application/auth_notifier.dart' - lib\features\achievements\application\achievement_providers.dart:6:8 - unused_import
+warning - Unnecessary cast - lib\features\ai\data\ai_repository.dart:19:24 - unnecessary_cast
+warning - Unnecessary cast - lib\features\ai\data\ai_repository.dart:57:24 - unnecessary_cast
+warning - Unnecessary cast - lib\features\ai\data\ai_repository.dart:84:24 - unnecessary_cast
+warning - Unused import: 'package:flutter_riverpod/flutter_riverpod.dart' - lib\features\auth\application\auth_notifier.dart:2:8 - unused_import
+warning - Unnecessary cast - lib\features\auth\data\auth_repository.dart:91:29 - unnecessary_cast
+warning - Unused import: 'package:go_router/go_router.dart' - lib\features\auth\presentation\screens\login_screen.dart:3:8 - unused_import
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\login_screen.dart:85:38 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\login_screen.dart:118:38 - prefer_const_constructors
+warning - Unused import: 'package:flutter/gestures.dart' - lib\features\auth\presentation\screens\signup_screen.dart:1:8 - unused_import
+warning - Unused import: 'package:go_router/go_router.dart' - lib\features\auth\presentation\screens\signup_screen.dart:4:8 - unused_import
+   info - The private field _selectedTab could be 'final' - lib\features\auth\presentation\screens\signup_screen.dart:30:7 - prefer_final_fields
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\signup_screen.dart:83:15 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\signup_screen.dart:110:44 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\signup_screen.dart:120:44 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\signup_screen.dart:131:38 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\signup_screen.dart:140:38 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\signup_screen.dart:158:38 - prefer_const_constructors
+warning - The value of the local variable 'isT2' isn't used - lib\features\auth\presentation\screens\verify_email_screen.dart:16:11 - unused_local_variable
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\verify_email_screen.dart:36:24 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\verify_email_screen.dart:37:26 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\auth\presentation\screens\verify_email_screen.dart:39:28 - prefer_const_constructors
+warning - Unused import: 'package:prodiet_unified/features/auth/application/auth_providers.dart' - lib\features\compensation\application\compensation_providers.dart:2:8 - unused_import
+   info - Use 'const' for final variables initialized to a constant value - lib\features\compensation\presentation\widgets\adaptive_compensation_widgets.dart:19:5 - prefer_const_declarations
+   info - The import of 'dart:async' is unnecessary because all of the used elements are also provided by the import of 'package:riverpod_annotation/riverpod_annotation.dart' - lib\features\dashboard\application\dashboard_providers.dart:1:8 - unnecessary_import
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\dashboard\application\notification_providers.dart:5:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/widgets/empty_states/empty_state_configs.dart' - lib\features\dashboard\presentation\screens\notifications_screen.dart:10:8 - unused_import
+warning - The value of the local variable 'isT2' isn't used - lib\features\dashboard\presentation\screens\notifications_screen.dart:150:11 - unused_local_variable
+warning - Unused import: 'package:prodiet_unified/features/meal_planner/domain/daily_meal_summary.dart' - lib\features\dashboard\presentation\screens\today_meals_screen.dart:12:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/widgets/async_value_widget.dart' - lib\features\dashboard\presentation\screens\today_meals_screen.dart:13:8 - unused_import
+warning - Unused import: 'package:flutter_riverpod/flutter_riverpod.dart' - lib\features\dashboard\presentation\widgets\adaptive_today_meals_widgets.dart:2:8 - unused_import
+   info - Use 'const' for final variables initialized to a constant value - lib\features\dashboard\presentation\widgets\unified_hydration_card.dart:92:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\features\dashboard\presentation\widgets\unified_meal_card.dart:86:5 - prefer_const_declarations
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\diet_plan\application\diet_plan_providers.dart:5:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\inventory\application\inventory_providers.dart:7:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\inventory\presentation\screens\inventory_screen.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter_riverpod/flutter_riverpod.dart' - lib\features\inventory\presentation\widgets\adaptive_inventory_widgets.dart:2:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/inventory/application/inventory_providers.dart' - lib\features\inventory\presentation\widgets\adaptive_inventory_widgets.dart:5:8 - unused_import
+warning - The value of the local variable 'highlightColor' isn't used - lib\features\meal_planner\presentation\widgets\adaptive_meal_planner_widgets.dart:26:11 - unused_local_variable
+warning - Unused import: 'package:flutter_riverpod/flutter_riverpod.dart' - lib\features\ocr_scanner\application\ocr_notifier.dart:3:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\progress\application\progress_providers.dart:5:8 - unused_import
+   info - Use 'const' with the constructor to improve performance - lib\features\progress\presentation\screens\activity_sync_screen.dart:107:23 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\progress\presentation\screens\activity_sync_screen.dart:108:32 - prefer_const_constructors
+warning - Unused import: 'package:prodiet_unified/core/widgets/async_value_widget.dart' - lib\features\progress\presentation\screens\progress_screen.dart:6:8 - unused_import
+warning - The value of the local variable 'isT2' isn't used - lib\features\progress\presentation\widgets\adaptive_progress_widgets.dart:79:11 - unused_local_variable
+warning - Unused import: 'package:prodiet_unified/core/widgets/empty_states/prodiet_empty_state.dart' - lib\features\recipe\presentation\screens\recipe_screen.dart:6:8 - unused_import
+warning - The value of the field '_supabase' isn't used - lib\features\shopping_list\data\shopping_repository.dart:13:25 - unused_field
+   info - Use 'const' for final variables initialized to a constant value - lib\features\vendor\presentation\screens\vendor_screen.dart:126:5 - prefer_const_declarations
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\voice\presentation\screens\voice_screen.dart:9:8 - unused_import
+warning - Unused import: 'package:google_fonts/google_fonts.dart' - lib\features\voice\presentation\widgets\adaptive_voice_widgets.dart:3:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart' - lib\features\water\presentation\screens\water_screen.dart:6:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/water/domain/water_log.dart' - lib\features\water\presentation\screens\water_screen.dart:9:8 - unused_import
+   info - Use 'const' for final variables initialized to a constant value - lib\features\water\presentation\screens\water_screen.dart:212:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\features\water\presentation\widgets\adaptive_water_widgets.dart:32:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\features\water\presentation\widgets\adaptive_water_widgets.dart:95:5 - prefer_const_declarations
+warning - Unused import: 'package:flutter/material.dart' - lib\main.dart:1:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/ocr_scanner/domain/ocr_result.dart' - test\OCR\ocr_pipeline_test.dart:8:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/services/analytics_providers.dart' - test\integration\auth_flow_mock_test.dart:19:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/features/auth/application/auth_notifier.dart' - test\integration\e2e_user_flows_test.dart:11:8 - unused_import
+   info - The import of 'package:prodiet_unified/features/auth/application/auth_state.dart' is unnecessary because all of the used elements are also provided by the import of 'package:prodiet_unified/features/auth/application/auth_providers.dart' - test\integration\e2e_user_flows_test.dart:12:8 - unnecessary_import
+warning - Unused import: 'package:prodiet_unified/core/services/analytics_providers.dart' - test\integration\e2e_user_flows_test.dart:20:8 - unused_import
+   info - Use 'const' with the constructor to improve performance - test\integration\e2e_user_flows_test.dart:142:34 - prefer_const_constructors
+warning - Unnecessary 'noSuchMethod' declaration - test\unit\analytics_service_test.dart:9:11 - unnecessary_no_such_method
+warning - Unused import: 'package:prodiet_unified/features/recipe/domain/recipe.dart' - test\unit\matching_recipes_test.dart:4:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/services/fcm_service.dart' - test\unit\observability_test.dart:9:8 - unused_import
+warning - Unnecessary 'noSuchMethod' declaration - test\unit\observability_test.dart:15:11 - unnecessary_no_such_method
+warning - Unnecessary 'noSuchMethod' declaration - test\unit\observability_test.dart:20:11 - unnecessary_no_such_method
+warning - Unnecessary 'noSuchMethod' declaration - test\unit\observability_test.dart:25:11 - unnecessary_no_such_method
+warning - Unnecessary 'noSuchMethod' declaration - test\unit\observability_test.dart:30:11 - unnecessary_no_such_method
+warning - Unnecessary 'noSuchMethod' declaration - test\unit\observability_test.dart:35:11 - unnecessary_no_such_method
+   info - Use 'const' for final variables initialized to a constant value - test\unit\voice_input_parser_test.dart:39:7 - prefer_const_declarations
+warning - Unused import: 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart' - test\widgets\accessibility_and_theme_test.dart:6:8 - unused_import
+warning - Unused import: 'package:mocktail/mocktail.dart' - test\widgets\calorie_summary_card_test.dart:4:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart' - test\widgets\calorie_summary_card_test.dart:9:8 - unused_import
+warning - Unused import: 'package:flutter_riverpod/legacy.dart' - test\widgets\dashboard_golden_test.dart:4:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/services/analytics_providers.dart' - test\widgets\dashboard_golden_test.dart:17:8 - unused_import
+warning - Unused import: 'package:flutter_riverpod/legacy.dart' - test\widgets\dashboard_golden_v2_test.dart:4:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/services/analytics_providers.dart' - test\widgets\dashboard_golden_v2_test.dart:17:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/services/analytics_providers.dart' - test\widgets\dashboard_screen_test.dart:7:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart' - test\widgets\health_goals_screen_test.dart:13:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart' - test\widgets\login_screen_test.dart:12:8 - unused_import
+warning - Unused import: 'package:prodiet_unified/core/services/analytics_providers.dart' - test\widgets\login_screen_test.dart:13:8 - unused_import
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:5:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:6:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:7:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:14:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:21:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:33:11 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:38:13 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:41:13 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:43:13 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:48:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:56:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:59:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:64:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:67:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:78:11 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:80:11 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:89:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:92:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:94:7 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:97:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:100:3 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:102:5 - avoid_print
+   info - Don't invoke 'print' in production code - tool\release_validator.dart:105:5 - avoid_print
+
