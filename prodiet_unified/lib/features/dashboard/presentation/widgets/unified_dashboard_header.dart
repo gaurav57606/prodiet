@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart';
+import 'package:prodiet_unified/core/widgets/theme_toggle.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 
-class T2DashboardHeader extends ConsumerWidget {
-  const T2DashboardHeader({super.key});
+class UnifiedDashboardHeader extends ConsumerWidget {
+  const UnifiedDashboardHeader({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tokens = context.tokens;
+    
+    if (tokens.useFloatingHeader) {
+      return const SliverAppBar(
+        floating: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text('Dashboard'),
+        actions: [
+          ThemeToggle(),
+          SizedBox(width: 8),
+        ],
+      );
+    }
+
     final user = ref.watch(currentUserProvider);
     final name = user?.name?.split(' ').first ?? 'there';
     final greeting = 'Good morning, $name';
@@ -31,7 +46,7 @@ class T2DashboardHeader extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    greeting.toUpperCase(),
+                    tokens.useUpperCasing ? greeting.toUpperCase() : greeting,
                     style: tokens.typography.labelSmall.copyWith(
                       color: tokens.colors.onSurface.withValues(alpha: 0.6),
                       fontWeight: FontWeight.w700,
@@ -40,7 +55,7 @@ class T2DashboardHeader extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "EAT",
+                    tokens.useUpperCasing ? "EAT" : "Eat",
                     style: tokens.typography.displayLarge.copyWith(
                       fontSize: 56, 
                       fontWeight: FontWeight.w900,
@@ -49,7 +64,7 @@ class T2DashboardHeader extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    "RIGHT.",
+                    tokens.useUpperCasing ? "RIGHT." : "Right.",
                     style: tokens.typography.displayLarge.copyWith(
                       fontSize: 56, 
                       fontWeight: FontWeight.w900,
@@ -65,7 +80,7 @@ class T2DashboardHeader extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "CALORIES LEFT",
+                  tokens.useUpperCasing ? "CALORIES LEFT" : "Calories Left",
                   style: tokens.typography.labelSmall.copyWith(
                     color: tokens.colors.onSurface.withValues(alpha: 0.4),
                     letterSpacing: 1.5,

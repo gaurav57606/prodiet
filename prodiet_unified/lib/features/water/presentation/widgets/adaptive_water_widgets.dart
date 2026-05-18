@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart';
 import 'package:intl/intl.dart';
-import 'package:prodiet_unified/core/theme/font_config.dart';
 
 class AdaptiveWaterHero extends StatelessWidget {
   final int consumed;
@@ -18,118 +17,106 @@ class AdaptiveWaterHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final isT2 = tokens.dashboardLayout == AppDashboardLayout.t2;
-
-    if (isT2) {
-      return _buildT2(context);
-    }
-    return _buildT1(context);
-  }
-
-  Widget _buildT1(BuildContext context) {
-    final tokens = context.tokens;
     final formatter = NumberFormat('#,###');
-    const color = Color(0xFF00CED1); // Accent Teal
+    final isT2 = tokens.useUpperCasing;
+    
+    const t1Color = Color(0xFF00CED1); // Accent Teal
+    const t2Color = Color(0xFF00E5FF); // T2 Sky
+    final color = isT2 ? t2Color : t1Color;
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [color.withValues(alpha: 0.15), color.withValues(alpha: 0.05)],
-        ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.withValues(alpha: 0.15)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                formatter.format(consumed),
-                style: tokens.typography.displayLarge.copyWith(
-                  color: color,
-                  fontSize: 64,
-                  fontWeight: FontWeight.w900,
-                ),
+      padding: isT2 ? EdgeInsets.zero : const EdgeInsets.all(24),
+      decoration: isT2
+          ? null
+          : BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [color.withValues(alpha: 0.15), color.withValues(alpha: 0.05)],
               ),
-              const SizedBox(width: 8),
-              Text(
-                'ml',
-                style: tokens.typography.headlineMedium.copyWith(
-                  color: color.withValues(alpha: 0.5),
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            'OF ${formatter.format(target)} ML TARGET',
-            style: tokens.typography.labelSmall.copyWith(
-              color: color.withValues(alpha: 0.6),
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.0,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: color.withValues(alpha: 0.15)),
             ),
-          ),
-          const SizedBox(height: 24),
-          LinearProgressIndicator(
-            value: progress.clamp(0.0, 1.0),
-            backgroundColor: color.withValues(alpha: 0.1),
-            color: color,
-            minHeight: 12,
-            borderRadius: BorderRadius.circular(6),
-          ),
+      child: Column(
+        crossAxisAlignment: isT2 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        children: [
+          if (isT2) ...[
+            Text(
+              'WATER',
+              style: tokens.typography.displayLarge.copyWith(
+                fontSize: 56,
+                fontWeight: FontWeight.w900,
+                color: color,
+                height: 1.0,
+              ),
+            ),
+            const SizedBox(height: 8),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: formatter.format(consumed),
+                    style: tokens.typography.displayLarge.copyWith(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                      color: tokens.colors.onSurface,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' ml / ${formatter.format(target)} ml',
+                    style: tokens.typography.displayLarge.copyWith(
+                      fontSize: 16,
+                      color: tokens.colors.onSurface.withValues(alpha: 0.5),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  formatter.format(consumed),
+                  style: tokens.typography.displayLarge.copyWith(
+                    color: color,
+                    fontSize: 64,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'ml',
+                  style: tokens.typography.headlineMedium.copyWith(
+                    color: color.withValues(alpha: 0.5),
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              'OF ${formatter.format(target)} ML TARGET',
+              style: tokens.typography.labelSmall.copyWith(
+                color: color.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.0,
+              ),
+            ),
+            const SizedBox(height: 24),
+            LinearProgressIndicator(
+              value: progress.clamp(0.0, 1.0),
+              backgroundColor: color.withValues(alpha: 0.1),
+              color: color,
+              minHeight: 12,
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ],
         ],
       ),
-    );
-  }
-
-  Widget _buildT2(BuildContext context) {
-    final tokens = context.tokens;
-    final formatter = NumberFormat('#,###');
-    const color = Color(0xFF00E5FF); // T2 Sky
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'WATER',
-          style: AppFonts.barlowCondensed(
-            fontSize: 56,
-            fontWeight: FontWeight.w900,
-            color: color,
-            height: 1.0,
-          ),
-        ),
-        const SizedBox(height: 8),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: formatter.format(consumed),
-                style: AppFonts.barlowCondensed(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: tokens.colors.onSurface,
-                ),
-              ),
-              TextSpan(
-                text: ' ml / ${formatter.format(target)} ml',
-                style: AppFonts.barlowCondensed(
-                  fontSize: 16,
-                  color: tokens.colors.onSurface.withValues(alpha: 0.5),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -145,7 +132,7 @@ class AdaptiveWaterQuickAdd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final isT2 = tokens.dashboardLayout == AppDashboardLayout.t2;
+    final isT2 = tokens.waterQuickAddCrossAxisCount == 3;
 
     final amounts = [
       {'val': 250, 'lbl': '250ml', 'icon': Icons.local_drink_rounded},
@@ -161,7 +148,7 @@ class AdaptiveWaterQuickAdd extends StatelessWidget {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: isT2 ? 3 : 2,
+      crossAxisCount: tokens.waterQuickAddCrossAxisCount,
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       childAspectRatio: isT2 ? 1.8 : 1.5,
@@ -186,7 +173,7 @@ class AdaptiveWaterQuickAdd extends StatelessWidget {
                 ],
                 Text(
                   a['lbl'] as String,
-                  style: (isT2 ? AppFonts.barlowCondensed(fontSize: 14) : tokens.typography.titleMedium).copyWith(
+                  style: (isT2 ? tokens.typography.labelMedium.copyWith(fontSize: 14) : tokens.typography.titleMedium).copyWith(
                     fontWeight: FontWeight.w900,
                   ),
                 ),

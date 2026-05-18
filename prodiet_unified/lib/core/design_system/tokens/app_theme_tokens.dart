@@ -24,6 +24,13 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
   final AppShadows shadows;
   final AppMotion motion;
   final AppDashboardLayout dashboardLayout;
+  
+  // Semantic Layout and Component Tokens
+  final bool useFloatingHeader;
+  final bool useUpperCasing;
+  final bool customCheckboxShape;
+  final int waterQuickAddCrossAxisCount;
+  final bool showAlertList;
 
   const AppThemeTokens({
     required this.colors,
@@ -34,6 +41,11 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
     required this.shadows,
     required this.motion,
     this.dashboardLayout = AppDashboardLayout.grid,
+    this.useFloatingHeader = true,
+    this.useUpperCasing = false,
+    this.customCheckboxShape = false,
+    this.waterQuickAddCrossAxisCount = 2,
+    this.showAlertList = true,
   });
 
   @override
@@ -46,6 +58,11 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
     AppShadows? shadows,
     AppMotion? motion,
     AppDashboardLayout? dashboardLayout,
+    bool? useFloatingHeader,
+    bool? useUpperCasing,
+    bool? customCheckboxShape,
+    int? waterQuickAddCrossAxisCount,
+    bool? showAlertList,
   }) {
     return AppThemeTokens(
       colors: colors ?? this.colors,
@@ -56,6 +73,11 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
       shadows: shadows ?? this.shadows,
       motion: motion ?? this.motion,
       dashboardLayout: dashboardLayout ?? this.dashboardLayout,
+      useFloatingHeader: useFloatingHeader ?? this.useFloatingHeader,
+      useUpperCasing: useUpperCasing ?? this.useUpperCasing,
+      customCheckboxShape: customCheckboxShape ?? this.customCheckboxShape,
+      waterQuickAddCrossAxisCount: waterQuickAddCrossAxisCount ?? this.waterQuickAddCrossAxisCount,
+      showAlertList: showAlertList ?? this.showAlertList,
     );
   }
 
@@ -71,6 +93,11 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
       shadows: shadows.lerp(other.shadows, t),
       motion: motion.lerp(other.motion, t),
       dashboardLayout: t < 0.5 ? dashboardLayout : other.dashboardLayout,
+      useFloatingHeader: t < 0.5 ? useFloatingHeader : other.useFloatingHeader,
+      useUpperCasing: t < 0.5 ? useUpperCasing : other.useUpperCasing,
+      customCheckboxShape: t < 0.5 ? customCheckboxShape : other.customCheckboxShape,
+      waterQuickAddCrossAxisCount: t < 0.5 ? waterQuickAddCrossAxisCount : other.waterQuickAddCrossAxisCount,
+      showAlertList: t < 0.5 ? showAlertList : other.showAlertList,
     );
   }
 }

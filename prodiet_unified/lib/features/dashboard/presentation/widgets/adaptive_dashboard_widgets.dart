@@ -11,19 +11,14 @@ import 'package:prodiet_unified/features/dashboard/presentation/widgets/unified_
 import 'package:prodiet_unified/features/dashboard/presentation/widgets/unified_activity_section.dart';
 import 'package:prodiet_unified/features/dashboard/presentation/widgets/alerts_list.dart';
 import 'package:prodiet_unified/shared/presentation/widgets/unified_alert_strip.dart';
-import 'package:prodiet_unified/features/dashboard/presentation/widgets/t1_dashboard_header.dart';
-import 'package:prodiet_unified/features/dashboard/presentation/widgets/t2_dashboard_header.dart';
+import 'package:prodiet_unified/features/dashboard/presentation/widgets/unified_dashboard_header.dart';
 
 class AdaptiveDashboardHeader extends StatelessWidget {
   const AdaptiveDashboardHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.tokens;
-    if (tokens.dashboardLayout == AppDashboardLayout.curved) {
-      return const T2DashboardHeader();
-    }
-    return const T1DashboardHeader();
+    return const UnifiedDashboardHeader();
   }
 }
 

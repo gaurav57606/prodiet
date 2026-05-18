@@ -14,6 +14,11 @@ import 't2_spacing.dart';
 class T2Tokens {
   static AppThemeTokens get light => AppThemeTokens(
     dashboardLayout: AppDashboardLayout.t2,
+    useFloatingHeader: false,
+    useUpperCasing: true,
+    customCheckboxShape: true,
+    waterQuickAddCrossAxisCount: 3,
+    showAlertList: false,
     colors: AppColors(
       primary: t2LightScheme.primary,
       secondary: t2LightScheme.secondary,
@@ -96,6 +101,11 @@ class T2Tokens {
 
   static AppThemeTokens get dark => AppThemeTokens(
     dashboardLayout: AppDashboardLayout.t2,
+    useFloatingHeader: false,
+    useUpperCasing: true,
+    customCheckboxShape: true,
+    waterQuickAddCrossAxisCount: 3,
+    showAlertList: false,
     colors: AppColors(
       primary: t2DarkScheme.primary,
       secondary: t2DarkScheme.secondary,
