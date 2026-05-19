@@ -10,6 +10,7 @@ import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 
+import 'package:prodiet_unified/app/bootstrap_screen.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
 import 'package:prodiet_unified/features/meal_planner/data/meal_repository.dart';
 import 'package:prodiet_unified/features/meal_planner/application/meal_providers.dart';
@@ -112,9 +113,9 @@ void main() {
 
       // Stub Analytics
       when(() => mockAnalytics.startSession(any(), 
-        deviceModel: any(named: 'deviceModel'),
-        osVersion: any(named: 'osVersion'),
-        appVersion: any(named: 'appVersion'))).thenAnswer((_) => Future<void>.value());
+      deviceModel: any(named: 'deviceModel'),
+      osVersion: any(named: 'osVersion'),
+      appVersion: any(named: 'appVersion'))).thenAnswer((_) => Future<void>.value());
       when(() => mockAnalytics.endSession(any())).thenAnswer((_) => Future<void>.value());
       when(() => mockAnalytics.logScreen(any())).thenAnswer((_) => Future<void>.value());
       
@@ -140,6 +141,7 @@ void main() {
             fcmServiceProvider.overrideWithValue(mockFcm),
             connectivityProvider.overrideWith(() => MockConnectivityNotifier()),
             activeThemeInitializedProvider.overrideWith(MockActiveThemeInitializedNotifier.new),
+            bootstrapStateProvider.overrideWith((ref) => BootstrapState.ready),
           ],
           child: const ProDietApp(isTest: true),
         ),

@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
+
 
 class NotificationSettings {
   final bool meals;
@@ -76,7 +77,6 @@ class NotificationSettingsNotifier extends StateNotifier<NotificationSettings> {
     await prefs.setBool(_kStreak, value);
   }
 }
-
 final notificationSettingsProvider =
     StateNotifierProvider<NotificationSettingsNotifier, NotificationSettings>((ref) {
   return NotificationSettingsNotifier();
@@ -86,7 +86,7 @@ final notificationsProvider = FutureProvider.autoDispose<List<Map<String, dynami
   final userId = ref.watch(currentUserIdProvider);
   if (userId.isEmpty) return [];
 
-  final supabase = Supabase.instance.client;
+  final supabase = ref.watch(supabaseClientProvider);
   final response = await supabase
       .from('notifications')
       .select()
@@ -96,3 +96,4 @@ final notificationsProvider = FutureProvider.autoDispose<List<Map<String, dynami
 
   return List<Map<String, dynamic>>.from(response);
 });
+

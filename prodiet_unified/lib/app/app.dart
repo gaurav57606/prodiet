@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:prodiet_unified/app/bootstrap_screen.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/services/analytics_service.dart';
 import 'package:prodiet_unified/app/router.dart';
@@ -10,8 +11,12 @@ import 'package:prodiet_unified/core/services/connectivity_service.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/core/theme/app_theme.dart';
 import 'package:prodiet_unified/shared/components/production_error_screen.dart';
-
 import 'package:prodiet_unified/core/observability/monitoring/app_health_monitor.dart';
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
+import 'package:prodiet_unified/core/sync/sync_providers.dart';
+import 'package:prodiet_unified/core/services/fcm_service.dart';
+import 'package:prodiet_unified/core/services/analytics_providers.dart';
+
 
 class ProDietApp extends ConsumerStatefulWidget {
   final bool isTest;
@@ -23,6 +28,7 @@ class ProDietApp extends ConsumerStatefulWidget {
 
 class _ProDietAppState extends ConsumerState<ProDietApp> with WidgetsBindingObserver {
   late final AppLifecycleListener _listener;
+  bool _warmedUp = false;
 
   @override
   void initState() {
@@ -55,6 +61,31 @@ class _ProDietAppState extends ConsumerState<ProDietApp> with WidgetsBindingObse
         }
       }
     });
+  }
+
+  void _runDeferredWarmup() {
+    try {
+      AppLogger.info('[App] Starting deferred startup warmup...');
+
+      // 1. Safe initialization of sync and background processes
+      ref.read(syncManagerProvider).start();
+
+      // 2. Bind FCM token updates & synchronization to authenticated user lifecycle
+      ref.listenManual(currentUserIdProvider, (previous, next) {
+        if (next.isNotEmpty) {
+          ref.read(fcmServiceProvider)?.initialize(next);
+          ref.read(syncManagerProvider).processQueue();
+          ref.read(analyticsManagerProvider).setUserId(next);
+        }
+      });
+
+      // 3. Fast check of initial auth provider state to start session checking in background
+      ref.read(authProvider);
+
+      AppLogger.info('[App] Deferred startup warmup complete.');
+    } catch (e, st) {
+      AppLogger.error('[App] Critical error in deferred warmup', error: e, stack: st);
+    }
   }
 
   @override
@@ -121,6 +152,32 @@ class _ProDietAppState extends ConsumerState<ProDietApp> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    final bootstrapState = ref.watch(bootstrapStateProvider);
+
+    if (bootstrapState == BootstrapState.loading) {
+      return const MaterialApp(
+        title: 'ProDiet',
+        debugShowCheckedModeBanner: false,
+        home: BootstrapLoadingScreen(),
+      );
+    }
+
+    if (bootstrapState == BootstrapState.failed) {
+      return const MaterialApp(
+        title: 'ProDiet',
+        debugShowCheckedModeBanner: false,
+        home: BootstrapErrorScreen(),
+      );
+    }
+
+    // Handle deferred warmup exactly once when transition to ready state completes
+    if (bootstrapState == BootstrapState.ready && !_warmedUp) {
+      _warmedUp = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _runDeferredWarmup();
+      });
+    }
+
     final tokens = ref.watch(appThemeTokensProvider);
     final active = ref.watch(activeThemeProvider);
     

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prodiet_unified/features/dashboard/application/dashboard_providers.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
+import 'package:prodiet_unified/core/services/supabase_service.dart';
 import '../domain/models/achievement.dart';
 import '../data/achievement_repository.dart';
 
@@ -18,7 +18,7 @@ final streakAchievementProvider = FutureProvider.autoDispose<void>((ref) async {
   final milestones = [3, 7, 14, 30];
 
   if (streak > 0 && milestones.contains(streak)) {
-    final supabase = Supabase.instance.client;
+    final supabase = ref.watch(supabaseClientProvider);
     await supabase.from('achievements').upsert({
       'user_id': userId,
       'title': '$streak Day Streak 🔥',
@@ -35,8 +35,9 @@ final streakAchievementProvider = FutureProvider.autoDispose<void>((ref) async {
 });
 
 final achievementRepositoryProvider = Provider<AchievementRepository>((ref) {
-  return AchievementRepository(Supabase.instance.client);
+  return AchievementRepository(ref.watch(supabaseClientProvider));
 });
+
 
 final achievementsProvider = FutureProvider.autoDispose<List<Achievement>>((ref) async {
   final authState = ref.watch(authProvider);

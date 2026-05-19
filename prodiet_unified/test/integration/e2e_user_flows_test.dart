@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:prodiet_unified/app/app.dart';
+import 'package:prodiet_unified/app/bootstrap_screen.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
@@ -152,6 +153,7 @@ void main() {
             fcmServiceProvider.overrideWithValue(mockFcm),
             connectivityProvider.overrideWith(() => MockConnectivityNotifier()),
             activeThemeInitializedProvider.overrideWith(MockActiveThemeInitializedNotifier.new),
+            bootstrapStateProvider.overrideWith((ref) => BootstrapState.ready),
           ],
           child: const ProDietApp(isTest: true),
         ),

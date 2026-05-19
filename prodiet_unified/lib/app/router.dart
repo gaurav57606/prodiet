@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/shared/presentation/widgets/adaptive_app_shell.dart';
+import 'package:prodiet_unified/app/bootstrap_screen.dart';
+import 'package:prodiet_unified/app/navigation_state.dart';
+import 'package:prodiet_unified/shared/components/production_error_screen.dart';
 
 // Unified Screens
 import 'package:prodiet_unified/features/auth/presentation/screens/splash_screen.dart' as unified_splash;
@@ -47,20 +50,21 @@ final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final _shellKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final notifier = ref.watch(routerNotifierProvider);
+  final notifier = ref.read(routerNotifierProvider);
   
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     refreshListenable: notifier,
     redirect: (context, state) => redirectLogic(context, state, ref),
+    errorBuilder: (context, state) => ProductionErrorScreen(
+      error: state.error ?? Exception('Unknown routing error: ${state.uri}'),
+      onRetry: () => context.go(AppRoutes.dashboard),
+    ),
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const Scaffold(
-          backgroundColor: Colors.black,
-          body: Center(child: CircularProgressIndicator(color: Colors.white)),
-        ),
+        builder: (context, state) => const BootstrapScreen(),
       ),
 
       // ─── AUTH ROUTES ────────────────────────────────────────────────────────
@@ -137,12 +141,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 String? redirectLogic(BuildContext context, GoRouterState state, dynamic ref) {
-  final isInitialized = ref.read(activeThemeInitializedProvider);
-  final authState = ref.read(authProvider);
+  final navState = ref.read(navigationStateProvider);
   final loc = state.matchedLocation;
 
-  // Hold on '/' loading screen until BOTH theme AND auth are ready
-  if (!isInitialized || authState is AuthLoading) {
+  // 1. Bootstrapping / Initializing state
+  if (navState == AppNavigationState.bootstrapping) {
     return loc == '/' ? null : '/';
   }
 
@@ -161,21 +164,30 @@ String? redirectLogic(BuildContext context, GoRouterState state, dynamic ref) {
 
   final isPublic = publicRoutes.contains(loc);
 
-  if (authState is AuthFailure) {
+  // 2. Auth Failure / Splash redirect
+  if (navState == AppNavigationState.unauthenticatedSplash) {
     return isPublic ? null : AppRoutes.authSplash;
   }
-  if (authState is AuthUnauthenticated) {
+
+  // 3. Unauthenticated state
+  if (navState == AppNavigationState.unauthenticated) {
     return isPublic ? null : AppRoutes.authLogin;
   }
-  if (authState is AuthProfileMissing) {
+
+  // 4. Profile creation/sync missing
+  if (navState == AppNavigationState.profileMissing) {
     return (loc == AppRoutes.authProfileRetry) ? null : AppRoutes.authProfileRetry;
   }
-  if (authState is AuthNeedsOnboarding) {
+
+  // 5. Onboarding needed
+  if (navState == AppNavigationState.onboarding) {
     return (loc == AppRoutes.authOnboarding || loc == AppRoutes.authHealthGoals)
         ? null
         : AppRoutes.authHealthGoals;
   }
-  if (authState is AuthAuthenticated) {
+
+  // 6. Authenticated and ready
+  if (navState == AppNavigationState.authenticated) {
     if (loc == '/' || isPublic) return AppRoutes.dashboard;
     return null;
   }

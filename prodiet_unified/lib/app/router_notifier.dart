@@ -1,37 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
+import 'package:prodiet_unified/app/navigation_state.dart';
 
-/// Bridges Riverpod auth and theme state changes into GoRouter's
-/// refreshListenable so redirects fire automatically.
+/// Bridges Riverpod navigation state machine changes into GoRouter's
+/// refreshListenable so redirects fire automatically and deterministically.
 class RouterNotifier extends ChangeNotifier {
   RouterNotifier(Ref ref) {
-    _listenToAuth(ref);
-    _listenToTheme(ref);
-    _listenToThemeInitialized(ref);  // ← ADD THIS LINE ONLY
+    _listenToNavigationState(ref);
   }
 
-  void _listenToAuth(Ref ref) {
-    ref.listen<AuthState>(
-      authProvider,
-      (_, __) => notifyListeners(),
-      fireImmediately: true,
-    );
-  }
-
-  void _listenToTheme(Ref ref) {
-    ref.listen<ActiveTheme>(
-      activeThemeProvider,
-      (_, __) => notifyListeners(),
-      fireImmediately: true,
-    );
-  }
-
-  void _listenToThemeInitialized(Ref ref) {
-    ref.listen<bool>(
-      activeThemeInitializedProvider,
-      (_, __) => notifyListeners(),
+  void _listenToNavigationState(Ref ref) {
+    ref.listen<AppNavigationState>(
+      navigationStateProvider,
+      (_, __) {
+        notifyListeners();
+      },
       fireImmediately: true,
     );
   }
@@ -40,3 +23,4 @@ class RouterNotifier extends ChangeNotifier {
 final routerNotifierProvider = Provider<RouterNotifier>((ref) {
   return RouterNotifier(ref);
 });
+

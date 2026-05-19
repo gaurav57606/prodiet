@@ -74,6 +74,9 @@ void main() {
     mockState   = MockGoRouterState();
     mockRepo    = MockAuthRepository();
 
+    // Default stub for non-nullable matchedLocation to prevent type errors under test
+    when(() => mockState.matchedLocation).thenReturn('/');
+
     // REQUIRED: FakeAuthNotifier calls super() which fires _init()
     // inside AuthNotifier constructor — these stubs must be present.
     when(() => mockRepo.currentSession()).thenReturn(null);
@@ -86,6 +89,7 @@ void main() {
   // ─────────────────────────────────────────────────────────
   group('AppRouter — Theme guard', () {
     test('redirects to / when theme not yet initialized', () {
+      when(() => mockState.matchedLocation).thenReturn(AppRoutes.dashboard);
       final container = _buildContainer(
         themeInitialized: false,
         mockRepo: mockRepo,
@@ -103,6 +107,12 @@ void main() {
       final container = _buildContainer(
         themeInitialized: true,
         theme: ActiveTheme.t1Light,
+        authState: AuthAuthenticated(AppUser(
+          id: 'u1',
+          email: 'u1@t.com',
+          onboardingComplete: true,
+          createdAt: DateTime(2026),
+        )),
         mockRepo: mockRepo,
       );
       expect(redirectLogic(mockContext, mockState, container), AppRoutes.dashboard);
