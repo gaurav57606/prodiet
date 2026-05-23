@@ -12,6 +12,7 @@ import 'package:prodiet_unified/core/error/app_error.dart';
 
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
 import 'package:prodiet_unified/features/auth/domain/models/app_user.dart';
+import 'package:prodiet_unified/app/bootstrap_screen.dart';
 
 class MockBuildContext extends Mock implements BuildContext {}
 class MockGoRouterState extends Mock implements GoRouterState {}
@@ -53,9 +54,11 @@ ProviderContainer _buildContainer({
   required bool themeInitialized,
   ActiveTheme theme = ActiveTheme.t1Light,
   AuthState authState = const AuthUnauthenticated(),
+  BootstrapState bootstrapState = BootstrapState.ready,
   required MockAuthRepository mockRepo,
 }) {
   return ProviderContainer(overrides: [
+    bootstrapStateProvider.overrideWith((ref) => bootstrapState),
     activeThemeInitializedProvider.overrideWith(() => FakeActiveThemeInitializedNotifier(themeInitialized)),
     activeThemeProvider
         .overrideWith(() => FakeActiveThemeNotifier(theme)),

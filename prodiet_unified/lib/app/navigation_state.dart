@@ -23,7 +23,7 @@ final navigationStateProvider = Provider<AppNavigationState>((ref) {
   final authState = ref.watch(authProvider);
   
   if (authState is AuthLoading) {
-    return AppNavigationState.bootstrapping;
+    return AppNavigationState.unauthenticatedSplash;
   }
   if (authState is AuthFailure) {
     return AppNavigationState.unauthenticatedSplash;

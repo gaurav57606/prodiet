@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prodiet_unified/core/theme/t1/t1_tokens.dart';
 import 'app_colors.dart';
 import 'app_typography.dart';
 import 'app_spacing.dart';
@@ -103,5 +104,5 @@ class AppThemeTokens extends ThemeExtension<AppThemeTokens> {
 }
 
 extension AppThemeTokensExtension on BuildContext {
-  AppThemeTokens get tokens => Theme.of(this).extension<AppThemeTokens>()!;
+  AppThemeTokens get tokens => Theme.of(this).extension<AppThemeTokens>() ?? T1Tokens.dark;
 }

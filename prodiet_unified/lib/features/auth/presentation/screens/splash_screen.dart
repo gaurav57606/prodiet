@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
 import 'package:prodiet_unified/core/widgets/loading_widget.dart';
 import 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart';
+import 'package:prodiet_unified/core/sync/connection_monitor.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +19,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _timeoutTimer = Timer(const Duration(seconds: 8), () {
+    _timeoutTimer = Timer(const Duration(seconds: 20), () {
       if (mounted) setState(() => _timedOut = true);
     });
   }
@@ -34,6 +35,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final tokens = context.tokens;
     final scheme = tokens.colors;
     final authState = ref.watch(authProvider);
+    final connectionStatus = ref.watch(connectionMonitorProvider);
 
     ref.listen<AuthState>(authProvider, (_, next) {
       if (next is AuthFailure) {
@@ -45,6 +47,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     });
 
     if (_timedOut || authState is AuthFailure) {
+      String title = 'Could not connect';
+      String message = 'Connection timed out. Check your internet and try again.';
+
+      if (authState is AuthFailure) {
+        title = 'Authentication Error';
+        message = authState.error.displayMessage;
+      } else if (connectionStatus == ConnectionStatus.offline) {
+        title = 'No Internet Connection';
+        message = 'It looks like you are completely offline. Check your network and try again.';
+      } else if (connectionStatus == ConnectionStatus.degraded) {
+        title = 'Server Unreachable';
+        message = 'The server is taking too long to respond. We will keep trying to connect.';
+      } else {
+        title = 'Connection Slow';
+        message = 'The connection is taking longer than expected. Please wait or try again.';
+      }
+
       return Scaffold(
         backgroundColor: scheme.surface,
         body: SafeArea(
@@ -57,15 +76,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   const Icon(Icons.warning_amber_rounded, size: 48, color: Color(0xFFF5A623)),
                   const SizedBox(height: 16),
                   Text(
-                    authState is AuthFailure ? 'Authentication Error' : 'Could not connect',
+                    title,
                     style: tokens.typography.headlineSmall.copyWith(fontWeight: FontWeight.w800),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    authState is AuthFailure
-                      ? authState.error.displayMessage
-                      : 'Connection timed out. Check your internet and try again.',
+                    message,
                     style: tokens.typography.bodySmall.copyWith(color: scheme.onSurface.withValues(alpha: 0.6)),
                     textAlign: TextAlign.center,
                   ),
@@ -74,7 +91,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     onPressed: () {
                       setState(() => _timedOut = false);
                       _timeoutTimer?.cancel();
-                      _timeoutTimer = Timer(const Duration(seconds: 8), () {
+                      _timeoutTimer = Timer(const Duration(seconds: 20), () {
                         if (mounted) setState(() => _timedOut = true);
                       });
                       ref.invalidate(authProvider);

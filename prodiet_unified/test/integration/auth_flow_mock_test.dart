@@ -55,6 +55,31 @@ void main() {
       return '.';
     });
 
+  // Mock connectivity checking method channel
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+    .setMockMethodCallHandler(
+        const MethodChannel('dev.fluttercommunity.plus/connectivity'),
+        (MethodCall methodCall) async {
+      if (methodCall.method == 'check') {
+        return ['wifi'];
+      }
+      return null;
+    });
+
+  // Mock connectivity status stream event channel
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+    .setMockMethodCallHandler(
+        const MethodChannel('dev.fluttercommunity.plus/connectivity_status'),
+        (MethodCall methodCall) async {
+      if (methodCall.method == 'listen') {
+        return null;
+      }
+      if (methodCall.method == 'cancel') {
+        return null;
+      }
+      return null;
+    });
+
   group('End-to-End Golden Path', () {
     SharedPreferences.setMockInitialValues({});
     

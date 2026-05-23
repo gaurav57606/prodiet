@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prodiet_unified/core/services/fcm_service.dart';
 import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 import '../../../core/error/error_handler.dart';
@@ -81,10 +83,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       logger.d('[$_tag] Fetching profile for $userId...');
       
       // Try fetching the profile.
-      var profile = await _repo.fetchProfile(userId).timeout(
+      final future = _repo.fetchProfile(userId);
+      var profile = await future.timeout(
         const Duration(seconds: 5), // Reduced timeout for faster failover
         onTimeout: () {
-          logger.e('[$_tag] Profile fetch timed out for $userId');
+          logger.w('[$_tag] Profile fetch timed out for $userId');
           throw TimeoutException('Profile fetch timed out');
         },
       );
@@ -107,10 +110,36 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
 
       logger.d('[$_tag] Profile loaded successfully for ${profile.email}');
+      
+      // Cache the fetched profile locally for offline-first support
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('prodiet_cached_user_profile_$userId', jsonEncode(profile.toJson()));
+        logger.d('[$_tag] Profile cached successfully in SharedPreferences for $userId');
+      } catch (cacheErr) {
+        logger.w('[$_tag] Failed to cache profile locally: $cacheErr');
+      }
+
       _handleProfile(profile);
     } catch (e) {
       if (!mounted) return;
-      logger.e('[$_tag] _handleSession error: $e');
+      logger.e('[$_tag] _handleSession remote fetch failed/timed out: $e');
+
+      // Resilient fallback: Try to load from SharedPreferences cache
+      try {
+        logger.i('[$_tag] Attempting to load locally cached profile for $userId due to network failure...');
+        final prefs = await SharedPreferences.getInstance();
+        final cachedJson = prefs.getString('prodiet_cached_user_profile_$userId');
+        if (cachedJson != null) {
+          final profile = AppUser.fromJson(jsonDecode(cachedJson) as Map<String, dynamic>);
+          logger.i('[$_tag] Successfully loaded cached profile for ${profile.email} (Degraded Offline Mode)');
+          _handleProfile(profile);
+          return;
+        }
+      } catch (cacheErr) {
+        logger.e('[$_tag] Failed to read cached profile: $cacheErr');
+      }
+
       state = AuthFailure(ErrorHandler.handle(e, context: '$_tag._handleSession'));
     }
   }
@@ -161,7 +190,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> signOut() async {
     try {
+      final userId = currentUser?.id;
       await _repo.signOut();
+      if (userId != null) {
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.remove('prodiet_cached_user_profile_$userId');
+          logger.d('[$_tag] Removed cached profile for $userId on signOut');
+        } catch (_) {}
+      }
       if (!mounted) return;
     } catch (e) {
       if (!mounted) return;

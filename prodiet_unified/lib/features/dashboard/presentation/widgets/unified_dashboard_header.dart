@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:prodiet_unified/app/app_routes.dart';
 import 'package:prodiet_unified/core/design_system/tokens/app_theme_tokens.dart';
 import 'package:prodiet_unified/core/widgets/theme_toggle.dart';
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
@@ -45,13 +47,33 @@ class UnifiedDashboardHeader extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    tokens.useUpperCasing ? greeting.toUpperCase() : greeting,
-                    style: tokens.typography.labelSmall.copyWith(
-                      color: tokens.colors.onSurface.withValues(alpha: 0.6),
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.0,
-                    ),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.push(AppRoutes.profile),
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: tokens.colors.primary.withValues(alpha: 0.1),
+                          child: Icon(
+                            Icons.person_rounded,
+                            size: 16,
+                            color: tokens.colors.primary,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          tokens.useUpperCasing ? greeting.toUpperCase() : greeting,
+                          style: tokens.typography.labelSmall.copyWith(
+                            color: tokens.colors.onSurface.withValues(alpha: 0.6),
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.0,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(

@@ -231,6 +231,7 @@ class _T2Scaffold extends ConsumerWidget {
             _sheetItem(context, ctx, Icons.restaurant_menu_outlined, 'Recipes', AppRoutes.t2Recipe),
             _sheetItem(context, ctx, Icons.store_outlined, 'Order & Restock', AppRoutes.t2Vendor),
             _sheetItem(context, ctx, Icons.watch_outlined, 'Fitband & Activity', AppRoutes.t2Fitband),
+            _sheetItem(context, ctx, Icons.person_outline_rounded, 'Profile & Settings', AppRoutes.profile),
             Divider(color: tokens.colors.outline.withValues(alpha: 0.1), height: 28),
             ListTile(
               contentPadding: EdgeInsets.zero,

@@ -23,7 +23,10 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 
 // Convenience selectors
 final currentUserProvider = Provider<AppUser?>((ref) {
-  return ref.watch(authProvider.notifier).currentUser;
+  final authState = ref.watch(authProvider);
+  if (authState is AuthAuthenticated) return authState.user;
+  if (authState is AuthNeedsOnboarding) return authState.user;
+  return null;
 });
 
 final isAuthenticatedProvider = Provider<bool>((ref) {
@@ -37,5 +40,8 @@ final isLoadingAuthProvider = Provider<bool>((ref) {
 /// Returns the current authenticated user's ID, or empty string if not
 /// authenticated. Used by stream providers that require a userId.
 final currentUserIdProvider = Provider<String>((ref) {
-  return ref.watch(authProvider.notifier).currentUser?.id ?? '';
+  final authState = ref.watch(authProvider);
+  if (authState is AuthAuthenticated) return authState.user.id;
+  if (authState is AuthNeedsOnboarding) return authState.user.id;
+  return '';
 });

@@ -116,6 +116,48 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 32),
+
+            _buildSectionHeader(context, 'FEATURES & TOOLS'),
+            const SizedBox(height: 12),
+            _buildContainer(
+              context,
+              Column(
+                children: [
+                  AdaptiveMenuTile(
+                    label: 'Stock & Inventory', 
+                    icon: Icons.inventory_2_outlined,
+                    onTap: () => context.push(AppRoutes.inventory),
+                  ),
+                  AdaptiveMenuTile(
+                    label: 'Shopping List', 
+                    icon: Icons.shopping_cart_outlined,
+                    onTap: () => context.push(AppRoutes.shopping),
+                  ),
+                  AdaptiveMenuTile(
+                    label: 'Recipes', 
+                    icon: Icons.restaurant_menu_outlined,
+                    onTap: () => context.push(AppRoutes.recipe),
+                  ),
+                  AdaptiveMenuTile(
+                    label: 'Order & Restock', 
+                    icon: Icons.store_outlined,
+                    onTap: () => context.push(AppRoutes.vendor),
+                  ),
+                  AdaptiveMenuTile(
+                    label: 'Achievements', 
+                    icon: Icons.emoji_events_outlined,
+                    onTap: () => context.push(AppRoutes.achievements),
+                  ),
+                  AdaptiveMenuTile(
+                    label: 'Plan Adjustments', 
+                    icon: Icons.auto_awesome_rounded,
+                    onTap: () => context.push(AppRoutes.compensation),
+                    showBorder: false,
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 40),
 
             SizedBox(

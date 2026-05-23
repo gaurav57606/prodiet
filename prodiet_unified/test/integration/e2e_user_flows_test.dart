@@ -54,6 +54,31 @@ void main() {
         return '.';
       });
 
+  // Mock connectivity checking method channel
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
+          const MethodChannel('dev.fluttercommunity.plus/connectivity'),
+          (MethodCall methodCall) async {
+        if (methodCall.method == 'check') {
+          return ['wifi'];
+        }
+        return null;
+      });
+
+  // Mock connectivity status stream event channel
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
+          const MethodChannel('dev.fluttercommunity.plus/connectivity_status'),
+          (MethodCall methodCall) async {
+        if (methodCall.method == 'listen') {
+          return null;
+        }
+        if (methodCall.method == 'cancel') {
+          return null;
+        }
+        return null;
+      });
+
   group('Multi-Step End-to-End Integration Flow', () {
     late MockAuthRepository mockAuthRepo;
     late MockMealRepository mockMealRepo;
@@ -160,8 +185,13 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-
-      // 1. Assert initial state loads the Dashboard with mocked user profile details
+      for (final widget in tester.allWidgets) {
+        if (widget is Text) {
+          print('DEBUG TEXT: ${widget.data}');
+        } else if (widget is RichText) {
+          print('DEBUG RICHTEXT: ${(widget.text as TextSpan).toPlainText()}');
+        }
+      }
       expect(find.text('KCAL REMAINING TODAY'), findsWidgets);
       expect(find.text('1300'), findsWidgets); // Remaining Calories (2500 - 1200)
       expect(find.textContaining('Gaurav', findRichText: true), findsWidgets); // Welcoming label

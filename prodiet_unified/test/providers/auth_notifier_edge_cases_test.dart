@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:fake_async/fake_async.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prodiet_unified/features/auth/application/auth_notifier.dart';
 import 'package:prodiet_unified/features/auth/application/auth_state.dart';
 import 'package:prodiet_unified/features/auth/data/auth_repository.dart';
@@ -35,6 +37,7 @@ void main() {
   setUp(() {
     mockRepo = MockAuthRepository();
     mockFcm  = MockFcmService();
+    SharedPreferences.setMockInitialValues({});
     when(() => mockRepo.currentSession()).thenReturn(null);
     when(() => mockRepo.authStateChanges()).thenAnswer((_) => const Stream.empty());
     when(() => mockFcm.initialize(any())).thenAnswer((_) => Future<void>.value());
@@ -166,6 +169,70 @@ void main() {
         
         // Verify it was NOT called again after dispose
         verifyNever(() => mockRepo.fetchProfile('u2'));
+      });
+    });
+
+    test('successfully caches profile and falls back to local SharedPreferences cache on timeout', () {
+      fakeAsync((async) {
+        final user = AppUser(
+          id: 'u_cache_1', name: 'Cached User', email: 'cache@t.com',
+          onboardingComplete: true, createdAt: DateTime.now(),
+        );
+
+        SharedPreferences.setMockInitialValues({});
+
+        // 1. First run, fetches successfully and caches it
+        when(() => mockRepo.fetchProfile('u_cache_1')).thenAnswer((_) async => user);
+        when(() => mockRepo.currentSession()).thenReturn(_makeSession('u_cache_1', 'cache@t.com'));
+
+        authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
+        async.flushMicrotasks();
+        expect(authNotifier.state, isA<AuthAuthenticated>());
+
+        // Dispose to prepare for re-init with failure
+        authNotifier.dispose();
+
+        // 2. Next run, fetch times out / fails, but we have the cached user!
+        when(() => mockRepo.fetchProfile('u_cache_1')).thenAnswer((_) async {
+          await Future.delayed(const Duration(seconds: 10)); // Trigger timeout
+          throw TimeoutException('Timed out');
+        });
+        when(() => mockRepo.currentSession()).thenReturn(_makeSession('u_cache_1', 'cache@t.com'));
+
+        authNotifier = AuthNotifier(mockRepo, fcm: mockFcm);
+        
+        // Wait long enough for the 5-second timeout to fire and trigger the fallback path
+        async.elapse(const Duration(seconds: 6));
+
+        expect(authNotifier.state, isA<AuthAuthenticated>());
+        expect((authNotifier.state as AuthAuthenticated).user.name, 'Cached User');
+      });
+    });
+
+    test('clears local cached profile on signOut', () {
+      fakeAsync((async) {
+        final user = AppUser(
+          id: 'u_cache_2', name: 'Cached User 2', email: 'cache2@t.com',
+          onboardingComplete: true, createdAt: DateTime.now(),
+        );
+
+        SharedPreferences.setMockInitialValues({
+          'flutter.prodiet_cached_user_profile_u_cache_2': jsonEncode(user.toJson()),
+        });
+
+        when(() => mockRepo.signOut()).thenAnswer((_) async {});
+        
+        authNotifier = AuthNotifier(mockRepo, fcm: mockFcm, skipInit: true);
+        authNotifier.state = AuthAuthenticated(user);
+
+        authNotifier.signOut();
+        async.elapse(const Duration(milliseconds: 100));
+
+        // Let's verify that the cached key was removed from SharedPreferences
+        SharedPreferences.getInstance().then((prefs) {
+          expect(prefs.containsKey('prodiet_cached_user_profile_u_cache_2'), isFalse);
+        });
+        async.flushMicrotasks();
       });
     });
   });

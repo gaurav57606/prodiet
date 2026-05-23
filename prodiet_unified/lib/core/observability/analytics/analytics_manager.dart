@@ -54,10 +54,10 @@ class AppAnalyticsEvent {
 }
 
 class AnalyticsManager {
-  final FirebaseAnalytics _analytics;
+  final FirebaseAnalytics? _analytics;
 
   AnalyticsManager({FirebaseAnalytics? analytics})
-      : _analytics = analytics ?? FirebaseAnalytics.instance;
+      : _analytics = analytics ?? (kIsWeb ? null : FirebaseAnalytics.instance);
 
   /// Log a structured, type-safe AppAnalyticsEvent
   Future<void> logEvent(AppAnalyticsEvent event) async {
@@ -66,7 +66,7 @@ class AnalyticsManager {
     // Sanitize taxonomy dot format to underscore for Firebase Analytics limits
     final firebaseEventName = event.name.replaceAll('.', '_');
     
-    await _analytics.logEvent(
+    await _analytics!.logEvent(
       name: firebaseEventName,
       parameters: event.parameters,
     );
@@ -76,7 +76,7 @@ class AnalyticsManager {
   Future<void> logRawEvent(String name, [Map<String, Object>? parameters]) async {
     if (kIsWeb) return;
     final firebaseEventName = name.replaceAll('.', '_');
-    await _analytics.logEvent(
+    await _analytics!.logEvent(
       name: firebaseEventName,
       parameters: parameters,
     );
@@ -84,16 +84,16 @@ class AnalyticsManager {
 
   Future<void> logScreen(String screenName) async {
     if (kIsWeb) return;
-    await _analytics.logScreenView(screenName: screenName);
+    await _analytics!.logScreenView(screenName: screenName);
   }
 
   Future<void> setUserId(String userId) async {
     if (kIsWeb) return;
-    await _analytics.setUserId(id: userId);
+    await _analytics!.setUserId(id: userId);
   }
 
   Future<void> setUserProperty(String name, String value) async {
     if (kIsWeb) return;
-    await _analytics.setUserProperty(name: name, value: value);
+    await _analytics!.setUserProperty(name: name, value: value);
   }
 }

@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:prodiet_unified/features/auth/application/auth_providers.dart';
-import 'package:prodiet_unified/core/theme/active_theme_provider.dart';
 import 'package:prodiet_unified/shared/presentation/widgets/adaptive_app_shell.dart';
 import 'package:prodiet_unified/app/bootstrap_screen.dart';
 import 'package:prodiet_unified/app/navigation_state.dart';
 import 'package:prodiet_unified/shared/components/production_error_screen.dart';
+import 'package:prodiet_unified/core/observability/logger/app_logger.dart';
 
 // Unified Screens
 import 'package:prodiet_unified/features/auth/presentation/screens/splash_screen.dart' as unified_splash;
@@ -50,7 +50,7 @@ final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final _shellKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final notifier = ref.read(routerNotifierProvider);
+  final notifier = ref.watch(routerNotifierProvider);
   
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -143,6 +143,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 String? redirectLogic(BuildContext context, GoRouterState state, dynamic ref) {
   final navState = ref.read(navigationStateProvider);
   final loc = state.matchedLocation;
+  AppLogger.debug('[Router] redirectLogic: navState=$navState, loc=$loc');
 
   // 1. Bootstrapping / Initializing state
   if (navState == AppNavigationState.bootstrapping) {

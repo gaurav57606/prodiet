@@ -8,6 +8,7 @@ import 'package:prodiet_unified/features/preferences/domain/user_preferences.dar
 import 'package:prodiet_unified/features/preferences/presentation/widgets/adaptive_preference_widgets.dart';
 import 'package:prodiet_unified/core/design_system/components/app_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:prodiet_unified/core/config/feature_flags.dart';
 import 'package:prodiet_unified/core/intelligence/intelligence_providers.dart';
 
 class PreferencesScreen extends ConsumerStatefulWidget {
@@ -33,6 +34,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
   bool _personalization = true;
   bool _ocrLearning = true;
   bool _habitAnalytics = true;
+  bool _ocrEnabled = false;
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
         _personalization = privacyManager.isPersonalizationEnabled;
         _ocrLearning = privacyManager.isOcrLearningEnabled;
         _habitAnalytics = privacyManager.isHabitAnalyticsEnabled;
+        _ocrEnabled = FeatureFlags.ocrEnabled;
       });
     });
   }
@@ -190,7 +193,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               _buildChoiceChip("Intermittent", "$_mealsCount meals", (v) => setState(() => _mealsCount = 0)),
             ]),
 
-            AdaptivePreferenceSection(title: "AI Intelligence & Privacy", children: const []),
+            const AdaptivePreferenceSection(title: "AI Intelligence & Privacy", children: []),
             const SizedBox(height: 16),
             _buildContainer(
               context,
@@ -225,6 +228,16 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                       setState(() => _habitAnalytics = v);
                       ref.read(privacyEthicsManagerProvider).setHabitAnalyticsPreference(v);
                     },
+                  ),
+                  AdaptivePreferenceRow(
+                    label: "OCR Meal Scanner",
+                    subLabel: "Enable photo-based meal recognition scanner",
+                    hasToggle: true,
+                    toggleValue: _ocrEnabled,
+                    onToggle: (v) {
+                      setState(() => _ocrEnabled = v);
+                      FeatureFlags.updateFlags({'ocr_enabled': v});
+                    },
                     showBorder: false,
                   ),
                   const Divider(height: 1, thickness: 1),
@@ -252,7 +265,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                         _personalization = false;
                         _ocrLearning = false;
                         _habitAnalytics = false;
+                        _ocrEnabled = false;
                       });
+                      FeatureFlags.updateFlags({'ocr_enabled': false});
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('CCPA & GDPR compliance erasure complete ✓ All local intelligence maps purged.'),
